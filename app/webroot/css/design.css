@@ -1,0 +1,122 @@
+/**/
+
+body {
+    padding-top: 70px;
+    background-color: #ecf0f1;
+}
+
+.card {
+    border-radius: 2px;
+    -webkit-box-shadow: 0 2px 2px rgba(0, 2, 5, 0.15);
+    box-shadow: 0 2px 2px rgba(0, 2, 5, 0.15);
+    background-color: #ffffff;
+}
+
+/* SHARE ELEMENT */
+
+.div-shareelement {
+    margin-bottom: 30px;
+    border-radius: 2px;
+    -webkit-box-shadow: 0 2px 2px rgba(0, 2, 5, 0.1);
+    box-shadow: 0 2px 2px rgba(0, 2, 5, 0.1);
+    background-color: #ffffff;
+    cursor: pointer;
+}
+
+.div-shareelement:hover {
+    background-color: #fdfdfd;
+}
+
+.div-shareelement-block {
+    padding: 10px;
+}
+
+.div-shareelement-date {
+    font-size: 18px;
+    color: #ffffff;
+    font-weight: bold;
+    border-top-left-radius: 2px;
+    border-top-right-radius: 2px;
+}
+
+.div-shareelement-block-subtitle {
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+.div-shareelement-subtitle {
+    font-size: 16px;
+    color: #333333;
+}
+
+.div-shareelement-block-title {
+    padding-top: 0px;
+    padding-bottom: 5px;
+}
+
+.div-shareelement-title {
+    font-size: 22px;
+    color: #333333;
+}
+
+.div-shareelement-block-limitations {
+    padding-top: 0px;
+    padding-bottom: 5px;
+}
+
+/* SHARE */
+
+.div-share {
+    background-color: #ffffff;
+}
+
+/* COMMENT */
+
+#div-share-comments {
+    padding-top: 15px;
+    /*padding-bottom: 15px;*/
+}
+
+.div-comment-user-img {
+    background-color: #2ecc71;
+    color: #ffffff;
+    font-size: 30px;
+    height: 64px;
+    width: 64px;
+    display: table-cell;
+    vertical-align: middle;
+    text-align: center;
+}
+
+#div-share-comments p {
+    margin-bottom: 5px;
+}
+
+#div-share-comments .blockquote-normal {
+    border-left: 5px solid #4aa3df;
+}
+
+#div-share-comments .blockquote-reverse {
+    border-right: 5px solid #2ecc71;
+}
+
+/* SHARE/ADD */
+
+.div-add-section {
+    padding: 15px;
+    background-color: #ffffff;
+    margin-bottom: 15px;
+}
+
+/* MENU */
+.panel {
+    border: none;
+    border-radius: initial;
+}
+
+.panel-primary .panel-heading {
+    background-color: #2ecc71;
+    color: #ffffff;
+    border: none;
+    border-radius: initial;
+}
