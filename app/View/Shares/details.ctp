@@ -197,8 +197,12 @@
     $(function() {
         var width = $('#img-gmaps').width();
         console.log(width);
-        
-        var url = 'https://maps.googleapis.com/maps/api/staticmap?center=<?php echo $share['latitude']; ?>,<?php echo $share['longitude']; ?>&zoom=13&size=' + width + 'x' + width;
+
+
+        var url = 'https://maps.googleapis.com/maps/api/staticmap?center=<?php echo $share['latitude']; ?>,' +
+        '<?php echo $share['longitude']; ?>&zoom=13&size=' + width + 'x' + width +
+        '&markers=color:red%7C<?php echo $share['latitude']; ?>' +
+        ',<?php echo $share['longitude']; ?>';
         console.log(url);
 
         $('#img-gmaps').attr("src", url);
