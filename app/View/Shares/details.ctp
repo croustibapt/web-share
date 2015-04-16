@@ -174,7 +174,7 @@
                 html += printComment(comment['user']['external_id'], comment['user']['username'], comment['message'], comment['created']);
             }
         } else {
-            html = '<div class="lead text-muted text-center" role="alert">Aucun commentaire</div>';
+            html = '<div class="lead text-muted text-center">Aucun commentaire</div>';
         }
 
         return html;

@@ -107,7 +107,7 @@ class AppController extends Controller {
         }
     }
 
-    private function isLocalUserSessionAuthenticated() {
+    protected function isLocalUserSessionAuthenticated() {
         $userExternalId = $this->Session->read(SHARE_LOCAL_USER_SESSION_PREFIX.'.'.SHARE_HEADER_AUTH_EXTERNAL_ID);
         $mail = $this->Session->read(SHARE_LOCAL_USER_SESSION_PREFIX.'.'.SHARE_HEADER_AUTH_MAIL);
         $authToken = $this->Session->read(SHARE_LOCAL_USER_SESSION_PREFIX.'.'.SHARE_HEADER_AUTH_TOKEN);
@@ -116,6 +116,13 @@ class AppController extends Controller {
         $isAuthenticated = (($userExternalId != NULL) && ($mail != NULL) && ($authToken != NULL) && ($username != NULL));
 
         return $isAuthenticated;
+    }
+    
+    private function invalidateLocalUserSession() {
+        $this->Session->delete(SHARE_LOCAL_USER_SESSION_PREFIX.'.'.SHARE_HEADER_AUTH_EXTERNAL_ID);
+        $this->Session->delete(SHARE_LOCAL_USER_SESSION_PREFIX.'.'.SHARE_HEADER_AUTH_MAIL);
+        $this->Session->delete(SHARE_LOCAL_USER_SESSION_PREFIX.'.'.SHARE_HEADER_AUTH_TOKEN);
+        $this->Session->delete(SHARE_LOCAL_USER_SESSION_PREFIX.'.'.SHARE_HEADER_AUTH_USERNAME);
     }
 
     public function beforeFilter() {
@@ -190,18 +197,18 @@ class AppController extends Controller {
                     exit();*/
 
                     if ($userToken != NULL) {
-                        // If you already have a valid access token:
+                        //If you already have a valid access token:
                         $session = new FacebookSession($userToken);
 
-                        // To validate the session:
+                        //To validate the session:
                         try {
                             $isAuthenticated = $session->validate();
                         } catch (FacebookRequestException $ex) {
-                            // Session not valid, Graph API returned an exception with the reason.
-                            echo $ex->getMessage();
-                        } catch (\Exception $ex) {
-                            // Graph API returned info, but it may mismatch the current app or have expired.
-                            echo $ex->getMessage();
+                            //Session not valid, Graph API returned an exception with the reason.
+                            $this->invalidateLocalUserSession();
+                        } catch (Exception $ex) {
+                            //Graph API returned info, but it may mismatch the current app or have expired.
+                            $this->invalidateLocalUserSession();
                         }
                     }
                 } else {

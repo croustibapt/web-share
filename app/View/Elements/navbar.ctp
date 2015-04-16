@@ -37,6 +37,12 @@
                        aria-expanded="false">Hi <?php echo $this->Session->read(SHARE_LOCAL_USER_SESSION_PREFIX.'.'
                             .SHARE_HEADER_AUTH_USERNAME); ?> <span class="caret"></span></a>
                     <ul class="dropdown-menu" role="menu">
+                        <li>
+                            <?php
+                                echo $this->Html->link('My account', '/user/home');
+                            ?>
+                        </li>
+                        <li class="divider"></li>
                         <li><a  href="#">Logout</a></li>
                     </ul>
 
