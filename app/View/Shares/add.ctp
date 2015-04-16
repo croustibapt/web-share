@@ -111,11 +111,14 @@
             </div>
         </div>
 
-        <a id="button-share-add-more-details" style="width: 100%; margin-bottom: 15px;" class="btn btn-default" type="button" data-toggle="collapse" data-target="#div-more-details-collapse" aria-expanded="false" aria-controls="collapseExample">
-            More details
-        </a>
+        <div class="text-center">
+            <!-- data-target="#div-more-details-collapse" -->
+            <a id="button-share-add-more-details" style="margin-bottom: 15px;" class="btn btn-default" type="button">
+                More details <span class="caret"></span>
+            </a>
+        </div>
 
-        <div id="div-more-details-collapse" class="collapse">
+        <div id="div-more-details-collapse">
             <div id="div-add-section-more" class="div-add-section card" style="border-top: 10px solid #9b59b6;">
                 <div class="row">
                     <div class="col-md-6">
@@ -179,6 +182,14 @@
                 </div>
             </div>
         </div>
+
+        <div class="text-center">
+            <!-- data-target="#div-more-details-collapse" -->
+            <a id="button-share-add-less-details" style="margin-bottom: 15px;" class="btn btn-default" type="button">
+                Less details <span class="dropup"><span class="caret"></span></span>
+            </a>
+        </div>
+
     </div>
     <div class="col-md-2">
         <?php if ($this->LocalUser->isAuthenticated($this)) : ?>
@@ -209,15 +220,28 @@
     });
 
     $('.selectpicker').selectpicker();
-    
+
+    $('#div-more-details-collapse').hide();
+    $('#button-share-add-less-details').hide();
+
     //
     $('#button-share-add-more-details').click(function () {
-        if ($(this).hasClass('active')) {
-            $(this).removeClass('active');
-            $(this).text('More details');
-        } else {
-            $(this).addClass('active');
-            $(this).text('Less details');
-        }
+        $('#div-more-details-collapse').toggle();
+        $(this).hide();
+        $('#button-share-add-less-details').show();
+        /*if ($(this).hasClass('active')) {
+         $(this).removeClass('active');
+         $(this).text('More details');
+         } else {
+         $(this).addClass('active');
+         $(this).text('Less details');
+         }*/
+    });
+
+    //
+    $('#button-share-add-less-details').click(function () {
+        $('#div-more-details-collapse').toggle();
+        $(this).hide();
+        $('#button-share-add-more-details').show();
     });
 </script>
