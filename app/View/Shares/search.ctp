@@ -2,7 +2,7 @@
     <div class="col-md-9">
         <?php
             foreach ($response['results'] as $share) {
-                echo $this->element('shareelement', array(
+                echo $this->element('share-card', array(
                     'share' => $share
                 ));
             }

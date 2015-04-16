@@ -6,8 +6,7 @@
 
         <?php
             echo $this->Form->create('Share', array(
-                'class' => 'form-horizontal',
-                'novalidate' => 'novalidate'
+                'class' => 'form-horizontal'
             ));
         ?>
 
