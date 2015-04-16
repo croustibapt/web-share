@@ -11,3 +11,5 @@ CakePHP 2
 /app/Config/database.php
 /vendors/*
 /app/Vendor/*
+
+.idea/*

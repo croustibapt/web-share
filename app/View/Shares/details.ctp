@@ -73,9 +73,13 @@
 
         <!-- Message and supplement -->
         <blockquote>
+            <?php if ($share['message'] != "") : ?>
+
             <p class="lead">
-                <?php echo ($share['message'] != "") ? $share['message'] : "J'suis un mec à la cool moi, j'suis pas un enculeur de mamans." ; ?>
+                <?php echo $share['message']; ?>
             </p>
+
+            <?php endif; ?>
             
             <?php if ($share['supplement'] != "") : ?>
             
@@ -123,10 +127,12 @@
 
 <!-- Comments -->
 <h2>Commentaires</h2>
-<div id="div-share-comments" class="row card">
+<div id="div-share-details-comments" class="row card">
     <div class="col-md-12">
-        <div id="div-share-comments-list">
-
+        <div id="div-share-details-comments-list">
+            <p class="text-muted text-center">
+                Chargement des commentaires...
+            </p>
         </div>
     </div>
     
@@ -137,6 +143,14 @@
     </div>
     <div class="col-md-2 div-share-details-comments-editor">
         <button id="btn-comment-add" type="submit" class="btn btn-primary">Envoyer</button>
+    </div>
+
+    <?php else : ?>
+
+    <div class="col-md-12 div-share-details-comments-editor">
+        <div class="alert alert-danger" role="alert">
+            <strong>Information :</strong> Vous devez être authentifié pour commenter.
+        </div>
     </div>
     
     <?php endif; ?>
@@ -164,9 +178,14 @@
         var html = '';
 
         var comments = data['results'];
-        for (var i = 0; i < comments.length; i++) {
-            var comment = comments[i];
-            html += printComment(comment['user']['external_id'], comment['user']['username'], comment['message'], comment['created']);
+
+        if (comments.length > 0) {
+            for (var i = 0; i < comments.length; i++) {
+                var comment = comments[i];
+                html += printComment(comment['user']['external_id'], comment['user']['username'], comment['message'], comment['created']);
+            }
+        } else {
+            html = '<div class="alert alert-info" role="alert">Aucun commentaire</div>';
         }
 
         return html;
@@ -179,7 +198,7 @@
         //Comments
         $.get(webroot + "api/comment/get?shareId=<?php echo $share['share_id']; ?>", function(data, status) {
             var html = printComments(data);
-            $('#div-share-comments-list').html(html);
+            $('#div-share-details-comments-list').html(html);
 
             $(".timeago").timeago();
             console.log(data);
@@ -219,7 +238,7 @@
 
             console.log(data);
             var htmlComment = printComment(data['user']['external_id'], data['user']['username'], message, data['created']);
-            $('#div-share-comments-list').append(htmlComment);
+            $('#div-share-details-comments-list').append(htmlComment);
 
             $(".timeago").timeago();
         })

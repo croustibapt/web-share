@@ -132,13 +132,13 @@ body {
 
 /* COMMENT */
 
-#div-share-comments {
+#div-share-details-comments {
     margin-bottom: 15px;
     background-color: #ffffff;
     border-top: 10px solid #f39c12;
 }
 
-#div-share-comments-list {
+#div-share-details-comments-list {
     padding-top: 15px;
     /*padding-bottom: 15px;*/
 }
@@ -152,6 +152,10 @@ body {
     display: table-cell;
     vertical-align: middle;
     text-align: center;
+}
+
+#div-share-details-comments .alert {
+    margin-bottom: 0px;
 }
 
 #textarea-comment-add {
@@ -176,6 +180,7 @@ body {
 
 .div-share-details-comments-editor {
     border-top: 1px solid #ecf0f1;
+    margin-top: 15px;
     padding-top: 15px;
     padding-bottom: 15px;
 }
