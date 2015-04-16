@@ -193,6 +193,40 @@ body {
     margin-bottom: 15px;
 }
 
+.div-add-section .input-group {
+    margin-bottom: 10px;
+}
+
+.div-add-section .bootstrap-select {
+    width: 100%;
+}
+
+.div-add-section .selectpicker {
+    border-top-right-radius: 5px!important;
+    border-bottom-right-radius: 5px!important;
+}
+
+
+#div-add-section-description .input-group-addon, #div-add-section-description .input-group input, #div-add-section-description .selectpicker {
+    border-color: #3498db;
+}
+
+#div-add-section-description .input-group-addon {
+    background-color: #3498db;
+    color: #ffffff;
+    min-width: 40px;
+}
+
+#div-add-section-more .input-group-addon, #div-add-section-more .input-group input, #div-add-section-more .selectpicker {
+    border-color: #9b59b6;
+}
+
+#div-add-section-more .input-group-addon {
+    background-color: #9b59b6;
+    color: #ffffff;
+    min-width: 40px;
+}
+
 /* MENU */
 .panel {
     border: none;

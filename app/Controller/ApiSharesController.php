@@ -3,7 +3,7 @@ App::uses('AppController', 'Controller');
 App::uses('ShareException', 'Lib');
 
 class ApiSharesController extends AppController {
-	public $uses = array('Share', 'ShareType', 'User', 'Tag', 'Comment', 'Request');
+	public $uses = array('Share', 'ShareType', 'ShareTypeCategory', 'User', 'Tag', 'Comment', 'Request');
     
     protected function getShareTypeId($shareTypeLabel = NULL) {
         $shareTypeId = NULL;

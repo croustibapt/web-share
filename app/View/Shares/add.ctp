@@ -9,59 +9,78 @@
             ));
         ?>
 
-        <div class="div-add-section card" style="border-top: 10px solid #4aa3df;">
+        <div id="div-add-section-description" class="div-add-section card" style="border-top: 10px solid #4aa3df;">
             <div class="row">
                 <div class="col-md-6">
-                    <?php
-                        echo $this->Element('forminput', array(
-                            'name' => 'share_type_id',
-                            'label' => 'Type',
-                            'type' => 'select'
+                    <!-- Type -->
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="fa fa-tag"></i></span>
+                        <?php
+                        echo $this->Form->input('share_type_id', array(
+                            'label' => false,
+                            'class' => 'selectpicker',
+                            'type' => 'select',
+                            'div' => false,
+                            'data-style' => 'btn btn-default form-control input-lg'
                         ));
-                    ?>
-                    <?php
-                        echo $this->Element('forminput', array(
-                            'name' => 'title',
-                            'label' => 'Title',
-                            'placeholder' => 'ex: 2 pizzas achetées = 2 pizzas offertes'
-                        ));
-                    ?>
-                    <?php
-                        echo $this->Element('forminput', array(
-                            'name' => 'event_date',
-                            'label' => 'Date',
-                            'class' => 'datetimepicker',
-                            'placeholder' => 'AAAA-MM-JJ HH:MM'
-                        ));
-                    ?>
-                    
-                    <div class="form-group">
-                        <label class="col-sm-2 control-label"><?php echo 'Price'; ?></label>
-                        <div class="col-sm-10">
-                            <div class="input-group">
-                                <span class="input-group-addon" id="basic-addon1">€ (euros)</span>
-
-                                <?php
-                                    echo $this->Form->input('price', array(
-                                        'label' => false,
-                                        'class' => 'form-control',
-                                        'aria-describedby' => 'basic-addon1',
-                                        'type' => 'text',
-                                        'div' => false,
-                                        'placeholder' => 'ex: 9'
-                                    ));
-                                ?>
-                            </div>
-                        </div>
+                        ?>
                     </div>
 
-                    <?php
-                        echo $this->Element('forminput', array(
-                            'name' => 'places',
-                            'label' => 'Places',
-                            'placeholder' => 'ex: 4'
+                    <!-- Title -->
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="fa fa-file-text"></i></span>
+                        <?php
+                        echo $this->Form->input('title', array(
+                            'label' => false,
+                            'class' => 'form-control input-lg',
+                            'type' => 'text',
+                            'div' => false,
+                            'placeholder' => 'Titre'
                         ));
-                    ?>
+                        ?>
+                    </div>
+
+                    <!-- Date -->
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="fa fa-calendar-o"></i></span>
+                        <?php
+                        echo $this->Form->input('event_date', array(
+                            'label' => false,
+                            'class' => 'form-control input-lg datetimepicker',
+                            'type' => 'text',
+                            'div' => false,
+                            'placeholder' => 'Date'
+                        ));
+                        ?>
+                    </div>
+
+                    <!-- Price -->
+                    <div class="input-group">
+                        <span class="input-group-addon" id="basic-addon1"><i class="fa fa-dollar"></i></span>
+                        <?php
+                        echo $this->Form->input('price', array(
+                            'label' => false,
+                            'class' => 'form-control input-lg',
+                            'type' => 'text',
+                            'div' => false,
+                            'placeholder' => 'Prix (en euros)'
+                        ));
+                        ?>
+                    </div>
+
+                    <!-- Places -->
+                    <div class="input-group">
+                        <span class="input-group-addon" id="basic-addon1"><i class="fa fa-ellipsis-h"></i></span>
+                        <?php
+                        echo $this->Form->input('places', array(
+                            'label' => false,
+                            'class' => 'form-control input-lg',
+                            'type' => 'text',
+                            'div' => false,
+                            'placeholder' => 'Nombre de places'
+                        ));
+                        ?>
+                    </div>
                 </div>
                 <div class="col-md-6">
                     <div class="gllpLatlonPicker">
@@ -93,46 +112,77 @@
         </a>
 
         <div id="div-more-details-collapse" class="collapse">
-            <div class="div-add-section card" style="border-top: 10px solid #9b59b6;">
-                <?php
-                echo $this->Element('forminput', array(
-                    'name' => 'supplement',
-                    'label' => 'Supplement',
-                    'placeholder' => 'ex: Possibilité de venir sur place'
-                ));
-                ?>
+            <div id="div-add-section-more" class="div-add-section card" style="border-top: 10px solid #9b59b6;">
 
-                <?php
-                echo $this->Element('forminput', array(
-                    'name' => 'message',
-                    'label' => 'Message',
-                    'placeholder' => 'ex: Bonjour je vous propose...'
-                ));
-                ?>
+                <!-- Supplement -->
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="fa fa-plus-circle"></i></span>
+                    <?php
+                    echo $this->Form->input('supplement', array(
+                        'label' => false,
+                        'class' => 'form-control input-lg',
+                        'type' => 'text',
+                        'div' => false,
+                        'placeholder' => 'Supplément'
+                    ));
+                    ?>
+                </div>
 
-                <?php
-                echo $this->Element('forminput', array(
-                    'name' => 'limitations',
-                    'label' => 'Limitations',
-                    'placeholder' => 'ex: En livraison uniquement'
-                ));
-                ?>
+                <!-- Message -->
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="fa fa-pencil-square-o"></i></span>
+                    <?php
+                    echo $this->Form->input('message', array(
+                        'label' => false,
+                        'class' => 'form-control input-lg',
+                        'type' => 'text',
+                        'div' => false,
+                        'placeholder' => 'Message'
+                    ));
+                    ?>
+                </div>
 
-                <?php
-                echo $this->Element('forminput', array(
-                    'name' => 'meet_place',
-                    'label' => 'Meet place',
-                    'placeholder' => 'ex: Devant le cinéma'
-                ));
-                ?>
+                <!-- Limitations -->
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="fa fa-asterisk"></i></span>
+                    <?php
+                        echo $this->Form->input('limitations', array(
+                            'label' => false,
+                            'class' => 'form-control input-lg',
+                            'type' => 'text',
+                            'div' => false,
+                            'placeholder' => 'Limitations'
+                        ));
+                    ?>
+                </div>
 
-                <?php
-                echo $this->Element('forminput', array(
-                    'name' => 'waiting_time',
-                    'label' => 'Waiting time',
-                    'placeholder' => 'ex: 15'
-                ));
-                ?>
+                <!-- Meet place -->
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="fa fa-location-arrow"></i></span>
+                    <?php
+                        echo $this->Form->input('meet_place', array(
+                            'label' => false,
+                            'class' => 'form-control input-lg',
+                            'type' => 'text',
+                            'div' => false,
+                            'placeholder' => 'Meet place'
+                        ));
+                    ?>
+                </div>
+
+                <!-- Waiting time -->
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
+                    <?php
+                        echo $this->Form->input('waiting_time', array(
+                            'label' => false,
+                            'class' => 'form-control input-lg',
+                            'type' => 'text',
+                            'div' => false,
+                            'placeholder' => 'Waiting time (in minutes)'
+                        ));
+                    ?>
+                </div>
             </div>
         </div>
     </div>
@@ -151,6 +201,8 @@
         minDate: new Date(),
         format: 'Y-m-d H:i:s'
     });
+
+    $('.selectpicker').selectpicker();
     
     //
     $('#button-share-add-more-details').click(function () {

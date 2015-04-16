@@ -37,8 +37,10 @@ class SharesController extends ApiSharesController {
         }
 
         //Get share types
-        $shareTypes = $this->ShareType->find('list');
-        $newShareTypes[-1] = 'all';
+        $shareTypes = $this->ShareType->find('list', array(
+            'fields' => array('ShareType.id', 'ShareType.label', 'ShareTypeCategory.label'),
+            'recursive' => 0
+        ));
         $this->set('shareTypes', $shareTypes);
 	}
     
