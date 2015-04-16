@@ -113,75 +113,65 @@
 
         <div id="div-more-details-collapse" class="collapse">
             <div id="div-add-section-more" class="div-add-section card" style="border-top: 10px solid #9b59b6;">
+                <div class="row">
+                    <div class="col-md-6">
+                        <!-- Message -->
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="fa fa-pencil-square-o"></i></span>
+                            <?php
+                            echo $this->Form->input('message', array(
+                                'label' => false,
+                                'class' => 'form-control input-lg',
+                                'type' => 'text',
+                                'div' => false,
+                                'placeholder' => 'Message'
+                            ));
+                            ?>
+                        </div>
 
-                <!-- Supplement -->
-                <div class="input-group">
-                    <span class="input-group-addon"><i class="fa fa-plus-circle"></i></span>
-                    <?php
-                    echo $this->Form->input('supplement', array(
-                        'label' => false,
-                        'class' => 'form-control input-lg',
-                        'type' => 'text',
-                        'div' => false,
-                        'placeholder' => 'Supplément'
-                    ));
-                    ?>
-                </div>
+                        <!-- Limitations -->
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="fa fa-asterisk"></i></span>
+                            <?php
+                            echo $this->Form->input('limitations', array(
+                                'label' => false,
+                                'class' => 'form-control input-lg',
+                                'type' => 'text',
+                                'div' => false,
+                                'placeholder' => 'Limitations'
+                            ));
+                            ?>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <!-- Meet place -->
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="fa fa-location-arrow"></i></span>
+                            <?php
+                                echo $this->Form->input('meet_place', array(
+                                    'label' => false,
+                                    'class' => 'form-control input-lg',
+                                    'type' => 'text',
+                                    'div' => false,
+                                    'placeholder' => 'Meet place'
+                                ));
+                            ?>
+                        </div>
 
-                <!-- Message -->
-                <div class="input-group">
-                    <span class="input-group-addon"><i class="fa fa-pencil-square-o"></i></span>
-                    <?php
-                    echo $this->Form->input('message', array(
-                        'label' => false,
-                        'class' => 'form-control input-lg',
-                        'type' => 'text',
-                        'div' => false,
-                        'placeholder' => 'Message'
-                    ));
-                    ?>
-                </div>
-
-                <!-- Limitations -->
-                <div class="input-group">
-                    <span class="input-group-addon"><i class="fa fa-asterisk"></i></span>
-                    <?php
-                        echo $this->Form->input('limitations', array(
-                            'label' => false,
-                            'class' => 'form-control input-lg',
-                            'type' => 'text',
-                            'div' => false,
-                            'placeholder' => 'Limitations'
-                        ));
-                    ?>
-                </div>
-
-                <!-- Meet place -->
-                <div class="input-group">
-                    <span class="input-group-addon"><i class="fa fa-location-arrow"></i></span>
-                    <?php
-                        echo $this->Form->input('meet_place', array(
-                            'label' => false,
-                            'class' => 'form-control input-lg',
-                            'type' => 'text',
-                            'div' => false,
-                            'placeholder' => 'Meet place'
-                        ));
-                    ?>
-                </div>
-
-                <!-- Waiting time -->
-                <div class="input-group">
-                    <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
-                    <?php
-                        echo $this->Form->input('waiting_time', array(
-                            'label' => false,
-                            'class' => 'form-control input-lg',
-                            'type' => 'text',
-                            'div' => false,
-                            'placeholder' => 'Waiting time (in minutes)'
-                        ));
-                    ?>
+                        <!-- Waiting time -->
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
+                            <?php
+                                echo $this->Form->input('waiting_time', array(
+                                    'label' => false,
+                                    'class' => 'form-control input-lg',
+                                    'type' => 'text',
+                                    'div' => false,
+                                    'placeholder' => 'Waiting time (in minutes)'
+                                ));
+                            ?>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
