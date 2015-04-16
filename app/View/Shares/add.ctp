@@ -15,7 +15,9 @@
 
         <div id="div-add-section-description" class="div-add-section card" style="border-top: 10px solid #4aa3df;">
             <div class="row">
-                <div class="col-md-6">
+                <div id="div-share-add-description-left" class="col-md-6">
+                    <p class="lead">Que partagez-vous ?</p>
+
                     <!-- Type -->
                     <div class="input-group">
                         <span class="input-group-addon"><i class="fa fa-tag"></i></span>
@@ -31,64 +33,48 @@
                     </div>
 
                     <!-- Title -->
-                    <div class="input-group">
-                        <span class="input-group-addon"><i class="fa fa-file-text"></i></span>
-                        <?php
-                        echo $this->Form->input('title', array(
-                            'label' => false,
-                            'class' => 'form-control input-lg',
-                            'type' => 'text',
-                            'div' => false,
-                            'placeholder' => 'Titre'
+                    <?php
+                        echo $this->element('share-add-input', array(
+                            'name' => 'title',
+                            'placeholder' => 'Titre',
+                            'icon' => 'fa-file-text'
                         ));
-                        ?>
-                    </div>
+                    ?>
 
                     <!-- Date -->
-                    <div class="input-group">
-                        <span class="input-group-addon"><i class="fa fa-calendar-o"></i></span>
-                        <?php
-                        echo $this->Form->input('event_date', array(
-                            'label' => false,
-                            'class' => 'form-control input-lg datetimepicker',
-                            'type' => 'text',
-                            'div' => false,
-                            'placeholder' => 'Date'
+                    <?php
+                        echo $this->element('share-add-input', array(
+                            'name' => 'event_date',
+                            'placeholder' => 'Date',
+                            'class' => 'datetimepicker',
+                            'icon' => 'fa-calendar-o'
                         ));
-                        ?>
-                    </div>
+                    ?>
 
                     <!-- Price -->
-                    <div class="input-group">
-                        <span class="input-group-addon" id="basic-addon1"><i class="fa fa-dollar"></i></span>
-                        <?php
-                        echo $this->Form->input('price', array(
-                            'label' => false,
-                            'class' => 'form-control input-lg',
-                            'type' => 'text',
-                            'div' => false,
-                            'placeholder' => 'Prix (en euros)'
+                    <?php
+                        echo $this->element('share-add-input', array(
+                            'name' => 'price',
+                            'placeholder' => 'Prix (en euros)',
+                            'icon' => 'fa-dollar'
                         ));
-                        ?>
-                    </div>
+                    ?>
 
                     <!-- Places -->
-                    <div class="input-group last">
-                        <span class="input-group-addon" id="basic-addon1"><i class="fa fa-ellipsis-h"></i></span>
-                        <?php
-                        echo $this->Form->input('places', array(
-                            'label' => false,
-                            'class' => 'form-control input-lg',
-                            'type' => 'text',
-                            'div' => false,
-                            'placeholder' => 'Nombre de places'
+                    <?php
+                        echo $this->element('share-add-input', array(
+                            'name' => 'places',
+                            'placeholder' => 'Nombre de places',
+                            'icon' => 'fa-ellipsis-h'
                         ));
-                        ?>
-                    </div>
+                    ?>
                 </div>
                 <div class="col-md-6">
+                    <p class="lead text-right">Où le partagez-vous ?</p>
+
+                    <!-- Google maps -->
                     <div class="gllpLatlonPicker">
-                        <div class="gllpMap">Google Maps</div>
+                        <div id="div-share-add-google-map" class="gllpMap img-rounded">Google Maps</div>
 
                         <input type="hidden" class="gllpLatitude" value="43.594857" />
                         <input type="hidden" class="gllpLongitude" value="1.439707" />
@@ -111,86 +97,56 @@
             </div>
         </div>
 
-        <div class="text-center">
-            <!-- data-target="#div-more-details-collapse" -->
-            <a id="button-share-add-more-details" style="margin-bottom: 15px;" class="btn btn-default" type="button">
-                More details <span class="caret"></span>
-            </a>
-        </div>
-
         <div id="div-more-details-collapse">
             <div id="div-add-section-more" class="div-add-section card" style="border-top: 10px solid #9b59b6;">
                 <div class="row">
+                    <div class="col-md-12">
+                        <p class="lead">Une précision ?</p>
+                    </div>
+
                     <div class="col-md-6">
                         <!-- Message -->
-                        <div class="input-group">
-                            <span class="input-group-addon"><i class="fa fa-pencil-square-o"></i></span>
-                            <?php
-                            echo $this->Form->input('message', array(
-                                'label' => false,
-                                'class' => 'form-control input-lg',
-                                'type' => 'text',
-                                'div' => false,
-                                'placeholder' => 'Message'
+                        <?php
+                            echo $this->element('share-add-input', array(
+                                'name' => 'message',
+                                'placeholder' => 'Message',
+                                'icon' => 'fa-pencil-square-o'
                             ));
-                            ?>
-                        </div>
+                        ?>
 
                         <!-- Limitations -->
-                        <div class="input-group last">
-                            <span class="input-group-addon"><i class="fa fa-asterisk"></i></span>
-                            <?php
-                            echo $this->Form->input('limitations', array(
-                                'label' => false,
-                                'class' => 'form-control input-lg',
-                                'type' => 'text',
-                                'div' => false,
-                                'placeholder' => 'Limitations'
+                        <?php
+                            echo $this->element('share-add-input', array(
+                                'name' => 'limitations',
+                                'placeholder' => 'Limitations',
+                                'icon' => 'fa-asterisk'
                             ));
-                            ?>
-                        </div>
+                        ?>
                     </div>
                     <div class="col-md-6">
-                        <!-- Meet place -->
-                        <div class="input-group">
-                            <span class="input-group-addon"><i class="fa fa-location-arrow"></i></span>
-                            <?php
-                                echo $this->Form->input('meet_place', array(
-                                    'label' => false,
-                                    'class' => 'form-control input-lg',
-                                    'type' => 'text',
-                                    'div' => false,
-                                    'placeholder' => 'Meet place'
-                                ));
-                            ?>
-                        </div>
+                        <!-- Meeting place -->
+                        <?php
+                            echo $this->element('share-add-input', array(
+                                'name' => 'meet_place',
+                                'placeholder' => 'Meeting place',
+                                'icon' => 'fa-location-arrow'
+                            ));
+                        ?>
 
                         <!-- Waiting time -->
-                        <div class="input-group last">
-                            <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
-                            <?php
-                                echo $this->Form->input('waiting_time', array(
-                                    'label' => false,
-                                    'class' => 'form-control input-lg',
-                                    'type' => 'text',
-                                    'div' => false,
-                                    'placeholder' => 'Waiting time (in minutes)'
-                                ));
-                            ?>
-                        </div>
+                        <?php
+                            echo $this->element('share-add-input', array(
+                                'name' => 'waiting_time',
+                                'placeholder' => 'Waiting time (in minutes)',
+                                'icon' => 'fa-clock-o'
+                            ));
+                        ?>
                     </div>
                 </div>
             </div>
         </div>
-
-        <div class="text-center">
-            <!-- data-target="#div-more-details-collapse" -->
-            <a id="button-share-add-less-details" style="margin-bottom: 15px;" class="btn btn-default" type="button">
-                Less details <span class="dropup"><span class="caret"></span></span>
-            </a>
-        </div>
-
     </div>
+
     <div class="col-md-2">
         <?php if ($this->LocalUser->isAuthenticated($this)) : ?>
 
@@ -221,27 +177,13 @@
 
     $('.selectpicker').selectpicker();
 
-    $('#div-more-details-collapse').hide();
-    $('#button-share-add-less-details').hide();
-
-    //
-    $('#button-share-add-more-details').click(function () {
-        $('#div-more-details-collapse').toggle();
-        $(this).hide();
-        $('#button-share-add-less-details').show();
-        /*if ($(this).hasClass('active')) {
-         $(this).removeClass('active');
-         $(this).text('More details');
-         } else {
-         $(this).addClass('active');
-         $(this).text('Less details');
-         }*/
-    });
-
-    //
-    $('#button-share-add-less-details').click(function () {
-        $('#div-more-details-collapse').toggle();
-        $(this).hide();
-        $('#button-share-add-more-details').show();
+    //On load
+    $(function() {
+        //
+        $('#button-share-add-less-details').click(function () {
+            $('#div-more-details-collapse').toggle();
+            $(this).hide();
+            $('#button-share-add-more-details').show();
+        });
     });
 </script>

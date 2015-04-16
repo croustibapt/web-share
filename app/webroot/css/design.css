@@ -191,18 +191,20 @@ body {
 
 /* SHARE/ADD */
 
+#div-share-add-google-map {
+    height: 290px;
+    margin-bottom: 15px;
+}
+
 .div-add-section {
     padding: 15px;
+    padding-bottom: 0px;
     background-color: #ffffff;
     margin-bottom: 15px;
 }
 
 .div-add-section .input-group {
     margin-bottom: 15px;
-}
-
-.div-add-section .input-group.last {
-    margin-bottom: 0px;
 }
 
 .div-add-section .bootstrap-select {
@@ -214,6 +216,11 @@ body {
     border-bottom-right-radius: 5px!important;
 }
 
+#div-add-section-description .input-group.has-error .input-group-addon, #div-add-section-description .input-group.has-error input, #div-add-section-description .input-group.has-error .selectpicker {
+    border-color: #e74c3c;
+}
+
+
 #div-add-section-description .input-group-addon, #div-add-section-description .input-group input, #div-add-section-description .selectpicker {
     border-color: #3498db;
 }
@@ -222,6 +229,10 @@ body {
     background-color: #3498db;
     color: #ffffff;
     min-width: 40px;
+}
+
+#div-add-section-description .input-group.has-error .input-group-addon {
+    background-color: #e74c3c;
 }
 
 #div-add-section-more .input-group-addon, #div-add-section-more .input-group input, #div-add-section-more .selectpicker {
