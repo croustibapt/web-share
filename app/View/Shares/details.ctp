@@ -73,29 +73,18 @@
 
         <!-- Message and supplement -->
         <blockquote>
-            <?php if ($share['message'] != "") : ?>
-
             <p class="lead">
-                <?php echo $share['message']; ?>
+                <?php echo ($share['message'] != "") ? $share['message'] : "Pas de message"; ?>
             </p>
 
-            <?php endif; ?>
+            <?php if ($share['limitations'] != "") : ?>
             
-            <?php if ($share['supplement'] != "") : ?>
-            
-            <footer><?php echo $share['supplement']; ?></footer>
+            <footer class="footer-share-details-limitations text-danger">
+                <i class="fa fa-asterisk"></i> <?php echo $share['limitations']; ?>
+            </footer>
             
             <?php endif; ?>
         </blockquote>
-        
-        <!-- Limitations -->
-        <?php if ($share['limitations'] != "") : ?>
-        
-        <p class="lead text-danger">
-            <i class="fa fa-asterisk"></i> <?php echo $share['limitations']; ?>
-        </p>
-        
-        <?php endif; ?>
     </div>
     
     <!-- Place -->

@@ -2,12 +2,16 @@
 
 <div class="row" style="">
     <div class="col-md-10">
+        <?php if ($this->LocalUser->isAuthenticated($this)) : ?>
+
         <?php
             echo $this->Form->create('Share', array(
                 'class' => 'form-horizontal',
                 'novalidate' => 'novalidate'
             ));
         ?>
+
+        <?php endif; ?>
 
         <div id="div-add-section-description" class="div-add-section card" style="border-top: 10px solid #4aa3df;">
             <div class="row">
@@ -69,7 +73,7 @@
                     </div>
 
                     <!-- Places -->
-                    <div class="input-group">
+                    <div class="input-group last">
                         <span class="input-group-addon" id="basic-addon1"><i class="fa fa-ellipsis-h"></i></span>
                         <?php
                         echo $this->Form->input('places', array(
@@ -107,7 +111,7 @@
             </div>
         </div>
 
-        <a id="button-share-add-more-details" style="width: 100%; margin-bottom: 15px;" class="btn btn-default" type="button" data-toggle="collapse" data-target="#div-more-details-collapse" aria-expanded="false" aria-controls="collapseExample" href="#">
+        <a id="button-share-add-more-details" style="width: 100%; margin-bottom: 15px;" class="btn btn-default" type="button" data-toggle="collapse" data-target="#div-more-details-collapse" aria-expanded="false" aria-controls="collapseExample">
             More details
         </a>
 
@@ -130,7 +134,7 @@
                         </div>
 
                         <!-- Limitations -->
-                        <div class="input-group">
+                        <div class="input-group last">
                             <span class="input-group-addon"><i class="fa fa-asterisk"></i></span>
                             <?php
                             echo $this->Form->input('limitations', array(
@@ -159,7 +163,7 @@
                         </div>
 
                         <!-- Waiting time -->
-                        <div class="input-group">
+                        <div class="input-group last">
                             <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
                             <?php
                                 echo $this->Form->input('waiting_time', array(
@@ -177,13 +181,25 @@
         </div>
     </div>
     <div class="col-md-2">
+        <?php if ($this->LocalUser->isAuthenticated($this)) : ?>
+
         <?php
-        echo $this->Form->submit('Partager mon coupon', array(
-            'class' => 'btn btn-success pull-right'
-        ));
+            echo $this->Form->submit('Partager mon coupon', array(
+                'class' => 'btn btn-success'
+            ));
         ?>
 
         <?php echo $this->Form->end(); ?>
+
+        <?php else : ?>
+
+        <button class="btn btn-default disabled">Partager mon coupon</button>
+
+        <div class="alert alert-info" role="alert" style="margin-top: 15px;">
+            <strong>Information :</strong> Vous devez être authentifié pour partager un coupon.
+        </div>
+
+        <?php endif; ?>
     </div>
 </div>
 <script>

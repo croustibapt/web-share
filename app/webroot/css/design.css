@@ -111,6 +111,10 @@ body {
     font-weight: 600;
 }
 
+.footer-share-details-limitations:before {
+    content: normal;
+}
+
 .div-share-details-place {
     margin-top: 15px;
     margin-bottom: 10px;
@@ -166,15 +170,15 @@ body {
     width: 100%;
 }
 
-#div-share-comments-list p {
+#div-share-details-comments-list p {
     margin-bottom: 5px;
 }
 
-#div-share-comments-list .blockquote-normal {
+#div-share-details-comments-list .blockquote-normal {
     border-left: 5px solid #4aa3df;
 }
 
-#div-share-comments-list .blockquote-reverse {
+#div-share-details-comments-list .blockquote-reverse {
     border-right: 5px solid #2ecc71;
 }
 
@@ -194,7 +198,11 @@ body {
 }
 
 .div-add-section .input-group {
-    margin-bottom: 10px;
+    margin-bottom: 15px;
+}
+
+.div-add-section .input-group.last {
+    margin-bottom: 0px;
 }
 
 .div-add-section .bootstrap-select {
@@ -205,7 +213,6 @@ body {
     border-top-right-radius: 5px!important;
     border-bottom-right-radius: 5px!important;
 }
-
 
 #div-add-section-description .input-group-addon, #div-add-section-description .input-group input, #div-add-section-description .selectpicker {
     border-color: #3498db;
@@ -228,6 +235,7 @@ body {
 }
 
 /* MENU */
+
 .panel {
     border: none;
     border-radius: initial;
