@@ -8,7 +8,6 @@
         <?php
             echo $this->Html->meta('icon');
 
-            echo $this->Html->css('font-awesome.min');
             echo $this->Html->css('bootstrap.min');
             echo $this->Html->css('bootstrap-select.min');
             echo $this->Html->css('ionicons.min');
@@ -31,6 +30,8 @@
         
         <script src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
         <script src="http://js.nicedit.com/nicEdit-latest.js"></script>
+
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
     </head>
     <body>
         <!-- NAV BAR -->
