@@ -9,12 +9,12 @@
             echo $this->Html->meta('icon');
 
             echo $this->Html->css('bootstrap.min');
-            echo $this->Html->css('bootstrap-select.min');
-            echo $this->Html->css('font-awesome.min');
+            echo $this->Html->css('font-awesome');
             echo $this->Html->css('ionicons.min');
             echo $this->Html->css('jquery.datetimepicker');
             echo $this->Html->css('design');
             echo $this->Html->css('jquery-gmaps-latlon-picker');
+            echo $this->Html->css('bootstrap-select.min');
 
             echo $this->Html->script('jquery-2.1.3.min');
             echo $this->Html->script('bootstrap.min');
