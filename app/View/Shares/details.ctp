@@ -3,20 +3,17 @@
 ?>
 
 <h2>Détails</h2>
-<div class="row div-share" style="border-top: 10px solid <?php echo $shareTypeColor; ?>;">
+<div class="row div-share card" style="border-top: 10px solid <?php echo $shareTypeColor; ?>;">
     <div class="col-md-2 text-center">
-        <?php
-            /*echo $this->Html->image('img-default-user.png', array(
-                'style' => 'margin-top: 20px; width: 100%;'
-            ));*/
-        ?>
-
-        <h1 style="font-size: 75px; color: <?php echo $shareTypeColor; ?>;">
+        <!-- Share type icon -->
+        <h1 class="h1-share-details-type" style="color: <?php echo $shareTypeColor; ?>;">
             <?php
                 echo $this->ShareType->shareTypeIcon($share['share_type_category']['label'], $share['share_type']['label']);
             ?>
         </h1>
-        <div style="margin-top: 15px;">
+        
+        <!-- Datetime -->
+        <div class="div-share-details-date">
             <?php
                 $date = new DateTime($share['event_date']);
 
@@ -24,12 +21,22 @@
                 $day = strftime('%e %b.', $date->getTimestamp());
                 $hour = strftime('%kh%M', $date->getTimestamp());
             ?>
-            <h2 style="margin-bottom: 5px; color: <?php echo $shareTypeColor; ?>;" class="date"><?php echo $day; ?></h2>
-            <h2 style="margin-top: 0px; font-weight: 200;" class="hour"><?php echo $hour; ?></h2>
+            
+            <!-- Date -->
+            <h2 class="h2-share-details-date" style=" color: <?php echo $shareTypeColor; ?>;">
+                <?php echo $day; ?>
+            </h2>
+            
+            <!-- Hour -->
+            <h2 class="h2-share-details-hour">
+                <?php echo $hour; ?>
+            </h2>
         </div>
-
-        <a href="#" class="btn btn-success pull-right" style="width: 100%; margin-top: 10px; margin-bottom: 10px;">Participer</a>
         
+        <!-- Participate button -->
+        <a href="#" class="btn btn-success pull-right a-share-details-participate">Participer</a>
+        
+        <!-- Places -->
         <?php
             $placesLeft = $share['places'] - $share['participation_count'];
         ?>
@@ -48,63 +55,96 @@
 
         <?php endif; ?>
     </div>
-    <div class="col-md-8" style="background-color: #ffffff;">
-        <h1 style="margin-top: 15px;"><?php echo $share['title']; ?> <span style="color: <?php echo $shareTypeColor; ?>;">#<?php echo $this->ShareType->shareTypeLabel($share['share_type_category']['label'], $share['share_type']['label']); ?></span></h1>
-        <h2 style="color: #3498db; font-weight: 200;"><span style="font-size: 35px; font-weight: 600;"><?php echo number_format($share['price'], 1); ?>€</span> par personne</h2>
+    
+    <!-- Description -->
+    <div class="col-md-8 div-share-details-description">
+        
+        <!-- Title -->
+        <h1 class="h1-share-details-title">
+            <?php echo $share['title']; ?> <span style="color: <?php echo $shareTypeColor; ?>;">#<?php echo $this->ShareType->shareTypeLabel($share['share_type_category']['label'], $share['share_type']['label']); ?></span>
+        </h1>
+        
+        <!-- Price -->
+        <h2 class="h2-share-details-price">
+            <span class="span-share-details-price"><?php echo number_format($share['price'], 1); ?>€</span> par personne
+        </h2>
 
         <hr />
 
+        <!-- Message and supplement -->
         <blockquote>
             <p class="lead">
                 <?php echo ($share['message'] != "") ? $share['message'] : "J'suis un mec à la cool moi, j'suis pas un enculeur de mamans." ; ?>
             </p>
-            <footer><?php echo ($share['supplement'] != "") ? $share['supplement'] : "Je ne fais pas crédit bande de batards" ; ?></footer>
+            
+            <?php if ($share['supplement'] != "") : ?>
+            
+            <footer><?php echo $share['supplement']; ?></footer>
+            
+            <?php endif; ?>
         </blockquote>
-        <p class="lead text-danger"><i class="fa fa-asterisk"></i> <?php echo ($share['limitations'] != "") ? $share['limitations'] : "Uniquement -26 ans" ; ?></p>
+        
+        <!-- Limitations -->
+        <?php if ($share['limitations'] != "") : ?>
+        
+        <p class="lead text-danger">
+            <i class="fa fa-asterisk"></i> <?php echo $share['limitations']; ?>
+        </p>
+        
+        <?php endif; ?>
     </div>
+    
+    <!-- Place -->
     <div class="col-md-2 text-center">
-        <div id="div-gmaps" style="margin-top: 15px; margin-bottom: 10px;">
-            <img id="img-gmaps" class="img-circle" src="" style="width: 75%;" />
+        <!-- Google maps div -->
+        <div id="div-gmaps" class="div-share-details-place">
+            <img id="img-gmaps" class="img-circle img-share-details-place" src="" />
         </div>
+        
+        <!-- City -->
         <h3><?php echo ($share['city'] != "") ? $share['city'] : "Inconnu" ; ?></h3>
-        <p class="text-info"><i class="fa fa-location-arrow"></i> <?php echo ($share['meet_place'] != "") ? $share['meet_place'] : "Derrière la FNAC" ; ?></p>
+        
+        <!-- Meet place -->
+        <?php if ($share['meet_place'] != "") : ?>
+        
+        <p class="text-info"><i class="fa fa-location-arrow"></i> <?php echo $share['meet_place']; ?></p>
+        
+        <?php endif; ?>
     </div>
-</div>
-<div class="row" style="background-color: #ffffff;">
+    
+    <!-- User -->
     <div class="col-md-12 text-right">
-        <h5 style="margin-bottom: 10px; color: #bdc3c7; font-weight: 200;">Créée par <a style="font-weight: 400;" href=""><?php echo $share['user']['username']; ?></a> <span class="timeago" title="<?php echo $share['modified']; ?>"><?php echo $share['modified']; ?></span></h5>
+        <!-- Created by -->
+        <h5 class="h5-share-details-created">
+            Créée par <a class="a-share-details-user" href=""><?php echo $share['user']['username']; ?></a> <span class="timeago" title="<?php echo $share['modified']; ?>"><?php echo $share['modified']; ?></span>
+        </h5>
     </div>
 </div>
 
+<!-- Comments -->
 <h2>Commentaires</h2>
-<div class="row" style="background-color: #ffffff; border-top: 10px solid #f39c12;">
+<div id="div-share-comments" class="row card">
     <div class="col-md-12">
-        <div id="div-share-comments">
+        <div id="div-share-comments-list">
 
         </div>
     </div>
-</div>
-
-<div class="row" style="background-color: #ffffff; margin-bottom: 15px; border-top: 1px solid #ecf0f1; padding-top: 15px; padding-bottom: 15px;">
-    <div class="col-md-10">
-        <textarea id="textarea-comment-add" class="form-control" rows="3" style="width: 100%;"></textarea>
+    
+    <?php if ($this->LocalUser->isAuthenticated($this)) : ?>
+    
+    <div class="col-md-10 div-share-details-comments-editor">
+        <textarea id="textarea-comment-add" class="form-control" rows="3"></textarea>
     </div>
-    <div class="col-md-2">
-        <button id="btn-comment-add" type="submit" class="btn btn-primary" style="width: 100%;">Envoyer</button>
+    <div class="col-md-2 div-share-details-comments-editor">
+        <button id="btn-comment-add" type="submit" class="btn btn-primary">Envoyer</button>
     </div>
-
-    <script type="text/javascript" src="http://js.nicedit.com/nicEdit-latest.js"></script> <script type="text/javascript">
-        var nicEdit;
-
-        //<![CDATA[
-        bkLib.onDomLoaded(function() {
-            nicEdit = new nicEditor({buttonList : ['bold','italic','underline', 'link', 'unlink']}).panelInstance('textarea-comment-add');
-        });
-        //]]>
-    </script>
+    
+    <?php endif; ?>
 </div>
 
 <script>
+    var nicEdit;
+    
     function printComment(externalId, username, message, created) {
         var reverseClass = (<?php echo $share['user']['external_id']; ?> == externalId) ? "blockquote-reverse" : "blockquote-normal";
 
@@ -139,7 +179,7 @@
         //Comments
         $.get(webroot + "api/comment/get?shareId=<?php echo $share['share_id']; ?>", function(data, status) {
             var html = printComments(data);
-            $('#div-share-comments').html(html);
+            $('#div-share-comments-list').html(html);
 
             $(".timeago").timeago();
             console.log(data);
@@ -148,19 +188,12 @@
 
     $(function() {
         var width = $('#img-gmaps').width();
-        //var height = $('#div-share').height();
-
         console.log(width);
-        //console.log(height);
-
-        //var url = 'https://maps.googleapis.com/maps/api/streetview?size=' + width + 'x' + height + '&location=43.6,2.5&fov=180&heading=235&pitch=10';
+        
         var url = 'https://maps.googleapis.com/maps/api/staticmap?center=<?php echo $share['latitude']; ?>,<?php echo $share['longitude']; ?>&zoom=13&size=' + width + 'x' + width;
         console.log(url);
 
         $('#img-gmaps').attr("src", url);
-
-        /*$('#div-gmaps').css('background-image', 'url(' + url + ')');
-        $('#div-gmaps').css('height', width + 'px');*/
     });
 
     //
@@ -181,15 +214,23 @@
             data : jsonData,
             dataType : "json"
         })
-            .done(function(data, textStatus, jqXHR) {
-                console.log(data);
-                var htmlComment = printComment(data['user']['external_id'], data['user']['username'], message, data['created']);
-                $('#div-share-comments').append(htmlComment);
+        .done(function(data, textStatus, jqXHR) {
+            nicEditors.findEditor('textarea-comment-add').setContent('');
 
-                $(".timeago").timeago();
-            })
-            .fail(function(jqXHR, textStatus, errorThrown) {
-                console.log(jqXHR);
-            });
+            console.log(data);
+            var htmlComment = printComment(data['user']['external_id'], data['user']['username'], message, data['created']);
+            $('#div-share-comments-list').append(htmlComment);
+
+            $(".timeago").timeago();
+        })
+        .fail(function(jqXHR, textStatus, errorThrown) {
+            console.log(jqXHR);
+        });
     });
+    
+    //<![CDATA[
+    bkLib.onDomLoaded(function() {
+        nicEdit = new nicEditor({buttonList : ['bold','italic','underline', 'link', 'unlink']}).panelInstance('textarea-comment-add');
+    });
+    //]]>
 </script>

@@ -34,13 +34,27 @@
                             'placeholder' => 'AAAA-MM-JJ HH:MM'
                         ));
                     ?>
-                    <?php
-                        echo $this->Element('forminput', array(
-                            'name' => 'price',
-                            'label' => 'Price',
-                            'placeholder' => 'ex: 9'
-                        ));
-                    ?>
+                    
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label"><?php echo 'Price'; ?></label>
+                        <div class="col-sm-10">
+                            <div class="input-group">
+                                <span class="input-group-addon" id="basic-addon1">€ (euros)</span>
+
+                                <?php
+                                    echo $this->Form->input('price', array(
+                                        'label' => false,
+                                        'class' => 'form-control',
+                                        'aria-describedby' => 'basic-addon1',
+                                        'type' => 'text',
+                                        'div' => false,
+                                        'placeholder' => 'ex: 9'
+                                    ));
+                                ?>
+                            </div>
+                        </div>
+                    </div>
+
                     <?php
                         echo $this->Element('forminput', array(
                             'name' => 'places',
@@ -74,9 +88,9 @@
             </div>
         </div>
 
-        <button style="width: 100%; margin-bottom: 15px;" class="btn btn-default" type="button" data-toggle="collapse" data-target="#div-more-details-collapse" aria-expanded="false" aria-controls="collapseExample">
+        <a id="button-share-add-more-details" style="width: 100%; margin-bottom: 15px;" class="btn btn-default" type="button" data-toggle="collapse" data-target="#div-more-details-collapse" aria-expanded="false" aria-controls="collapseExample" href="#">
             More details
-        </button>
+        </a>
 
         <div id="div-more-details-collapse" class="collapse">
             <div class="div-add-section card" style="border-top: 10px solid #9b59b6;">
@@ -136,5 +150,16 @@
     $('.datetimepicker').datetimepicker({
         minDate: new Date(),
         format: 'Y-m-d H:i:s'
+    });
+    
+    //
+    $('#button-share-add-more-details').click(function () {
+        if ($(this).hasClass('active')) {
+            $(this).removeClass('active');
+            $(this).text('More details');
+        } else {
+            $(this).addClass('active');
+            $(this).text('Less details');
+        }
     });
 </script>

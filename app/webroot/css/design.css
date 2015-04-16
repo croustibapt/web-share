@@ -70,9 +70,75 @@ body {
     background-color: #ffffff;
 }
 
+.h1-share-details-type {
+    font-size: 75px;
+}
+
+.div-share-details-date {
+    margin-top: 15px;
+}
+
+.h2-share-details-date {
+    margin-bottom: 5px;
+}
+
+.h2-share-details-hour {
+    margin-top: 0px;
+    font-weight: 200;
+}
+
+.a-share-details-participate {
+    width: 100%;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.div-share-details-description {
+    background-color: #ffffff;
+}
+
+.h1-share-details-title {
+    margin-top: 15px;
+}
+
+.h2-share-details-price {
+    color: #3498db;
+    font-weight: 200;
+}
+
+.span-share-details-price {
+    font-size: 35px;
+    font-weight: 600;
+}
+
+.div-share-details-place {
+    margin-top: 15px;
+    margin-bottom: 10px;
+}
+
+.img-share-details-place {
+    width: 75%;
+}
+
+.h5-share-details-created {
+    margin-bottom: 10px;
+    color: #bdc3c7;
+    font-weight: 200;
+}
+
+.a-share-details-user {
+    font-weight: 400;
+}
+
 /* COMMENT */
 
 #div-share-comments {
+    margin-bottom: 15px;
+    background-color: #ffffff;
+    border-top: 10px solid #f39c12;
+}
+
+#div-share-comments-list {
     padding-top: 15px;
     /*padding-bottom: 15px;*/
 }
@@ -88,16 +154,30 @@ body {
     text-align: center;
 }
 
-#div-share-comments p {
+#textarea-comment-add {
+    width: 100%;
+}
+
+#btn-comment-add {
+    width: 100%;
+}
+
+#div-share-comments-list p {
     margin-bottom: 5px;
 }
 
-#div-share-comments .blockquote-normal {
+#div-share-comments-list .blockquote-normal {
     border-left: 5px solid #4aa3df;
 }
 
-#div-share-comments .blockquote-reverse {
+#div-share-comments-list .blockquote-reverse {
     border-right: 5px solid #2ecc71;
+}
+
+.div-share-details-comments-editor {
+    border-top: 1px solid #ecf0f1;
+    padding-top: 15px;
+    padding-bottom: 15px;
 }
 
 /* SHARE/ADD */

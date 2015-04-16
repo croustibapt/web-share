@@ -28,7 +28,7 @@
         ?>
         
         <script src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
-        <script id="digits-sdk" src="https://cdn.digits.com/1/sdk.js" async></script>
+        <script src="http://js.nicedit.com/nicEdit-latest.js"></script>
     </head>
     <body>
         <!-- NAV BAR -->
@@ -56,40 +56,6 @@
         <script>
             //Webroot global variable
             var webroot = "<?php echo $this->webroot; ?>";
-            
-            //
-            function printAjaxResult(data, jqXHR, divId) {
-                //Format HTML data
-                //console.log(JSON.stringify(data));
-                var html = 'HTTP: ' + jqXHR.status + '<br />' + JSON.stringify(data, undefined, 2);
-                $('#' + divId).html('<pre>' + html + '</pre>');
-            }
-            
-            //
-            /*function onLoginStatus(loginStatusResponse){
-                console.log(loginStatusResponse);
-            }
-
-            //
-            function onLoginStatusFailure(error){
-                console.log('Login status error: ' + error); 
-            }
-            
-            //Initialize Digits for Web using your application's consumer key that Fabric generated
-            $(function() {
-                //Initialize Digits SDK using your application's consumer key.
-                Digits.init({ consumerKey: 'kdxjY0pNrdKapJYHguAAox8Yp' })
-                .done(function(){
-                    console.log("Digits is initialized");
-                    Digits.getLoginStatus()
-                    .done(onLoginStatus)
-                    .fail(onLoginStatusFailure);
-                })
-                .fail(function(){
-                    console.log("Digits failed to initialize");
-                });
-            });*/
-            
         </script>
     </body>
 </html>
