@@ -27,7 +27,7 @@ class ApiCommentsController extends AppController {
                 //Data comment
                 $dataComment['Comment']['user_id'] = $userId;
                 $dataComment['Comment']['share_id'] = $shareId;
-                $dataComment['Comment']['message'] = $message;
+                $dataComment['Comment']['message'] = urldecode($message);
 
                 //Save it
                 $comment = $this->Comment->save($dataComment);                

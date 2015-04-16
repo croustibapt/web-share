@@ -82,8 +82,8 @@ class UsersController extends ApiUsersController {
                     //Save session
                     $this->saveAuthSession($userExternalId, $userMail, $userAuthToken, $user['User']['username']);
 
-                    //Redirect to home
-                    $this->redirect('/');
+                    //Redirect to referer
+                    $this->redirect($this->referer());
                 } else {
                     //Redirect to user/add
                     $this->redirect(array('controller' => 'users', 'action' => 'add', $userExternalId, $userAuthToken, $username, $userMail));

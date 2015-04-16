@@ -130,7 +130,7 @@
 <div id="div-share-details-comments" class="row card">
     <div class="col-md-12">
         <div id="div-share-details-comments-list">
-            <p class="text-muted text-center">
+            <p class="lead text-muted text-center">
                 Chargement des commentaires...
             </p>
         </div>
@@ -148,7 +148,7 @@
     <?php else : ?>
 
     <div class="col-md-12 div-share-details-comments-editor">
-        <div class="alert alert-danger" role="alert">
+        <div class="alert alert-info" role="alert">
             <strong>Information :</strong> Vous devez être authentifié pour commenter.
         </div>
     </div>
@@ -185,7 +185,7 @@
                 html += printComment(comment['user']['external_id'], comment['user']['username'], comment['message'], comment['created']);
             }
         } else {
-            html = '<div class="alert alert-info" role="alert">Aucun commentaire</div>';
+            html = '<div class="lead text-muted text-center" role="alert">Aucun commentaire</div>';
         }
 
         return html;
@@ -222,7 +222,7 @@
         var message = nicEditors.findEditor('textarea-comment-add').getContent();
         var jsonData =  '{' +
             '"share_id": "<?php echo $share['share_id']; ?>",' +
-            '"message": "' + message + '"' +
+            '"message": "' + encodeURI(message) + '"' +
             '}';
 
         console.log(jsonData);
