@@ -8,35 +8,59 @@
     $hour = strftime('%kh%M', $date->getTimestamp());
 ?>
 
-<h4 style="margin-left: 15px; margin-right: 15px; color: <?php echo $shareTypeColor; ?>;"><?php echo $day; ?> <?php echo $hour; ?></h4>
-<div class="" shareid="<?php echo $share['share_id']; ?>" style="padding-left: 15px; padding-right: 15px;">
-
-    <div style="border: 1px solid #dddddd;">
+<h4 class="h4-user-home-share" style="color: <?php echo $shareTypeColor; ?>;"><?php echo $day; ?> <?php echo $hour;
+    ?></h4>
+<div class="div-user-home-share" shareid="<?php echo $share['share_id']; ?>">
+    <div class="div-user-home-share-container">
         <div class="media">
-            <div class="media-left" style="font-size: 60px; color: <?php echo $shareTypeColor; ?>; padding-left: 20px;
-                padding-right: 0px;">
-                <div style="margin-top: 10px;">
+            <div class="div-user-home-share-icon media-left" style="color: <?php echo $shareTypeColor; ?>;">
+                <div class="div-user-home-share-icon-container">
                     <!-- Icon -->
                     <?php echo $this->ShareType->shareTypeIcon($share['share_type_category']['label'], $share['share_type']['label']); ?>
                 </div>
 
             </div>
-            <div class="media-body" style="padding: 20px;">
-                <blockquote style="border-left: none; margin-bottom: 0px; padding: 0px;">
-                    <h3 style="margin-top: 0px;"><?php echo $share['title']; ?></h3>
-                    <footer class="lead" style="margin-bottom: 0px;">15 places à 5euros</footer>
+            <div class="div-user-home-share-title media-body">
+                <blockquote class="blockquote-user-home-share-title">
+                    <!-- Title -->
+                    <h3 class="h3-user-home-share-title"><?php echo $share['title']; ?></h3>
+
+                    <!-- Places, price -->
+                    <footer class="footer-user-home-share-title lead">
+                        <?php
+                            $totalPlaces = $share['places'];
+                            $participationCount = $share['participation_count'];
+                            $placesLeft = $totalPlaces - $participationCount;
+
+                            $priceLabel = 'euros';
+                            if ($share['price'] <= 1.0) {
+                                $priceLabel = 'euros';
+                            }
+                        ?>
+                        <?php if ($placesLeft > 1) : ?>
+
+                        <strong><?php echo $placesLeft; ?></strong> places
+
+                        <?php elseif ($placesLeft > 0) : ?>
+
+                        <strong><?php echo $placesLeft; ?></strong> place
+
+                        <?php else : ?>
+
+                        Complet
+
+                        <?php endif; ?>
+
+                        à <strong><?php echo number_format($share['price'], 1, '.',
+                                ''); ?></strong> <?php echo $priceLabel; ?>
+                    </footer>
                 </blockquote>
-                <!-- Title -->
-
-
-                <!-- Places, price -->
-
             </div>
         </div>
 
         <?php if ($share['request_count'] > 0) : ?>
 
-        <table class="table table-hover" style="margin-bottom: 0px;">
+        <table class="table table-hover table-user-home-share-requests">
 
             <?php foreach ($share['requests'] as $request) : ?>
 
@@ -51,10 +75,11 @@
 
         <?php else : ?>
 
-        <table class="table" style="margin-bottom: 0px;">
+        <table class="table table-user-home-share-requests">
             <tr class="active">
                 <td>
-                    <p class="lead text-muted text-center" style="margin-bottom: 0px;">Vous n'avez aucun partage en cours</p>
+                    <p class="lead text-muted text-center p-user-home-share-requests">Vous n'avez aucun
+                        partage en cours</p>
                 </td>
             </tr>
 

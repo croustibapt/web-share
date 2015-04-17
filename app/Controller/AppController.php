@@ -142,11 +142,6 @@ class AppController extends Controller {
             $this->saveAuthSession($userExternalId, $phoneNumber, $authToken, $username);
         }*/
     }
-
-    private function getConnectionWithAccessToken($token, $tokenSecret) {
-        $connection = new TwitterOAuth(SHARE_APP_TOKEN, SHARE_APP_TOKEN_SECRET, $token, $tokenSecret);
-        return $connection;
-    }
     
     private function extractUserAuthValue($request = NULL, $key = NULL) {
         $userAuthValue = NULL;
@@ -346,7 +341,8 @@ class AppController extends Controller {
         }
     }
     
-    protected function formatShare($share = NULL, $userExternalId = NULL, $returnComments = false, $returnRequests = false) {
+    protected function formatShare($share = NULL, $userExternalId = NULL, $returnComments = false,
+                                   $returnRequests = false, $returnShareUserId = false) {
         $response = NULL;
         
         /*echo json_encode($share);
@@ -360,6 +356,11 @@ class AppController extends Controller {
             $response['share_id'] = $share['Share']['id'];
             $response['user']['external_id'] = $share['User']['external_id'];
             $response['user']['username'] = $share['User']['username'];
+
+            if ($returnShareUserId) {
+                $response['user']['id'] = $share['User']['id'];
+            }
+
             $response['title'] = $share['Share']['title'];
             $response['event_date'] = $share['Share']['event_date'];
             $response['share_type']['share_type_id'] = $share['ShareType']['id'];
@@ -462,5 +463,88 @@ class AppController extends Controller {
         }
         
         return $success;
+    }
+
+    private function isShareOpened($share = NULL) {
+        return ($share['Share']['status'] == SHARE_STATUS_OPENED);
+    }
+
+    private function isPlacesLeft($share = NULL) {
+        $isPlacesLeft = false;
+
+        if ($share != NULL) {
+            $leftPlaces = $share['Share']['places'];
+
+            //Check place
+            if (isset($share['Request'])) {
+
+                foreach ($share['Request'] as $request) {
+                    if ($request['status'] == SHARE_REQUEST_STATUS_ACCEPTED) {
+                        $leftPlaces--;
+                    }
+                }
+            }
+
+            $isPlacesLeft = ($leftPlaces > 0);
+        }
+
+        return $isPlacesLeft;
+    }
+
+    protected function doesUserOwnShare($share = NULL, $userId = NULL) {
+        $doesUserOwnShare = false;
+
+        if (($share != NULL) && ($userId != NULL)) {
+            $doesUserOwnShare = ($share['User']['id'] == $userId);
+        }
+
+        return $doesUserOwnShare;
+    }
+
+    private function canParticipate($share = NULL, $userId = NULL) {
+        $canParticipate = false;
+
+        if (($share != NULL) && ($userId != NULL)) {
+            //Check if user does not already participate
+            if (!$this->doesUserOwnShare($share, $userId) && $this->isShareOpened($share) && $this->isPlacesLeft($share)) {
+                $canParticipate = true;
+            }
+        }
+
+        return $canParticipate;
+    }
+
+    protected function getRequestStatus($share = NULL, $userId = NULL) {
+        $requestStatus = NULL;
+
+        if (($share != NULL) && ($userId != NULL)) {
+            //Find first Request
+            $request = $this->Request->find('first', array(
+                'conditions' => array(
+                    'Request.share_id' => $share['Share']['id'],
+                    'Request.user_id' => $userId
+                )
+            ));
+
+            if ($request != NULL) {
+                $requestStatus = $request['Request']['status'];
+            }
+        }
+
+        return $requestStatus;
+    }
+
+    protected  function canRequest($share = NULL, $userId = NULL) {
+        $canRequest = false;
+
+        if (($share != NULL) && ($userId != NULL)) {
+            //Check if user does not already participate
+            if ($this->canParticipate($share, $userId)) {
+                $requestStatus = $this->getRequestStatus($share, $userId);
+                $canRequest = ($requestStatus == NULL);
+            }
+        }
+
+        return $canRequest;
     }
 }

@@ -44,9 +44,36 @@ class SharesController extends ApiSharesController {
         $this->set('shareTypes', $shareTypes);
 	}
     
-    public function details($shareId = NULL) {        
-        $response = $this->internDetails($shareId);
+    public function details($shareId = NULL) {
+        $response = $this->internDetails($shareId, true);
         $this->set('share', $response);
+
+        //Get user identifier
+        $userExternalId = $this->getUserExternalId($this->request);
+        $userId = $this->getUserId($userExternalId);
+
+        $share['Share'] = $response;
+        //unset($share['Share']['user']);
+
+        $share['Share']['id'] = $share['Share']['share_id'];
+        $share['User']['id'] = $share['Share']['user']['id'];
+        unset($share['Share']['share_id']);
+
+        if (isset($share['Share']['requests'])) {
+            $share['Request'] = $share['Share']['requests'];
+            unset($share['Share']['requests']);
+        }
+
+        $canRequest = $this->canRequest($share, $userId);
+        $this->set('canRequest', $canRequest);
+
+        //Own
+        $doesUserOwnShare = $this->doesUserOwnShare($share, $userId);
+        $this->set('doesUserOwnShare', $doesUserOwnShare);
+
+        //Request status
+        $requestStatus = $this->getRequestStatus($share, $userId);
+        $this->set('requestStatus', $requestStatus);
     }
 
     /*public function delete() {

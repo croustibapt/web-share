@@ -32,9 +32,58 @@
                 <?php echo $hour; ?>
             </h2>
         </div>
-        
-        <!-- Participate button -->
-        <a href="#" class="btn btn-success pull-right a-share-details-participate">Participer</a>
+
+        <?php if ($this->LocalUser->isAuthenticated($this)) : ?>
+
+            <?php if ($canRequest) : ?>
+
+            <!-- Participate button -->
+            <button id="button-share-details-participate" class="btn btn-success pull-right
+            button-share-details-participate">Participer</button>
+
+            <script>
+                $('#button-share-details-participate').click(function () {
+                    var button = $(this);
+                    button.attr('disabled', 'disabled');
+
+                    $.ajax({
+                        type : "GET",
+                        url : webroot + "api/request/add?shareId=<?php echo $share['share_id']; ?>",
+                        dataType : "json"
+                    })
+                    .done(function(data, textStatus, jqXHR) {
+                        console.log('done');
+
+                        button.attr('disabled', null);
+                        button.html('<?php echo $this->Share->getShareDetailsRequestStatusLabel
+                        (SHARE_REQUEST_STATUS_PENDING); ?>');
+                    })
+                    .fail(function(jqXHR, textStatus, errorThrown) {
+                        console.log('fail');
+                        console.log(jqXHR);
+                        button.attr('disabled', null);
+                    });
+                });
+            </script>
+
+            <?php else : ?>
+
+                <?php if (!$doesUserOwnShare) : ?>
+
+                <button id="button-share-details-participate" class="btn <?php echo
+                $this->Share->getShareDetailsRequestStatusClass($requestStatus); ?> pull-right disabled
+                button-share-details-participate"><?php echo $this->Share->getShareDetailsRequestStatusLabel($requestStatus); ?></button>
+
+                <?php endif; ?>
+
+            <?php endif; ?>
+
+        <?php else : ?>
+
+        <button id="button-share-details-participate" class="btn btn-success pull-right disabled
+        button-share-details-participate">Participer</button>
+
+        <?php endif; ?>
         
         <!-- Places -->
         <?php

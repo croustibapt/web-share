@@ -157,7 +157,7 @@ body {
     font-weight: 200;
 }
 
-.a-share-details-participate {
+.button-share-details-participate {
     width: 100%;
     margin-top: 10px;
     margin-bottom: 10px;
@@ -313,6 +313,73 @@ body {
     background-color: #9b59b6;
     color: #ffffff;
     min-width: 40px;
+}
+
+/* USER/HOME */
+
+.div-user-home-tabs {
+    padding: 15px;
+}
+
+.div-user-home-panes {
+    margin-top: 15px;
+}
+
+.h4-user-home-share {
+    margin-left: 15px;
+    margin-right: 15px;
+}
+
+.div-user-home-share {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+.div-user-home-share-container {
+    border: 1px solid #dddddd;
+}
+
+.div-user-home-share-icon {
+    font-size: 60px;
+    padding-left: 20px;
+    padding-right: 0px;
+}
+
+.div-user-home-share-icon-container {
+    margin-top: 10px;"
+}
+
+.div-user-home-share-title {
+    padding: 20px;
+}
+
+.blockquote-user-home-share-title {
+    border-left: none;
+    margin-bottom: 0px;
+    padding: 0px;
+}
+
+.h3-user-home-share-title {
+    margin-top: 0px;
+}
+
+.footer-user-home-share-title {
+    margin-bottom: 0px;
+}
+
+.table-user-home-share-requests {
+    margin-bottom: 0px;
+}
+
+.p-user-home-share-requests {
+    margin-bottom: 0px;
+}
+
+.tr-user-home-request {
+    cursor: pointer;
+}
+.p-user-home-request {
+    margin-bottom: 0px;
 }
 
 /* MENU */

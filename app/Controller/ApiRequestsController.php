@@ -1,80 +1,12 @@
 <?php
 App::uses('AppController', 'Controller');
+App::uses('ShareException', 'Lib');
 
 class ApiRequestsController extends AppController {
     public $name = 'ApiRequests';
     
 	public $uses = array('Request', 'Share');
-    
-    private function isShareOpened($share = NULL) {
-        return ($share['Share']['status'] == SHARE_STATUS_OPENED);
-    }
-    
-    private function isPlacesLeft($share = NULL) {
-        $isPlacesLeft = false;
-        
-        if ($share != NULL) {
-            //Check place
-            if (isset($share['Request'])) {
-                $leftPlaces = $share['Share']['places'];
-                
-                foreach ($share['Request'] as $request) {
-                    if ($request['status'] == SHARE_REQUEST_STATUS_ACCEPTED) {
-                        $leftPlaces--;
-                    }
-                }
-                
-                $isPlacesLeft = ($leftPlaces > 0);
-            }
-        }
-        
-        return $isPlacesLeft;
-    }
-    
-    private function doesUserOwnShare($share = NULL, $userId = NULL) {
-        $doesUserOwnShare = false;
-        
-        if (($share != NULL) && ($userId != NULL)) {
-            $doesUserOwnShare = ($share['User']['id'] == $userId);
-        }
-        
-        return $doesUserOwnShare;
-    }
-    
-    private function canParticipate($share = NULL, $userId = NULL) {
-        $canParticipate = false;
-        
-        if (($share != NULL) && ($userId != NULL)) {            
-            //Check if user does not already participate
-            if (!$this->doesUserOwnShare($share, $userId) && $this->isShareOpened($share) && $this->isPlacesLeft($share)) {
-                $canParticipate = true;
-            }
-        }
-        
-        return $canParticipate;
-    }
-    
-    private function canRequest($share = NULL, $userId = NULL) {
-        $canRequest = false;
-        
-        if (($share != NULL) && ($userId != NULL)) {            
-            //Check if user does not already participate
-            if ($this->canParticipate($share, $userId)) {
-                //Find first Request
-                $request = $this->Request->find('first', array(
-                    'conditions' => array(
-                        'Request.share_id' => $share['Share']['id'],
-                        'Request.user_id' => $userId
-                    )
-                ));
-                
-                $canRequest = ($request == NULL);
-            }
-        }
-        
-        return $canRequest;
-    }
-    
+
     private function canChangeStatus($request = NULL, $status = NULL) {
         $canChangeStatus = false;
         
@@ -283,6 +215,11 @@ class ApiRequestsController extends AppController {
     
     public function apiAccept($requestId = NULL) {
         if ($this->request->is('GET')) {
+            /*sleep(3);
+            //TEMP TEST
+            $this->sendErrorResponse(SHARE_STATUS_CODE_NOT_FOUND, SHARE_ERROR_CODE_RESOURCE_NOT_FOUND,
+            "Request not found", NULL);*/
+
             //Get user identifier
             $userExternalId = $this->getUserExternalId($this->request);
             $userId = $this->getUserId($userExternalId);

@@ -275,7 +275,7 @@ class ApiSharesController extends AppController {
         }
 	}
     
-    protected function internDetails($shareId = NULL) {
+    protected function internDetails($shareId = NULL, $returnShareUserId = false) {
         $response = NULL;
         
         //Check parameter
@@ -297,7 +297,7 @@ class ApiSharesController extends AppController {
             //If it's well formatted
             if ($share != NULL) {
                 //Format response
-                $response = $this->formatShare($share, NULL, false, true);
+                $response = $this->formatShare($share, NULL, false, true, $returnShareUserId);
             } else {
                 throw new ShareException(SHARE_STATUS_CODE_NOT_FOUND, SHARE_ERROR_CODE_RESOURCE_NOT_FOUND, "Share not found");
             }
