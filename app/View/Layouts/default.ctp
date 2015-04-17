@@ -34,9 +34,12 @@
         <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
     </head>
     <body>
-        <!-- NAV BAR -->
-        <?php echo $this->element('navbar'); ?>
+        <!-- Navigation bar -->
+        <?php echo $this->element('nav-bar'); ?>
         
+        <!-- Action bar -->
+        <?php echo $this->element('action-bar'); ?>
+                
         <div class="wrapper">
             <?php
                 $error = $this->Session->flash('nok');

@@ -8,8 +8,8 @@
     $hour = strftime('%kh%M', $date->getTimestamp());
 ?>
 
-<h3 style="color: <?php echo $shareTypeColor; ?>;"><?php echo $day; ?> <?php echo $hour; ?></h3>
-<div class="div-share-card" shareid="<?php echo $share['share_id']; ?>" style="padding-left: 15px; padding-right: 15px;">
+<h3 style="margin-left: 15px; margin-right: 15px; color: <?php echo $shareTypeColor; ?>;"><?php echo $day; ?> <?php echo $hour; ?></h3>
+<div class="" shareid="<?php echo $share['share_id']; ?>" style="padding-left: 15px; padding-right: 15px;">
 
     <!-- Date -->
     <div class="row">
@@ -25,7 +25,11 @@
             <p class="lead">15 places à 5euros</p>
         </div>
     </div>
+    
     <?php if ($share['request_count'] > 0) : ?>
+    
+    <table class="table table-hover">
+            
         <?php foreach ($share['requests'] as $request) : ?>
             
         <?php
@@ -36,7 +40,19 @@
         ?>
 
         <?php endforeach; ?>
+        
+    <?php else : ?>
+        
+    <table class="table">
+        <tr class="active">
+            <td>
+                <p class="lead text-muted text-center" style="margin-bottom: 0px;">Vous n'avez aucun partage en cours</p>
+            </td>
+        </tr>
+        
     <?php endif; ?>
+        
+    </table>
 </div>
 
 <script>

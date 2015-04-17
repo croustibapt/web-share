@@ -1,4 +1,4 @@
-<div class="div-share-card" shareid="<?php echo $share['share_id']; ?>">
+<div class="div-share-card card" shareid="<?php echo $share['share_id']; ?>">
     <div class="div-share-card-date" style="background-color: <?php echo $this->ShareType->shareTypeColor
     ($share['share_type_category']['label']); ?>;">
         <div class="row">
