@@ -307,7 +307,7 @@ class AppController extends Controller {
         }
     }
     
-    protected function formatRequests(& $response, $requests, $userExternalId = NULL) {
+    protected function formatRequests(& $response, $requests, $userExternalId = NULL, $returnShareDetails = false) {
         $response = array();
                 
         $requestIndex = 0;
@@ -318,6 +318,17 @@ class AppController extends Controller {
             
             $response[$requestIndex]['request_id'] = $request['Request']['id'];
             $response[$requestIndex]['share_id'] = $request['Request']['share_id'];
+
+            if ($returnShareDetails) {
+                $response[$requestIndex]['share']['title'] = $request['Share']['title'];
+                $response[$requestIndex]['share']['event_date'] = $request['Share']['event_date'];
+                $response[$requestIndex]['share']['price'] = $request['Share']['price'];
+                $response[$requestIndex]['share']['places'] = $request['Share']['places'];
+                $response[$requestIndex]['share']['participation_count'] = $request['Share']['participation_count'];
+                $response[$requestIndex]['share']['share_type']['label'] = $request['ShareType']['label'];
+                $response[$requestIndex]['share']['share_type_category']['label'] = $request['ShareTypeCategory']['label'];
+            }
+
             $response[$requestIndex]['status'] = $status;
             $response[$requestIndex]['user']['external_id'] = $request['User']['external_id'];
             $response[$requestIndex]['user']['username'] = $request['User']['username'];

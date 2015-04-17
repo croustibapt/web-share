@@ -49,7 +49,14 @@
 
                 <?php foreach ($user['requests'] as $request) : ?>
 
-                <?php pr($request); ?>
+                <?php
+                    //
+                    echo $this->element('request-home-card', array(
+                        'request' => $request
+                    ));
+                ?>
+
+                <hr />
 
                 <?php endforeach; ?>
 

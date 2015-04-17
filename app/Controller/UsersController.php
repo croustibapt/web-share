@@ -43,7 +43,7 @@ class UsersController extends ApiUsersController {
             if ($this->request->is('GET')) {
                 try {
                     //Intern home
-                    $user = $this->interHome();
+                    $user = $this->interHome(true);
 
                     $this->set('user', $user);
                 } catch (ShareException $e) {

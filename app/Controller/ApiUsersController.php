@@ -111,7 +111,7 @@ class ApiUsersController extends AppController {
         }
     }
 
-    protected function interHome() {
+    protected function interHome($returnShareDetails = false) {
         $response = NULL;
 
         //Check credentials
@@ -160,7 +160,28 @@ class ApiUsersController extends AppController {
                     )
                 ));
 
-                $this->formatRequests($response['requests'], $requests, $userExternalId);
+                if ($returnShareDetails) {
+                    foreach ($requests as & $request) {
+                        $sql = "SELECT *, (SELECT COUNT(Request.id) FROM requests Request WHERE Request.share_id = Share.id AND Request.status = 1)
+AS participation_count FROM shares Share, share_types ShareType, share_type_categories ShareTypeCategory WHERE Share
+.share_type_id = ShareType.id AND ShareType.share_type_category_id = ShareTypeCategory.id AND Share.id =".$request['Request']['share_id']." LIMIT 1;";
+                        $shares = $this->Share->query($sql);
+
+                        if (count($shares) > 0) {
+                            $share = $shares[0];
+                            $request['Share']['participation_count'] = $share['0']['participation_count'];
+                            $request['ShareType']['label'] = $share['ShareType']['label'];
+                            $request['ShareTypeCategory']['label'] = $share['ShareTypeCategory']['label'];
+
+                        } else {
+                            $request['Share']['participation_count'] = 0;
+                            $request['ShareType']['label'] = 'other';
+                            $request['ShareTypeCategory']['label'] = 'other';
+                        }
+                    }
+                }
+
+                $this->formatRequests($response['requests'], $requests, $userExternalId, $returnShareDetails);
             }
         } else {
             throw new ShareException(SHARE_STATUS_CODE_UNAUTHORIZED, SHARE_ERROR_CODE_BAD_CREDENTIALS, "Bad credentials");
