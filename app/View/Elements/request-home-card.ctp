@@ -56,11 +56,10 @@
                     </footer>
                 </blockquote>
             </div>
-            <div class="media-right" style="display: table-cell; vertical-align: middle; font-size: 40px; color: <?php
-            echo
-            $shareTypeColor;
-            ?>;">
-                <div class="div-user-home-share-icon-container" style="margin-top: 0px; padding-right: 20px;">
+            <div class="media-right" style="display: table-cell; vertical-align: middle; font-size: 40px;">
+                <div class="div-user-home-share-icon-container text-<?php echo
+                $this->Share->getShareDetailsRequestStatusClass($request['status']) ?>" style="margin-top: 0px;
+                padding-right: 20px;">
                     <!-- Status -->
                     <?php echo $this->Share->getRequestStatusIcon($request['status']); ?>
                 </div>

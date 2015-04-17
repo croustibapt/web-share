@@ -70,7 +70,7 @@
 
                 <?php if (!$doesUserOwnShare) : ?>
 
-                <button id="button-share-details-participate" class="btn <?php echo
+                <button id="button-share-details-participate" class="btn btn-<?php echo
                 $this->Share->getShareDetailsRequestStatusClass($requestStatus); ?> pull-right disabled
                 button-share-details-participate"><?php echo $this->Share->getShareDetailsRequestStatusLabel($requestStatus); ?></button>
 

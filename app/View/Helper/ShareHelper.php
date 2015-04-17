@@ -20,16 +20,16 @@ class ShareHelper extends AppHelper {
     }
 
     public function getShareDetailsRequestStatusClass($status = NULL) {
-        $class = 'btn-default';
+        $class = 'default';
 
         if ($status == SHARE_REQUEST_STATUS_PENDING) {
-            $class = 'btn-warning';
+            $class = 'warning';
         } else if ($status == SHARE_REQUEST_STATUS_ACCEPTED) {
-            $class = 'btn-success';
+            $class = 'success';
         } else if ($status == SHARE_REQUEST_STATUS_DECLINED) {
-            $class = 'btn-danger';
+            $class = 'danger';
         } else if ($status == SHARE_REQUEST_STATUS_CANCELLED) {
-            $class = 'btn-default';
+            $class = 'default';
         }
 
         return $class;
