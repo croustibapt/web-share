@@ -55,6 +55,7 @@
                         console.log('done');
 
                         button.attr('disabled', null);
+                        button.removeClass('btn-success').addClass('btn-warning');
                         button.html('<?php echo $this->Share->getShareDetailsRequestStatusLabel
                         (SHARE_REQUEST_STATUS_PENDING); ?>');
                     })
