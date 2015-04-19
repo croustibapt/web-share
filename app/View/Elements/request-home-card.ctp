@@ -8,25 +8,25 @@
     $hour = strftime('%kh%M', $date->getTimestamp());
 ?>
 
-<h4 class="h4-user-home-share" style="color: <?php echo $shareTypeColor; ?>;"><?php echo $day; ?> <?php echo $hour;
+<h4 class="h4-user-home-request" style="color: <?php echo $shareTypeColor; ?>;"><?php echo $day; ?> <?php echo $hour;
     ?></h4>
-<div class="div-user-home-share" shareid="<?php echo $request['share_id']; ?>">
-    <div class="div-user-home-share-container">
+<div class="div-user-home-request" shareid="<?php echo $request['share_id']; ?>">
+    <div class="div-user-home-request-container">
         <div class="media" style="display: table;">
-            <div class="div-user-home-share-icon media-left" style="display: table-cell; vertical-align: middle;
+            <div class="div-user-home-request-icon media-left" style="display: table-cell; vertical-align: middle;
                 color: <?php echo $shareTypeColor; ?>;">
-                <div class="div-user-home-share-icon-container">
+                <div class="div-user-home-request-icon-container">
                     <!-- Icon -->
                     <?php echo $this->ShareType->shareTypeIcon($request['share']['share_type_category']['label'], $request['share']['share_type']['label']); ?>
                 </div>
             </div>
-            <div class="div-user-home-share-title media-body">
-                <blockquote class="blockquote-user-home-share-title">
+            <div class="div-user-home-request-title media-body">
+                <blockquote class="blockquote-user-home-request-title">
                     <!-- Title -->
-                    <h3 class="h3-user-home-share-title"><?php echo $request['share']['title']; ?></h3>
+                    <h3 class="h3-user-home-request-title"><?php echo $request['share']['title']; ?></h3>
 
                     <!-- Places, price -->
-                    <footer class="footer-user-home-share-title lead">
+                    <footer class="footer-user-home-request-title lead">
                         <?php
                             $totalPlaces = $request['share']['places'];
                             $participationCount = $request['share']['participation_count'];
@@ -56,8 +56,8 @@
                     </footer>
                 </blockquote>
             </div>
-            <div class="media-right" style="display: table-cell; vertical-align: middle; font-size: 40px;">
-                <div class="div-user-home-share-icon-container text-<?php echo
+            <div class="media-right text-center" style="display: table-cell; vertical-align: middle; font-size: 40px;">
+                <div class="div-user-home-request-icon-container text-<?php echo
                 $this->Share->getShareDetailsRequestStatusClass($request['status']) ?>" style="margin-top: 0px;
                 padding-right: 20px;">
                     <!-- Status -->
@@ -67,3 +67,14 @@
         </div>
     </div>
 </div>
+
+<script>
+    //
+    /*$('.media-right').popover({
+        html: true,
+        trigger: 'click',
+        content: function() {
+            return $('#<?php //echo $popoverDivId; ?>').html();
+        }
+    });*/
+</script>

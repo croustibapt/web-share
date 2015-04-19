@@ -476,11 +476,11 @@ class AppController extends Controller {
         return $success;
     }
 
-    private function isShareOpened($share = NULL) {
+    protected function isShareOpened($share = NULL) {
         return ($share['Share']['status'] == SHARE_STATUS_OPENED);
     }
 
-    private function isPlacesLeft($share = NULL) {
+    protected function isPlacesLeft($share = NULL) {
         $isPlacesLeft = false;
 
         if ($share != NULL) {
@@ -512,7 +512,7 @@ class AppController extends Controller {
         return $doesUserOwnShare;
     }
 
-    private function canParticipate($share = NULL, $userId = NULL) {
+    protected function canParticipate($share = NULL, $userId = NULL) {
         $canParticipate = false;
 
         if (($share != NULL) && ($userId != NULL)) {
@@ -545,7 +545,7 @@ class AppController extends Controller {
         return $requestStatus;
     }
 
-    protected  function canRequest($share = NULL, $userId = NULL) {
+    protected function canRequest($share = NULL, $userId = NULL) {
         $canRequest = false;
 
         if (($share != NULL) && ($userId != NULL)) {

@@ -315,7 +315,7 @@ body {
     min-width: 40px;
 }
 
-/* USER/HOME */
+/* USER/HOME/SHARES */
 
 .div-user-home-tabs {
     padding: 15px;
@@ -375,10 +375,56 @@ body {
     margin-bottom: 0px;
 }
 
-.tr-user-home-request {
+.tr-user-home-share-request {
     cursor: pointer;
 }
-.p-user-home-request {
+.p-user-home-share-request {
+    margin-bottom: 0px;
+}
+
+/* USER/HOME/REQUEST */
+
+/* USER/HOME */
+
+.h4-user-home-request {
+    margin-left: 15px;
+    margin-right: 15px;
+}
+
+.div-user-home-request {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+.div-user-home-request-container {
+    border: 1px solid #dddddd;
+}
+
+.div-user-home-request-icon {
+    font-size: 60px;
+    padding-left: 20px;
+    padding-right: 0px;
+}
+
+.div-user-home-request-icon-container {
+
+}
+
+.div-user-home-request-title {
+    padding: 20px;
+}
+
+.blockquote-user-home-request-title {
+    border-left: none;
+    margin-bottom: 0px;
+    padding: 0px;
+}
+
+.h3-user-home-request-title {
+    margin-top: 0px;
+}
+
+.footer-user-home-request-title {
     margin-bottom: 0px;
 }
 

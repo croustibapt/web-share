@@ -76,10 +76,32 @@
 
 <script>
     //
-    function changeRequestStatus(status, trId, button) {
-        console.log('click');
+    function getPopUpDivHtml(requestId) {
+        var html =
+                '<button request-id="' + requestId +'" class="button-user-home-request-actions btn btn-danger" status="<?php echo SHARE_REQUEST_STATUS_DECLINED; ?>">' +
+                    'Refuser' +
+                '</button>' +
+                '<button request-id="' + requestId +'" class="button-user-home-request-actions btn btn-success" status="<?php echo SHARE_REQUEST_STATUS_ACCEPTED; ?>">' +
+                    'Accepter' +
+                '</button>';
+                
+        return html;
+    }
+    
+    //
+    $('.tr-user-home-request.warning').popover({
+        html: true,
+        trigger: 'click',
+        content: function() {
+            var requestId = $(this).attr('request-id');
+            return getPopUpDivHtml(requestId);
+        }
+    });
+    
+    //
+    function changeRequestStatus(status, requestId, button) {
         var url = null;
-        var tr = $('#' + trId);
+        var tr = $('#tr-user-home-request-' + requestId);
         var requestId = tr.attr('request-id');
 
         if (status == <?php echo SHARE_REQUEST_STATUS_ACCEPTED; ?>) {
@@ -109,7 +131,7 @@
             })
             .fail(function(jqXHR, textStatus, errorThrown) {
                 console.log(jqXHR);
-                button.attr('disabled', null);
+                button.button('reset');
                 tr.popover('hide');
             });
         }
@@ -117,11 +139,11 @@
 
     //
     $(document).on("click", ".button-user-home-request-actions", function() {
-        var trId = $(this).attr('tr-id');
+        var requestId = $(this).attr('request-id');
         var status = $(this).attr('status');
-        $(this).attr('disabled', 'disabled');
+        $(this).button('loading');
 
         //
-        changeRequestStatus(status, trId, $(this));
+        changeRequestStatus(status, requestId, $(this));
     });
 </script>
