@@ -13,3 +13,4 @@ CakePHP 2
 /app/Vendor/*
 
 .idea/*
+/nbproject/*
