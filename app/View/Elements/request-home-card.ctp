@@ -9,6 +9,7 @@
 ?>
 
 <div id="div-user-home-request-main-container-<?php echo $request['request_id']; ?>" class="div-user-home-request-main-container" request-id="<?php echo $request['request_id']; ?>">
+
     <h4 class="h4-user-home-request" style="color: <?php echo $shareTypeColor; ?>;"><?php echo $day; ?> <?php echo $hour;
     ?></h4>
     <div class="div-user-home-request" shareid="<?php echo $request['share_id']; ?>">
@@ -68,4 +69,6 @@
             </div>
         </div>
     </div>
+
+    <hr />
 </div>

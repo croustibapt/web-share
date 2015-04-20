@@ -26,8 +26,8 @@ body {
 /* SHARE CARD */
 
 .div-share-card {
-    margin-bottom: 30px;
     cursor: pointer;
+    margin-bottom: 30px;
 }
 
 .div-share-card:hover {
@@ -43,8 +43,8 @@ body {
     border-top-right-radius: 2px;
     padding-left: 15px;
     padding-right: 15px;
-    padding-top: 10px;
-    padding-bottom: 10px;
+    padding-top: 5px;
+    padding-bottom: 5px;
 }
 
 .span-share-card-date {
@@ -56,7 +56,7 @@ body {
 }
 
 .div-share-card-subtitle {
-    padding-top: 10px;
+    padding-top: 5px;
     padding-left: 15px;
     padding-right: 15px;
     color: #333333;
@@ -91,6 +91,11 @@ body {
     margin-bottom: 0px;
 }
 
+.blockquote-share-card-title {
+    border-left: none;
+    margin-bottom: 0px;
+}
+
 .div-share-card-limitations {
     padding-left: 15px;
     padding-right: 15px;
@@ -115,6 +120,7 @@ body {
 
 .div-share-card-progress .progress {
     margin-bottom: 0px;
+    height: 10px;
 }
 
 .div-share-card-progress-cell {
@@ -161,6 +167,10 @@ body {
     width: 100%;
     margin-top: 10px;
     margin-bottom: 10px;
+}
+
+.button-share-details-participate.disabled {
+    opacity: 1.0;
 }
 
 .div-share-details-description {
@@ -337,6 +347,7 @@ body {
 
 .div-user-home-share-container {
     border: 1px solid #dddddd;
+    background-color: #fafafa;
 }
 
 .div-user-home-share-icon {
@@ -384,6 +395,10 @@ body {
 
 /* USER/HOME/REQUEST */
 
+.div-user-home-request-main-container {
+    cursor: pointer;
+}
+
 .h4-user-home-request {
     margin-left: 15px;
     margin-right: 15px;
@@ -396,6 +411,7 @@ body {
 
 .div-user-home-request-container {
     border: 1px solid #dddddd;
+    background-color: #fafafa;
 }
 
 .div-user-home-request-icon {
@@ -430,7 +446,6 @@ body {
     display: table-cell;
     vertical-align: middle;
     font-size: 40px;
-    cursor: pointer;
 }
 
 /* MENU */

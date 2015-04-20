@@ -1,25 +1,29 @@
+<?php
+    $shareColor = $this->ShareType->shareTypeColor($share['share_type_category']['label']);
+?>
+
 <div class="div-share-card card" shareid="<?php echo $share['share_id']; ?>">
+
     <div class="div-share-card-date" style="background-color: <?php echo $this->ShareType->shareTypeColor
     ($share['share_type_category']['label']); ?>;">
         <div class="row">
             <div class="col-md-10">
                 <!-- Date -->
                 <?php
-                    $date = new DateTime($share['event_date']);
-                    
-                    setlocale(LC_TIME, "fr_FR");
-                    $day = strftime('%A %e %B', $date->getTimestamp());
-                    $hour = strftime('%k:%M', $date->getTimestamp());
+                $date = new DateTime($share['event_date']);
+
+                setlocale(LC_TIME, "fr_FR");
+                $day = strftime('%A %e %B', $date->getTimestamp());
+                $hour = strftime('%k:%M', $date->getTimestamp());
                 ?>
-                <span class="span-share-card-date"><?php echo $day; ?></span> <span class="span-share-card-date-hour"><?php echo $hour; ?></span>
+                <span class="span-share-card-date"><?php echo $day; ?></span>
             </div>
             <div class="col-md-2 text-right">
-                <!-- Icon -->
-                <?php echo $this->ShareType->shareTypeIcon($share['share_type_category']['label'], $share['share_type']['label']); ?>
+                <span class="span-share-card-date-hour"><?php echo $hour; ?></span>
             </div>
         </div>
     </div>
-    
+
     <div class="div-share-card-subtitle">
         <div class="row">
             <div class="col-md-6">
@@ -32,37 +36,34 @@
                 <!-- City, zip code -->
                 <span class="span-share-card-city"><?php echo $share['city']; ?></span> <span
                     class="span-share-card-zip-code">
-                    <?php
-                        echo $share['zip_code'];
-                    ?>
-                </span>
-            </div>
-        </div>
-    </div>
-    
-    <div class="div-share-card-title">
-        <div class="row">
-            <div class="col-md-12">
-                <!-- Message -->
-                <p class="lead">
-                    <?php echo $share['title']; ?>
-                </p>
+                <?php
+                echo $share['zip_code'];
+                ?>
+            </span>
             </div>
         </div>
     </div>
 
-    <!-- Limitations -->
-    <?php if ($share['limitations'] != "") : ?>
+    <div class="media" style="display: table; margin-top: 10px;">
+        <div class="media-left" style="padding-left: 15px; padding-right: 0px; display: table-cell; vertical-align:
+            top; font-size: 40px; color: <?php echo $shareColor; ?>;">
+            <!-- Icon -->
+            <?php echo $this->ShareType->shareTypeIcon($share['share_type_category']['label'],
+                $share['share_type']['label']); ?>
+        </div>
+        <div class="media-body">
+            <blockquote class="blockquote-share-card-title">
+                <h3 class="media-heading"><?php echo $share['title']; ?></h3>
+                <?php if ($share['limitations'] != "") : ?>
 
-    <div class="div-share-card-limitations">
-        <div class="row">
-            <div class="col-md-12">
-                <span class="text-danger"><i class="fa fa-asterisk"></i> <?php echo $share['limitations']; ?></span>
-            </div>
+                    <footer class="footer-share-details-limitations text-danger">
+                        <i class="fa fa-asterisk"></i> <?php echo $share['limitations']; ?>
+                    </footer>
+
+                <?php endif; ?>
+            </blockquote>
         </div>
     </div>
-
-    <?php endif; ?>
     
     <div class="div-share-card-places-price">
         <div class="row">
@@ -93,11 +94,12 @@
         <div class="row">
             <div class="col-md-12">
 
-
                 <div class="div-share-card-progress">
                     <div class="div-share-card-progress-cell">
                         <div class="progress">
-                            <div class="progress-bar <?php echo $full ? "progress-bar-success" : ""; ?>" role="progressbar" aria-valuenow="<?php echo $percentage; ?>" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo $percentage; ?>%;">
+                            <div class="progress-bar <?php echo $full ? "progress-bar-success" : ""; ?>"
+                                 role="progressbar" aria-valuenow="<?php echo $percentage; ?>"
+                                 aria-valuemin="0" aria-valuemax="100" style="width: <?php echo $percentage; ?>%;">
                                 <?php echo $progressText; ?>
                             </div>
                         </div>
@@ -109,8 +111,6 @@
                         </p>
                     </div>
                 </div>
-
-
 
             </div>
         </div>
