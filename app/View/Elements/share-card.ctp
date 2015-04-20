@@ -45,11 +45,15 @@
     </div>
 
     <div class="media" style="display: table; margin-top: 10px;">
-        <div class="media-left" style="padding-left: 15px; padding-right: 0px; display: table-cell; vertical-align:
+        <div class="media-left" style="padding-left: 15px; padding-right: 0px; display: table-cell;
+            vertical-align:
             top; font-size: 40px; color: <?php echo $shareColor; ?>;">
-            <!-- Icon -->
-            <?php echo $this->ShareType->shareTypeIcon($share['share_type_category']['label'],
-                $share['share_type']['label']); ?>
+            <div class="text-center" style="width: 50px;">
+                <!-- Icon -->
+                <?php echo $this->ShareType->shareTypeIcon($share['share_type_category']['label'],
+                    $share['share_type']['label']); ?>
+            </div>
+
         </div>
         <div class="media-body">
             <blockquote class="blockquote-share-card-title">

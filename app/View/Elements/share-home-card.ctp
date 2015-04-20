@@ -13,9 +13,9 @@
 <div class="div-user-home-share" shareid="<?php echo $share['share_id']; ?>">
     <div class="div-user-home-share-container">
         <div class="media" style="display: table;">
-            <div class="div-user-home-share-icon media-left" style="display: table-cell; vertical-align: middle;
+            <div class="div-user-home-share-icon media-left" style="display: table-cell; vertical-align: top;
                 color: <?php echo $shareTypeColor; ?>;">
-                <div class="div-user-home-share-icon-container">
+                <div class="div-user-home-share-icon-container text-center">
                     <!-- Icon -->
                     <?php echo $this->ShareType->shareTypeIcon($share['share_type_category']['label'], $share['share_type']['label']); ?>
                 </div>
@@ -81,8 +81,9 @@
         <table class="table table-user-home-share-requests">
             <tr class="active">
                 <td>
-                    <p class="lead text-muted text-center p-user-home-share-requests">Vous n'avez aucun
-                        partage en cours</p>
+                    <p class="lead text-muted text-center p-user-home-share-requests">
+                        Vous n'avez aucun partage en cours
+                    </p>
                 </td>
             </tr>
 

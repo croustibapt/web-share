@@ -10,14 +10,12 @@
 
 <div id="div-user-home-request-main-container-<?php echo $request['request_id']; ?>" class="div-user-home-request-main-container" request-id="<?php echo $request['request_id']; ?>">
 
-    <h4 class="h4-user-home-request" style="color: <?php echo $shareTypeColor; ?>;"><?php echo $day; ?> <?php echo $hour;
-    ?></h4>
+    <h4 class="h4-user-home-request" style="color: <?php echo $shareTypeColor; ?>;"><?php echo $day; ?> <?php echo $hour; ?></h4>
     <div class="div-user-home-request" shareid="<?php echo $request['share_id']; ?>">
         <div class="div-user-home-request-container">
-            <div class="media" style="display: table;">
-                <div class="div-user-home-request-icon media-left" style="display: table-cell; vertical-align: middle;
-                    color: <?php echo $shareTypeColor; ?>;">
-                    <div class="div-user-home-request-icon-container">
+            <div class="media">
+                <div class="div-user-home-request-icon media-left" style="color: <?php echo $shareTypeColor; ?>;">
+                    <div class="div-user-home-request-icon-container text-center">
                         <!-- Icon -->
                         <?php echo $this->ShareType->shareTypeIcon($request['share']['share_type_category']['label'], $request['share']['share_type']['label']); ?>
                     </div>
@@ -53,15 +51,12 @@
 
                             <?php endif; ?>
 
-                            à <strong><?php echo number_format($request['share']['price'], 1, '.',
-                                    ''); ?></strong> <?php echo $priceLabel; ?>
+                            à <strong><?php echo number_format($request['share']['price'], 1, '.', ''); ?></strong> <?php echo $priceLabel; ?>
                         </footer>
                     </blockquote>
                 </div>
                 <div class="div-user-home-request-status media-right text-center">
-                    <div class="div-user-home-request-icon-container text-<?php echo
-                    $this->Share->getShareDetailsRequestStatusClass($request['status']) ?>" style="margin-top: 0px;
-                    padding-right: 20px;">
+                    <div class="div-user-home-request-icon-container text-<?php echo $this->Share->getShareDetailsRequestStatusClass($request['status']); ?>">
                         <!-- Status -->
                         <?php echo $this->Share->getRequestStatusIcon($request['status']); ?>
                     </div>

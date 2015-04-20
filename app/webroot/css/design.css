@@ -94,6 +94,7 @@ body {
 .blockquote-share-card-title {
     border-left: none;
     margin-bottom: 0px;
+    padding-left: 15px;
 }
 
 .div-share-card-limitations {
@@ -351,13 +352,14 @@ body {
 }
 
 .div-user-home-share-icon {
-    font-size: 60px;
+    font-size: 40px;
     padding-left: 20px;
     padding-right: 0px;
 }
 
 .div-user-home-share-icon-container {
-
+    width: 50px;
+    margin-top: 20px;
 }
 
 .div-user-home-share-title {
@@ -414,14 +416,22 @@ body {
     background-color: #fafafa;
 }
 
+.div-user-home-request-container .media {
+    display: table;
+}
+
 .div-user-home-request-icon {
-    font-size: 60px;
+    font-size: 40px;
     padding-left: 20px;
     padding-right: 0px;
+    display: table-cell;
+    vertical-align: top;
 }
 
 .div-user-home-request-icon-container {
-
+    width: 50px;
+    margin-top: 20px;
+    padding-right: 20px;
 }
 
 .div-user-home-request-title {
