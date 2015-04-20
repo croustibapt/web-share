@@ -14,7 +14,7 @@ class ApiRequestsController extends AppController {
             if (($status == SHARE_REQUEST_STATUS_ACCEPTED) || ($status == SHARE_REQUEST_STATUS_DECLINED)) {
                 $canChangeStatus = ($request['Request']['status'] == SHARE_REQUEST_STATUS_PENDING);
             } else if ($status == SHARE_REQUEST_STATUS_CANCELLED) {
-                $canChangeStatus = ($request['Request']['status'] == SHARE_REQUEST_STATUS_ACCEPTED);
+                $canChangeStatus = (($request['Request']['status'] == SHARE_REQUEST_STATUS_PENDING) || ($request['Request']['status'] == SHARE_REQUEST_STATUS_ACCEPTED));
             }
         }
         return $canChangeStatus;
@@ -79,7 +79,7 @@ class ApiRequestsController extends AppController {
                 )
             ));
             
-            $canCancelRequest = $this->doesUserOwnShare($share, $userId);
+            $canCancelRequest = ($this->doesUserOwnShare($share, $userId) || ($request['Request']['user_id'] == $userId));
         }
         
         return $canCancelRequest;

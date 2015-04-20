@@ -74,14 +74,14 @@
     </div>
 </div>
 
-<script>
+<script>   
     //
-    function getPopUpDivHtml(requestId) {
+    function getPendingPopUpDivHtml(requestId) {
         var html =
-                '<button request-id="' + requestId +'" class="button-user-home-request-actions btn btn-danger" status="<?php echo SHARE_REQUEST_STATUS_DECLINED; ?>">' +
+                '<button request-id="' + requestId +'" class="button-user-home-share-request-actions btn btn-danger" status="<?php echo SHARE_REQUEST_STATUS_DECLINED; ?>">' +
                     'Refuser' +
                 '</button>' +
-                '<button request-id="' + requestId +'" class="button-user-home-request-actions btn btn-success" status="<?php echo SHARE_REQUEST_STATUS_ACCEPTED; ?>">' +
+                '<button request-id="' + requestId +'" class="button-user-home-share-request-actions btn btn-success" status="<?php echo SHARE_REQUEST_STATUS_ACCEPTED; ?>">' +
                     'Accepter' +
                 '</button>';
                 
@@ -89,25 +89,77 @@
     }
     
     //
-    $('.tr-user-home-request.warning').popover({
+    function getCancelPopUpDivHtml(requestId) {
+        var html =
+                '<button request-id="' + requestId +'" class="button-user-home-request-cancel btn btn-default">' +
+                    'Cancel' +
+                '</button>';
+                
+        return html;
+    }
+    
+    //
+    $('.tr-user-home-share-request.warning').popover({
         html: true,
         trigger: 'click',
         content: function() {
             var requestId = $(this).attr('request-id');
-            return getPopUpDivHtml(requestId);
+            return getPendingPopUpDivHtml(requestId);
+        }
+    });
+    
+    $('.tr-user-home-share-request.success').popover({
+        html: true,
+        trigger: 'click',
+        content: function() {
+            var requestId = $(this).attr('request-id');
+            return getCancelPopUpDivHtml(requestId);
         }
     });
     
     //
-    function changeRequestStatus(status, requestId, button) {
+    $('.div-user-home-request-main-container').popover({
+        html: true,
+        trigger: 'click',
+        content: function() {
+            var requestId = $(this).attr('request-id');
+            return getCancelPopUpDivHtml(requestId);
+        }
+    });
+    
+    //
+    $(document).on("click", ".button-user-home-share-request-actions", function() {
+        var requestId = $(this).attr('request-id');
+        var tr = $('#tr-user-home-share-request-' + requestId);
+
+        var status = $(this).attr('status');
+        $(this).button('loading');
+
+        //
+        changeRequestStatus(status, requestId, tr, $(this));
+    });
+    
+    //
+    $(document).on("click", ".button-user-home-request-cancel", function() {
+        var requestId = $(this).attr('request-id');
+        var tr = $('#tr-user-home-share-request-' + requestId);
+
+        $(this).button('loading');
+
+        //
+        changeRequestStatus(<?php echo SHARE_REQUEST_STATUS_CANCELLED; ?>, requestId, tr, $(this));
+    });
+    
+    //
+    function changeRequestStatus(status, requestId, container, button) {
         var url = null;
-        var tr = $('#tr-user-home-request-' + requestId);
-        var requestId = tr.attr('request-id');
 
         if (status == <?php echo SHARE_REQUEST_STATUS_ACCEPTED; ?>) {
             url = webroot + "api/request/accept/" + requestId;
         } else if (status == <?php echo SHARE_REQUEST_STATUS_DECLINED;?>) {
             url = webroot + "api/request/decline/" + requestId;
+        } else if (status == <?php echo SHARE_REQUEST_STATUS_CANCELLED;?>) {
+            url = webroot + "api/request/cancel/" + requestId;
         }
         console.log(url);
 
@@ -118,32 +170,24 @@
                 dataType : "text"
             })
             .done(function(data, textStatus, jqXHR) {
-                tr.popover('hide');
-                tr.popover('destroy');
+                container.popover('hide');
+                container.popover('destroy');
 
                 //
                 if (status == <?php echo SHARE_REQUEST_STATUS_ACCEPTED; ?>) {
-                    tr.removeClass('warning').addClass('success');
-                    tr.children('td').eq(1).html('<p class="p-user-home-request lead text-success">Acceptée <i class="fa fa-check-circle"></i></p>');
+                    container.removeClass('warning').addClass('success');
+                    container.children('td').eq(1).html('<p class="p-user-home-share-request lead text-success"><?php echo $this->Share->getShareDetailsRequestStatusLabel(SHARE_REQUEST_STATUS_ACCEPTED); ?></p>');
                 } else if (status == <?php echo SHARE_REQUEST_STATUS_DECLINED; ?>) {
-                    tr.remove();
+                    container.remove();
+                } else if (status == <?php echo SHARE_REQUEST_STATUS_CANCELLED; ?>) {
+                    container.remove();
                 }
             })
             .fail(function(jqXHR, textStatus, errorThrown) {
                 console.log(jqXHR);
                 button.button('reset');
-                tr.popover('hide');
+                container.popover('hide');
             });
         }
     }
-
-    //
-    $(document).on("click", ".button-user-home-request-actions", function() {
-        var requestId = $(this).attr('request-id');
-        var status = $(this).attr('status');
-        $(this).button('loading');
-
-        //
-        changeRequestStatus(status, requestId, $(this));
-    });
 </script>

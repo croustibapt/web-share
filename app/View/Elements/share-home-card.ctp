@@ -66,10 +66,12 @@
             <?php foreach ($share['requests'] as $request) : ?>
 
             <?php
-                echo $this->element('share-home-request', array(
-                    'request' => $request,
-                    'shareTypeColor' => $shareTypeColor
-                ))
+                if (($request['status'] == SHARE_REQUEST_STATUS_ACCEPTED) || ($request['status'] == SHARE_REQUEST_STATUS_PENDING)) {
+                    echo $this->element('share-home-request', array(
+                        'request' => $request,
+                        'shareTypeColor' => $shareTypeColor
+                    ));
+                }
             ?>
 
             <?php endforeach; ?>

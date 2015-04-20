@@ -384,8 +384,6 @@ body {
 
 /* USER/HOME/REQUEST */
 
-/* USER/HOME */
-
 .h4-user-home-request {
     margin-left: 15px;
     margin-right: 15px;
@@ -426,6 +424,13 @@ body {
 
 .footer-user-home-request-title {
     margin-bottom: 0px;
+}
+
+.div-user-home-request-status {
+    display: table-cell;
+    vertical-align: middle;
+    font-size: 40px;
+    cursor: pointer;
 }
 
 /* MENU */
