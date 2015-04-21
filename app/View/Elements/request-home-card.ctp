@@ -7,63 +7,73 @@
     $day = strftime('%A %e %B', $date->getTimestamp());
     $hour = strftime('%kh%M', $date->getTimestamp());
 ?>
-
-<div id="div-user-home-request-main-container-<?php echo $request['request_id']; ?>" class="div-user-home-request-main-container" request-id="<?php echo $request['request_id']; ?>">
-
-    <h4 class="h4-user-home-request" style="color: <?php echo $shareTypeColor; ?>;"><?php echo $day; ?> <?php echo $hour; ?></h4>
-    <div class="div-user-home-request" shareid="<?php echo $request['share_id']; ?>">
-        <div class="div-user-home-request-container">
-            <div class="media">
-                <div class="div-user-home-request-icon media-left" style="color: <?php echo $shareTypeColor; ?>;">
-                    <div class="div-user-home-request-icon-container text-center">
-                        <!-- Icon -->
-                        <?php echo $this->ShareType->shareTypeIcon($request['share']['share_type_category']['label'], $request['share']['share_type']['label']); ?>
-                    </div>
+<div id="div-user-home-request-main-container-<?php echo $request['request_id']; ?>" class="div-user-home-request-main-container card" request-id="<?php echo $request['request_id']; ?>">
+    <div class="div-user-home-request-container">
+        <!-- Date/Hour -->
+        <div class="div-card-date" style="background-color: <?php echo $shareTypeColor; ?>;">
+            <div class="row">
+                <div class="col-md-10">
+                    <span class="span-card-date"><?php echo $day; ?></span>
                 </div>
-                <div class="div-user-home-request-title media-body">
-                    <blockquote class="blockquote-user-home-request-title">
-                        <!-- Title -->
-                        <h3 class="h3-user-home-request-title"><?php echo $request['share']['title']; ?></h3>
+                <div class="col-md-2 text-right">
+                    <span class="span-card-date-hour"><?php echo $hour; ?></span>
+                </div>
+            </div>
+        </div>
 
-                        <!-- Places, price -->
-                        <footer class="footer-user-home-request-title lead">
-                            <?php
-                                $totalPlaces = $request['share']['places'];
-                                $participationCount = $request['share']['participation_count'];
-                                $placesLeft = $totalPlaces - $participationCount;
+        <div class="media">
+            <div class="div-user-home-request-icon media-left" style="color: <?php echo $shareTypeColor; ?>;">
+                <div class="div-user-home-request-icon-container text-center">
+                    <!-- Icon -->
+                    <?php echo $this->ShareType->shareTypeIcon($request['share']['share_type_category']['label'], $request['share']['share_type']['label']); ?>
+                </div>
+            </div>
+            <div class="div-user-home-request-title media-body">
+                <blockquote class="blockquote-user-home-request-title">
+                    <!-- Title -->
+                    <?php
+                        echo $this->Html->link('<h3 class="h3-user-home-request-title">'.$request['share']['title'].'</h3>', '/share/details/'.$request['share_id'], array(
+                            'escape' => false,
+                            'class' => 'a-user-home-request-title'
+                        ));
+                    ?>
 
+                    <!-- Places, price -->
+                    <footer class="footer-user-home-request-title lead">
+                        <?php
+                            $totalPlaces = $request['share']['places'];
+                            $participationCount = $request['share']['participation_count'];
+                            $placesLeft = $totalPlaces - $participationCount;
+
+                            $priceLabel = 'euros';
+                            if ($request['share']['price'] <= 1.0) {
                                 $priceLabel = 'euros';
-                                if ($request['share']['price'] <= 1.0) {
-                                    $priceLabel = 'euros';
-                                }
-                            ?>
-                            <?php if ($placesLeft > 1) : ?>
+                            }
+                        ?>
+                        <?php if ($placesLeft > 1) : ?>
 
-                            <strong><?php echo $placesLeft; ?></strong> places
+                        <strong><?php echo $placesLeft; ?></strong> places
 
-                            <?php elseif ($placesLeft > 0) : ?>
+                        <?php elseif ($placesLeft > 0) : ?>
 
-                            <strong><?php echo $placesLeft; ?></strong> place
+                        <strong><?php echo $placesLeft; ?></strong> place
 
-                            <?php else : ?>
+                        <?php else : ?>
 
-                            Complet
+                        Complet
 
-                            <?php endif; ?>
+                        <?php endif; ?>
 
-                            à <strong><?php echo number_format($request['share']['price'], 1, '.', ''); ?></strong> <?php echo $priceLabel; ?>
-                        </footer>
-                    </blockquote>
-                </div>
-                <div class="div-user-home-request-status media-right text-center">
-                    <div class="div-user-home-request-icon-container text-<?php echo $this->Share->getShareDetailsRequestStatusClass($request['status']); ?>">
-                        <!-- Status -->
-                        <?php echo $this->Share->getRequestStatusIcon($request['status']); ?>
-                    </div>
+                        à <strong><?php echo number_format($request['share']['price'], 1, '.', ''); ?></strong> <?php echo $priceLabel; ?>
+                    </footer>
+                </blockquote>
+            </div>
+            <div class="div-user-home-request-status media-right text-center">
+                <div class="div-user-home-request-icon-container text-<?php echo $this->Share->getShareDetailsRequestStatusClass($request['status']); ?>">
+                    <!-- Status -->
+                    <?php echo $this->Share->getRequestStatusIcon($request['status']); ?>
                 </div>
             </div>
         </div>
     </div>
-
-    <hr />
 </div>

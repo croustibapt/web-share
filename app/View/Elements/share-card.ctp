@@ -4,8 +4,7 @@
 
 <div class="div-share-card card" shareid="<?php echo $share['share_id']; ?>">
 
-    <div class="div-share-card-date" style="background-color: <?php echo $this->ShareType->shareTypeColor
-    ($share['share_type_category']['label']); ?>;">
+    <div class="div-card-date" style="background-color: <?php echo $this->ShareType->shareTypeColor($share['share_type_category']['label']); ?>;">
         <div class="row">
             <div class="col-md-10">
                 <!-- Date -->
@@ -16,10 +15,10 @@
                 $day = strftime('%A %e %B', $date->getTimestamp());
                 $hour = strftime('%k:%M', $date->getTimestamp());
                 ?>
-                <span class="span-share-card-date"><?php echo $day; ?></span>
+                <span class="span-card-date"><?php echo $day; ?></span>
             </div>
             <div class="col-md-2 text-right">
-                <span class="span-share-card-date-hour"><?php echo $hour; ?></span>
+                <span class="span-card-date-hour"><?php echo $hour; ?></span>
             </div>
         </div>
     </div>

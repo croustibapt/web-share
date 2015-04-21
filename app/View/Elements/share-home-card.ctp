@@ -8,11 +8,23 @@
     $hour = strftime('%kh%M', $date->getTimestamp());
 ?>
 
-<h4 class="h4-user-home-share" style="color: <?php echo $shareTypeColor; ?>;"><?php echo $day; ?> <?php echo $hour;
-    ?></h4>
-<div class="div-user-home-share" shareid="<?php echo $share['share_id']; ?>">
+<div class="div-user-home-share card" shareid="<?php echo $share['share_id']; ?>">
     <div class="div-user-home-share-container">
-        <div class="media" style="display: table;">
+        
+        <!-- Date/Hour -->
+        <div class="div-card-date" style="background-color: <?php echo $shareTypeColor; ?>;">
+            <div class="row">
+                <div class="col-md-10">
+                    <span class="span-card-date"><?php echo $day; ?></span>
+                </div>
+                <div class="col-md-2 text-right">
+                    <span class="span-card-date-hour"><?php echo $hour; ?></span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Body -->
+        <div class="media" style="display: table; margin-top: 0px;">
             <div class="div-user-home-share-icon media-left" style="display: table-cell; vertical-align: top;
                 color: <?php echo $shareTypeColor; ?>;">
                 <div class="div-user-home-share-icon-container text-center">
@@ -24,7 +36,12 @@
             <div class="div-user-home-share-title media-body">
                 <blockquote class="blockquote-user-home-share-title">
                     <!-- Title -->
-                    <h3 class="h3-user-home-share-title"><?php echo $share['title']; ?></h3>
+                    <?php
+                        echo $this->Html->link('<h3 class="h3-user-home-share-title">'.$share['title'].'</h3>', '/share/details/'.$share['share_id'], array(
+                            'escape' => false,
+                            'class' => 'a-user-home-share-title'
+                        ));
+                    ?>
 
                     <!-- Places, price -->
                     <footer class="footer-user-home-share-title lead">
@@ -82,7 +99,7 @@
             <tr class="active">
                 <td>
                     <p class="lead text-muted text-center p-user-home-share-requests">
-                        Vous n'avez aucun partage en cours
+                        Vous n'avez aucune demande
                     </p>
                 </td>
             </tr>

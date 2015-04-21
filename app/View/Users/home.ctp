@@ -1,74 +1,70 @@
-<h2>My account</h2>
+<div class="div-user-home-tabs">
+    <ul class="nav nav-pills text-center" role="tablist">
+        <li role="presentation" class="active">
+            <a href="#div-user-home-shares" aria-controls="div-user-home-shares" role="tab" data-toggle="tab">Mes partages</a>
+        </li>
+        <li role="presentation">
+            <a href="#div-user-home-requests" aria-controls="div-user-home-requests" role="tab" data-toggle="tab">Mes demandes</a>
+        </li>
+        <li role="presentation">
+            <a href="#div-user-home-profile" aria-controls="div-user-home-profile" role="tab" data-toggle="tab">Mon profil</a>
+        </li>
+    </ul>
+</div>
 
-<div class="card">
-    <div class="div-user-home-tabs">
-        <ul class="nav nav-pills text-center" role="tablist">
-            <li role="presentation" class="active">
-                <a href="#div-user-home-shares" aria-controls="div-user-home-shares" role="tab" data-toggle="tab">Mes partages</a>
-            </li>
-            <li role="presentation">
-                <a href="#div-user-home-requests" aria-controls="div-user-home-requests" role="tab" data-toggle="tab">Mes demandes</a>
-            </li>
-            <li role="presentation">
-                <a href="#div-user-home-profile" aria-controls="div-user-home-profile" role="tab" data-toggle="tab">Mon profil</a>
-            </li>
-        </ul>
-    </div>
-   
-    <!-- Tab panes -->
-    <div class="div-user-home-panes tab-content">
-        <!-- Shares -->
-        <div id="div-user-home-shares" class="tab-pane active" role="tabpanel">
+<!-- Tab panes -->
+<div class="div-user-home-panes tab-content">
+    <!-- Shares -->
+    <div id="div-user-home-shares" class="tab-pane active" role="tabpanel">
 
-            <?php if ($user['share_count'] > 0) : ?>
+        <?php if ($user['share_count'] > 0) : ?>
 
-                <?php foreach ($user['shares'] as $share) : ?>
+            <?php foreach ($user['shares'] as $share) : ?>
 
-                <?php
-                    //
-                    echo $this->element('share-home-card', array(
-                        'share' => $share
-                    ));
-                ?>
-            
-                <?php endforeach; ?>
-
-            <?php else : ?>
-
-            <div class="lead text-muted text-center">Vous n'avez aucun partage en cours</div>
-
-            <?php endif; ?>
-        </div>
-
-        <!-- Requests -->
-        <div role="tabpanel" class="tab-pane" id="div-user-home-requests">
-
-            <?php if ($user['request_count'] > 0) : ?>
-
-                <?php foreach ($user['requests'] as $request) : ?>
-
-                <?php
-                    if ($request['status'] != SHARE_REQUEST_STATUS_CANCELLED) {
-                        //
-                        echo $this->element('request-home-card', array(
-                            'request' => $request
-                        ));
-                    }
-                ?>
-
-                <?php endforeach; ?>
-
-            <?php else : ?>
-
-            <div class="lead text-muted text-center">Vous n'avez aucune demande en cours</div>
-
-            <?php endif; ?>
-        </div>
-        <div role="tabpanel" class="tab-pane" id="div-user-home-profile">
             <?php
-                pr($user);
+                //
+                echo $this->element('share-home-card', array(
+                    'share' => $share
+                ));
             ?>
-        </div>
+
+            <?php endforeach; ?>
+
+        <?php else : ?>
+
+        <div class="lead text-muted text-center">Vous n'avez aucun partage en cours</div>
+
+        <?php endif; ?>
+    </div>
+
+    <!-- Requests -->
+    <div role="tabpanel" class="tab-pane" id="div-user-home-requests">
+
+        <?php if ($user['request_count'] > 0) : ?>
+
+            <?php foreach ($user['requests'] as $request) : ?>
+
+            <?php
+                if ($request['status'] != SHARE_REQUEST_STATUS_CANCELLED) {
+                    //
+                    echo $this->element('request-home-card', array(
+                        'request' => $request
+                    ));
+                }
+            ?>
+
+            <?php endforeach; ?>
+
+        <?php else : ?>
+
+        <div class="lead text-muted text-center">Vous n'avez aucune demande en cours</div>
+
+        <?php endif; ?>
+    </div>
+    <div role="tabpanel" class="tab-pane" id="div-user-home-profile">
+        <?php
+            pr($user);
+        ?>
     </div>
 </div>
 
