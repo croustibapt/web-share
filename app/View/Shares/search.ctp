@@ -3,7 +3,10 @@
         <?php
             foreach ($response['results'] as $share) {
                 echo $this->element('share-card', array(
-                    'share' => $share
+                    'share' => $share,
+                    'subtitle' => true,
+                    'placesPrice' => true,
+                    'request' => NULL
                 ));
             }
         ?>
@@ -14,3 +17,11 @@
         ?>
     </div>
 </div>
+
+<script>
+    //
+    $('.div-share-card').click(function() {
+        var shareId = $(this).attr('shareid');
+        window.location.href = webroot + "share/details/" + shareId;
+    });
+</script>

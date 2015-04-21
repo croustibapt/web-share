@@ -320,6 +320,7 @@ class AppController extends Controller {
             $response[$requestIndex]['share_id'] = $request['Request']['share_id'];
 
             if ($returnShareDetails) {
+                $response[$requestIndex]['share']['share_id'] = $request['Share']['id'];
                 $response[$requestIndex]['share']['title'] = $request['Share']['title'];
                 $response[$requestIndex]['share']['event_date'] = $request['Share']['event_date'];
                 $response[$requestIndex]['share']['price'] = $request['Share']['price'];
