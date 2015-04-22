@@ -180,7 +180,9 @@ class ApiRequestsController extends AppController {
         return $success;
     }
     
-    protected function internAccept($requestId = NULL, $userId = NULL) {        
+    protected function internAccept($requestId = NULL, $userId = NULL) {
+        $success = false;
+        
         if (($requestId != NULL) && ($userId != NULL)) {
             //Get related Request
             $request = $this->Request->find('first', array(
@@ -196,6 +198,9 @@ class ApiRequestsController extends AppController {
                     if ($this->canAcceptRequest($request, $userId)) {
                         //Update status
                         if ($this->changeStatus($request, SHARE_REQUEST_STATUS_ACCEPTED)) {
+                            //Success!
+                            $success = true;
+                            
                             //Send push notif
                             $this->sendPushNotif($request['Request']['user_id'], 'Votre demande a été acceptée.');
                         } else {
@@ -211,6 +216,8 @@ class ApiRequestsController extends AppController {
                 throw new ShareException(SHARE_STATUS_CODE_NOT_FOUND, SHARE_ERROR_CODE_RESOURCE_NOT_FOUND, "Request not found");
             } 
         }
+        
+        return $success;
     }
     
     public function apiAccept($requestId = NULL) {

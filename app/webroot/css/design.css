@@ -121,9 +121,25 @@ body {
     margin-top: 10px;
 }
 
+.form-share-card-request {
+    display: inline;
+}
+
+.form-share-card-request input {
+    width: 70px;
+}
+
+
+
 .div-share-card-request-status {
     margin-top: 10px;
 }
+
+
+
+
+
+
 
 .p-share-card-left-places {
     margin-bottom: 0px;

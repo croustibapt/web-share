@@ -3,10 +3,7 @@
         <?php
             foreach ($response['results'] as $share) {
                 echo $this->element('share-card', array(
-                    'share' => $share,
-                    'subtitle' => true,
-                    'placesPrice' => true,
-                    'request' => NULL
+                    'share' => $share
                 ));
             }
         ?>
