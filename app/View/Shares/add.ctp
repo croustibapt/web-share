@@ -1,3 +1,6 @@
+<script src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+
 <h2>Partager un coupon</h2>
 
 <div class="row" style="">

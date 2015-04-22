@@ -19,7 +19,16 @@ class ApiCommentsController extends AppController {
             ));
         }
 
-        if (($user != NULL) && ($shareId != NULL) && ($message != NULL)) {
+        $share = NULL;
+        if ($shareId != NULL) {
+            $share = $this->Share->find('first', array(
+                'conditions' => array(
+                    'Share.id' => $shareId
+                )
+            ));
+        }
+
+        if (($user != NULL) && ($share != NULL) && (strlen($message) > 0)) {
             //Check credentials
             if ($this->checkCredentials($this->request)) {
                 $userId = $user['User']['id'];
@@ -54,7 +63,7 @@ class ApiCommentsController extends AppController {
                 throw new ShareException(SHARE_STATUS_CODE_UNAUTHORIZED, SHARE_ERROR_CODE_BAD_CREDENTIALS, "Bad credentials");
             }
         } else {
-            throw new ShareException(SHARE_STATUS_CODE_BAD_REQUEST, SHARE_ERROR_CODE_BAD_PARAMETERS, "Bad parameters".$userId." - ".$shareId." - ".$message);
+            throw new ShareException(SHARE_STATUS_CODE_BAD_REQUEST, SHARE_ERROR_CODE_BAD_PARAMETERS, "Bad parameters");
         }
         
         return $response;
@@ -85,9 +94,18 @@ class ApiCommentsController extends AppController {
     
     protected function internGet($shareId = NULL) {
         $response = NULL;
+
+        $share = NULL;
+        if ($shareId != NULL) {
+            $share = $this->Share->find('first', array(
+                'conditions' => array(
+                    'Share.id' => $shareId
+                )
+            ));
+        }
         
         //If correct identifier
-        if ($shareId != NULL) {
+        if ($share != NULL) {
             //Conditions
             $conditons = array();
             $conditions['Comment.share_id'] = $shareId;

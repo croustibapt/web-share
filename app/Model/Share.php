@@ -49,7 +49,7 @@ class Share extends AppModel {
                 'message' => 'FieldRequired'
             ),
             'minLength' => array(
-                'rule'    => array('minLength', 15),
+                'rule'    => array('minLength', SHARE_SHARE_TITLE_MIN_LENGTH),
                 'message' => 'FieldLengthNotValid'
             )
         ),

@@ -12,4 +12,17 @@ class Comment extends AppModel {
 			'foreignKey' => 'user_id',
             'counterCache' => true
     ));
+
+    public $validate = array(
+        'message' => array(
+            'required' => array(
+                'rule' => 'notEmpty',
+                'required' => 'create',
+                'allowEmpty' => false,
+                'message' => 'FieldRequired'
+            ),
+            'minLength' => array(
+                'rule'    => array('minLength', SHARE_COMMENT_MESSAGE_MIN_LENGTH),
+                'message' => 'FieldLengthNotValid'
+    )));
 }

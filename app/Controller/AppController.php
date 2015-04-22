@@ -67,6 +67,10 @@ define("SHARE_SEARCH_LIMIT", 25);
 
 define("SHARE_COMMENTS_LIMIT", 5);
 
+//String min size
+define("SHARE_SHARE_TITLE_MIN_LENGTH", 15);
+define("SHARE_COMMENT_MESSAGE_MIN_LENGTH", 2);
+
 //Share statuses
 define("SHARE_STATUS_OPENED", 0);
 define("SHARE_STATUS_CLOSED", 1);
