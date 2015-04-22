@@ -28,7 +28,7 @@
 
             <?php
                 //
-                echo $this->element('share-card', array(
+                echo $this->element('share-request-card', array(
                     'share' => $share,
                     'request' => true
                 ));
@@ -76,3 +76,19 @@
     </div>
 
 </div>
+
+<script>
+    $('.button-request-card-cancel').click(function() {
+        var requestId = $(this).attr('request-id');
+        console.log(requestId);
+
+        $('#modal-request-card-cancel-' + requestId).modal('show');
+    });
+
+    $('.button-request-card-decline').click(function() {
+        var requestId = $(this).attr('request-id');
+        console.log(requestId);
+
+        $('#modal-request-card-decline-' + requestId).modal('show');
+    });
+</script>

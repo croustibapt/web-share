@@ -5,6 +5,22 @@ body {
     background-color: #eeeeee;
 }
 
+.text-info {
+    color: #2980b9;
+}
+
+.text-success {
+    color: #27ae60;
+}
+
+.text-warning {
+    color: #f39c12;
+}
+
+.text-danger {
+    color: #c0392b;
+}
+
 #div-action-bar {
     margin-bottom: 20px;
     background-color: #ffffff;
@@ -95,12 +111,6 @@ body {
     max-height: 80px;
 }
 
-.span-share-card-icon-container {
-    display: table-cell;
-    vertical-align: middle;
-    color: #ffffff;
-}
-
 .div-share-card-title {
     padding-left: 0px;
 }
@@ -111,8 +121,17 @@ body {
     padding-left: 0px;
 }
 
+.h3-share-card-title {
+    color: #2c3e50;
+}
+
+.div-share-card-title footer:before  {
+    content: normal;
+}
+
 .footer-share-card-summary {
     margin-bottom: 10px;
+    color: #34495e;
 }
 
 .div-share-card-limitations {
@@ -125,21 +144,9 @@ body {
     display: inline;
 }
 
-.form-share-card-request input {
+.form-share-card-request-input {
     width: 70px;
 }
-
-
-
-.div-share-card-request-status {
-    margin-top: 10px;
-}
-
-
-
-
-
-
 
 .p-share-card-left-places {
     margin-bottom: 0px;

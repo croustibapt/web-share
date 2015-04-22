@@ -1,10 +1,5 @@
 <?php
     $shareColor = $this->ShareType->shareTypeColor($share['share_type_category']['label']);
-
-    //Request?
-    if (!isset($request)) {
-        $request = false;
-    }
 ?>
 
 <div class="div-share-card card">
@@ -17,8 +12,6 @@
         ));
     ?>
 
-    <?php if (!$request) : ?>
-
     <div class="div-share-card-subtitle">
         <div class="row">
             <div class="col-md-6">
@@ -27,6 +20,7 @@
                     class="span-share-card-modified timeago" title="<?php echo $share['modified']; ?>"><?php echo
                     $share['modified']; ?></span>
             </div>
+
             <div class="col-md-6 text-right">
                 <!-- City, zip code -->
                 <span class="span-share-card-city"><?php echo $share['city']; ?></span> <span class="span-share-card-zip-code">
@@ -35,8 +29,6 @@
             </div>
         </div>
     </div>
-
-    <?php endif; ?>
 
     <div class="div-share-card-main row">
         <div class="col-md-12">
@@ -50,16 +42,8 @@
                 <!-- Title -->
                 <blockquote class="blockquote-share-card-title">
                     <h3 class="media-heading"><?php echo $share['title']; ?></h3>
-                    <?php if ($request) : ?>
 
-                    <!-- Summary -->
-                    <?php
-                        echo $this->element('share-card-summary', array(
-                            'share' => $share
-                        ));
-                    ?>
-
-                    <?php elseif (isset($share['limitations']) && ($share['limitations'] != "")) : ?>
+                    <?php if (isset($share['limitations']) && ($share['limitations'] != "")) : ?>
 
                     <!-- Limitations -->
                     <footer class="footer-share-details-limitations text-danger">
@@ -72,11 +56,10 @@
         </div>
     </div>
 
-    <?php if (!$request) : ?>
-    
     <div class="div-share-card-places-price">
         <div class="row">
             <div class="col-md-12">
+                <!-- Places left -->
                 <?php
                     $totalPlaces = $share['places'] + 1;
                     $participationCount = $share['participation_count'] + 1;
@@ -103,6 +86,7 @@
         <div class="row">
             <div class="col-md-12">
 
+                <!-- Progress bar -->
                 <div class="div-share-card-progress">
                     <div class="div-share-card-progress-cell">
                         <div class="progress">
@@ -115,8 +99,7 @@
                     </div>
                     <div class="div-share-card-progress-cell text-right">
                         <p class="p-share-card-price lead">
-                            <?php echo number_format($share['price'], 1, '.',
-                                ''); ?>€ <small class="p-share-card-price-label">/ Pers.</small>
+                            <?php echo number_format($share['price'], 1, '.', ''); ?>€ <small class="p-share-card-price-label">/ Pers.</small>
                         </p>
                     </div>
                 </div>
@@ -124,41 +107,6 @@
             </div>
         </div>
     </div>
-
-    <?php endif; ?>
-
-    <?php if ($request) : ?>
-
-        <?php if ($share['request_count'] > 0) : ?>
-
-        <table class="table table-hover table-user-home-share-requests">
-
-            <?php foreach ($share['requests'] as $request) : ?>
-
-            <?php
-                echo $this->element('share-card-request', array(
-                    'request' => $request
-                ));
-            ?>
-
-            <?php endforeach; ?>
-
-        <?php else : ?>
-
-        <table class="table table-user-home-share-requests">
-            <tr class="active">
-                <td>
-                    <p class="lead text-muted text-center p-user-home-share-requests">
-                        Vous n'avez aucune demande
-                    </p>
-                </td>
-            </tr>
-
-        <?php endif; ?>
-
-        </table>
-
-    <?php endif; ?>
 </div>
 
 <script>

@@ -1,10 +1,16 @@
 <?php if ($request['status'] == SHARE_REQUEST_STATUS_PENDING) : ?>
 
+<?php
+    //Decline request modal
+    echo $this->element('request-modal', array(
+        'requestId' => $request['request_id']
+    ));
+?>
+
 <tr class="tr-share-card-request warning">
     <td>
         <p class="p-share-card-request lead">
-            <strong><?php echo $request['user']['username']; ?></strong>
-            <small class="text-warning">En attente</small>
+            <strong><?php echo $request['user']['username']; ?></strong> <i class="fa fa-question-circle text-warning"></i>
         </p>
     </td>
 
@@ -17,55 +23,36 @@
             ));
             
             echo $this->Form->submit('Accepter', array(
-                'class' => 'btn btn-success btn-xs',
+                'class' => 'form-share-card-request-input btn btn-success btn-xs',
                 'div' => false
             ));
             
             echo $this->Form->end();
         ?>
-        
-        <?php
-            echo $this->Form->create('Request', array(
-                'action' => 'decline/'.$request['request_id'],
-                'class' => 'form-share-card-request form-inline',
-                'type' => 'get'
-            ));
-            
-            echo $this->Form->submit('Refuser', array(
-                'class' => 'btn btn-danger btn-xs',
-                'div' => false
-            ));
-            
-            echo $this->Form->end();
-        ?>
+
+        <button class="form-share-card-request-input button-request-card-decline btn btn-danger btn-xs" request-id="<?php echo $request['request_id']; ?>">Refuser</button>
     </td>
 </tr>
 
 <?php elseif ($request['status'] == SHARE_REQUEST_STATUS_ACCEPTED) : ?>
 
+<?php
+    //Cancel request modal
+    echo $this->element('request-modal', array(
+        'requestId' => $request['request_id'],
+        'cancel' => true
+    ));
+?>
+
 <tr class="tr-share-card-request success">
     <td>
         <p class="p-share-card-request lead">
-            <strong><?php echo $request['user']['username']; ?></strong>
-            <small class="text-success">Acceptée</small>
+            <strong><?php echo $request['user']['username']; ?></strong> <i class="fa fa-check-circle text-success"></i>
         </p>
     </td>
 
     <td class="text-right" style="vertical-align: middle;">
-        <?php
-            echo $this->Form->create('Request', array(
-                'action' => 'cancel/'.$request['request_id'],
-                'class' => 'form-share-card-request form-inline',
-                'type' => 'get'
-            ));
-            
-            echo $this->Form->submit('Cancel', array(
-                'class' => 'btn btn-default btn-xs',
-                'div' => false
-            ));
-            
-            echo $this->Form->end();
-        ?>
+        <button class="button-request-card-cancel btn btn-default btn-xs" request-id="<?php echo $request['request_id']; ?>">Annuler</button>
     </td>
 </tr>
 
