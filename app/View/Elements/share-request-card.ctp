@@ -25,7 +25,7 @@
                     <?php echo $this->ShareType->shareTypeIcon($share['share_type_category']['label'], $share['share_type']['label']); ?>
                 </div>
             </div>
-            <div class="div-share-card-title" style="display: table-cell; vertical-align: top; text-align: justify;">
+            <div class="div-share-card-title">
 
                 <blockquote class="blockquote-share-card-title">
                     <!-- Title -->

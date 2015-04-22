@@ -28,7 +28,7 @@
                     <?php echo $this->ShareType->shareTypeIcon($request['share']['share_type_category']['label'], $request['share']['share_type']['label']); ?>
                 </div>
             </div>
-            <div class="div-share-card-title" style="display: table-cell; vertical-align: top; text-align: justify;">
+            <div class="div-share-card-title">
                 <!-- Title -->
                 <blockquote class="blockquote-share-card-title">
                     <?php
@@ -51,14 +51,21 @@
                     <footer class="footer-request-card lead text-warning">
                         Demande en attente <i class="fa fa-question-circle"></i>
 
+                    <button class="button-request-card-cancel btn btn-default btn-xs" request-id="<?php echo $request['request_id']; ?>">Annuler ma demande</button>
+
                     <?php elseif ($request['status'] == SHARE_REQUEST_STATUS_ACCEPTED) : ?>
 
                     <footer class="footer-request-card lead text-success">
                         Demande acceptée <i class="fa fa-check-circle"></i>
 
-                    <?php endif; ?>
+                    <button class="button-request-card-cancel btn btn-default btn-xs" request-id="<?php echo $request['request_id']; ?>">Ne plus participer</button>
 
-                    <button class="button-request-card-cancel btn btn-default btn-xs" request-id="<?php echo $request['request_id']; ?>">Annuler</button>
+                    <?php elseif ($request['status'] == SHARE_REQUEST_STATUS_DECLINED) : ?>
+
+                    <footer class="footer-request-card lead text-danger">
+                        Demande rejetée <i class="fa fa-times-circle"></i>
+
+                    <?php endif; ?>
 
                     </footer>
 

@@ -113,6 +113,9 @@ body {
 
 .div-share-card-title {
     padding-left: 0px;
+    display: table-cell;
+    vertical-align: top;
+    text-align: justify;
 }
 
 .blockquote-share-card-title {
