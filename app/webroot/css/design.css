@@ -177,6 +177,10 @@ body {
     height: 10px;
 }
 
+.div-share-card-progress .progress-bar {
+    line-height: 10px;
+}
+
 .div-share-card-progress-cell {
     display: table-cell;
     width: 50%;

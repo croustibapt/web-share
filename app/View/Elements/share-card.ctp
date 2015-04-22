@@ -65,22 +65,29 @@
                     $participationCount = $share['participation_count'] + 1;
                     $placesLeft = $totalPlaces - $participationCount;
                     $percentage = ($participationCount * 100) / $totalPlaces;
+                    $full = ($placesLeft == 0);
                 ?>
-                <p class="text-info p-share-card-left-places">
-                    <?php
-                        $full = false;
-                        $progressText = "";
 
-                        if ($placesLeft > 1) {
-                            echo $placesLeft." places restantes";
-                        } else if ($placesLeft > 0) {
-                            echo $placesLeft." place restante";
-                        } else {
-                            $full = true;
-                            $progressText = "Complet";
-                        }
-                    ?>
+                <?php if ($placesLeft > 1) : ?>
+
+                <p class="text-info p-share-card-left-places">
+                    <?php echo $placesLeft; ?> places restantes
                 </p>
+
+                <?php elseif ($placesLeft > 0) : ?>
+
+                <p class="text-warning p-share-card-left-places">
+                    <?php echo $placesLeft; ?> place restante
+                </p>
+
+                <?php else : ?>
+
+                <p class="text-success p-share-card-left-places">
+                    Complet
+                </p>
+
+                <?php endif; ?>
+
             </div>
         </div>
         <div class="row">
@@ -90,10 +97,7 @@
                 <div class="div-share-card-progress">
                     <div class="div-share-card-progress-cell">
                         <div class="progress">
-                            <div class="progress-bar <?php echo $full ? "progress-bar-success" : ""; ?>"
-                                 role="progressbar" aria-valuenow="<?php echo $percentage; ?>"
-                                 aria-valuemin="0" aria-valuemax="100" style="width: <?php echo $percentage; ?>%;">
-                                <?php echo $progressText; ?>
+                            <div class="progress-bar <?php echo $full ? "progress-bar-success" : ""; ?>" role="progressbar" aria-valuenow="<?php echo $percentage; ?>" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo $percentage; ?>%;">
                             </div>
                         </div>
                     </div>

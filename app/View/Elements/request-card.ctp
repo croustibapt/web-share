@@ -3,11 +3,14 @@
 ?>
 
 <?php
-    //Cancel request modal
-    echo $this->element('request-modal', array(
-        'requestId' => $request['request_id'],
-        'cancel' => true
-    ));
+    //Only for pending and accepted requests
+    if ($request['status'] != SHARE_REQUEST_STATUS_DECLINED) {
+        //Cancel request modal
+        echo $this->element('request-modal', array(
+            'requestId' => $request['request_id'],
+            'cancel' => true
+        ));
+    }
 ?>
 
 <div class="card">
