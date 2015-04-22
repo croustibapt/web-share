@@ -18,7 +18,7 @@
 <script>
     //
     $('.div-share-card').click(function() {
-        var shareId = $(this).attr('shareid');
+        var shareId = $(this).attr('share-id');
         window.location.href = webroot + "share/details/" + shareId;
     });
 </script>

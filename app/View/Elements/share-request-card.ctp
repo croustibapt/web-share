@@ -7,7 +7,7 @@
     }
 ?>
 
-<div class="div-share-card card">
+<div class="card">
     
     <!-- Date -->
     <?php
@@ -26,9 +26,15 @@
                 </div>
             </div>
             <div class="div-share-card-title" style="display: table-cell; vertical-align: top; text-align: justify;">
-                <!-- Title -->
+
                 <blockquote class="blockquote-share-card-title">
-                    <h3 class="media-heading"><?php echo $share['title']; ?></h3>
+                    <!-- Title -->
+                    <?php
+                        echo $this->Html->link('<h3 class="media-heading">'.$share['title'].'</h3>', '/share/details/'.$share['share_id'], array(
+                            'escape' => false,
+                            'class' => 'a-share-card-title'
+                        ));
+                    ?>
 
                     <!-- Summary -->
                     <?php
@@ -41,23 +47,34 @@
         </div>
     </div>
 
-    <?php if ($share['request_count'] > 0) : ?>
-
-    <table class="table table-hover table-user-home-share-requests">
-
-        <?php foreach ($share['requests'] as $request) : ?>
+    <table class="table-share-request-card-requests table table-hover">
 
         <?php
-            echo $this->element('share-card-request', array(
-                'request' => $request
-            ));
+            $nbRequests = 0;
         ?>
 
-        <?php endforeach; ?>
+        <?php if ($share['request_count'] > 0) : ?>
 
-    <?php else : ?>
+            <?php foreach ($share['requests'] as $request) : ?>
 
-    <table class="table table-user-home-share-requests">
+            <?php
+                //Only pending or accepted requests
+                if (($request['status'] == SHARE_REQUEST_STATUS_PENDING) || ($request['status'] == SHARE_REQUEST_STATUS_PENDING)) {
+                    //Request
+                    echo $this->element('share-card-request', array(
+                        'request' => $request
+                    ));
+
+                    $nbRequests++;
+                }
+            ?>
+
+            <?php endforeach; ?>
+
+        <?php endif; ?>
+
+        <?php if ($nbRequests == 0) : ?>
+
         <tr class="active">
             <td>
                 <p class="p-share-card-request lead text-muted text-center p-user-home-share-requests">
@@ -66,7 +83,7 @@
             </td>
         </tr>
 
-    <?php endif; ?>
+        <?php endif; ?>
 
     </table>
 </div>

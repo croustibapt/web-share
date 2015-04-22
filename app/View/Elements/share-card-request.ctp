@@ -9,8 +9,8 @@
 
 <tr class="tr-share-card-request warning">
     <td>
-        <p class="p-share-card-request lead">
-            <strong><?php echo $request['user']['username']; ?></strong> <i class="fa fa-question-circle text-warning"></i>
+        <p class="p-share-card-request-user p-share-card-request lead">
+            <?php echo $request['user']['username']; ?> <i class="fa fa-question-circle text-warning"></i>
         </p>
     </td>
 
@@ -46,8 +46,8 @@
 
 <tr class="tr-share-card-request success">
     <td>
-        <p class="p-share-card-request lead">
-            <strong><?php echo $request['user']['username']; ?></strong> <i class="fa fa-check-circle text-success"></i>
+        <p class="p-share-card-request-user p-share-card-request lead">
+            <?php echo $request['user']['username']; ?> <i class="fa fa-check-circle text-success"></i>
         </p>
     </td>
 

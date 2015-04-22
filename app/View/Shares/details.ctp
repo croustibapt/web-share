@@ -2,7 +2,6 @@
     $shareTypeColor = $this->ShareType->shareTypeColor($share['share_type_category']['label']);
 ?>
 
-<h2>Détails</h2>
 <div class="row div-share card" style="border-top: 10px solid <?php echo $shareTypeColor; ?>;">
     <div class="col-md-2 text-center">
         <!-- Share type icon -->
@@ -38,41 +37,28 @@
             <?php if ($canRequest) : ?>
 
             <!-- Participate button -->
-            <button id="button-share-details-participate" class="btn btn-success pull-right
-            button-share-details-participate">Participer</button>
+            <?php
+                echo $this->Form->create('Request', array(
+                    'action' => 'add',
+                    'class' => 'form-share-card-request form-inline'
+                ));
 
-            <script>
-                $('#button-share-details-participate').click(function () {
-                    var button = $(this);
-                    button.attr('disabled', 'disabled');
+                echo $this->Form->hidden('shareId', array(
+                    'value' => $share['share_id']
+                ));
 
-                    $.ajax({
-                        type : "GET",
-                        url : webroot + "api/request/add?shareId=<?php echo $share['share_id']; ?>",
-                        dataType : "json"
-                    })
-                    .done(function(data, textStatus, jqXHR) {
-                        console.log('done');
+                echo $this->Form->submit('Participer', array(
+                    'class' => 'btn btn-success pull-right button-share-details-participate'
+                ));
 
-                        button.removeClass('btn-success').addClass('btn-warning');
-                        button.html('<?php echo $this->Share->getShareDetailsRequestStatusLabel
-                        (SHARE_REQUEST_STATUS_PENDING); ?>');
-                    })
-                    .fail(function(jqXHR, textStatus, errorThrown) {
-                        console.log('fail');
-                        console.log(jqXHR);
-                        button.attr('disabled', null);
-                    });
-                });
-            </script>
+                echo $this->Form->end();
+            ?>
 
             <?php else : ?>
 
                 <?php if (!$doesUserOwnShare) : ?>
 
-                <button id="button-share-details-participate" class="btn btn-<?php echo
-                $this->Share->getShareDetailsRequestStatusClass($requestStatus); ?> pull-right disabled
-                button-share-details-participate"><?php echo $this->Share->getShareDetailsRequestStatusLabel($requestStatus); ?></button>
+                <button id="button-share-details-participate" class="btn btn-<?php echo $this->Share->getShareDetailsRequestStatusClass($requestStatus); ?> pull-right disabled button-share-details-participate"><?php echo $this->Share->getShareDetailsRequestStatusLabel($requestStatus); ?></button>
 
                 <?php endif; ?>
 
@@ -265,7 +251,7 @@
         var jsonData =  '{' +
             '"share_id": "<?php echo $share['share_id']; ?>",' +
             '"message": "' + encodeURI(message) + '"' +
-            '}';
+        '}';
 
         console.log(jsonData);
 

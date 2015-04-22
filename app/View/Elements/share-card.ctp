@@ -2,7 +2,7 @@
     $shareColor = $this->ShareType->shareTypeColor($share['share_type_category']['label']);
 ?>
 
-<div class="div-share-card card">
+<div class="div-share-card card" share-id="<?php echo $share['share_id']; ?>">
     
     <!-- Date -->
     <?php

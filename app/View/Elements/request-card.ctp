@@ -10,7 +10,7 @@
     ));
 ?>
 
-<div class="div-share-card card">
+<div class="card">
 
     <!-- Date -->
     <?php
@@ -31,7 +31,12 @@
             <div class="div-share-card-title" style="display: table-cell; vertical-align: top; text-align: justify;">
                 <!-- Title -->
                 <blockquote class="blockquote-share-card-title">
-                    <h3 class="h3-share-card-title media-heading"><?php echo $request['share']['title']; ?></h3>
+                    <?php
+                        echo $this->Html->link('<h3 class="media-heading">'.$request['share']['title'].'</h3>', '/share/details/'.$request['share']['share_id'], array(
+                            'escape' => false,
+                            'class' => 'a-share-card-title'
+                        ));
+                    ?>
 
                     <!-- Summary -->
                     <?php
@@ -43,12 +48,12 @@
                     <!-- Status -->
                     <?php if ($request['status'] == SHARE_REQUEST_STATUS_PENDING) : ?>
 
-                    <footer class="lead text-warning">
+                    <footer class="footer-request-card lead text-warning">
                         Demande en attente <i class="fa fa-question-circle"></i>
 
                     <?php elseif ($request['status'] == SHARE_REQUEST_STATUS_ACCEPTED) : ?>
 
-                    <footer class="lead text-success">
+                    <footer class="footer-request-card lead text-success">
                         Demande acceptée <i class="fa fa-check-circle"></i>
 
                     <?php endif; ?>

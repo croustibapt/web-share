@@ -20,11 +20,11 @@ class ApiRequestsController extends AppController {
         return $canChangeStatus;
     }
 
-    private function canAcceptRequest($request = NULL, $userId = NULL) {
+    private function canAcceptRequest($request = NULL, $userExternalId = NULL) {
         $canAcceptRequest = false;
         
         //Check parameters
-        if (($request != NULL) && ($userId != NULL) && $this->canChangeStatus($request, SHARE_REQUEST_STATUS_ACCEPTED)) {
+        if (($request != NULL) && ($userExternalId != NULL) && $this->canChangeStatus($request, SHARE_REQUEST_STATUS_ACCEPTED)) {
             //Get Share identifier
             $shareId = $request['Request']['share_id'];
 
@@ -35,7 +35,7 @@ class ApiRequestsController extends AppController {
                 )
             ));
                         
-            if ($this->doesUserOwnShare($share, $userId) && $this->canParticipate($share, $request['Request']['user_id'])) {
+            if ($this->doesUserOwnShare($share, $userExternalId) && $this->canParticipate($share, $request['User']['external_id'])) {
                 $canAcceptRequest = true;
             }
         }
@@ -43,11 +43,11 @@ class ApiRequestsController extends AppController {
         return $canAcceptRequest;
     }
     
-    private function canDeclineRequest($request = NULL, $userId = NULL) {
+    private function canDeclineRequest($request = NULL, $userExternalId = NULL) {
         $canAcceptRequest = false;
         
         //Check parameters
-        if (($request != NULL) && ($userId != NULL) && $this->canChangeStatus($request, SHARE_REQUEST_STATUS_DECLINED)) {
+        if (($request != NULL) && ($userExternalId != NULL) && $this->canChangeStatus($request, SHARE_REQUEST_STATUS_DECLINED)) {
             //Get Share identifier
             $shareId = $request['Request']['share_id'];
 
@@ -58,17 +58,17 @@ class ApiRequestsController extends AppController {
                 )
             ));
             
-            $canAcceptRequest = $this->doesUserOwnShare($share, $userId);
+            $canAcceptRequest = $this->doesUserOwnShare($share, $userExternalId);
         }
         
         return $canAcceptRequest;
     }
     
-    private function canCancelRequest($request = NULL, $userId = NULL) {
+    private function canCancelRequest($request = NULL, $userExternalId = NULL) {
         $canCancelRequest = false;
         
         //Check parameters
-        if (($request != NULL) && ($userId != NULL) && $this->canChangeStatus($request, SHARE_REQUEST_STATUS_CANCELLED)) {
+        if (($request != NULL) && ($userExternalId != NULL) && $this->canChangeStatus($request, SHARE_REQUEST_STATUS_CANCELLED)) {
             //Get Share identifier
             $shareId = $request['Request']['share_id'];
 
@@ -79,7 +79,7 @@ class ApiRequestsController extends AppController {
                 )
             ));
             
-            $canCancelRequest = ($this->doesUserOwnShare($share, $userId) || ($request['Request']['user_id'] == $userId));
+            $canCancelRequest = ($this->doesUserOwnShare($share, $userExternalId) || ($request['User']['external_id'] == $userExternalId));
         }
         
         return $canCancelRequest;
@@ -180,10 +180,10 @@ class ApiRequestsController extends AppController {
         return $success;
     }
     
-    protected function internAccept($requestId = NULL, $userId = NULL) {
+    protected function internAccept($requestId = NULL, $userExternalId = NULL) {
         $success = false;
         
-        if (($requestId != NULL) && ($userId != NULL)) {
+        if (($requestId != NULL) && ($userExternalId != NULL)) {
             //Get related Request
             $request = $this->Request->find('first', array(
                 'conditions' => array(
@@ -195,7 +195,7 @@ class ApiRequestsController extends AppController {
                 //If it exists, then check credentials
                 if ($this->checkCredentials($this->request)) {
                     //
-                    if ($this->canAcceptRequest($request, $userId)) {
+                    if ($this->canAcceptRequest($request, $userExternalId)) {
                         //Update status
                         if ($this->changeStatus($request, SHARE_REQUEST_STATUS_ACCEPTED)) {
                             //Success!
@@ -229,11 +229,10 @@ class ApiRequestsController extends AppController {
 
             //Get user identifier
             $userExternalId = $this->getUserExternalId($this->request);
-            $userId = $this->getUserId($userExternalId);
-            
+
             try {
                 //Intern accept
-                $this->internAccept($requestId, $userId);
+                $this->internAccept($requestId, $userExternalId);
 
                 //Send JSON respsonse
                 $this->sendResponse(SHARE_STATUS_CODE_OK);
@@ -243,8 +242,8 @@ class ApiRequestsController extends AppController {
         }
     }
     
-    protected function internDecline($requestId = NULL, $userId = NULL) {        
-        if (($requestId != NULL) && ($userId != NULL)) {
+    protected function internDecline($requestId = NULL, $userExternalId = NULL) {
+        if (($requestId != NULL) && ($userExternalId != NULL)) {
             //Get related Request
             $request = $this->Request->find('first', array(
                 'conditions' => array(
@@ -256,7 +255,7 @@ class ApiRequestsController extends AppController {
                 //If it exists, then check credentials
                 if ($this->checkCredentials($this->request)) {
                     //
-                    if ($this->canDeclineRequest($request, $userId)) {
+                    if ($this->canDeclineRequest($request, $userExternalId)) {
                         //Update status
                         if ($this->changeStatus($request, SHARE_REQUEST_STATUS_DECLINED)) {
                             //Send push notif
@@ -280,11 +279,10 @@ class ApiRequestsController extends AppController {
         if ($this->request->is('GET')) {
             //Get user identifier
             $userExternalId = $this->getUserExternalId($this->request);
-            $userId = $this->getUserId($userExternalId);
-            
+
             try {
                 //Intern decline
-                $this->internDecline($requestId, $userId);
+                $this->internDecline($requestId, $userExternalId);
 
                 //Send JSON respsonse
                 $this->sendResponse(SHARE_STATUS_CODE_OK);
@@ -294,8 +292,8 @@ class ApiRequestsController extends AppController {
         }
     }
     
-    protected function internCancel($requestId = NULL, $userId = NULL) {        
-        if (($requestId != NULL) && ($userId != NULL)) {
+    protected function internCancel($requestId = NULL, $userExternalId = NULL) {
+        if (($requestId != NULL) && ($userExternalId != NULL)) {
             //Get related Request
             $request = $this->Request->find('first', array(
                 'conditions' => array(
@@ -307,7 +305,7 @@ class ApiRequestsController extends AppController {
                 //If it exists, then check credentials
                 if ($this->checkCredentials($this->request)) {
                     //
-                    if ($this->canCancelRequest($request, $userId)) {
+                    if ($this->canCancelRequest($request, $userExternalId)) {
                         //Update status
                         if ($this->changeStatus($request, SHARE_REQUEST_STATUS_CANCELLED)) {
                             //Send push notif
@@ -331,11 +329,10 @@ class ApiRequestsController extends AppController {
         if ($this->request->is('GET')) {
             //Get user identifier
             $userExternalId = $this->getUserExternalId($this->request);
-            $userId = $this->getUserId($userExternalId);
-            
+
             try {
                 //Intern cancel
-                $this->internCancel($requestId, $userId);
+                $this->internCancel($requestId, $userExternalId);
 
                 //Send JSON respsonse
                 $this->sendResponse(SHARE_STATUS_CODE_OK);

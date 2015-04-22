@@ -111,7 +111,7 @@ class ApiUsersController extends AppController {
         }
     }
 
-    protected function interHome($returnShareDetails = false) {
+    protected function interHome() {
         $response = NULL;
 
         //Check credentials
@@ -145,7 +145,7 @@ class ApiUsersController extends AppController {
                 //Format Shares
                 $shareIndex = 0;
                 foreach ($shares as $share) {
-                    $response['shares'][$shareIndex++] = $this->formatShare($share, $userExternalId, false, true, true);
+                    $response['shares'][$shareIndex++] = $this->formatShare($share, false, true);
                 }
             }
 
@@ -160,28 +160,16 @@ class ApiUsersController extends AppController {
                     )
                 ));
 
-                if ($returnShareDetails) {
-                    foreach ($requests as & $request) {
-                        $sql = "SELECT *, (SELECT COUNT(Request.id) FROM requests Request WHERE Request.share_id = Share.id AND Request.status = 1)
-AS participation_count FROM shares Share, share_types ShareType, share_type_categories ShareTypeCategory WHERE Share
-.share_type_id = ShareType.id AND ShareType.share_type_category_id = ShareTypeCategory.id AND Share.id =".$request['Request']['share_id']." LIMIT 1;";
-                        $shares = $this->Share->query($sql);
+                foreach ($requests as & $request) {
+                    $sql = "SELECT *, X(Share.location) as latitude, Y(Share.location) as longitude, (SELECT COUNT(Request.id) FROM requests Request WHERE Request.share_id = Share.id AND Request.status = 1) AS participation_count FROM shares AS Share, users AS User, share_types AS ShareType, share_type_categories ShareTypeCategory WHERE Share.user_id = User.id AND Share.share_type_id = ShareType.id AND ShareType.share_type_category_id = ShareTypeCategory.id AND Share.id = ".$request['Request']['share_id']." LIMIT 1;";
 
-                        if (count($shares) > 0) {
-                            $share = $shares[0];
-                            $request['Share']['participation_count'] = $share['0']['participation_count'];
-                            $request['ShareType']['label'] = $share['ShareType']['label'];
-                            $request['ShareTypeCategory']['label'] = $share['ShareTypeCategory']['label'];
+                    $shares = $this->Share->query($sql);
+                    $share = $shares[0];
 
-                        } else {
-                            $request['Share']['participation_count'] = 0;
-                            $request['ShareType']['label'] = 'other';
-                            $request['ShareTypeCategory']['label'] = 'other';
-                        }
-                    }
+                    $request['Share'] = $share;
                 }
 
-                $this->formatRequests($response['requests'], $requests, $userExternalId, $returnShareDetails);
+                $this->formatRequests($response['requests'], $requests, true);
             }
         } else {
             throw new ShareException(SHARE_STATUS_CODE_UNAUTHORIZED, SHARE_ERROR_CODE_BAD_CREDENTIALS, "Bad credentials");

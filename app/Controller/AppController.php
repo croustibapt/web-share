@@ -218,18 +218,6 @@ class AppController extends Controller {
         return $isAuthenticated;
     }
     
-    /*protected function getRateLimits() {
-        $connection = $this->getConnectionWithAccessToken("2931969015-GYqu1xfoh0BcdJDq5SfR99m8WjmBrc6AZRTtXky", "rQaBqnR1vjQbrjFxl2dDsPCqHNEkjHQ0JcaiuQ44IFiyO");
-                                
-        if ($connection != NULL) {
-            $content = $connection->get("application/rate_limit_status");
-            //$response = $connection->lastResponse();
-            
-            echo json_encode($content);
-            exit();
-        }
-    }*/
-    
     protected function getUserExternalId($request = NULL) {
         return $this->extractUserAuthValue($request, SHARE_HEADER_AUTH_EXTERNAL_ID);
     }
@@ -307,7 +295,7 @@ class AppController extends Controller {
         }
     }
     
-    protected function formatRequests(& $response, $requests, $userExternalId = NULL, $returnShareDetails = false) {
+    protected function formatRequests(& $response, $requests, $returnShare = false) {
         $response = array();
                 
         $requestIndex = 0;
@@ -315,32 +303,23 @@ class AppController extends Controller {
         
         foreach ($requests as $request) {
             $status = $request['Request']['status'];
-            
+
             $response[$requestIndex]['request_id'] = $request['Request']['id'];
             $response[$requestIndex]['share_id'] = $request['Request']['share_id'];
+            $response[$requestIndex]['status'] = $status;
 
-            if ($returnShareDetails) {
-                $response[$requestIndex]['share']['share_id'] = $request['Share']['id'];
-                $response[$requestIndex]['share']['title'] = $request['Share']['title'];
-                $response[$requestIndex]['share']['event_date'] = $request['Share']['event_date'];
-                $response[$requestIndex]['share']['price'] = $request['Share']['price'];
-                $response[$requestIndex]['share']['places'] = $request['Share']['places'];
-                $response[$requestIndex]['share']['participation_count'] = $request['Share']['participation_count'];
-                $response[$requestIndex]['share']['share_type']['label'] = $request['ShareType']['label'];
-                $response[$requestIndex]['share']['share_type_category']['label'] = $request['ShareTypeCategory']['label'];
+            //Share
+            if ($returnShare) {
+                $response[$requestIndex]['share'] = $this->formatShare($request['Share']);
             }
 
-            $response[$requestIndex]['status'] = $status;
+            //User
             $response[$requestIndex]['user']['external_id'] = $request['User']['external_id'];
             $response[$requestIndex]['user']['username'] = $request['User']['username'];
             
             //Return mail only if the request has been accepted
             if ($status == SHARE_REQUEST_STATUS_ACCEPTED) {
                 $response[$requestIndex]['user']['mail'] = $request['User']['mail'];
-            }
-            
-            if (($userExternalId != NULL) && ($userExternalId == $request['User']['external_id'])) {
-                $userParticipate = true;
             }
 
             $requestIndex++;
@@ -353,10 +332,9 @@ class AppController extends Controller {
         }
     }
     
-    protected function formatShare($share = NULL, $userExternalId = NULL, $returnComments = false,
-                                   $returnRequests = false, $returnShareUserId = false) {
+    protected function formatShare($share = NULL, $returnComments = false, $returnRequests = false) {
         $response = NULL;
-        
+
         /*echo json_encode($share);
         exit();*/
         
@@ -368,10 +346,6 @@ class AppController extends Controller {
             $response['share_id'] = $share['Share']['id'];
             $response['user']['external_id'] = $share['User']['external_id'];
             $response['user']['username'] = $share['User']['username'];
-
-            if ($returnShareUserId) {
-                $response['user']['id'] = $share['User']['id'];
-            }
 
             $response['title'] = $share['Share']['title'];
             $response['event_date'] = $share['Share']['event_date'];
@@ -428,9 +402,7 @@ class AppController extends Controller {
                     ),
                     'order' => 'Request.created ASC'
                 ));
-                if ($this->formatRequests($response['requests'], $requests, $userExternalId)) {
-                    $response['user']['mail'] = $share['User']['mail'];
-                }
+                $this->formatRequests($response['requests'], $requests);
             }
         }
         
@@ -503,22 +475,22 @@ class AppController extends Controller {
         return $isPlacesLeft;
     }
 
-    protected function doesUserOwnShare($share = NULL, $userId = NULL) {
+    protected function doesUserOwnShare($share = NULL, $userExternalId = NULL) {
         $doesUserOwnShare = false;
 
-        if (($share != NULL) && ($userId != NULL)) {
-            $doesUserOwnShare = ($share['User']['id'] == $userId);
+        if (($share != NULL) && ($userExternalId != NULL)) {
+            $doesUserOwnShare = ($share['User']['external_id'] == $userExternalId);
         }
 
         return $doesUserOwnShare;
     }
 
-    protected function canParticipate($share = NULL, $userId = NULL) {
+    protected function canParticipate($share = NULL, $userExternalId = NULL) {
         $canParticipate = false;
 
-        if (($share != NULL) && ($userId != NULL)) {
+        if (($share != NULL) && ($userExternalId != NULL)) {
             //Check if user does not already participate
-            if (!$this->doesUserOwnShare($share, $userId) && $this->isShareOpened($share) && $this->isPlacesLeft($share)) {
+            if (!$this->doesUserOwnShare($share, $userExternalId) && $this->isShareOpened($share) && $this->isPlacesLeft($share)) {
                 $canParticipate = true;
             }
         }
@@ -526,15 +498,15 @@ class AppController extends Controller {
         return $canParticipate;
     }
 
-    protected function getRequestStatus($share = NULL, $userId = NULL) {
+    protected function getRequestStatus($share = NULL, $userExternalId = NULL) {
         $requestStatus = NULL;
 
-        if (($share != NULL) && ($userId != NULL)) {
+        if (($share != NULL) && ($userExternalId != NULL)) {
             //Find first Request
             $request = $this->Request->find('first', array(
                 'conditions' => array(
                     'Request.share_id' => $share['Share']['id'],
-                    'Request.user_id' => $userId
+                    'User.external_id' => $userExternalId
                 )
             ));
 
@@ -546,13 +518,13 @@ class AppController extends Controller {
         return $requestStatus;
     }
 
-    protected function canRequest($share = NULL, $userId = NULL) {
+    protected function canRequest($share = NULL, $userExternalId = NULL) {
         $canRequest = false;
 
-        if (($share != NULL) && ($userId != NULL)) {
+        if (($share != NULL) && ($userExternalId != NULL)) {
             //Check if user does not already participate
-            if ($this->canParticipate($share, $userId)) {
-                $requestStatus = $this->getRequestStatus($share, $userId);
+            if ($this->canParticipate($share, $userExternalId)) {
+                $requestStatus = $this->getRequestStatus($share, $userExternalId);
                 $canRequest = ($requestStatus == NULL);
             }
         }
