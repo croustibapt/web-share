@@ -15,10 +15,15 @@
     <div class="div-share-card-subtitle">
         <div class="row">
             <div class="col-md-6">
-                <!-- User, created -->
-                <span class="span-share-card-user"><?php echo $share['user']['username']; ?></span> <span
-                    class="span-share-card-modified timeago" title="<?php echo $share['modified']; ?>"><?php echo
-                    $share['modified']; ?></span>
+                <!-- User -->
+                <?php
+                    echo $this->Html->link('<span class="span-share-card-user">'.$share['user']['username'].'</span>', '/users/details/'.$share['user']['external_id'], array(
+                        'escape' => false
+                    ));
+                ?>
+                
+                <!-- Created -->
+                <span class="span-share-card-modified timeago" title="<?php echo $share['modified']; ?>"><?php echo $share['modified']; ?></span>
             </div>
 
             <div class="col-md-6 text-right">

@@ -35,7 +35,16 @@ class UsersController extends ApiUsersController {
 	}
 
     public function details($externalId = NULL) {
-        //TODO
+        if ($this->request->is('GET')) {
+            try {
+                //Intern home
+                $user = $this->internDetails($externalId);
+
+                $this->set('user', $user);
+            } catch (ShareException $e) {
+                $this->set('error', $e);
+            }
+        }
     }
 
     public function home() {

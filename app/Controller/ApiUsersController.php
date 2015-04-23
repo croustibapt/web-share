@@ -73,7 +73,7 @@ class ApiUsersController extends AppController {
         if ($externalId != NULL) {
             //Find first user
             $user = $this->User->find('first', array(
-                'fields' => array('User.username', 'User.external_id'),
+                'fields' => array('User.username', 'User.external_id', 'User.created', 'User.share_count', 'User.request_count', 'User.comment_count'),
                 'conditions' => array(
                     'User.external_id' => $externalId
                 )
@@ -86,6 +86,10 @@ class ApiUsersController extends AppController {
                     //Format data
                     $response['username'] = $user['User']['username'];
                     $response['external_id'] = $user['User']['external_id'];
+                    $response['created'] = $user['User']['created'];
+                    $response['share_count'] = $user['User']['share_count'];
+                    $response['request_count'] = $user['User']['request_count'];
+                    $response['comment_count'] = $user['User']['comment_count'];
                 } else {
                     throw new ShareException(SHARE_STATUS_CODE_UNAUTHORIZED, SHARE_ERROR_CODE_BAD_CREDENTIALS, "Bad credentials");
                 }
@@ -121,7 +125,7 @@ class ApiUsersController extends AppController {
 
             //Find its entity
             $user = $this->User->find('first', array(
-                'fields' => array('User.username', 'User.external_id', 'User.share_count', 'User.request_count', 'User.comment_count'),
+                'fields' => array('User.username', 'User.external_id', 'User.created', 'User.share_count', 'User.request_count', 'User.comment_count'),
                 'conditions' => array(
                     'User.external_id' => $userExternalId
                 )
@@ -130,6 +134,7 @@ class ApiUsersController extends AppController {
             //User
             $response['username'] = $user['User']['username'];
             $response['external_id'] = $user['User']['external_id'];
+            $response['created'] = $user['User']['created'];
             $response['comment_count'] = $user['User']['comment_count'];
 
             //Shares

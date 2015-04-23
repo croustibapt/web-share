@@ -2,7 +2,6 @@
     $shareTypeColor = $this->ShareType->shareTypeColor($share['share_type_category']['label']);
 ?>
 
-
 <script src="http://js.nicedit.com/nicEdit-latest.js"></script>
 
 <div class="row div-share card" style="border-top: 10px solid <?php echo $shareTypeColor; ?>;">
@@ -146,9 +145,15 @@
     <!-- User -->
     <div class="col-md-12 text-right">
         <!-- Created by -->
-        <h5 class="h5-share-details-created">
-            Créée par <a class="a-share-details-user" href=""><?php echo $share['user']['username']; ?></a> <span class="timeago" title="<?php echo $share['modified']; ?>"><?php echo $share['modified']; ?></span>
-        </h5>
+        <p class="p-share-details-created text-muted">
+            Créée par 
+            <?php
+                echo $this->Html->link('<span class="span-share-card-user">'.$share['user']['username'].'</span>', '/users/details/'.$share['user']['external_id'], array(
+                    'escape' => false
+                ));
+            ?>
+             <span class="timeago" title="<?php echo $share['modified']; ?>"><?php echo $share['modified']; ?></span>
+        </p>
     </div>
 </div>
 

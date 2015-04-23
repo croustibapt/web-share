@@ -71,7 +71,9 @@
     <!-- My profile -->
     <div role="tabpanel" class="tab-pane" id="div-user-home-profile">
         <?php
-            pr($user);
+            echo $this->element('user-card', array(
+                'user' => $user
+            ));
         ?>
     </div>
 
