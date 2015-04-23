@@ -563,7 +563,7 @@ class AppController extends Controller {
                 'conditions' => array(
                     'Comment.share_id' => $shareId
                 ),
-                'order' => 'Comment.id ASC'
+                'order' => 'Comment.id DESC'
             ));
             $response['results'] = array();
 

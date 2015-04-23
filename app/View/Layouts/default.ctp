@@ -68,6 +68,12 @@
                 var responseJSON = ajaxError.responseJSON;
                 toastr.error(responseJSON.error_message, responseJSON.error_code);
             }
+
+            //On ready
+            $(document).ready(function() {
+                //Date (timeago)
+                $(".timeago").timeago();
+            });
         </script>
     </body>
 </html>
