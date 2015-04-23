@@ -21,7 +21,7 @@ class ApiSharesController extends AppController {
         return $shareTypeId;
     }
 
-    protected function internSearch($types = NULL, $expiryDate = NULL, $start = NULL, $region = NULL, $limit = SHARE_SEARCH_LIMIT) {
+    protected function internSearch($types = NULL, $expiryDate = NULL, $region = NULL, $page = 1) {
         //Main query
         $sqlPrefix = "SELECT *, X(Share.location) as latitude, Y(Share.location) as longitude, ShareTypeCategory.label, (SELECT COUNT(Request.id) FROM requests Request WHERE Request.share_id = Share.id AND Request.status = 1) AS participation_count";
         $sql = " FROM shares Share, users User, share_types ShareType, share_type_categories ShareTypeCategory WHERE Share.user_id = User.id AND Share.share_type_id = ShareType.id AND ShareType.share_type_category_id = ShareTypeCategory.id";
@@ -49,11 +49,6 @@ class ApiSharesController extends AppController {
             $sql .= ' AND Share.event_date >= '.$expiryDate->format('Y-m-d H:i:s');
         }
 
-        //Start
-        if ($start != NULL) {
-            $sql .= ' AND Share.id >= '.$start;
-        }
-
         //Region
         if ($region != NULL) {
             $sql .= " AND Contains(GeometryFromText('POLYGON((";
@@ -76,11 +71,14 @@ class ApiSharesController extends AppController {
             $sql .= "))', 4326), Share.location)";
         }
 
-        $sql .= " GROUP BY Share.id";
+        //Limit
+        $sqlLimit = " LIMIT ".SHARE_SEARCH_LIMIT;
+        
+        //Offset
+        $offset = ceil(($page - 1) / SHARE_SEARCH_LIMIT);
+        $sqlOffset = " OFFSET ".$offset;
 
-        $sqlLimit = " LIMIT ".$limit;
-
-        $query = $sqlPrefix.$sql.$sqlLimit.";";
+        $query = $sqlPrefix.$sql." GROUP BY Share.id".$sqlLimit.$sqlOffset.";";
 
         /*echo json_encode($query);
         exit();*/
@@ -88,6 +86,7 @@ class ApiSharesController extends AppController {
         //Execute request
         $shares = $this->Share->query($query);
 
+        $response['page'] = $page;
         $response['results'] = array();
         $shareIndex = 0;
         foreach ($shares as $share) {
@@ -102,6 +101,7 @@ class ApiSharesController extends AppController {
         }
 
         $response['total_results'] = $totalResults;
+        $response['total_pages'] = ceil($totalResults / SHARE_SEARCH_LIMIT);
 
         return $response;
     }
@@ -126,25 +126,19 @@ class ApiSharesController extends AppController {
                 $expiryDate->setTimestamp($expiryTimestamp);
             }
 
-            //Get Start
-            $start = NULL;
-            if (isset($this->params['url']['start']) && is_numeric($this->params['url']['start'])) {
-                $start = $this->params['url']['start'];
-            }
-
             //Get region
             $region = NULL;
             if (isset($data['region']) && is_array($data['region'])) {
                 $region = $data['region'];
             }
 
-            //Get limit
-            $limit = SHARE_SEARCH_LIMIT;
-            if (isset($this->params['url']['limit']) && is_numeric($this->params['url']['limit'])) {
-                $limit = $this->params['url']['limit'];
+            //Page
+            $page = 1;
+            if (isset($this->params['url']['page']) && is_numeric($this->params['url']['page'])) {
+                $page = $this->params['url']['page'];
             }
 
-            $response = $this->internSearch($types, $expiryDate, $start, $region, $limit);
+            $response = $this->internSearch($types, $expiryDate, $region, $page);
 
             //Send JSON response
             $this->sendResponse(SHARE_STATUS_CODE_OK, $response);
