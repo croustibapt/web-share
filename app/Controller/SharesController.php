@@ -45,12 +45,11 @@ class SharesController extends ApiSharesController {
 	}
     
     public function details($shareId = NULL) {
-        $response = $this->internDetails($shareId, true);
+        $response = $this->internDetails($shareId);
         $this->set('share', $response);
 
         //Get user identifier
         $userExternalId = $this->getUserExternalId($this->request);
-        $userId = $this->getUserId($userExternalId);
 
         $share['Share'] = $response;
 
@@ -76,6 +75,15 @@ class SharesController extends ApiSharesController {
         //Request status
         $requestStatus = $this->getRequestStatus($share, $userExternalId);
         $this->set('requestStatus', $requestStatus);
+
+        //Get comments
+        $page = 1;
+        if (isset($this->params['url']['page']) && is_numeric($this->params['url']['page'])) {
+            $page = $this->params['url']['page'];
+        }
+
+        $commentsResponse = $this->internGetComments($shareId, $page);
+        $this->set('comments', $commentsResponse);
     }
 
     /*public function delete() {

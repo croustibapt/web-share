@@ -45,13 +45,8 @@ body {
     box-shadow: 0px 2px 10px rgba(0, 2, 5, 0.25);
 }
 
-/* SHARE CARD */
-
-.div-share-card {
-    cursor: pointer;
-}
-
-.div-share-card-date {
+.card-header {
+    background-color: #35cf76;
     color: #ffffff;
     border-top-left-radius: 2px;
     border-top-right-radius: 2px;
@@ -59,6 +54,12 @@ body {
     padding-right: 15px;
     padding-top: 5px;
     padding-bottom: 5px;
+}
+
+/* SHARE CARD */
+
+.div-share-card {
+    cursor: pointer;
 }
 
 .span-share-card-date {
@@ -293,7 +294,6 @@ body {
 #div-share-details-comments {
     margin-bottom: 15px;
     background-color: #ffffff;
-    border-top: 10px solid #f39c12;
 }
 
 #div-share-details-comments-list {
@@ -366,7 +366,6 @@ body {
 #div-add-section-description .input-group.has-error .input-group-addon, #div-add-section-description .input-group.has-error input, #div-add-section-description .input-group.has-error .selectpicker {
     border-color: #e74c3c;
 }
-
 
 #div-add-section-description .input-group-addon, #div-add-section-description .input-group input, #div-add-section-description .selectpicker {
     border-color: #3498db;

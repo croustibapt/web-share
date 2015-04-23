@@ -5,7 +5,7 @@
     $day = strftime('%A %e %B', $dateTime->getTimestamp());
     $hour = strftime('%k:%M', $dateTime->getTimestamp());
 ?>
-<div class="div-share-card-date" style="background-color: <?php echo $color; ?>;">
+<div class="card-header" style="background-color: <?php echo $color; ?>;">
     <div class="row">
         <div class="col-md-10">
             <span class="span-share-card-date"><?php echo $day; ?></span>

@@ -4,7 +4,10 @@
 
 <script src="http://js.nicedit.com/nicEdit-latest.js"></script>
 
-<div class="row div-share card" style="border-top: 10px solid <?php echo $shareTypeColor; ?>;">
+<div class="row div-share card">
+    <div class="card-header" style="background-color: <?php echo $shareTypeColor; ?>;">
+        Détails
+    </div>
     <div class="col-md-2 text-center">
         <!-- Share type icon -->
         <h1 class="h1-share-details-type" style="color: <?php echo $shareTypeColor; ?>;">
@@ -158,13 +161,133 @@
 </div>
 
 <!-- Comments -->
-<h2>Commentaires</h2>
 <div id="div-share-details-comments" class="row card">
+    <div class="card-header" style="background-color: #3498db;">
+        Commentaires
+    </div>
     <div class="col-md-12">
         <div id="div-share-details-comments-list">
-            <p class="lead text-muted text-center">
-                Chargement des commentaires...
-            </p>
+
+            <?php if ($comments['total_results'] > 0) : ?>
+
+                <?php foreach ($comments['results'] as $comment) : ?>
+
+                    <?php
+                        $isMe = ($share['user']['external_id'] == $comment['user']['external_id']);
+                        $blockquoteClass = $isMe ? "blockquote-reverse" : "blockquote-normal";
+                    ?>
+
+                    <?php if ($isMe) : ?>
+
+                    <div class="media">
+                        <div class="media-body">
+                            <blockquote class="blockquote-reverse">
+                                <h4 class="media-heading"><?php echo $comment['user']['username']; ?></h4>
+                                <p class="lead"><?php echo $comment['message']; ?></p>
+                                <footer>
+                                    <span class="timeago" title="' + created + '"><?php echo $comment['created']; ?></span>
+                                </footer>
+                            </blockquote>
+                        </div>
+                        <div class="media-right">
+                            <img class="comment-user-img img-circle img-thumbnail" src="https://graph.facebook.com/v2.3/<?php echo $comment['user']['external_id']; ?>/picture" />
+                        </div>
+                    </div>
+
+                    <?php else : ?>
+
+                    <div class="media">
+                        <div class="media-left">
+                            <img class="comment-user-img img-circle img-thumbnail" src="https://graph.facebook.com/v2.3/<?php echo $comment['user']['external_id']; ?>/picture" />
+                        </div>
+                        <div class="media-body">
+                            <blockquote class="blockquote-normal">
+                                <h4 class="media-heading"><?php echo $comment['user']['username']; ?></h4>
+                                <p class="lead"><?php echo $comment['message']; ?></p>
+                                <footer>
+                                    <span class="timeago" title="' + created + '"><?php echo $comment['created']; ?></span>
+                                </footer>
+                            </blockquote>
+                        </div>
+                    </div>
+
+                    <?php endif; ?>
+
+                <?php endforeach; ?>
+
+                <?php if ($comments['total_pages'] > 1) : ?>
+
+                    <nav class="text-center">
+                        <ul class="pagination">
+
+                            <!-- Previous -->
+                            <?php if ($comments['page'] > 1) : ?>
+
+                            <li>
+                                <?php
+                                    echo $this->Html->link('<span aria-hidden="true">&laquo;</span>', '/share/details/'.$share['share_id'].'?page='.($comments['page'] - 1), array(
+                                        'escape' => false,
+                                        'aria-label' => 'Previous'
+                                    ));
+                                ?>
+                            </li>
+
+                            <?php else : ?>
+
+                            <li class="disabled">
+                                <a href="" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a>
+                            </li>
+
+                            <?php endif; ?>
+
+                            <?php for ($i = 1; $i <= $comments['total_pages']; $i++) : ?>
+
+                                <!-- Middle -->
+                                <?php if ($i == $comments['page']) : ?>
+
+                                <li class="active">
+                                    <a href=""><?php echo $i; ?></a>
+                                </li>
+
+                                <?php else : ?>
+
+                                <li>
+                                    <?php
+                                        echo $this->Html->link($i, '/share/details/'.$share['share_id'].'?page='.$i);
+                                    ?>
+
+                                </li>
+
+                                <?php endif; ?>
+
+                            <?php endfor; ?>
+
+                            <!-- Next -->
+                            <?php if ($comments['page'] < $comments['total_pages']) : ?>
+
+                            <li>
+                                <?php
+                                    echo $this->Html->link('<span aria-hidden="true">&raquo;</span>', '/share/details/'.$share['share_id'].'?page='.($comments['page'] + 1), array(
+                                        'escape' => false,
+                                        'aria-label' => 'Next'
+                                    ));
+                                ?>
+                            </li>
+
+                            <?php else : ?>
+
+                            <li class="disabled">
+                                <a href="" aria-label="Next"><span aria-hidden="true">&raquo;</span></a>
+                            </li>
+
+                            <?php endif; ?>
+
+                        </ul>
+                    </nav>
+
+                <?php endif; ?>
+
+            <?php endif; ?>
         </div>
     </div>
     
@@ -237,6 +360,7 @@
         var html = '';
 
         var comments = data['results'];
+        var totalComments = data['total_results'];
 
         //If we have comments
         if (comments.length > 0) {
@@ -250,15 +374,41 @@
             html = '<p class="p-share-details-comments-list-none-header lead text-muted text-center">Aucun commentaire</p>';
         }
 
+        //Pagination
+        var nbPages = Math.ceil(totalComments / <?php echo SHARE_COMMENTS_LIMIT; ?>);
+        html +=
+            '<nav class="text-center">' +
+                '<ul class="pagination">' +
+                    '<li>' +
+                        '<a href="#" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a>' +
+                    '</li>';
+
+        for (var i = 0; i < nbPages; i++) {
+            html +=
+                '<li><a href="#">' + (i + 1) + '</a></li>';
+        }
+
+        html +=
+                    '<li>' +
+                        '<a href="#" aria-label="Next"><span aria-hidden="true">&raquo;</span></a>' +
+                    '</li>' +
+                '</ul>' +
+            '</nav>';
+
         return html;
     }
 
     //Function used to load the last share comments
-    function loadComments(shareId) {
+    function loadComments(shareId, limit, start) {
+        var url = webroot + 'api/comment/get?shareId=' + shareId + '&limit=' + limit;
+        if (limit != null) {
+            url += '&start=' + start;
+        }
+
         //Ajax load
         $.ajax({
             type : "GET",
-            url : webroot + "api/comment/get?shareId=" + shareId,
+            url : url,
             dataType : "json"
         })
         .done(function(data, textStatus, jqXHR) {
@@ -281,6 +431,8 @@
 
         $('#img-gmaps').attr("src", url);
     }
+
+    <?php if ($this->LocalUser->isAuthenticated($this)) : ?>
 
     //Function used to send a comment
     function sendComment(shareId, message, sendButton) {
@@ -329,16 +481,32 @@
         }
     }
 
+    //Method called when the user click on the comment send button
+    $('#btn-comment-add').click(function () {
+        //Get editor
+        var editor = nicEditors.findEditor('textarea-comment-add');
+
+        //And its message
+        var message = editor.getContent();
+
+        //Finally send the comment
+        sendComment(<?php echo $share['share_id']; ?>, message, $(this));
+    });
+
+    <?php endif; ?>
+
     //On ready
     $(document).ready(function() {
         //Date (timeago)
         $(".timeago").timeago();
 
         //Load all share comments
-        loadComments(<?php echo $share['share_id']; ?>);
+        //loadComments(<?php echo $share['share_id']; ?>, <?php echo SHARE_COMMENTS_LIMIT; ?>, null);
 
         //Initialize Google Maps image
         initializeGoogleMapsImage(<?php echo $share['latitude']; ?>, <?php echo $share['longitude']; ?>);
+
+        <?php if ($this->LocalUser->isAuthenticated($this)) : ?>
 
         //Create editor
         new nicEditor({
@@ -349,17 +517,7 @@
         //Initial empty content
         var editor = nicEditors.findEditor('textarea-comment-add');
         editor.setContent('');
-    });
 
-    //
-    $('#btn-comment-add').click(function () {
-        //Get editor
-        var editor = nicEditors.findEditor('textarea-comment-add');
-
-        //And its message
-        var message = editor.getContent();
-
-        //Finally send the comment
-        sendComment(<?php echo $share['share_id']; ?>, message, $(this));
+        <?php endif; ?>
     });
 </script>

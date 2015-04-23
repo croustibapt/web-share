@@ -20,12 +20,12 @@
             <ul class="nav navbar-nav">
                 <li class="<?php echo (($this->name == 'Shares') && ($this->action == 'search')) ? "active" : ""; ?>">
                     <?php
-                        echo $this->Html->link('Search', '/share/search');
+                        echo $this->Html->link('Rechercher un partage', '/share/search');
                     ?>
                 </li>
                 <li class="<?php echo (($this->name == 'Shares') && ($this->action == 'add')) ? "active" : ""; ?>">
                     <?php
-                        echo $this->Html->link('Add', '/share/add');
+                        echo $this->Html->link('Partager un coupon', '/share/add');
                     ?>
                 </li>
             </ul>

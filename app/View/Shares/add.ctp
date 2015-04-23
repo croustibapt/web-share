@@ -1,10 +1,7 @@
 <script src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
-
-<h2>Partager un coupon</h2>
 
 <div class="row" style="">
-    <div class="col-md-10">
+    <div class="col-md-9">
         <?php if ($this->LocalUser->isAuthenticated($this)) : ?>
 
         <?php
@@ -15,97 +12,97 @@
 
         <?php endif; ?>
 
-        <div id="div-add-section-description" class="div-add-section card" style="border-top: 10px solid #4aa3df;">
-            <div class="row">
-                <div id="div-share-add-description-left" class="col-md-6">
-                    <p class="lead">Que partagez-vous ?</p>
+        <div class="card">
+            <div class="card-header" style="background-color: #4aa3df;">
+                Que partagez-vous ?
+            </div>
+            <div id="div-add-section-description" class="div-add-section">
+                <div class="row">
+                    <div id="div-share-add-description-left" class="col-md-6">
+                        <!-- Type -->
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="fa fa-tag"></i></span>
+                            <?php
+                            echo $this->Form->input('share_type_id', array(
+                                'label' => false,
+                                'class' => 'selectpicker',
+                                'type' => 'select',
+                                'div' => false,
+                                'data-style' => 'btn btn-default form-control input-lg'
+                            ));
+                            ?>
+                        </div>
 
-                    <!-- Type -->
-                    <div class="input-group">
-                        <span class="input-group-addon"><i class="fa fa-tag"></i></span>
+                        <!-- Title -->
                         <?php
-                        echo $this->Form->input('share_type_id', array(
-                            'label' => false,
-                            'class' => 'selectpicker',
-                            'type' => 'select',
-                            'div' => false,
-                            'data-style' => 'btn btn-default form-control input-lg'
-                        ));
-                        ?>
-                    </div>
-
-                    <!-- Title -->
-                    <?php
                         echo $this->element('share-add-input', array(
                             'name' => 'title',
                             'placeholder' => 'Titre',
                             'icon' => 'fa-file-text'
                         ));
-                    ?>
+                        ?>
 
-                    <!-- Date -->
-                    <?php
+                        <!-- Date -->
+                        <?php
                         echo $this->element('share-add-input', array(
                             'name' => 'event_date',
                             'placeholder' => 'Date',
                             'class' => 'datetimepicker',
                             'icon' => 'fa-calendar-o'
                         ));
-                    ?>
+                        ?>
 
-                    <!-- Price -->
-                    <?php
+                        <!-- Price -->
+                        <?php
                         echo $this->element('share-add-input', array(
                             'name' => 'price',
                             'placeholder' => 'Prix (en euros)',
                             'icon' => 'fa-dollar'
                         ));
-                    ?>
+                        ?>
 
-                    <!-- Places -->
-                    <?php
+                        <!-- Places -->
+                        <?php
                         echo $this->element('share-add-input', array(
                             'name' => 'places',
                             'placeholder' => 'Nombre de places',
                             'icon' => 'fa-ellipsis-h'
                         ));
-                    ?>
-                </div>
-                <div class="col-md-6">
-                    <p class="lead text-right">Où le partagez-vous ?</p>
-
-                    <!-- Google maps -->
-                    <div class="gllpLatlonPicker">
-                        <div id="div-share-add-google-map" class="gllpMap img-rounded">Google Maps</div>
-
-                        <input type="hidden" class="gllpLatitude" value="43.594857" />
-                        <input type="hidden" class="gllpLongitude" value="1.439707" />
-                        <input type="hidden" class="gllpZoom" value="11" />
-
-                        <?php
-                        echo $this->Form->hidden('latitude', array(
-                            'class' => 'gllpLatitude',
-                            'value' => '43.594857'
-                        ));
                         ?>
-                        <?php
-                        echo $this->Form->hidden('longitude', array(
-                            'class' => 'gllpLongitude',
-                            'value' => '1.439707'
-                        ));
-                        ?>
+                    </div>
+                    <div class="col-md-6">
+                        <!-- Google maps -->
+                        <div class="gllpLatlonPicker">
+                            <div id="div-share-add-google-map" class="gllpMap img-rounded">Google Maps</div>
+
+                            <input type="hidden" class="gllpLatitude" value="43.594857" />
+                            <input type="hidden" class="gllpLongitude" value="1.439707" />
+                            <input type="hidden" class="gllpZoom" value="11" />
+
+                            <?php
+                            echo $this->Form->hidden('latitude', array(
+                                'class' => 'gllpLatitude',
+                                'value' => '43.594857'
+                            ));
+                            ?>
+                            <?php
+                            echo $this->Form->hidden('longitude', array(
+                                'class' => 'gllpLongitude',
+                                'value' => '1.439707'
+                            ));
+                            ?>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div id="div-more-details-collapse">
-            <div id="div-add-section-more" class="div-add-section card" style="border-top: 10px solid #9b59b6;">
+        <div class="card">
+            <div class="card-header" style="background-color: #9b59b6;">
+                Une précision ?
+            </div>
+            <div id="div-add-section-more" class="div-add-section">
                 <div class="row">
-                    <div class="col-md-12">
-                        <p class="lead">Une précision ?</p>
-                    </div>
-
                     <div class="col-md-6">
                         <!-- Message -->
                         <?php
@@ -149,7 +146,7 @@
         </div>
     </div>
 
-    <div class="col-md-2">
+    <div class="col-md-3 text-center">
         <?php if ($this->LocalUser->isAuthenticated($this)) : ?>
 
         <?php

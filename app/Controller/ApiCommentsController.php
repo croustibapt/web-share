@@ -92,62 +92,6 @@ class ApiCommentsController extends AppController {
         }
     }
     
-    protected function internGet($shareId = NULL) {
-        $response = NULL;
-
-        $share = NULL;
-        if ($shareId != NULL) {
-            $share = $this->Share->find('first', array(
-                'conditions' => array(
-                    'Share.id' => $shareId
-                )
-            ));
-        }
-        
-        //If correct identifier
-        if ($share != NULL) {
-            //Conditions
-            $conditons = array();
-            $conditions['Comment.share_id'] = $shareId;
-
-            //Get start parameter
-            $start = NULL;
-            if (isset($this->params['url']['start']) && is_numeric($this->params['url']['start'])) {
-                $start = $this->params['url']['start'];
-                $conditions['Comment.id >='] = $start;
-            }
-
-            //Get limit parameter
-            $limit = SHARE_COMMENTS_LIMIT;
-            if (isset($this->params['url']['limit']) && is_numeric($this->params['url']['limit'])) {
-                $limit = $this->params['url']['limit'];
-            }
-
-            //Comments             
-            $comments = $this->Comment->find('all', array(
-                'limit' => $limit,
-                'conditions' => $conditions,
-                'order' => 'Comment.id ASC'
-            ));
-            $response['results'] = array();
-
-            //Format comments response
-            $this->formatComments($response['results'], $comments);
-
-            //Total results count
-            $countConditions = $conditions;
-            unset($countConditions['Comment.id >=']);                
-            $totalComments = $this->Comment->find('count', array(
-                'conditions' => $countConditions
-            ));
-            $response['total_results'] = $totalComments;
-        } else {
-            throw new ShareException(SHARE_STATUS_CODE_BAD_REQUEST, SHARE_ERROR_CODE_BAD_PARAMETERS, "Bad Share identifier");
-        }
-        
-        return $response;
-    }
-    
     public function apiGet() { 
         if ($this->request->is('GET')) {
             //Get Share identifier
@@ -155,10 +99,16 @@ class ApiCommentsController extends AppController {
             if (isset($this->params['url']['shareId']) && is_numeric($this->params['url']['shareId'])) {
                 $shareId = $this->params['url']['shareId'];
             }
+
+            //Get page parameter
+            $page = 1;
+            if (isset($this->params['url']['page']) && is_numeric($this->params['url']['page'])) {
+                $page = $this->params['url']['page'];
+            }
             
             try {
                 //Intern get
-                $response = $this->internGet($shareId);
+                $response = $this->internGetComments($shareId, $page);
 
                 //Send JSON respsonse
                 $this->sendResponse(SHARE_STATUS_CODE_OK, $response);
