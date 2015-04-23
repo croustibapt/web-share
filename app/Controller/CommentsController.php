@@ -17,6 +17,12 @@ class CommentsController extends ApiCommentsController {
             try {
                 //Intern add
                 $response = $this->internAdd($userExternalId, $shareId,$message);
+
+                //Redirect to the first page
+                $this->redirect(array(
+                    'controller' => 'shares',
+                    'action' => 'details/'.$shareId
+                ));
             } catch (ShareException $e) {
                 //$this->sendErrorResponse($e->getStatusCode(), $e->getCode(), $e->getMessage(), $e->getValidationErrors());
             }

@@ -28,7 +28,7 @@
                                     <footer>
                                         <span class="timeago" title="' + created + '"><?php echo $comment['created']; ?></span>
                                     </footer>
-                                    
+
                                 </blockquote>
                             </div>
                             <div class="media-right">
