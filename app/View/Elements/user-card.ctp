@@ -1,7 +1,7 @@
 <div class="card">
     <div class="row">
         <div class="user-card-picture-div col-md-2 text-center">
-            <img class="user-card-picture-img img-circle" src="http://graph.facebook.com/v2.3/<?php echo $user['external_id']; ?>/picture?type=large" />
+            <img class="user-card-picture-img img-circle" src="http://graph.facebook.com/v2.3/<?php echo $user['external_id']; ?>/picture?type=large&width=150&height=150" />
         </div>
         <div class="user-card-summary-div col-md-10">
             

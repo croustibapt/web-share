@@ -81,18 +81,13 @@ class ApiUsersController extends AppController {
 
             //If found
             if ($user != NULL) {
-                //Check credentials
-                if ($this->checkCredentials($this->request)) {                
-                    //Format data
-                    $response['username'] = $user['User']['username'];
-                    $response['external_id'] = $user['User']['external_id'];
-                    $response['created'] = $user['User']['created'];
-                    $response['share_count'] = $user['User']['share_count'];
-                    $response['request_count'] = $user['User']['request_count'];
-                    $response['comment_count'] = $user['User']['comment_count'];
-                } else {
-                    throw new ShareException(SHARE_STATUS_CODE_UNAUTHORIZED, SHARE_ERROR_CODE_BAD_CREDENTIALS, "Bad credentials");
-                }
+                //Format data
+                $response['username'] = $user['User']['username'];
+                $response['external_id'] = $user['User']['external_id'];
+                $response['created'] = $user['User']['created'];
+                $response['share_count'] = $user['User']['share_count'];
+                $response['request_count'] = $user['User']['request_count'];
+                $response['comment_count'] = $user['User']['comment_count'];
             } else {
                 throw new ShareException(SHARE_STATUS_CODE_NOT_FOUND, SHARE_ERROR_CODE_RESOURCE_NOT_FOUND, "User not found");
             }
