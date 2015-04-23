@@ -301,15 +301,8 @@ body {
     /*padding-bottom: 15px;*/
 }
 
-.div-comment-user-img {
-    background-color: #2ecc71;
-    color: #ffffff;
-    font-size: 30px;
-    height: 64px;
-    width: 64px;
-    display: table-cell;
-    vertical-align: middle;
-    text-align: center;
+.comment-user-img {
+    max-width: none;
 }
 
 #div-share-details-comments .alert {

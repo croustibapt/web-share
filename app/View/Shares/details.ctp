@@ -191,16 +191,43 @@
 <script>
     //Function used to print a single share comment
     function printComment(externalId, username, message, created) {
-        var reverseClass = (<?php echo $share['user']['external_id']; ?> == externalId) ? "blockquote-reverse" : "blockquote-normal";
+        var isMe = (<?php echo $share['user']['external_id']; ?> == externalId);
+        var blockquoteClass = isMe ? "blockquote-reverse" : "blockquote-normal";
 
-        var htmlComment = '' +
-            '<blockquote class="' + reverseClass + '">'+
+        var blockQuote = '' +
+            '<blockquote class="' + blockquoteClass + '">'+
                 '<h4 class="media-heading">' + username + '</h4>' +
                 '<p class="lead">' + message + '</p>' +
                 '<footer>' +
                     '<span class="timeago" title="' + created + '">' + created + '</span>' +
                 '</footer>' +
             '</blockquote>';
+
+        var userPicture = '<img class="comment-user-img img-circle img-thumbnail" src="https://graph.facebook.com/v2.3/' + externalId + '/picture" />'
+
+        var htmlComment = '';
+
+        if (isMe) {
+            htmlComment +=
+                '<div class="media">' +
+                    '<div class="media-body">' +
+                        blockQuote +
+                    '</div>' +
+                    '<div class="media-right">' +
+                        userPicture +
+                    '</div>' +
+                '</div>';
+        } else {
+            htmlComment +=
+                '<div class="media">' +
+                    '<div class="media-left">' +
+                        userPicture +
+                    '</div>' +
+                    '<div class="media-body">' +
+                        blockQuote +
+                    '</div>' +
+                '</div>';
+        }
 
         return htmlComment;
     }
