@@ -229,8 +229,11 @@ class ApiSharesController extends AppController {
 
                 //Prepare response
                 $response['share_id'] = $shareId;
-                $response['created'] = $share['Share']['created'];
-                $response['modified'] = $share['Share']['modified'];
+
+                //Created, modified
+                $this->formatISODate($response['created'], $share['Share']['created']);
+                $this->formatISODate($response['modified'], $share['Share']['modified']);
+
                 $response['city'] = $share['Share']['city'];
                 $response['zip_code'] = $share['Share']['zip_code'];
             } else {

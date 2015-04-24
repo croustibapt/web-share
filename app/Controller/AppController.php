@@ -290,7 +290,10 @@ class AppController extends Controller {
         foreach ($comments as $comment) {
             $response[$commentIndex]['comment_id'] = $comment['Comment']['id'];
             $response[$commentIndex]['message'] = $comment['Comment']['message'];
-            $response[$commentIndex]['created'] = $comment['Comment']['created'];
+
+            //Created
+            $this->formatISODate($response[$commentIndex]['created'], $comment['Comment']['created']);
+
             $response[$commentIndex]['share_id'] = $comment['Comment']['share_id'];
             $response[$commentIndex]['user']['external_id'] = $comment['User']['external_id'];
             $response[$commentIndex]['user']['username'] = $comment['User']['username'];
@@ -336,12 +339,12 @@ class AppController extends Controller {
         }
     }
 
-    protected function formatUTCDate(& $field = NULL, $date = NULL) {
+    protected function formatISODate(& $field = NULL, $date = NULL) {
         if ($date != NULL) {
-            $dateTime = DateTime::createFromFormat('Y-m-d H:i:s', $date, new DateTimeZone('UTC'));
-            $utcDate = date('c', $dateTime->getTimestamp());
+            $dateTime = new DateTime($date);
+            $isoDate = date('c', $dateTime->getTimestamp());
 
-            $field = $utcDate;
+            $field = $isoDate;
         }
     }
     
@@ -363,8 +366,7 @@ class AppController extends Controller {
             $response['title'] = $share['Share']['title'];
 
             //Event date
-            $response['event_date'] = $share['Share']['event_date'];
-            //$this->formatUTCDate($response['event_date'], $share['Share']['event_date']);
+            $this->formatISODate($response['event_date'], $share['Share']['event_date']);
 
             $response['share_type']['share_type_id'] = $share['ShareType']['id'];
             $response['share_type']['label'] = $share['ShareType']['label'];
@@ -392,8 +394,10 @@ class AppController extends Controller {
             $response['zip_code'] = $share['Share']['zip_code'];
 
             $response['radius'] = $share['Share']['radius'];
-            $response['created'] = $share['Share']['created'];
-            $response['modified'] = $share['Share']['modified'];
+
+            //Created, modified
+            $this->formatISODate($response['created'], $share['Share']['created']);
+            $this->formatISODate($response['modified'], $share['Share']['modified']);
             
             //Comments            
             $commentsCount = $share['Share']['comment_count'];

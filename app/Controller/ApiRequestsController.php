@@ -120,8 +120,8 @@ class ApiRequestsController extends AppController {
 
                             //Format response
                             $response['request_id'] = $request['Request']['id'];
-                            $response['created'] = $request['Request']['created'];
-                            $response['modified'] = $request['Request']['modified'];
+                            $this->formatISODate($response['created'], $request['Request']['created']);
+                            $this->formatISODate($response['modified'], $request['Request']['modified']);
                         } else {
                             throw new ShareException(SHARE_STATUS_CODE_INTERNAL_SERVER_ERROR, SHARE_ERROR_CODE_SAVE_FAILED, "Request save failed");
                         }

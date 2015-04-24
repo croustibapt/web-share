@@ -27,8 +27,10 @@ class ApiUsersController extends AppController {
                 $response['external_id'] = $user['User']['external_id'];
                 $response['username'] = $user['User']['username'];
                 $response['mail'] = $user['User']['mail'];
-                $response['created'] = $user['User']['created'];
-                $response['modified'] = $user['User']['modified'];
+
+                //Created, modified
+                $this->formatISODate($response['created'], $user['User']['created']);
+                $this->formatISODate($response['modified'], $user['User']['modified']);
             } else {
                 $validationErrors = $this->User->validationErrors;
 
@@ -84,7 +86,10 @@ class ApiUsersController extends AppController {
                 //Format data
                 $response['username'] = $user['User']['username'];
                 $response['external_id'] = $user['User']['external_id'];
-                $response['created'] = $user['User']['created'];
+
+                //Created
+                $this->formatISODate($response['created'], $user['User']['created']);
+
                 $response['share_count'] = $user['User']['share_count'];
                 $response['request_count'] = $user['User']['request_count'];
                 $response['comment_count'] = $user['User']['comment_count'];
@@ -129,7 +134,10 @@ class ApiUsersController extends AppController {
             //User
             $response['username'] = $user['User']['username'];
             $response['external_id'] = $user['User']['external_id'];
-            $response['created'] = $user['User']['created'];
+
+            //Created
+            $this->formatISODate($response['created'], $user['User']['created']);
+
             $response['comment_count'] = $user['User']['comment_count'];
 
             //Shares

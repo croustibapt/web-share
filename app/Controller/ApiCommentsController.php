@@ -47,8 +47,9 @@ class ApiCommentsController extends AppController {
                     $response['comment_id'] = $comment['Comment']['id'];
                     $response['user']['external_id'] = $user['User']['external_id'];
                     $response['user']['username'] = $user['User']['username'];
-                    $response['created'] = $comment['Comment']['created'];
-                    $response['modified'] = $comment['Comment']['modified'];
+
+                    $this->formatISODate($response['created'], $comment['Comment']['created']);
+                    $this->formatISODate($response['modified'], $comment['Comment']['modified']);
                 } else {
                     $validationErrors = $this->Comment->validationErrors;
 
