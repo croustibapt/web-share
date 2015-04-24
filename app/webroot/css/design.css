@@ -297,6 +297,8 @@ body {
 }
 
 #div-share-details-comments-list {
+    padding-left: 15px;
+    padding-right: 15px;
     padding-top: 15px;
     /*padding-bottom: 15px;*/
 }

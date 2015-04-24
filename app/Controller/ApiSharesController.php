@@ -46,7 +46,7 @@ class ApiSharesController extends AppController {
 
         //Expiry date
         if ($expiryDate != NULL) {
-            $sql .= ' AND Share.event_date >= '.$expiryDate->format('Y-m-d H:i:s');
+            $sql .= ' AND Share.event_date >= \''.$expiryDate->format('Y-m-d H:i:s').'\'';
         }
 
         //Region

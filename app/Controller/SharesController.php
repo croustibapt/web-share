@@ -4,8 +4,23 @@ App::uses('ApiSharesController', 'Controller');
 class SharesController extends ApiSharesController {
     //
     public function search() {
+        $types = NULL;
+        $expiryDate = NULL;
+        $region = NULL;
+        
+        if ($this->request->is('POST')) {
+            
+        }
+        
+        if (isset($this->params['url']['expiry']) && is_numeric($this->params['url']['expiry'])) {
+            $expiryTimestamp = $this->params['url']['expiry'];
+
+            $expiryDate = new DateTime();
+            $expiryDate->setTimestamp($expiryTimestamp);
+        }
+        
         //
-        $response = $this->internSearch();
+        $response = $this->internSearch($types, $expiryDate, $region);
 
         //
         $this->set('response', $response);
