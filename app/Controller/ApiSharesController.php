@@ -21,7 +21,7 @@ class ApiSharesController extends AppController {
         return $shareTypeId;
     }
 
-    protected function internSearch($types = NULL, $expiryDate = NULL, $region = NULL, $page = 1) {
+    protected function internSearch($types = NULL, $startDate = NULL, $endDate = NULL, $region = NULL, $page = 1) {
         //Main query
         $sqlPrefix = "SELECT *, X(Share.location) as latitude, Y(Share.location) as longitude, ShareTypeCategory.label, (SELECT COUNT(Request.id) FROM requests Request WHERE Request.share_id = Share.id AND Request.status = 1) AS participation_count";
         $sql = " FROM shares Share, users User, share_types ShareType, share_type_categories ShareTypeCategory WHERE Share.user_id = User.id AND Share.share_type_id = ShareType.id AND ShareType.share_type_category_id = ShareTypeCategory.id";
@@ -44,9 +44,14 @@ class ApiSharesController extends AppController {
             $sql .= ' AND Share.share_type_id IN '.$shareTypesIds;
         }
 
-        //Expiry date
-        if ($expiryDate != NULL) {
-            $sql .= ' AND Share.event_date >= \''.$expiryDate->format('Y-m-d H:i:s').'\'';
+        //Start date
+        if ($startDate != NULL) {
+            $sql .= ' AND Share.event_date >= \''.$startDate->format('Y-m-d H:i:s').'\'';
+        }
+
+        //End date
+        if ($endDate != NULL) {
+            $sql .= ' AND Share.event_date <= \''.$endDate->format('Y-m-d H:i:s').'\'';
         }
 
         //Region
@@ -78,7 +83,7 @@ class ApiSharesController extends AppController {
         $offset = ceil(($page - 1) / SHARE_SEARCH_LIMIT);
         $sqlOffset = " OFFSET ".$offset;
 
-        $query = $sqlPrefix.$sql." GROUP BY Share.id".$sqlLimit.$sqlOffset.";";
+        $query = $sqlPrefix.$sql." GROUP BY Share.id ORDER BY Share.event_date DESC".$sqlLimit.$sqlOffset.";";
 
         /*echo json_encode($query);
         exit();*/
@@ -117,13 +122,22 @@ class ApiSharesController extends AppController {
                 $types = $data['types'];
             }
 
-            //Get Expiry
-            $expiryDate = NULL;
-            if (isset($this->params['url']['expiry'])) {
-                $expiryTimestamp = $this->params['url']['expiry'];
+            //Get start date
+            $startDate = NULL;
+            if (isset($data['start']) && is_numeric($data['start'])) {
+                $startTimestamp = $data['start'];
 
-                $expiryDate = new DateTime();
-                $expiryDate->setTimestamp($expiryTimestamp);
+                $startDate = new DateTime();
+                $startDate->setTimestamp($startTimestamp);
+            }
+
+            //Get end date
+            $endDate = NULL;
+            if (isset($data['end']) && is_numeric($data['end'])) {
+                $endTimestamp = $data['end'];
+
+                $endDate = new DateTime();
+                $endDate->setTimestamp($endTimestamp);
             }
 
             //Get region
@@ -138,7 +152,7 @@ class ApiSharesController extends AppController {
                 $page = $this->params['url']['page'];
             }
 
-            $response = $this->internSearch($types, $expiryDate, $region, $page);
+            $response = $this->internSearch($types, $startDate, $endDate, $region, $page);
 
             //Send JSON response
             $this->sendResponse(SHARE_STATUS_CODE_OK, $response);

@@ -23,6 +23,11 @@
             echo $this->Html->script('jquery.timeago');
             echo $this->Html->script('locales/jquery.timeago.fr');
 
+            //Moment
+            echo $this->Html->script('moment/moment');
+            echo $this->Html->script('moment/moment-timezone-with-data');
+            echo $this->Html->script('moment/locale/fr');
+
             echo $this->fetch('meta');
             echo $this->fetch('css');
             echo $this->fetch('script');
@@ -36,10 +41,10 @@
     <body>
         <!-- Navigation bar -->
         <?php echo $this->element('nav-bar'); ?>
-        
+
         <!-- Action bar -->
         <?php echo $this->element('action-bar'); ?>
-                
+
         <div class="wrapper">
             <?php
                 $error = $this->Session->flash('nok');
@@ -58,7 +63,7 @@
                 <?php echo $this->fetch('content'); ?>
             </div>
         </div>
-        
+
         <script>
             //Webroot global variable
             var webroot = "<?php echo $this->webroot; ?>";
@@ -73,6 +78,26 @@
             $(document).ready(function() {
                 //Date (timeago)
                 $(".timeago").timeago();
+
+                //Day
+                $(".moment-day").each(function() {
+                    var htmlDate = $(this).html();
+                    var eventDate = new Date(htmlDate);
+                    var isoEventDate = eventDate.toISOString();
+                    var formattedDate = moment(isoEventDate).format('dddd D MMMM', 'fr');
+
+                    $(this).html(formattedDate);
+                });
+
+                //Hour
+                $(".moment-hour").each(function() {
+                    var htmlDate = $(this).html();
+                    var eventDate = new Date(htmlDate);
+                    var isoEventDate = eventDate.toISOString();
+                    var formattedDate = moment(isoEventDate).format('LT', 'fr');
+
+                    $(this).html(formattedDate);
+                });
             });
         </script>
     </body>

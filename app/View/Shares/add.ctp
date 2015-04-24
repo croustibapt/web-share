@@ -44,12 +44,16 @@
 
                         <!-- Date -->
                         <?php
-                        echo $this->element('share-add-input', array(
-                            'name' => 'event_date',
-                            'placeholder' => 'Date',
-                            'class' => 'datetimepicker',
-                            'icon' => 'fa-calendar-o'
-                        ));
+                            echo $this->element('share-add-input', array(
+                                'name' => 'share_date',
+                                'placeholder' => 'Date',
+                                'class' => 'datetimepicker',
+                                'icon' => 'fa-calendar-o'
+                            ));
+
+                            echo $this->Form->hidden('event_date', array(
+                                'id' => 'hidden-share-add-event-date'
+                            ));
                         ?>
 
                         <!-- Price -->
@@ -170,8 +174,15 @@
 </div>
 <script>
     $('.datetimepicker').datetimepicker({
+        lang: 'fr',
         minDate: new Date(),
-        format: 'Y-m-d H:i:s'
+        format: 'Y-m-d H:i',
+        onChangeDateTime: function(dp, input) {
+            var eventDate = new Date(input.val());
+            var timestamp = (eventDate.getTime() / 1000.0);
+
+            $('#hidden-share-add-event-date').val(timestamp);
+        }
     });
 
     $('.selectpicker').selectpicker();

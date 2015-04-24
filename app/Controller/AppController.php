@@ -335,6 +335,15 @@ class AppController extends Controller {
             $data[$fieldName] = null;
         }
     }
+
+    protected function formatUTCDate(& $field = NULL, $date = NULL) {
+        if ($date != NULL) {
+            $dateTime = DateTime::createFromFormat('Y-m-d H:i:s', $date, new DateTimeZone('UTC'));
+            $utcDate = date('c', $dateTime->getTimestamp());
+
+            $field = $utcDate;
+        }
+    }
     
     protected function formatShare($share = NULL, $returnComments = false, $returnRequests = false) {
         $response = NULL;
@@ -352,7 +361,11 @@ class AppController extends Controller {
             $response['user']['username'] = $share['User']['username'];
 
             $response['title'] = $share['Share']['title'];
+
+            //Event date
             $response['event_date'] = $share['Share']['event_date'];
+            //$this->formatUTCDate($response['event_date'], $share['Share']['event_date']);
+
             $response['share_type']['share_type_id'] = $share['ShareType']['id'];
             $response['share_type']['label'] = $share['ShareType']['label'];
             $response['share_type']['share_type_category_id'] = $share['ShareType']['share_type_category_id'];

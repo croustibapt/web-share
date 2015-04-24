@@ -77,10 +77,3 @@
         </div>
     </div>
 </div>
-
-<script>
-    $(function() {
-        //
-        jQuery(".timeago").timeago();
-    });
-</script>

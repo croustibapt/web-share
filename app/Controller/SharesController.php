@@ -5,22 +5,33 @@ class SharesController extends ApiSharesController {
     //
     public function search() {
         $types = NULL;
-        $expiryDate = NULL;
         $region = NULL;
-        
-        if ($this->request->is('POST')) {
-            
-        }
-        
-        if (isset($this->params['url']['expiry']) && is_numeric($this->params['url']['expiry'])) {
-            $expiryTimestamp = $this->params['url']['expiry'];
+        $startDate = NULL;
+        $endDate = NULL;
+        $page = 1;
 
-            $expiryDate = new DateTime();
-            $expiryDate->setTimestamp($expiryTimestamp);
+        //Post parameters
+        if ($this->request->is('POST')) {
+            $data = $this->request->data;
+
+            //Start date
+            $startTimestamp = $data['Share']['start'];
+            $startDate = new DateTime();
+            $startDate->setTimestamp($startTimestamp);
+
+            //End date
+            $endTimestamp = $data['Share']['end'];
+            $endDate = new DateTime();
+            $endDate->setTimestamp($endTimestamp);
+        }
+
+        //Page
+        if (isset($this->params['url']['page']) && is_numeric($this->params['url']['page'])) {
+            $page = $this->params['url']['page'];
         }
         
         //
-        $response = $this->internSearch($types, $expiryDate, $region);
+        $response = $this->internSearch($types, $startDate, $endDate, $region, $page);
 
         //
         $this->set('response', $response);
@@ -36,9 +47,11 @@ class SharesController extends ApiSharesController {
             $data = $this->request->data;
 
             try {
+                $eventDate = date('Y-m-d H:i:s', $data['Share']['event_date']);
+
                 //Intern add
                 $response = $this->internAdd($userId, $data['Share']['latitude'], $data['Share']['longitude'], NULL, NULL,
-                    $data['Share']['share_type_id'], $data['Share']['event_date'], $data['Share']['title'],
+                    $data['Share']['share_type_id'], $eventDate, $data['Share']['title'],
                     $data['Share']['price'], $data['Share']['places'], $data['Share']['waiting_time'],
                     $data['Share']['meet_place'], $data['Share']['limitations'], NULL,
                     $data['Share']['message'],

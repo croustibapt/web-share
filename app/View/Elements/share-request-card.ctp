@@ -87,10 +87,3 @@
 
     </table>
 </div>
-
-<script>
-    $(function() {
-        //
-        jQuery(".timeago").timeago();
-    });
-</script>
