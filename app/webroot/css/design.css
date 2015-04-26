@@ -21,6 +21,8 @@ body {
     color: #c0392b;
 }
 
+/* Action bar */
+
 #div-action-bar {
     margin-bottom: 20px;
     background-color: #ffffff;
@@ -31,6 +33,16 @@ body {
     padding-top: 10px;
     padding-bottom: 10px;
 }
+
+.action-bar-form {
+    width: 100px;
+}
+
+.action-bar-form input {
+    width: 100px;
+}
+
+/* Card */
 
 .card {
     border-radius: 2px;

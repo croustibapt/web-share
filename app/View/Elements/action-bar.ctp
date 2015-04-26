@@ -20,7 +20,7 @@
             echo $this->Form->create('Share', array(
                 'action' => 'search',
                 'type' => 'GET',
-                'class' => 'form-inline',
+                'class' => 'action-bar-form form-inline',
                 'style' => 'display: inline-block;'
             ));
 
@@ -28,8 +28,8 @@
                 'value' => 'day'
             ));
 
-            echo $this->Form->submit('Shares du jour', array(
-                'class' => 'btn btn-success btn-sm'
+            echo $this->Form->submit('Aujourd\'hui', array(
+                'class' => ((isset($date) && ($date == 'day')) ? 'btn btn-success btn-sm active' : 'btn btn-default btn-sm')
             ));
 
             echo $this->Form->end();
@@ -40,7 +40,7 @@
             echo $this->Form->create('Share', array(
                 'action' => 'search',
                 'type' => 'GET',
-                'class' => 'form-inline',
+                'class' => 'action-bar-form form-inline',
                 'style' => 'display: inline-block;'
             ));
 
@@ -48,8 +48,8 @@
                 'value' => 'week'
             ));
 
-            echo $this->Form->submit('Shares de la semaine', array(
-                'class' => 'btn btn-default btn-sm'
+            echo $this->Form->submit('Cette semaine', array(
+                'class' => ((isset($date) && ($date == 'week')) ? 'btn btn-success btn-sm active' : 'btn btn-default btn-sm')
             ));
 
             echo $this->Form->end();
@@ -60,7 +60,7 @@
             echo $this->Form->create('Share', array(
                 'action' => 'search',
                 'type' => 'GET',
-                'class' => 'form-inline',
+                'class' => 'action-bar-form form-inline',
                 'style' => 'display: inline-block;'
             ));
 
@@ -68,8 +68,24 @@
                 'value' => 'month'
             ));
 
-            echo $this->Form->submit('Shares du mois', array(
-                'class' => 'btn btn-default btn-sm'
+            echo $this->Form->submit('Ce mois-ci', array(
+                'class' => ((isset($date) && ($date == 'month')) ? 'btn btn-success btn-sm active' : 'btn btn-default btn-sm')
+            ));
+
+            echo $this->Form->end();
+        ?>
+        
+        <!-- All shares -->
+        <?php
+            echo $this->Form->create('Share', array(
+                'action' => 'search',
+                'type' => 'GET',
+                'class' => 'action-bar-form form-inline',
+                'style' => 'display: inline-block;'
+            ));
+
+            echo $this->Form->submit('Tous', array(
+                'class' => (!isset($date) ? 'btn btn-success btn-sm active' : 'btn btn-default btn-sm')
             ));
 
             echo $this->Form->end();
