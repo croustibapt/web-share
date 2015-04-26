@@ -21,6 +21,8 @@ class SharesController extends ApiSharesController {
             }
             
             if ($dateFilter != NULL) {
+                $this->set('date', $dateFilter);
+                
                 //Prepare date computation
                 $now = new DateTime();
                 $utcTimeZone = new DateTimeZone("UTC");

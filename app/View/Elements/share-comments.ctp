@@ -62,77 +62,12 @@
 
                     <?php endforeach; ?>
 
-                    <?php if ($comments['total_pages'] > 1) : ?>
-
-                        <nav class="text-center">
-                            <ul class="pagination">
-
-                                <!-- Previous -->
-                                <?php if ($comments['page'] > 1) : ?>
-
-                                    <li>
-                                        <?php
-                                            echo $this->Html->link('<span aria-hidden="true">&laquo;</span>', '/share/details/'.$share['share_id'].'?page='.($comments['page'] - 1), array(
-                                                'escape' => false,
-                                                'aria-label' => 'Previous'
-                                            ));
-                                        ?>
-                                    </li>
-
-                                <?php else : ?>
-
-                                    <li class="disabled">
-                                        <span aria-hidden="true">&laquo;</span>
-                                    </li>
-
-                                <?php endif; ?>
-
-                                <?php for ($i = 1; $i <= $comments['total_pages']; $i++) : ?>
-
-                                    <!-- Middle -->
-                                    <?php if ($i == $comments['page']) : ?>
-
-                                        <li class="active">
-                                            <a href="#"><?php echo $i; ?></a>
-                                        </li>
-
-                                    <?php else : ?>
-
-                                        <li>
-                                            <?php
-                                                echo $this->Html->link($i, '/share/details/'.$share['share_id'].'?page='.$i);
-                                            ?>
-
-                                        </li>
-
-                                    <?php endif; ?>
-
-                                <?php endfor; ?>
-
-                                <!-- Next -->
-                                <?php if ($comments['page'] < $comments['total_pages']) : ?>
-
-                                    <li>
-                                        <?php
-                                            echo $this->Html->link('<span aria-hidden="true">&raquo;</span>', '/share/details/'.$share['share_id'].'?page='.($comments['page'] + 1), array(
-                                                'escape' => false,
-                                                'aria-label' => 'Next'
-                                            ));
-                                        ?>
-                                    </li>
-
-                                <?php else : ?>
-
-                                    <li class="disabled">
-                                        <span aria-hidden="true">&raquo;</span>
-                                    </li>
-
-                                <?php endif; ?>
-
-                            </ul>
-                        </nav>
-
-                    <?php endif; ?>
+                    <?php
+                        echo $this->element('pagination', array(
+                            'results' => $comments,
+                            'baseUrl' => '/share/details/'.$share['share_id'].'?'
+                        ));
+                    ?>
 
                 <?php endif; ?>
             </div>

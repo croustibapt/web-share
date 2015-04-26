@@ -7,6 +7,17 @@
                 ));
             }
         ?>
+        <?php
+            $baseUrl = '/share/search?';
+            if (isset($date)) {
+                $baseUrl = '/share/search?date='.$date.'&';
+            }
+            
+            echo $this->element('pagination', array(
+                'results' => $response,
+                'baseUrl' => $baseUrl
+            ));
+        ?>
     </div>
     <div class="col-md-3">
         <?php
