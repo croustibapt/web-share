@@ -4,37 +4,78 @@ App::uses('ApiSharesController', 'Controller');
 class SharesController extends ApiSharesController {
     //
     public function search() {
-        $types = NULL;
-        $region = NULL;
-        $startDate = NULL;
-        $endDate = NULL;
-        $page = 1;
-
         //Post parameters
-        if ($this->request->is('POST')) {
-            $data = $this->request->data;
-
-            //Start date
-            $startTimestamp = $data['Share']['start'];
-            $startDate = new DateTime();
-            $startDate->setTimestamp($startTimestamp);
-
-            //End date
-            $endTimestamp = $data['Share']['end'];
-            $endDate = new DateTime();
-            $endDate->setTimestamp($endTimestamp);
-        }
-
-        //Page
-        if (isset($this->params['url']['page']) && is_numeric($this->params['url']['page'])) {
-            $page = $this->params['url']['page'];
-        }
+        if ($this->request->is('GET')) {
+            //pr($this->params['url']);
+            
+            $types = NULL;
+            $region = NULL;
+            $dateFilter = NULL;
+            $startDate = NULL;
+            $endDate = NULL;
+            $page = 1;
         
-        //
-        $response = $this->internSearch($types, $startDate, $endDate, $region, $page);
+            //Date filter
+            if (isset($this->params['url']['date']) && is_string($this->params['url']['date'])) {
+                $dateFilter = $this->params['url']['date'];
+            }
+            
+            if ($dateFilter != NULL) {
+                //Prepare date computation
+                $now = new DateTime();
+                $utcTimeZone = new DateTimeZone("UTC");
 
-        //
-        $this->set('response', $response);
+                //Current day
+                if ($dateFilter == 'day') {
+                    $currentDay = $now->format('Y-m-d');
+
+                    $startDate = new DateTime($currentDay, $utcTimeZone);
+
+                    $dayInterval = DateInterval::createfromdatestring('1 day - 1 second');
+                    
+                    $endDate = new DateTime($currentDay, $utcTimeZone);;
+                    $endDate->add($dayInterval);
+                } else if ($dateFilter == 'week') {
+                    //Current week
+                    $currentDay = $now->format('Y-m-d');
+                    
+                    $currentDayTimestamp = strtotime($currentDay);
+                    $start = (date('w', $currentDayTimestamp) == 1) ? $currentDayTimestamp : strtotime('last monday', $currentDayTimestamp);
+                    
+                    $startDateString = date('Y-m-d', $start);
+                    $startDate = new DateTime($startDateString, $utcTimeZone);
+                    
+                    $endDateString = date('Y-m-d', strtotime('next monday', $start));
+                    $endDate = new DateTime($endDateString, $utcTimeZone);
+                    
+                    $dayInterval = DateInterval::createfromdatestring('-1 second');
+                    $endDate->add($dayInterval);
+                } else if ($dateFilter == 'month') {
+                    //Current month
+                    $currentMonth = $now->format('Y-m');
+                    
+                    $startDate = new DateTime($currentMonth, $utcTimeZone);
+
+                    $monthInterval = DateInterval::createfromdatestring('1 month - 1 second');
+                    $endDate = new DateTime($currentMonth, $utcTimeZone);;
+                    $endDate->add($monthInterval);
+                }
+            }
+            
+            //Page
+            if (isset($this->params['url']['page']) && is_numeric($this->params['url']['page'])) {
+                $page = $this->params['url']['page'];
+            }
+            
+            /*pr($startDate);
+            pr($endDate);*/
+            
+            //
+            $response = $this->internSearch($types, $startDate, $endDate, $region, $page);
+
+            //
+            $this->set('response', $response);
+        }
     }
         
 	public function add() {

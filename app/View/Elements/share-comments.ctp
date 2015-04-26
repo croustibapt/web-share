@@ -27,7 +27,7 @@
                                         <p class="lead"><?php echo $comment['message']; ?></p>
 
                                         <footer>
-                                            <span class="timeago" title="' + created + '"><?php echo $comment['created']; ?></span>
+                                            <span class="moment-time-ago" title="' + created + '"><?php echo $comment['created']; ?></span>
                                         </footer>
 
                                     </blockquote>
@@ -51,7 +51,7 @@
                                         <p class="lead"><?php echo $comment['message']; ?></p>
 
                                         <footer>
-                                            <span class="timeago" title="<?php echo $comment['created']; ?>"><?php echo $comment['created']; ?></span>
+                                            <span class="moment-time-ago"><?php echo $comment['created']; ?></span>
                                         </footer>
 
                                     </blockquote>

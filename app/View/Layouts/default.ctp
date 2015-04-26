@@ -20,8 +20,6 @@
             echo $this->Html->script('bootstrap-select.min');
             echo $this->Html->script('jquery.datetimepicker');
             echo $this->Html->script('jquery-gmaps-latlon-picker');
-            echo $this->Html->script('jquery.timeago');
-            echo $this->Html->script('locales/jquery.timeago.fr');
 
             //Moment
             echo $this->Html->script('moment/moment');
@@ -75,13 +73,20 @@
             }
 
             //On ready
-            $(document).ready(function() {
-                //Date (timeago)
-                $(".timeago").timeago();
+            $(document).ready(function() {                
+                //Day
+                $(".moment-time-ago").each(function() {
+                    var htmlDate = $(this).html();
+                    var eventDate = new Date(htmlDate);
+                    var isoEventDate = eventDate.toISOString();
+                    var formattedDate = moment(isoEventDate).fromNow();
+
+                    $(this).html(formattedDate);
+                });
 
                 //Day
                 $(".moment-day").each(function() {
-                    var htmlDate = $(this).html();
+                    var htmlDate = $(this).text();
                     var eventDate = new Date(htmlDate);
                     var isoEventDate = eventDate.toISOString();
                     var formattedDate = moment(isoEventDate).format('dddd D MMMM', 'fr');

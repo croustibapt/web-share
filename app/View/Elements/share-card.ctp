@@ -23,7 +23,7 @@
                 ?>
                 
                 <!-- Created -->
-                <span class="span-share-card-modified timeago" title="<?php echo $share['modified']; ?>"><?php echo $share['modified']; ?></span>
+                <span class="span-share-card-modified moment-time-ago"><?php echo $share['modified']; ?></span>
             </div>
 
             <div class="col-md-6 text-right">

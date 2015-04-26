@@ -20,23 +20,11 @@
 
                 <!-- Datetime -->
                 <div class="div-share-details-date">
-                    <?php
-                        $date = new DateTime($share['event_date']);
-
-                        setlocale(LC_TIME, "fr_FR");
-                        $day = strftime('%e %b.', $date->getTimestamp());
-                        $hour = strftime('%kh%M', $date->getTimestamp());
-                    ?>
-
                     <!-- Date -->
-                    <h2 class="h2-share-details-date" style=" color: <?php echo $shareTypeColor; ?>;">
-                        <?php echo $day; ?>
-                    </h2>
+                    <h2 class="h2-share-details-date text-capitalize moment-day" style=" color: <?php echo $shareTypeColor; ?>;"><?php echo $share['event_date']; ?></h2>
 
                     <!-- Hour -->
-                    <h2 class="h2-share-details-hour">
-                        <?php echo $hour; ?>
-                    </h2>
+                    <h2 class="h2-share-details-hour moment-hour"><?php echo $share['event_date']; ?></h2>
                 </div>
 
                 <?php if ($this->LocalUser->isAuthenticated($this)) : ?>
@@ -160,7 +148,7 @@
                             'escape' => false
                         ));
                     ?>
-                     <span class="timeago" title="<?php echo $share['modified']; ?>"><?php echo $share['modified']; ?></span>
+                     <span class="moment-time-ago"><?php echo $share['modified']; ?></span>
                 </p>
             </div>
         </div>
