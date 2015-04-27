@@ -1,94 +1,93 @@
+<?php
+    /*pr($date);
+    pr($shareTypeCategory);
+    pr($shareType);
+    pr($page);*/
+
+    //pr($shareCategoryTypes);
+
+    //Suffix url
+    $suffixUrl = '';
+    //Selected share type label
+    $selectedShareTypeLabel = 'Catégorie';
+
+    if ($shareTypeCategory != NULL) {
+        $suffixUrl = '/'.$shareTypeCategory;
+        $selectedShareTypeLabel .= $shareTypeCategory;
+
+        if ($shareType != NULL) {
+            $suffixUrl = '/'.$shareType;
+            $selectedShareTypeLabel .= ', '.$shareType;
+        }
+    }
+?>
+
 <div id="div-action-bar">
     <div class="container">
-        <form class="form-inline" style="display: inline-block;">
-            <div class="form-group" style="width: 150px; margin-right: 10px; padding-right: 10px; border-right: 1px solid #dddddd;">
-                <select id="disabledSelect" class="form-control input-sm" style="width: 100%;">
-                    <option>Catégorie</option>
-                </select>
-            </div>
-        </form>
+        <!-- Share type category, types -->
+        <div class="dropdown" style="display: inline-block; margin-right: 10px; padding-right: 10px; border-right: 1px solid #dddddd;">
+            <a role="button" data-toggle="dropdown" class="btn btn-default btn-sm" data-target="#" href="/page.html">
+                <?php echo $selectedShareTypeLabel; ?> <span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu multi-level" role="menu" aria-labelledby="dropdownMenu">
 
-        <?php
-            $now = new DateTime();
-            $utcTimeZone = new DateTimeZone("UTC");
+                <li>
+                    <?php
+                        echo $this->Html->link('Tout', '/share/search/'.$date.'/');
+                    ?>
+                </li>
 
-            
-        ?>
-        
+                <?php foreach ($shareCategoryTypes as $shareTypeCategoryLabel => $shareTypes) : ?>
+
+                <li class="dropdown-submenu">
+                    <?php
+                        echo $this->Html->link($shareTypeCategoryLabel, '/share/search/'.$date.'/'.$shareTypeCategoryLabel);
+                    ?>
+
+                    <ul class="dropdown-menu">
+
+                        <?php foreach ($shareTypes as $shareType) : ?>
+
+                        <li>
+                            <?php
+                                echo $this->Html->link($shareType['label'], '/share/search/'.$date.'/'.$shareTypeCategoryLabel.'/'.$shareType['label']);
+                            ?>
+                        </li>
+
+                        <?php endforeach; ?>
+                    </ul>
+                </li>
+
+                <?php endforeach; ?>
+            </ul>
+        </div>
+
         <!-- Current day shares -->
         <?php
-            echo $this->Form->create('Share', array(
-                'action' => 'search',
-                'type' => 'GET',
-                'class' => 'action-bar-form form-inline',
-                'style' => 'display: inline-block;'
+            echo $this->Html->link('Aujourd\'hui', '/share/search/day'.$suffixUrl, array(
+                'class' => ($date == 'day') ? 'action-bar-input btn btn-success btn-sm active' : 'action-bar-input btn btn-default btn-sm'
             ));
-
-            echo $this->Form->hidden('date', array(
-                'value' => 'day'
-            ));
-
-            echo $this->Form->submit('Aujourd\'hui', array(
-                'class' => ((isset($date) && ($date == 'day')) ? 'btn btn-success btn-sm active' : 'btn btn-default btn-sm')
-            ));
-
-            echo $this->Form->end();
         ?>
-        
+
         <!-- Current week shares -->
         <?php
-            echo $this->Form->create('Share', array(
-                'action' => 'search',
-                'type' => 'GET',
-                'class' => 'action-bar-form form-inline',
-                'style' => 'display: inline-block;'
+            echo $this->Html->link('Cette semaine', '/share/search/week'.$suffixUrl, array(
+                'class' => ($date == 'week') ? 'action-bar-input btn btn-success btn-sm active' : 'action-bar-input btn btn-default btn-sm'
             ));
-
-            echo $this->Form->hidden('date', array(
-                'value' => 'week'
-            ));
-
-            echo $this->Form->submit('Cette semaine', array(
-                'class' => ((isset($date) && ($date == 'week')) ? 'btn btn-success btn-sm active' : 'btn btn-default btn-sm')
-            ));
-
-            echo $this->Form->end();
         ?>
-        
+
         <!-- Current month shares -->
         <?php
-            echo $this->Form->create('Share', array(
-                'action' => 'search',
-                'type' => 'GET',
-                'class' => 'action-bar-form form-inline',
-                'style' => 'display: inline-block;'
+            echo $this->Html->link('Ce mois-ci', '/share/search/month'.$suffixUrl, array(
+                'class' => ($date == 'month') ? 'action-bar-input btn btn-success btn-sm active' : 'action-bar-input btn btn-default btn-sm'
             ));
-
-            echo $this->Form->hidden('date', array(
-                'value' => 'month'
-            ));
-
-            echo $this->Form->submit('Ce mois-ci', array(
-                'class' => ((isset($date) && ($date == 'month')) ? 'btn btn-success btn-sm active' : 'btn btn-default btn-sm')
-            ));
-
-            echo $this->Form->end();
         ?>
-        
+
         <!-- All shares -->
         <?php
-            echo $this->Form->create('Share', array(
-                'action' => 'search',
-                'type' => 'GET',
-                'class' => 'action-bar-form form-inline',
-                'style' => 'display: inline-block;'
+            echo $this->Html->link('Tout', '/share/search/all'.$suffixUrl, array(
+                'class' => ($date == 'all') ? 'action-bar-input btn btn-success btn-sm active' : 'action-bar-input btn btn-default btn-sm'
             ));
-
-            echo $this->Form->submit('Tous', array(
-                'class' => (!isset($date) ? 'btn btn-success btn-sm active' : 'btn btn-default btn-sm')
-            ));
-
-            echo $this->Form->end();
         ?>
     </div>
 </div>

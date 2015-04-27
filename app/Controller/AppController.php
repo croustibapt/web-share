@@ -604,4 +604,36 @@ class AppController extends Controller {
 
         return $response;
     }
+
+    protected function getShareTypeCategoryTypes($shareTypeCategory = NULL) {
+        $types = NULL;
+
+        if ($shareTypeCategory != NULL) {
+            $types = $this->ShareType->find('list', array(
+                'fields' => array('ShareType.id'),
+                'recursive' => 0,
+                'conditions' => array(
+                    'ShareTypeCategory.label' => $shareTypeCategory
+                )
+            ));
+        }
+
+        return $types;
+    }
+
+    protected function getShareType($shareTypeCategory = NULL, $shareType = NULL) {
+        $type = NULL;
+
+        if (($shareTypeCategory != NULL) && ($shareType != NULL)) {
+            $type = $this->ShareType->find('first', array(
+                'fields' => array('ShareType.id'),
+                'conditions' => array(
+                    'ShareTypeCategory.label' => $shareTypeCategory,
+                    'ShareType.label' => $shareType
+                )
+            ));
+        }
+
+        return $type;
+    }
 }

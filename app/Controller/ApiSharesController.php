@@ -29,14 +29,15 @@ class ApiSharesController extends AppController {
         //Types
         if (($types != NULL) && (count($types) > 0)) {
             $shareTypesIds = "(";
-            $nbTypes = count($types);
 
-            for ($i = 0; $i < $nbTypes; $i++) {
+            $i = 0;
+            foreach ($types as $type) {
                 if ($i > 0) {
                     $shareTypesIds .= ", ";
                 }
 
-                $shareTypesIds .= $types[$i];
+                $shareTypesIds .= $type;
+                $i++;
             }
 
             $shareTypesIds .= ")";
@@ -80,7 +81,7 @@ class ApiSharesController extends AppController {
         $sqlLimit = " LIMIT ".SHARE_SEARCH_LIMIT;
         
         //Offset
-        $offset = ceil(($page - 1) / SHARE_SEARCH_LIMIT);
+        $offset = ($page - 1) * SHARE_SEARCH_LIMIT;
         $sqlOffset = " OFFSET ".$offset;
 
         $query = $sqlPrefix.$sql." GROUP BY Share.id ORDER BY Share.event_date DESC".$sqlLimit.$sqlOffset.";";

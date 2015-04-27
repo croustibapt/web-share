@@ -1,24 +1,8 @@
-/* COMMON */
+/* Common */
 
 body {
     padding-top: 50px;
     background-color: #eeeeee;
-}
-
-.text-info {
-    color: #2980b9;
-}
-
-.text-success {
-    color: #27ae60;
-}
-
-.text-warning {
-    color: #f39c12;
-}
-
-.text-danger {
-    color: #c0392b;
 }
 
 /* Action bar */
@@ -34,11 +18,7 @@ body {
     padding-bottom: 10px;
 }
 
-.action-bar-form {
-    width: 100px;
-}
-
-.action-bar-form input {
+.action-bar-input {
     width: 100px;
 }
 

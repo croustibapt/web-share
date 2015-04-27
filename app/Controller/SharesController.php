@@ -3,59 +3,48 @@ App::uses('ApiSharesController', 'Controller');
 
 class SharesController extends ApiSharesController {
     //
-    public function search() {
-        //Post parameters
+    public function search($date = 'all', $shareTypeCategory = NULL, $shareType = NULL) {
         if ($this->request->is('GET')) {
-            //pr($this->params['url']);
-            
-            $types = NULL;
             $region = NULL;
-            $dateFilter = NULL;
             $startDate = NULL;
             $endDate = NULL;
             $page = 1;
-        
+
             //Date filter
-            if (isset($this->params['url']['date']) && is_string($this->params['url']['date'])) {
-                $dateFilter = $this->params['url']['date'];
-            }
-            
-            if ($dateFilter != NULL) {
-                $this->set('date', $dateFilter);
-                
+            if ($date != 'all') {
                 //Prepare date computation
                 $now = new DateTime();
                 $utcTimeZone = new DateTimeZone("UTC");
 
                 //Current day
-                if ($dateFilter == 'day') {
+                if ($date == 'day') {
                     $currentDay = $now->format('Y-m-d');
 
                     $startDate = new DateTime($currentDay, $utcTimeZone);
 
                     $dayInterval = DateInterval::createfromdatestring('1 day - 1 second');
-                    
+
                     $endDate = new DateTime($currentDay, $utcTimeZone);;
                     $endDate->add($dayInterval);
-                } else if ($dateFilter == 'week') {
+                } else if ($date == 'week') {
                     //Current week
                     $currentDay = $now->format('Y-m-d');
-                    
+
                     $currentDayTimestamp = strtotime($currentDay);
                     $start = (date('w', $currentDayTimestamp) == 1) ? $currentDayTimestamp : strtotime('last monday', $currentDayTimestamp);
-                    
+
                     $startDateString = date('Y-m-d', $start);
                     $startDate = new DateTime($startDateString, $utcTimeZone);
-                    
+
                     $endDateString = date('Y-m-d', strtotime('next monday', $start));
                     $endDate = new DateTime($endDateString, $utcTimeZone);
-                    
+
                     $dayInterval = DateInterval::createfromdatestring('-1 second');
                     $endDate->add($dayInterval);
-                } else if ($dateFilter == 'month') {
+                } else if ($date == 'month') {
                     //Current month
                     $currentMonth = $now->format('Y-m');
-                    
+
                     $startDate = new DateTime($currentMonth, $utcTimeZone);
 
                     $monthInterval = DateInterval::createfromdatestring('1 month - 1 second');
@@ -63,21 +52,48 @@ class SharesController extends ApiSharesController {
                     $endDate->add($monthInterval);
                 }
             }
-            
+
+            //Parse types
+            if ($shareTypeCategory != NULL) {
+                if ($shareType != NULL) {
+                    $type = $this->getShareType($shareTypeCategory, $shareType);
+                    $types = [$type['ShareType']['id']];
+                } else {
+                    $types = $this->getShareTypeCategoryTypes($shareTypeCategory);
+                }
+            } else {
+                $types = NULL;
+            }
+
             //Page
             if (isset($this->params['url']['page']) && is_numeric($this->params['url']['page'])) {
                 $page = $this->params['url']['page'];
             }
-            
+
             /*pr($startDate);
             pr($endDate);*/
-            
+
             //
             $response = $this->internSearch($types, $startDate, $endDate, $region, $page);
 
             //
             $this->set('response', $response);
+
+            $this->set('date', $date);
+            $this->set('shareTypeCategory', $shareTypeCategory);
+            $this->set('shareType', $shareType);
+            $this->set('page', $page);
         }
+
+        //Get share types
+        $this->ShareType->unbindModel(
+            array('hasMany' => array('Share'))
+        );
+        $shareCategoryTypes = $this->ShareType->find('all', array(
+            'fields' => array('ShareType.id', 'ShareType.label', 'ShareType.share_type_category_id', 'ShareTypeCategory.label'),
+        ));
+        $shareCategoryTypes = Set::combine($shareCategoryTypes, '{n}.ShareType.id', '{n}.ShareType', '{n}.ShareTypeCategory.label');
+        $this->set('shareCategoryTypes', $shareCategoryTypes);
     }
         
 	public function add() {

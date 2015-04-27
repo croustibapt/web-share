@@ -8,7 +8,7 @@
 
                 <li>
                     <?php
-                        echo $this->Html->link('<span aria-hidden="true">&laquo;</span>', $baseUrl.'page='.($results['page'] - 1), array(
+                        echo $this->Html->link('<span aria-hidden="true">&laquo;</span>', $baseUrl.'?page='.($results['page'] - 1), array(
                             'escape' => false,
                             'aria-label' => 'Previous'
                         ));
@@ -36,7 +36,7 @@
 
                     <li>
                         <?php
-                            echo $this->Html->link($i, $baseUrl.'page='.$i);
+                            echo $this->Html->link($i, $baseUrl.'?page='.$i);
                         ?>
 
                     </li>
@@ -50,7 +50,7 @@
 
                 <li>
                     <?php
-                        echo $this->Html->link('<span aria-hidden="true">&raquo;</span>', $baseUrl.'page='.($results['page'] + 1), array(
+                        echo $this->Html->link('<span aria-hidden="true">&raquo;</span>', $baseUrl.'?page='.($results['page'] + 1), array(
                             'escape' => false,
                             'aria-label' => 'Next'
                         ));

@@ -9,6 +9,7 @@
             echo $this->Html->meta('icon');
 
             echo $this->Html->css('bootstrap.min');
+            echo $this->Html->css('bootstrap-modified');
             echo $this->Html->css('bootstrap-select.min');
             echo $this->Html->css('ionicons.min');
             echo $this->Html->css('jquery.datetimepicker');
@@ -40,9 +41,6 @@
         <!-- Navigation bar -->
         <?php echo $this->element('nav-bar'); ?>
 
-        <!-- Action bar -->
-        <?php echo $this->element('action-bar'); ?>
-
         <div class="wrapper">
             <?php
                 $error = $this->Session->flash('nok');
@@ -56,7 +54,7 @@
 
             <?php endif; ?>
 
-            <div class="content container">
+            <div class="content">
                 <!-- CONTENT -->
                 <?php echo $this->fetch('content'); ?>
             </div>

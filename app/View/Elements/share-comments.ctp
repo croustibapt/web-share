@@ -69,6 +69,12 @@
                         ));
                     ?>
 
+                <?php else : ?>
+
+                <p class="lead text-center">
+                    Aucun commentaire
+                </p>
+
                 <?php endif; ?>
             </div>
         </div>
