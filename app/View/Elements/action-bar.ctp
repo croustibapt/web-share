@@ -12,11 +12,11 @@
     $selectedShareTypeLabel = 'Catégorie';
 
     if ($shareTypeCategory != NULL) {
-        $suffixUrl = '/'.$shareTypeCategory;
-        $selectedShareTypeLabel .= $shareTypeCategory;
+        $suffixUrl .= '/'.$shareTypeCategory;
+        $selectedShareTypeLabel = $shareTypeCategory;
 
         if ($shareType != NULL) {
-            $suffixUrl = '/'.$shareType;
+            $suffixUrl .= '/'.$shareType;
             $selectedShareTypeLabel .= ', '.$shareType;
         }
     }
