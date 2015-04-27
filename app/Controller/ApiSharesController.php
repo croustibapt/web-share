@@ -149,8 +149,8 @@ class ApiSharesController extends AppController {
 
             //Page
             $page = 1;
-            if (isset($this->params['url']['page']) && is_numeric($this->params['url']['page'])) {
-                $page = $this->params['url']['page'];
+            if (isset($data['page']) && is_numeric($data['page'])) {
+                $page = $data['page'];
             }
 
             $response = $this->internSearch($types, $startDate, $endDate, $region, $page);
