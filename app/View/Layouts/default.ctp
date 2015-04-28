@@ -101,6 +101,9 @@
 
                     $(this).html(formattedDate);
                 });
+                
+                //Tooltip
+                $('[data-toggle="tooltip"]').tooltip();
             });
         </script>
     </body>

@@ -22,6 +22,10 @@ body {
     width: 100px;
 }
 
+.li-action-bar-selected {
+    background-color: #dddddd;
+}
+
 /* Card */
 
 .card {
@@ -235,13 +239,13 @@ body {
     font-weight: 200;
 }
 
-.button-share-details-participate {
+.button-share-details-participate, .button-share-details-participate-status {
     width: 100%;
     margin-top: 10px;
     margin-bottom: 10px;
 }
 
-.button-share-details-participate.disabled {
+.button-share-details-participate-status.disabled {
     opacity: 1.0;
 }
 

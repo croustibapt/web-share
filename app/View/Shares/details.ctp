@@ -44,7 +44,7 @@
                             ));
 
                             echo $this->Form->submit('Participer', array(
-                                'class' => 'btn btn-success pull-right button-share-details-participate'
+                                'class' => 'btn btn-success button-share-details-participate'
                             ));
 
                             echo $this->Form->end();
@@ -54,17 +54,16 @@
 
                             <?php if (!$doesUserOwnShare) : ?>
 
-                            <button id="button-share-details-participate" class="btn btn-<?php echo $this->Share->getShareDetailsRequestStatusClass($requestStatus); ?> pull-right disabled button-share-details-participate"><?php echo $this->Share->getShareDetailsRequestStatusLabel($requestStatus); ?></button>
+                            <button class="btn btn-<?php echo $this->Share->getShareDetailsRequestStatusClass($requestStatus); ?> disabled button-share-details-participate-status"><?php echo $this->Share->getShareDetailsRequestStatusLabel($requestStatus); ?></button>
 
                             <?php endif; ?>
 
                         <?php endif; ?>
 
                     <?php else : ?>
-
-                    <button id="button-share-details-participate" class="btn btn-success pull-right disabled
-                    button-share-details-participate">Participer</button>
-
+                        <div data-toggle="tooltip" data-placement="top" title="Vous devez être authentifié pour pouvoir participer">
+                            <button class="btn btn-success disabled button-share-details-participate">Participer</button>
+                        </div>
                     <?php endif; ?>
 
                     <!-- Places -->

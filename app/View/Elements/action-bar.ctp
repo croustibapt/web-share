@@ -26,31 +26,58 @@
     <div class="container">
         <!-- Share type category, types -->
         <div class="dropdown" style="display: inline-block; margin-right: 10px; padding-right: 10px; border-right: 1px solid #dddddd;">
-            <a role="button" data-toggle="dropdown" class="btn btn-default btn-sm" data-target="#" href="/page.html">
+            <a data-toggle="dropdown" class="btn btn-default btn-sm" href="#" style="width: 150px;">
                 <?php echo $selectedShareTypeLabel; ?> <span class="caret"></span>
             </a>
             <ul class="dropdown-menu multi-level" role="menu" aria-labelledby="dropdownMenu">
 
+                <?php if ($shareTypeCategory == NULL) : ?>
+                
+                <li class="li-action-bar-selected">
+                    
+                <?php else : ?>
+                    
                 <li>
+                    
+                <?php endif; ?>
+                    
                     <?php
-                        echo $this->Html->link('Tout', '/share/search/'.$date.'/');
+                        echo $this->Html->link('all', '/share/search/'.$date.'/');
                     ?>
                 </li>
 
                 <?php foreach ($shareCategoryTypes as $shareTypeCategoryLabel => $shareTypes) : ?>
 
+                <?php if ($shareTypeCategoryLabel == $shareTypeCategory) : ?>
+                
+                <li class="li-action-bar-selected dropdown-submenu">
+                    
+                <?php else : ?>
+                    
                 <li class="dropdown-submenu">
+                    
+                <?php endif; ?>
+                    
                     <?php
                         echo $this->Html->link($shareTypeCategoryLabel, '/share/search/'.$date.'/'.$shareTypeCategoryLabel);
                     ?>
 
                     <ul class="dropdown-menu">
 
-                        <?php foreach ($shareTypes as $shareType) : ?>
+                        <?php foreach ($shareTypes as $type) : ?>
 
+                        <?php if (($shareTypeCategoryLabel == $shareTypeCategory) && ($type['label'] == $shareType)) : ?>
+                        
+                        <li class="li-action-bar-selected">
+                        
+                        <?php else : ?>
+                        
                         <li>
+                            
+                        <?php endif; ?>
+                            
                             <?php
-                                echo $this->Html->link($shareType['label'], '/share/search/'.$date.'/'.$shareTypeCategoryLabel.'/'.$shareType['label']);
+                                echo $this->Html->link($type['label'], '/share/search/'.$date.'/'.$shareTypeCategoryLabel.'/'.$type['label']);
                             ?>
                         </li>
 
