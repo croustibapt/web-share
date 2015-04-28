@@ -89,31 +89,32 @@
             </ul>
         </div>
 
+
+        <!-- All shares -->
+        <?php
+            echo $this->Html->link('Tout', '/share/search/all'.$suffixUrl, array(
+                'class' => ($date == 'all') ? 'action-bar-input btn btn-concrete btn-sm active' : 'action-bar-input btn btn-concrete btn-sm'
+            ));
+        ?>
+
         <!-- Current day shares -->
         <?php
             echo $this->Html->link('Aujourd\'hui', '/share/search/day'.$suffixUrl, array(
-                'class' => ($date == 'day') ? 'action-bar-input btn btn-amethyst btn-sm active' : 'action-bar-input btn btn-amethyst btn-sm'
+                'class' => ($date == 'day') ? 'action-bar-input btn btn-turquoise btn-sm active' : 'action-bar-input btn btn-turquoise btn-sm'
             ));
         ?>
 
         <!-- Current week shares -->
         <?php
             echo $this->Html->link('Cette semaine', '/share/search/week'.$suffixUrl, array(
-                'class' => ($date == 'week') ? 'action-bar-input btn btn-success btn-sm active' : 'action-bar-input btn btn-default btn-sm'
+                'class' => ($date == 'week') ? 'action-bar-input btn btn-emerald btn-sm active' : 'action-bar-input btn btn-emerald btn-sm'
             ));
         ?>
 
         <!-- Current month shares -->
         <?php
             echo $this->Html->link('Ce mois-ci', '/share/search/month'.$suffixUrl, array(
-                'class' => ($date == 'month') ? 'action-bar-input btn btn-success btn-sm active' : 'action-bar-input btn btn-default btn-sm'
-            ));
-        ?>
-
-        <!-- All shares -->
-        <?php
-            echo $this->Html->link('Tout', '/share/search/all'.$suffixUrl, array(
-                'class' => ($date == 'all') ? 'action-bar-input btn btn-success btn-sm active' : 'action-bar-input btn btn-default btn-sm'
+                'class' => ($date == 'month') ? 'action-bar-input btn btn-peter-river btn-sm active' : 'action-bar-input btn btn-peter-river btn-sm'
             ));
         ?>
     </div>
