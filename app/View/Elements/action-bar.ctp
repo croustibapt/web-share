@@ -92,7 +92,7 @@
         <!-- Current day shares -->
         <?php
             echo $this->Html->link('Aujourd\'hui', '/share/search/day'.$suffixUrl, array(
-                'class' => ($date == 'day') ? 'action-bar-input btn btn-success btn-sm active' : 'action-bar-input btn btn-default btn-sm'
+                'class' => ($date == 'day') ? 'action-bar-input btn btn-amethyst btn-sm active' : 'action-bar-input btn btn-amethyst btn-sm'
             ));
         ?>
 

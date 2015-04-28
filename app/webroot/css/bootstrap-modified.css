@@ -14,6 +14,23 @@
     color: #c0392b;
 }
 
+.btn-amethyst {
+    color: #333;
+    background-color: #fff;
+    border-color: #ccc;
+}
+
+.btn-amethyst:hover,
+.btn-amethyst:focus,
+.btn-amethyst.focus,
+.btn-amethyst:active,
+.btn-amethyst.active,
+.open>.dropdown-toggle.btn-amethyst {
+  color: #ffffff;
+  background-color: #9b59b6;
+  border-color: #8e44ad;
+}
+
 /* Dropdoawn multi level */
 
 .dropdown-submenu {
