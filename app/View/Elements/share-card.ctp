@@ -56,6 +56,21 @@
                     </footer>
 
                     <?php endif; ?>
+
+                    <!-- Comment count -->
+                    <?php if ($share['comment_count'] > 1) : ?>
+
+                    <u class="text-default" style="font-size: 14px;">
+                        <?php echo $share['comment_count']; ?> commentaires
+                    </u>
+
+                    <?php elseif ($share['comment_count'] > 0) : ?>
+
+                    <u class="text-default" style="font-size: 14px;">
+                        <?php echo $share['comment_count']; ?> commentaire
+                    </u>
+
+                    <?php endif; ?>
                 </blockquote>
             </div>
         </div>

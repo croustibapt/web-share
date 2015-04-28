@@ -65,7 +65,7 @@
                     <?php
                         echo $this->element('pagination', array(
                             'results' => $comments,
-                            'baseUrl' => '/share/details/'.$share['share_id'].'?'
+                            'baseUrl' => '/share/details/'.$share['share_id']
                         ));
                     ?>
 

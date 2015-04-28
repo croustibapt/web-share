@@ -26,7 +26,7 @@
     <div class="container">
         <!-- Share type category, types -->
         <div class="dropdown" style="display: inline-block; margin-right: 10px; padding-right: 10px; border-right: 1px solid #dddddd;">
-            <a data-toggle="dropdown" class="btn btn-default btn-sm" href="#" style="width: 150px;">
+            <a data-toggle="dropdown" class="btn btn-peter-river btn-sm" href="#" style="width: 150px;">
                 <?php echo $selectedShareTypeLabel; ?> <span class="caret"></span>
             </a>
             <ul class="dropdown-menu multi-level" role="menu" aria-labelledby="dropdownMenu">
@@ -93,28 +93,28 @@
         <!-- All shares -->
         <?php
             echo $this->Html->link('Tout', '/share/search/all'.$suffixUrl, array(
-                'class' => ($date == 'all') ? 'action-bar-input btn btn-concrete btn-sm active' : 'action-bar-input btn btn-concrete btn-sm'
+                'class' => ($date == 'all') ? 'action-bar-input btn btn-action-bar btn-emerald btn-sm active' : 'action-bar-input btn btn-action-bar btn-link btn-emerald btn-sm'
             ));
         ?>
 
         <!-- Current day shares -->
         <?php
             echo $this->Html->link('Aujourd\'hui', '/share/search/day'.$suffixUrl, array(
-                'class' => ($date == 'day') ? 'action-bar-input btn btn-turquoise btn-sm active' : 'action-bar-input btn btn-turquoise btn-sm'
+                'class' => ($date == 'day') ? 'action-bar-input btn btn-action-bar btn-emerald btn-sm active' : 'action-bar-input btn btn-action-bar btn-link btn-emerald btn-sm'
             ));
         ?>
 
         <!-- Current week shares -->
         <?php
             echo $this->Html->link('Cette semaine', '/share/search/week'.$suffixUrl, array(
-                'class' => ($date == 'week') ? 'action-bar-input btn btn-emerald btn-sm active' : 'action-bar-input btn btn-emerald btn-sm'
+                'class' => ($date == 'week') ? 'action-bar-input btn btn-action-bar btn-emerald btn-sm active' : 'action-bar-input btn btn-action-bar btn-link btn-emerald btn-sm'
             ));
         ?>
 
         <!-- Current month shares -->
         <?php
             echo $this->Html->link('Ce mois-ci', '/share/search/month'.$suffixUrl, array(
-                'class' => ($date == 'month') ? 'action-bar-input btn btn-peter-river btn-sm active' : 'action-bar-input btn btn-peter-river btn-sm'
+                'class' => ($date == 'month') ? 'action-bar-input btn btn-action-bar btn-emerald btn-sm active' : 'action-bar-input btn btn-action-bar btn-link btn-emerald btn-sm'
             ));
         ?>
     </div>
