@@ -26,6 +26,14 @@ body {
     background-color: #dddddd;
 }
 
+/* Navigation bar */
+
+.nav-bar-user-img {
+    height: 20px;
+    width: 20px;
+    /*border: 2px solid #ffffff;*/
+}
+
 /* Card */
 
 .card {

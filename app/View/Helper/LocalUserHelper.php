@@ -13,4 +13,14 @@ class LocalUserHelper extends AppHelper {
 
         return $isAuthenticated;
     }
+
+    public function getExternalId($context) {
+        $userExternalId = $context->Session->read(SHARE_LOCAL_USER_SESSION_PREFIX.'.'.SHARE_HEADER_AUTH_EXTERNAL_ID);
+        return $userExternalId;
+    }
+
+    public function getUsername($context) {
+        $username = $context->Session->read(SHARE_LOCAL_USER_SESSION_PREFIX.'.'.SHARE_HEADER_AUTH_USERNAME);
+        return $username;
+    }
 }

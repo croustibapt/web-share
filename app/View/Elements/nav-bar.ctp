@@ -34,8 +34,9 @@
                     <?php if ($this->LocalUser->isAuthenticated($this)) : ?>
 
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
-                       aria-expanded="false">Hi <?php echo $this->Session->read(SHARE_LOCAL_USER_SESSION_PREFIX.'.'
-                            .SHARE_HEADER_AUTH_USERNAME); ?> <span class="caret"></span></a>
+                       aria-expanded="false">
+                        <img class="nav-bar-user-img img-circle" src="https://graph.facebook.com/v2.3/<?php echo $this->LocalUser->getExternalId($this); ?>/picture" /> Hi <?php echo $this->LocalUser->getUsername($this); ?> <span class="caret"></span>
+                    </a>
                     <ul class="dropdown-menu" role="menu">
                         <li>
                             <?php
@@ -43,7 +44,9 @@
                             ?>
                         </li>
                         <li class="divider"></li>
-                        <li><a  href="#">Logout</a></li>
+                        <li>
+                            <a id="a-nav-bar-logout" href="#">Logout</a>
+                        </li>
                     </ul>
 
                     <?php else : ?>
@@ -58,7 +61,41 @@
 </nav>
 
 <script>
-    <?php if (!$this->LocalUser->isAuthenticated($this)) : ?>
+    <?php if ($this->LocalUser->isAuthenticated($this)) : ?>
+
+    //
+    window.fbAsyncInit = function() {
+        //
+        FB.init({
+            appId: '<?php echo SHARE_FACEBOOK_APP_ID; ?>',
+            xfbml: true,
+            version: 'v2.3'
+        });
+
+        //Get the user Facebook login status
+        FB.getLoginStatus(function(response) {
+            //console.log(response);
+
+            //If we are connected
+            if (response.status !== 'connected') {
+                //Invalidate the current session
+                window.location.href = webroot + "user/logout";
+            }
+        });
+    };
+
+    //Logout button
+    $('#a-nav-bar-logout').click(function() {
+        //
+        FB.logout(function(response) {
+            console.log(response);
+
+            //Call logout
+            window.location.href = webroot + "user/logout";
+        });
+    });
+
+    <?php else : ?>
 
     //Jquery extend function
     $.extend({
@@ -72,65 +109,68 @@
         }
     });
 
-    //This is called with the results from FB.getLoginStatus().
-    function statusChangeCallback(response) {
-        console.log(response);
+    //Authenticate button
+    function authenticate(response) {
+        //Get back the auth token
+        var userAuthToken = response.authResponse.accessToken;
 
-        //If we are connected
-        if (response.status === 'connected') {
-            //Get back the auth token
-            var userAuthToken = response.authResponse.accessToken;
+        //And if it is not null
+        if (userAuthToken != null) {
+            //Fetch user information
+            FB.api('/me', function(response) {
+                //console.log(response);
 
-            //And if it is not null
-            if (userAuthToken != null) {
-                //Fetch user information
-                FB.api('/me', function(response) {
-                    //console.log(response);
+                //Get back user information
+                var userExternalId = response.id;
+                var userMail = response.email;
+                var username = response.first_name;
 
-                    //Get back user information
-                    var userExternalId = response.id;
-                    var userMail = response.email;
-                    var username = response.first_name;
+                console.log(userExternalId + ', ' + userAuthToken + ', ' + userMail + ', ' + username);
 
-                    console.log(userExternalId + ', ' + userAuthToken + ', ' + userMail + ', ' + username);
-
-                    //And try to authenticate him
-                    $.redirectPost(webroot + "user/authenticate", {userExternalId: userExternalId, userAuthToken: userAuthToken, userMail: userMail, username: username});
+                //And try to authenticate him
+                $.redirectPost(webroot + "user/authenticate", {
+                    userExternalId: userExternalId,
+                    userAuthToken: userAuthToken,
+                    userMail: userMail,
+                    username: username
                 });
-            }
-        } else if (response.status === 'not_authorized') {
-            //The person is logged into Facebook, but not your app.
-            console.log('Please log ' + 'into this app.');
-        } else {
-            //The person is not logged into Facebook, so we're not sure if they are logged into this app or not.
-            console.log('Please log ' + 'into Facebook.');
+            });
         }
     }
 
+    //
     window.fbAsyncInit = function() {
+        //
         FB.init({
-            appId      : '329532937243649',
-            xfbml      : true,
-            version    : 'v2.3'
+            appId: '<?php echo SHARE_FACEBOOK_APP_ID; ?>',
+            xfbml: true,
+            version: 'v2.3'
         });
-
-        /*FB.getLoginStatus(function(response) {
-            statusChangeCallback(response);
-        });*/
     };
 
     //Authenticate button clicked
     $('#navbar-authenticate-button').click(function() {
         //Start Facebook login process
         FB.login(function(response) {
-            console.log(response);
+            //console.log(response);
 
             //Check login status
             FB.getLoginStatus(function(response) {
-                //Handle result
-                statusChangeCallback(response);
+                //If we are connected
+                if (response.status === 'connected') {
+                    //Try to authenticate the user
+                    authenticate(response);
+                } else if (response.status === 'not_authorized') {
+                    //The person is logged into Facebook, but not your app.
+                    console.log('Please log ' + 'into this app.');
+                } else {
+                    //The person is not logged into Facebook, so we're not sure if they are logged into this app or not.
+                    console.log('Please log ' + 'into Facebook.');
+                }
             });
-        }, {scope: 'public_profile, email'});
+        }, {
+            scope: 'public_profile, email'
+        });
     });
 
     <?php endif; ?>

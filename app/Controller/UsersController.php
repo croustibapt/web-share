@@ -114,6 +114,15 @@ class UsersController extends ApiUsersController {
         }
     }
 
+    public function logout() {
+        if ($this->request->is('GET')) {
+            $this->invalidateLocalUserSession();
+        }
+
+        //Redirect to referer
+        $this->redirect($this->referer());
+    }
+
     /*public function delete() {
         if ($this->request->is('POST')) {
             $userId = $this->request->data['User']['id'];

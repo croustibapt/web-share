@@ -49,6 +49,7 @@
     ));
     Router::connect('/user/home', array('controller' => 'Users', 'action' => 'home'));
     Router::connect('/user/authenticate', array('controller' => 'Users', 'action' => 'authenticate'));
+    Router::connect('/user/logout', array('controller' => 'Users', 'action' => 'logout'));
 
 #pragma mark - SHARE TYPE CATEGORIES
 

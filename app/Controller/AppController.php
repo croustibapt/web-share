@@ -122,7 +122,7 @@ class AppController extends Controller {
         return $isAuthenticated;
     }
     
-    private function invalidateLocalUserSession() {
+    protected function invalidateLocalUserSession() {
         $this->Session->delete(SHARE_LOCAL_USER_SESSION_PREFIX.'.'.SHARE_HEADER_AUTH_EXTERNAL_ID);
         $this->Session->delete(SHARE_LOCAL_USER_SESSION_PREFIX.'.'.SHARE_HEADER_AUTH_MAIL);
         $this->Session->delete(SHARE_LOCAL_USER_SESSION_PREFIX.'.'.SHARE_HEADER_AUTH_TOKEN);
