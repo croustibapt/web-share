@@ -26,7 +26,7 @@
     <div class="container">
         <!-- Share type category, types -->
         <div class="dropdown" style="display: inline-block; margin-right: 10px; padding-right: 10px; border-right: 1px solid #dddddd;">
-            <a data-toggle="dropdown" class="btn btn-peter-river btn-sm" href="#" style="width: 150px;">
+            <a data-toggle="dropdown" class="btn btn-action-bar btn-peter-river btn-sm" href="#" style="width: 150px;">
                 <?php echo $selectedShareTypeLabel; ?> <span class="caret"></span>
             </a>
             <ul class="dropdown-menu multi-level" role="menu" aria-labelledby="dropdownMenu">

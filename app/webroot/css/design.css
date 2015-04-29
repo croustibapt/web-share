@@ -23,7 +23,15 @@ body {
 }
 
 .li-action-bar-selected {
-    background-color: #dddddd;
+    background-color: #3498db;
+}
+
+.li-action-bar-selected>a {
+    color: #ffffff!important;
+}
+
+.li-action-bar-selected a:hover {
+    color: #333333!important;
 }
 
 /* Navigation bar */
