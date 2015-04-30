@@ -93,6 +93,7 @@
         'shareTypeCategory' => '[A-Za-z0-9]+',
         'shareType' => '[A-Za-z0-9]+'
     ));
+    Router::connect('/share/map', array('controller' => 'Shares', 'action' => 'map'));
     Router::connect('/share/add', array('controller' => 'Shares', 'action' => 'add'));
     Router::connect('/share/details/:shareId', array('controller' => 'Shares', 'action' => 'details'), array(
         'pass' => array('shareId'),
