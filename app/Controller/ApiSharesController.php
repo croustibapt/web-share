@@ -117,6 +117,9 @@ class ApiSharesController extends AppController {
             //Decode data
             $data = $this->request->input('json_decode', true);
 
+            /*echo json_encode($data);
+            exit();*/
+
             //Get Share type
             $types = NULL;
             if (isset($data['types']) && is_array($data['types'])) {
