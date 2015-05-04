@@ -71,7 +71,7 @@
             }
 
             //On ready
-            $(document).ready(function() {                
+            $(document).ready(function() {
                 //Day
                 $(".moment-time-ago").each(function() {
                     var htmlDate = $(this).html();
