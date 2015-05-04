@@ -122,7 +122,7 @@ class ApiSharesController extends AppController {
 
             //Get Share type
             $types = NULL;
-            if (isset($data['types']) && is_array($data['types'])) {
+            if (isset($data['types']) && is_array($data['types']) && !(empty($data['types']))) {
                 $types = $data['types'];
             }
 
@@ -146,7 +146,7 @@ class ApiSharesController extends AppController {
 
             //Get region
             $region = NULL;
-            if (isset($data['region']) && is_array($data['region'])) {
+            if (isset($data['region']) && is_array($data['region']) && !(empty($data['region']))) {
                 $region = $data['region'];
             }
 

@@ -12,15 +12,24 @@
 <script>
     var map;
     var markers = [];
+    var shares = [];
     
     function addMarker(share) {
         var myLatlng = new google.maps.LatLng(share.latitude, share.longitude);
         var marker = new google.maps.Marker({
             position: myLatlng,
             map: map,
-            title: 'Hello World!'
+            title: share.title
         });
         markers.push(marker);
+        shares.push(share);
+
+        google.maps.event.addListener(marker, 'click', function() {
+            var infowindow = new google.maps.InfoWindow({
+                content: marker.getTitle()
+            });
+            infowindow.open(map, marker);
+        });
     }
     
     function clearMarkers() {
@@ -28,6 +37,7 @@
             markers[i].setMap(null);
         }
         markers.length = 0;
+        shares.length = 0;
     }
     
     function loadShares() {
