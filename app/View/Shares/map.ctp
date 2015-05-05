@@ -57,7 +57,7 @@
         if (shareTypeCategory == "food") {
             if (shareType == "pizza") {
                 return 'icon ion-pizza';
-            } else if ($shareType == "snack") {
+            } else if (shareType == "snack") {
                 return 'fa fa-coffee';
             } else {
                 return 'fa fa-cutlery';
@@ -65,13 +65,13 @@
         } else if (shareTypeCategory == "hightech") {
             if (shareType == "component") {
                 return 'fa fa-keyboard-o';
-            } else if ($shareType == "computer") {
+            } else if (shareType == "computer") {
                 return 'fa fa-desktop';
-            } else if ($shareType == "phone") {
+            } else if (shareType == "phone") {
                 return 'fa fa-mobile';
-            } else if ($shareType == "storage") {
+            } else if (shareType == "storage") {
                 return 'fa fa-hdd-o';
-            } else if ($shareType == "application") {
+            } else if (shareType == "application") {
                 return 'fa fa-tablet';
             } else {
                 return 'fa fa-laptop';
@@ -79,13 +79,13 @@
         } else if (shareTypeCategory == "audiovisual") {
             if (shareType == "picture") {
                 return 'fa fa-picture-o';
-            } else if ($shareType == "sound") {
+            } else if (shareType == "sound") {
                 return 'fa fa-volume-up';
-            } else if ($shareType == "photo") {
+            } else if (shareType == "photo") {
                 return 'fa fa-camera-retro';
-            } else if ($shareType == "disc") {
+            } else if (shareType == "disc") {
                 return 'fa fa-microphone';
-            } else if ($shareType == "game") {
+            } else if (shareType == "game") {
                 return 'fa fa-gamepad';
             } else {
                 return 'fa fa-headphones';
@@ -93,23 +93,23 @@
         } else if (shareTypeCategory == "recreation") {
             if (shareType == "cinema") {
                 return 'fa fa-film';
-            } else if ($shareType == "show") {
+            } else if (shareType == "show") {
                 return 'fa fa-ticket';
-            } else if ($shareType == "game") {
+            } else if (shareType == "game") {
                 return 'fa fa-puzzle-piece';
-            } else if ($shareType == "book") {
+            } else if (shareType == "book") {
                 return 'fa fa-book';
-            } else if ($shareType == "outdoor") {
+            } else if (shareType == "outdoor") {
                 return 'fa fa-sun-o';
-            } else if ($shareType == "sport") {
+            } else if (shareType == "sport") {
                 return 'fa fa-futbol-o';
-            } else if ($shareType == "auto") {
+            } else if (shareType == "auto") {
                 return 'fa fa-car';
-            } else if ($shareType == "moto") {
+            } else if (shareType == "moto") {
                 return 'fa fa-motorcycle';
-            } else if ($shareType == "music") {
+            } else if (shareType == "music") {
                 return 'fa fa-music';
-            } else if ($shareType == "pet") {
+            } else if (shareType == "pet") {
                 return 'fa fa-paw';
             } else {
                 return 'fa fa-paint-brush';
@@ -117,13 +117,13 @@
         } else if (shareTypeCategory == "mode") {
             if (shareType == "man") {
                 return 'fa fa-male';
-            } else if ($shareType == "woman") {
+            } else if (shareType == "woman") {
                 return 'fa fa-female';
-            } else if ($shareType == "mixte") {
+            } else if (shareType == "mixte") {
                 return 'icon ion-ios-body';
-            } else if ($shareType == "child") {
+            } else if (shareType == "child") {
                 return 'fa fa-child';
-            } else if ($shareType == "jewelry") {
+            } else if (shareType == "jewelry") {
                 return 'fa fa-diamond';
             } else {
                 return 'icon ion-tshirt';
@@ -131,9 +131,9 @@
         } else if (shareTypeCategory == "house") {
             if (shareType == "furniture") {
                 return 'fa fa-archive';
-            } else if ($shareType == "kitchen") {
+            } else if (shareType == "kitchen") {
                 return 'icon ion-knife';
-            } else if ($shareType == "diy") {
+            } else if (shareType == "diy") {
                 return 'fa fa-wrench';
             } else {
                 return 'fa fa-home';
@@ -141,9 +141,9 @@
         } else if (shareTypeCategory == "service") {
             if (shareType == "travel") {
                 return 'fa fa-suitcase';
-            } else if ($shareType == "hotel") {
+            } else if (shareType == "hotel") {
                 return 'fa fa-bed';
-            } else if ($shareType == "wellness") {
+            } else if (shareType == "wellness") {
                 return 'fa fa-smile-o';
             } else {
                 return 'fa fa-briefcase';
