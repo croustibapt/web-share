@@ -21,7 +21,7 @@
             position: myLatlng,
             map: map,
             title: share.title,
-            labelContent: '<div class="img-circle text-center" style="display: table; width: 32px; height: 32px; background-color: ' + iconColor + ';"><i class="' + iconClass + '"style="display: table-cell; vertical-align: middle; color: #ffffff; font-size: 20px;"></i></div>',
+            labelContent: '<div class="img-circle text-center" style="border: 4px solid white; background-color: ' + iconColor + '; display: table; min-width: 40px; width: 40px; min-height: 40px; height: 40px;"><i class="' + iconClass + '" style="display: table-cell; vertical-align: middle; color: #ffffff; font-size: 18px;"></i></div>',
             labelAnchor: new google.maps.Point(16, 16),
             icon: ' '
             /*icon: {
