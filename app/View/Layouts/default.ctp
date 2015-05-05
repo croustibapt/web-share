@@ -5,6 +5,13 @@
         <title>
             Share
         </title>
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+        <script src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>
+        
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
+        
         <?php
             echo $this->Html->meta('icon');
 
@@ -21,6 +28,7 @@
             echo $this->Html->script('bootstrap-select.min');
             echo $this->Html->script('jquery.datetimepicker');
             echo $this->Html->script('jquery-gmaps-latlon-picker');
+            echo $this->Html->script('markerwithlabel');
 
             //Moment
             echo $this->Html->script('moment/moment');
@@ -31,11 +39,6 @@
             echo $this->fetch('css');
             echo $this->fetch('script');
         ?>
-
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
-
-        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
     </head>
     <body>
         <!-- Navigation bar -->

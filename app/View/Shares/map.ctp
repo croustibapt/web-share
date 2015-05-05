@@ -1,8 +1,6 @@
 <!-- Action bar -->
 <?php echo $this->element('action-bar'); ?>
 
-<script src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>
-
 <div class="container">
     <div id="div-share-search-google-map" style="width: 100%; height: 500px;">
         
@@ -16,10 +14,23 @@
     
     function addMarker(share) {
         var myLatlng = new google.maps.LatLng(share.latitude, share.longitude);
-        var marker = new google.maps.Marker({
+        
+        var marker = new MarkerWithLabel({
             position: myLatlng,
             map: map,
-            title: share.title
+            title: share.title,
+            labelContent: '<div class="img-circle text-center" style="display: table; width: 32px; height: 32px; background-color: #2ecc71;"><i class="fa fa-folder" style="display: table-cell; vertical-align: middle; color: #ffffff; font-size: 20px;"></i></div>',
+            labelAnchor: new google.maps.Point(16, 16),
+            icon: ' '
+            /*icon: {
+                path: fontawesome.markers.FOLDER,
+                scale: 0.5,
+                strokeWeight: 0.0,
+                strokeColor: '#ffffff',
+                strokeOpacity: 1,
+                fillColor: '#2ecc71',
+                fillOpacity: 1.0,
+            },*/
         });
         markers.push(marker);
         shares.push(share);
