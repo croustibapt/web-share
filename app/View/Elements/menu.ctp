@@ -1,18 +1,17 @@
 <div class="panel panel-primary">
     <div class="panel-heading">
-        <h3 class="panel-title">Vous avez un coupon ?</h3>
-    </div>
-    <div class="panel-body text-center">
-        <button type="button" class="btn btn-success text-uppercase">PARTAGEZ LE <i class="fa fa-chevron-right"></i></button>
+        <span class="text-uppercase"><i class="fa fa-globe"></i> Voir sur la carte</span>
     </div>
 </div>
 
-<div class="panel panel-default">
-    <div class="panel-heading">
-        <h3 class="panel-title">Panel title</h3>
-    </div>
-    <div class="panel-body">
-        Panel content
+<div class="text-center" style="background-color: green;">
+    <div class="row">
+        <div class="col-md-2" style="background-color: red;">
+            <i class="fa fa-plus-circle"></i>
+        </div>
+        <div class="col-md-10">
+            <span class="text-uppercase">Partager un coupon</span>
+        </div>
     </div>
 </div>
 
