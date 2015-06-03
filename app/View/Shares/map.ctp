@@ -2,7 +2,7 @@
 <?php echo $this->element('action-bar'); ?>
 
 <div class="container">
-    <div id="div-share-search-google-map" style="width: 100%; height: 500px;">
+    <div id="div-share-search-google-map" style="width: 100%; height: 100%;">
         
     </div>
 </div>
@@ -184,6 +184,13 @@
 
         var jsonData =
         '   {' +
+        '       "page": "<?php echo $page; ?>",' +
+        <?php if (isset($startDate)) : ?>
+        '       "start": "<?php echo $startDate; ?>",' +
+        <?php endif; ?>
+        <?php if (isset($endDate)) : ?>
+        '       "end": "<?php echo $endDate; ?>",' +
+        <?php endif; ?>
         '       "region": [' +
         '           {' +
         '               "latitude": "' + ne.lat() + '",' +

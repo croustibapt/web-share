@@ -1,6 +1,11 @@
 /* Common */
 
+html {
+    height: 100%;
+}
+
 body {
+    height: 100%;
     padding-top: 50px;
     background-color: #eeeeee;
 }
@@ -8,7 +13,6 @@ body {
 /* Action bar */
 
 #div-action-bar {
-    margin-bottom: 20px;
     background-color: #ffffff;
     border-bottom: 1px solid #e0e0e0;
     width: 100%;

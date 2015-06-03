@@ -1,63 +1,61 @@
 <nav class="navbar navbar-default navbar-fixed-top">
-    <div class="container">
-        <!-- Brand and toggle get grouped for better mobile display -->
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <?php
-                echo $this->Html->link('Share', '/', array(
-                    'class' => 'navbar-brand'
-                ));
-            ?>
-        </div>
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+        </button>
+        <?php
+            echo $this->Html->link('Share', '/', array(
+                'class' => 'navbar-brand'
+            ));
+        ?>
+    </div>
 
-        <!-- Collect the nav links, forms, and other content for toggling -->
-        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-            <ul class="nav navbar-nav">
-                <li class="<?php echo (($this->name == 'Shares') && ($this->action == 'search')) ? "active" : ""; ?>">
-                    <?php
-                        echo $this->Html->link('Rechercher un partage', '/shares/search');
-                    ?>
-                </li>
-                <li class="<?php echo (($this->name == 'Shares') && ($this->action == 'add')) ? "active" : ""; ?>">
-                    <?php
-                        echo $this->Html->link('Partager un coupon', '/shares/add');
-                    ?>
-                </li>
-            </ul>
-            <ul class="nav navbar-nav navbar-right">
-                <li class="dropdown">
-                    <?php if ($this->LocalUser->isAuthenticated($this)) : ?>
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+        <ul class="nav navbar-nav">
+            <li class="<?php echo (($this->name == 'Shares') && ($this->action == 'search')) ? "active" : ""; ?>">
+                <?php
+                    echo $this->Html->link('Rechercher un partage', '/shares/search');
+                ?>
+            </li>
+            <li class="<?php echo (($this->name == 'Shares') && ($this->action == 'add')) ? "active" : ""; ?>">
+                <?php
+                    echo $this->Html->link('Partager un coupon', '/shares/add');
+                ?>
+            </li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+            <li class="dropdown">
+                <?php if ($this->LocalUser->isAuthenticated($this)) : ?>
 
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
-                       aria-expanded="false">
-                        <img class="nav-bar-user-img img-circle" src="https://graph.facebook.com/v2.3/<?php echo $this->LocalUser->getExternalId($this); ?>/picture" /> Hi <?php echo $this->LocalUser->getUsername($this); ?> <span class="caret"></span>
-                    </a>
-                    <ul class="dropdown-menu" role="menu">
-                        <li>
-                            <?php
-                                echo $this->Html->link('My account', '/user/home');
-                            ?>
-                        </li>
-                        <li class="divider"></li>
-                        <li>
-                            <a id="a-nav-bar-logout" href="#">Logout</a>
-                        </li>
-                    </ul>
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
+                   aria-expanded="false">
+                    <img class="nav-bar-user-img img-circle" src="https://graph.facebook.com/v2.3/<?php echo $this->LocalUser->getExternalId($this); ?>/picture" /> Hi <?php echo $this->LocalUser->getUsername($this); ?> <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu" role="menu">
+                    <li>
+                        <?php
+                            echo $this->Html->link('My account', '/user/home');
+                        ?>
+                    </li>
+                    <li class="divider"></li>
+                    <li>
+                        <a id="a-nav-bar-logout" href="#">Logout</a>
+                    </li>
+                </ul>
 
-                    <?php else : ?>
+                <?php else : ?>
 
-                    <a id="navbar-authenticate-button" href="#">Authenticate</a>
+                <a id="navbar-authenticate-button" href="#">Authenticate</a>
 
-                    <?php endif; ?>
-                </li>
-            </ul>
-        </div><!-- /.navbar-collapse -->
-    </div><!-- /.container-fluid -->
+                <?php endif; ?>
+            </li>
+        </ul>
+    </div><!-- /.navbar-collapse -->
 </nav>
 
 <script>

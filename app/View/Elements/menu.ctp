@@ -9,13 +9,29 @@
     </div>
 </div>
 
-<div class="text-center" style="background-color: #1abc9c; font-size: 16px; color: #ffffff; margin-bottom: 30px;">
+<div style="background-color: #1abc9c; font-size: 16px; color: #ffffff; margin-bottom: 30px;">
     <div class="row" style="margin: 0px;">
-        <div class="col-md-2" style="background-color: #16a085; padding: 10px;">
-            <i class="fa fa-plus-circle"></i>
-        </div>
         <div class="col-md-10" style="padding: 10px;">
             <span class="text-uppercase">Partager un coupon</span>
+        </div>
+        <div class="col-md-2 text-center" style="background-color: #16a085; padding: 10px;">
+            <i class="fa fa-plus-circle"></i>
+        </div>
+    </div>
+</div>
+
+<div style="background-color: #1abc9c; font-size: 16px; color: #ffffff; margin-bottom: 30px;">
+    <div class="row" style="margin: 0px;">
+        <div class="col-md-12" style="background-color: #16a085; padding: 10px;">
+            <span class="text-uppercase">Applications mobiles</span>
+        </div>
+    </div>
+    <div class="row" style="margin: 0px;">
+        <div class="col-md-6" style="padding: 10px;">
+            sd
+        </div>
+        <div class="col-md-6 text-center" style="padding: 10px;">
+            <button class="btn btn-primary">Télécharger</button>
         </div>
     </div>
 </div>

@@ -44,24 +44,20 @@
         <!-- Navigation bar -->
         <?php echo $this->element('nav-bar'); ?>
 
-        <div class="wrapper">
-            <?php
-                $error = $this->Session->flash('nok');
-                if ($error != '') :
-            ?>
+        <?php
+            $error = $this->Session->flash('nok');
+            if ($error != '') :
+        ?>
 
-            <div class="alert alert-red">
-                <h1>Error</h1>
-                <?php echo $error; ?>
-            </div>
-
-            <?php endif; ?>
-
-            <div class="content">
-                <!-- CONTENT -->
-                <?php echo $this->fetch('content'); ?>
-            </div>
+        <div class="alert alert-red">
+            <h1>Error</h1>
+            <?php echo $error; ?>
         </div>
+
+        <?php endif; ?>
+
+        <!-- CONTENT -->
+        <?php echo $this->fetch('content'); ?>
 
         <script>
             //Webroot global variable
@@ -73,8 +69,7 @@
                 toastr.error(responseJSON.error_message, responseJSON.error_code);
             }
 
-            //On ready
-            $(document).ready(function() {
+            function handleMomentTags() {
                 //Day
                 $(".moment-time-ago").each(function() {
                     var htmlDate = $(this).html();
@@ -104,6 +99,12 @@
 
                     $(this).html(formattedDate);
                 });
+            }
+
+            //On ready
+            $(document).ready(function() {
+                //Moment tags
+                handleMomentTags();
                 
                 //Tooltip
                 $('[data-toggle="tooltip"]').tooltip();

@@ -116,7 +116,22 @@ class SharesController extends ApiSharesController {
     
     public function map($date = 'all', $shareTypeCategory = NULL, $shareType = NULL) {
         if ($this->request->is('GET')) {
+            $startDate = NULL;
+            $endDate = NULL;
             $page = 1;
+
+            //Get start and end date
+            $this->getStartAndEndDate($startDate, $endDate, $date);
+            if ($startDate != NULL) {
+                $this->set('startDate', $startDate->getTimestamp());
+            }
+            if ($endDate != NULL) {
+                $this->set('endDate', $endDate->getTimestamp());
+            }
+
+            //Get types
+            $types = $this->getTypes($shareTypeCategory, $shareType);
+            $this->set('types', $types);
 
             //
             $this->setShareTypeCategories();
