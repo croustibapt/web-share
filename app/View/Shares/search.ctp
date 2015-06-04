@@ -1,6 +1,7 @@
 <?php
     /*echo $startDate;
     echo $endDate;*/
+    //pr($types);
 ?>
 
 <div class="content" style="height: 100%; position: relative;">
@@ -409,6 +410,20 @@
             <?php endif; ?>
             <?php if (isset($endDate)) : ?>
             '       "end": "<?php echo $endDate; ?>",' +
+            <?php endif; ?>
+            <?php if ($types != NULL) : ?>
+            '       "types": [' +
+            <?php
+                $typeIndex = 0;
+                foreach($types as $type) :
+            ?>
+            <?php if ($typeIndex++ > 0) : ?>
+            '               , <?php echo $type; ?>' +
+            <?php else : ?>
+            '               <?php echo $type; ?>' +
+            <?php endif; ?>
+            <?php endforeach; ?>
+            '       ],'
             <?php endif; ?>
             '       "region": [' +
             '           {' +

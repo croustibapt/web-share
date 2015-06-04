@@ -86,6 +86,8 @@ class ApiSharesController extends AppController {
 
         $query = $sqlPrefix.$sql." GROUP BY Share.id ORDER BY Share.event_date DESC".$sqlLimit.$sqlOffset.";";
 
+        //pr($query);
+
         /*echo json_encode($query);
         exit();*/
 

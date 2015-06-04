@@ -76,22 +76,22 @@ class SharesController extends ApiSharesController {
         
         return $types;
     }
+
+    public function home() {
+        //
+        $this->setShareTypeCategories();
+    }
     
     //
     public function search($date = 'all', $shareTypeCategory = NULL, $shareType = NULL) {
-        if ($this->request->is('GET')) {
-            $startDate = NULL;
-            $endDate = NULL;
-            $page = 1;
+        $startDate = NULL;
+        $endDate = NULL;
+        $page = 1;
+        $types = NULL;
 
+        if ($this->request->is('GET')) {
             //Get start and end date
             $this->getStartAndEndDate($startDate, $endDate, $date);
-            if ($startDate != NULL) {
-                $this->set('startDate', $startDate->getTimestamp());
-            }
-            if ($endDate != NULL) {
-                $this->set('endDate', $endDate->getTimestamp());
-            }
 
             //Get types
             $types = $this->getTypes($shareTypeCategory, $shareType);
@@ -100,21 +100,35 @@ class SharesController extends ApiSharesController {
             if (isset($this->params['url']['page']) && is_numeric($this->params['url']['page'])) {
                 $page = $this->params['url']['page'];
             }
+        } else if ($this->request->is('POST')) {
+            $data = $this->request->data;
 
-            /*pr($startDate);
-            pr($endDate);*/
+            //Get start and end date
+            $date = $data['Share']['date'];
+            $this->getStartAndEndDate($startDate, $endDate, $date);
 
-            //
-            $response = $this->internSearch($types, $startDate, $endDate, NULL, $page);
+            $shareTypeCategory = $data['Share']['share_type_category'];
+            $shareType = $data['Share']['share_type'];
 
-            //
-            $this->set('response', $response);
-
-            $this->set('date', $date);
-            $this->set('shareTypeCategory', $shareTypeCategory);
-            $this->set('shareType', $shareType);
-            $this->set('page', $page);
+            //Get types
+            $types = $this->getTypes($shareTypeCategory, $shareType);
+            //pr($types);
         }
+
+        $this->set('date', $date);
+        if ($startDate != NULL) {
+            $this->set('startDate', $startDate->getTimestamp());
+        }
+        if ($endDate != NULL) {
+            $this->set('endDate', $endDate->getTimestamp());
+        }
+        /*pr($startDate);
+        pr($endDate);*/
+
+        $this->set('types', $types);
+        $this->set('shareTypeCategory', $shareTypeCategory);
+        $this->set('shareType', $shareType);
+        $this->set('page', $page);
         
         //
         $this->setShareTypeCategories();
