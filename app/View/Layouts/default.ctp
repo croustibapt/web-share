@@ -41,6 +41,11 @@
         ?>
     </head>
     <body>
+        <script>
+            //Webroot global variable
+            var webroot = "<?php echo $this->webroot; ?>";
+        </script>
+        
         <!-- Navigation bar -->
         <?php echo $this->element('nav-bar'); ?>
 
@@ -60,9 +65,6 @@
         <?php echo $this->fetch('content'); ?>
 
         <script>
-            //Webroot global variable
-            var webroot = "<?php echo $this->webroot; ?>";
-
             //Function used to handle AJAX error and display a toast
             function handleAjaxError(ajaxError) {
                 var responseJSON = ajaxError.responseJSON;

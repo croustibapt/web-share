@@ -8,7 +8,7 @@
         </div>
 
         <?php
-            $baseUrl = '/share/search/'.$date;
+            $baseUrl = 'share/search/'.$date;
 
             //Share type category
             if ($shareTypeCategory != NULL) {
@@ -19,11 +19,6 @@
             if ($shareType != NULL) {
                 $baseUrl .= '/'.$shareType;
             }
-
-            echo $this->element('pagination', array(
-                'results' => $response,
-                'baseUrl' => $baseUrl
-            ));
         ?>
     </div>
     <div style="margin-left: 50%; width: 50%; height: 100%;">
@@ -34,6 +29,8 @@
 </div>
 
 <script>
+    var baseUrl = webroot + '<?php echo $baseUrl; ?>';
+    
     //
     $('.div-share-card').click(function() {
         var shareId = $(this).attr('share-id');
@@ -170,6 +167,65 @@
             '</div>';
 
         $('#div-search-results').append(shareHtml);
+    }
+    
+    function addPagination(response) {
+        var paginationHtml = '';
+        
+        if (response.total_pages > 1) {
+            paginationHtml +=
+                '<nav class="text-center">' +
+                '   <ul class="pagination">';
+        
+            //Previous
+            if (response.page > 1) {
+                paginationHtml +=
+                    '   <li>' +
+                    '       <a href="' + baseUrl + '?page=' + (response.page - 1) + '" aria-label="previous"><span aria-hidden="true">&laquo;</span></a>' +
+                    '   </li>';
+            } else {
+                paginationHtml +=
+                    '   <li class="disabled">' +
+                    '       <span aria-hidden="true">&laquo;</span>' +
+                    '   </li>';
+            }
+            
+            //Other pages
+            for (var i = 1; i <= response.total_pages; i++) {
+                //Middle
+                if (i == response.page) {
+                    paginationHtml +=
+                        '   <li class="active">' +
+                        '       <a href="#">' + i + '</a>' +
+                        '   </li>';
+                } else {
+                    paginationHtml +=
+                        '   <li>' +
+                        '       <a href="' + baseUrl + '?page=' + i + '">' + i + '</a>' +
+                        '   </li>';
+                }
+            }
+            
+            //Next
+            if (response.page < response.total_pages) {
+                paginationHtml +=
+                    '   <li>' +
+                    '       <a href="' + baseUrl + '?page=' + (response.page + 1) + '" aria-label="next"><span aria-hidden="true">&raquo;</span></a>' +
+                    '   </li>';
+            } else {
+                paginationHtml +=
+                    '   <li class="disabled">' +
+                    '       <span aria-hidden="true">&raquo;</span>' +
+                    '   </li>';
+            }
+            
+            paginationHtml +=
+                '   </ul>' +
+                '</nav>';
+        
+            //console.log(paginationHtml);
+            $('#div-search-results').append(paginationHtml);
+        }
     }
 
     function addMarker(share) {
@@ -395,6 +451,8 @@
                         addMarker(share);
                         addShare(share);
                     }
+                    
+                    addPagination(response);
                 })
                 .fail(function(jqXHR, textStatus) {
                     console.log(jqXHR);
