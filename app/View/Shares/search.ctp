@@ -1,9 +1,18 @@
+<?php
+    /*echo $startDate;
+    echo $endDate;*/
+?>
+
 <div class="content" style="height: 100%; position: relative;">
     <div style="float: left; width: 50%; height: 100%; overflow-y: scroll; overflow-x: hidden;">
         <!-- Action bar -->
         <?php echo $this->element('action-bar'); ?>
 
         <div id="div-search-results" class="row" style="padding: 30px;">
+
+        </div>
+
+        <div id="div-search-pagination">
 
         </div>
 
@@ -30,12 +39,6 @@
 
 <script>
     var baseUrl = webroot + '<?php echo $baseUrl; ?>';
-    
-    //
-    $('.div-share-card').click(function() {
-        var shareId = $(this).attr('share-id');
-        window.location.href = webroot + "share/details/" + shareId;
-    });
 
     //Google maps
     var map;
@@ -70,7 +73,7 @@
             '   <div class="div-share-card-subtitle">' +
             '       <div class="row">' +
             '           <div class="col-md-6">' +
-            '               <a href="/users/details/' + share.user.external_id + '"><span class="span-share-card-user">' + share.user.username + '</span></a>' +
+            '               <a href="' + webroot + 'users/details/' + share.user.external_id + '"><span class="span-share-card-user">' + share.user.username + '</span></a>' +
             '               <span class="span-share-card-modified moment-time-ago">' + momentModifiedTimeAgo + '</span>' +
             '           </div>' +
             '           <div class="col-md-6 text-right">' +
@@ -181,7 +184,7 @@
             if (response.page > 1) {
                 paginationHtml +=
                     '   <li>' +
-                    '       <a href="' + baseUrl + '?page=' + (response.page - 1) + '" aria-label="previous"><span aria-hidden="true">&laquo;</span></a>' +
+                    '       <a class="a-search-pagination" href="#" page="' + (response.page - 1) + '" aria-label="previous"><span aria-hidden="true">&laquo;</span></a>' +
                     '   </li>';
             } else {
                 paginationHtml +=
@@ -201,7 +204,7 @@
                 } else {
                     paginationHtml +=
                         '   <li>' +
-                        '       <a href="' + baseUrl + '?page=' + i + '">' + i + '</a>' +
+                        '       <a class="a-search-pagination" href="#" page="' + i + '">' + i + '</a>' +
                         '   </li>';
                 }
             }
@@ -210,7 +213,7 @@
             if (response.page < response.total_pages) {
                 paginationHtml +=
                     '   <li>' +
-                    '       <a href="' + baseUrl + '?page=' + (response.page + 1) + '" aria-label="next"><span aria-hidden="true">&raquo;</span></a>' +
+                    '       <a class="a-search-pagination" href="#" page="' + (response.page + 1) + '" aria-label="next"><span aria-hidden="true">&raquo;</span></a>' +
                     '   </li>';
             } else {
                 paginationHtml +=
@@ -224,7 +227,7 @@
                 '</nav>';
         
             //console.log(paginationHtml);
-            $('#div-search-results').append(paginationHtml);
+            $('#div-search-pagination').append(paginationHtml);
         }
     }
 
@@ -393,14 +396,14 @@
         }
     }
 
-    function loadShares() {
+    function loadShares(page) {
         var bounds = map.getBounds();
         var ne = bounds.getNorthEast();
         var sw = bounds.getSouthWest();
 
         var jsonData =
             '   {' +
-            '       "page": "<?php echo $page; ?>",' +
+            '       "page": "' + page + '",' +
             <?php if (isset($startDate)) : ?>
             '       "start": "<?php echo $startDate; ?>",' +
             <?php endif; ?>
@@ -440,23 +443,25 @@
                 data: jsonData,
                 dataType: 'json'
             })
-                .done(function(response) {
-                    console.log(response);
+            .done(function(response) {
+                console.log(response);
 
-                    $('#div-search-results').empty();
+                $('#div-search-results').empty();
+                $('#div-search-pagination').empty();
+                clearMarkers();
 
-                    var results = response['results'];
-                    for (var i = 0; i < results.length; i++) {
-                        var share = results[i];
-                        addMarker(share);
-                        addShare(share);
-                    }
-                    
-                    addPagination(response);
-                })
-                .fail(function(jqXHR, textStatus) {
-                    console.log(jqXHR);
-                });
+                var results = response['results'];
+                for (var i = 0; i < results.length; i++) {
+                    var share = results[i];
+                    addMarker(share);
+                    addShare(share);
+                }
+
+                addPagination(response);
+            })
+            .fail(function(jqXHR, textStatus) {
+                console.log(jqXHR);
+            });
         });
     }
 
@@ -468,10 +473,21 @@
         map = new google.maps.Map(document.getElementById('div-share-search-google-map'), mapOptions);
 
         google.maps.event.addListener(map, 'idle', function() {
-            clearMarkers();
-            loadShares();
+            loadShares(<?php echo $page; ?>);
         });
     }
 
     google.maps.event.addDomListener(window, 'load', initialize);
+
+    $(document).on("click", ".a-search-pagination" , function() {
+        console.log('click');
+        var page = $(this).attr('page');
+        loadShares(page);
+    });
+
+    //
+    $(document).on("click", ".div-share-card" , function() {
+        var shareId = $(this).attr('share-id');
+        window.location.href = webroot + "share/details/" + shareId;
+    });
 </script>
