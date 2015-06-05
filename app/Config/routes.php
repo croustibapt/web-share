@@ -80,35 +80,12 @@
     //General
 
     //Search
-    Router::connect('/share/search/:date', array('controller' => 'Shares', 'action' => 'search'), array(
-        'pass' => array('date'),
-        'date' => '(all|day|week|month)'
-    ));
-    Router::connect('/share/search/:date/:shareTypeCategory', array('controller' => 'Shares', 'action' => 'search'), array(
-        'pass' => array('date', 'shareTypeCategory'),
-        'date' => '(all|day|week|month)',
+    Router::connect('/share/search/:shareTypeCategory', array('controller' => 'Shares', 'action' => 'search'), array(
+        'pass' => array('shareTypeCategory'),
         'shareTypeCategory' => '[A-Za-z0-9]+'
     ));
-    Router::connect('/share/search/:date/:shareTypeCategory/:shareType', array('controller' => 'Shares', 'action' => 'search'), array(
-        'pass' => array('date', 'shareTypeCategory', 'shareType'),
-        'date' => '(all|day|week|month)',
-        'shareTypeCategory' => '[A-Za-z0-9]+',
-        'shareType' => '[A-Za-z0-9]+'
-    ));
-
-    //Map
-    Router::connect('/share/map/:date', array('controller' => 'Shares', 'action' => 'map'), array(
-        'pass' => array('date'),
-        'date' => '(all|day|week|month)'
-    ));
-    Router::connect('/share/map/:date/:shareTypeCategory', array('controller' => 'Shares', 'action' => 'map'), array(
-        'pass' => array('date', 'shareTypeCategory'),
-        'date' => '(all|day|week|month)',
-        'shareTypeCategory' => '[A-Za-z0-9]+'
-    ));
-    Router::connect('/share/map/:date/:shareTypeCategory/:shareType', array('controller' => 'Shares', 'action' => 'map'), array(
-        'pass' => array('date', 'shareTypeCategory', 'shareType'),
-        'date' => '(all|day|week|month)',
+    Router::connect('/share/search/:shareTypeCategory/:shareType', array('controller' => 'Shares', 'action' => 'search'), array(
+        'pass' => array('shareTypeCategory', 'shareType'),
         'shareTypeCategory' => '[A-Za-z0-9]+',
         'shareType' => '[A-Za-z0-9]+'
     ));

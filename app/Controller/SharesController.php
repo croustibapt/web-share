@@ -88,19 +88,13 @@ class SharesController extends ApiSharesController {
         $endDate = NULL;
         $page = 1;
         $types = NULL;
+        
+        /*//Page
+        if (isset($this->params['url']['page']) && is_numeric($this->params['url']['page'])) {
+            $page = $this->params['url']['page'];
+        }*/
 
-        if ($this->request->is('GET')) {
-            //Get start and end date
-            $this->getStartAndEndDate($startDate, $endDate, $date);
-
-            //Get types
-            $types = $this->getTypes($shareTypeCategory, $shareType);
-
-            //Page
-            if (isset($this->params['url']['page']) && is_numeric($this->params['url']['page'])) {
-                $page = $this->params['url']['page'];
-            }
-        } else if ($this->request->is('POST')) {
+        if ($this->request->is('POST')) {
             $data = $this->request->data;
 
             //Get start and end date

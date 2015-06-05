@@ -423,7 +423,7 @@
             '               <?php echo $type; ?>' +
             <?php endif; ?>
             <?php endforeach; ?>
-            '       ],'
+            '       ],' +
             <?php endif; ?>
             '       "region": [' +
             '           {' +

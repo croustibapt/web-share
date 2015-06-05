@@ -41,7 +41,7 @@
             <?php endif; ?>
 
                 <?php
-                    echo $this->Html->link('all', '/share/'.$this->action.'/'.$date.'/');
+                    echo $this->Html->link('all', '/shares/'.$this->action.'/'.$date.'/');
                 ?>
             </li>
 
@@ -91,29 +91,85 @@
 
     <!-- All shares -->
     <?php
-        echo $this->Html->link('Tout', '/share/'.$this->action.'/all'.$suffixUrl, array(
+        echo $this->Form->create('Share', array(
+            'action' => 'search',
+            'class' => 'form-inline'
+        ));
+        echo $this->Form->hidden('date', array(
+            'value' => 'all'
+        ));
+        echo $this->Form->hidden('share_type_category', array(
+            'value' => $shareTypeCategory
+        ));
+        echo $this->Form->hidden('share_type', array(
+            'value' => $shareType
+        ));
+        echo $this->Form->submit('Tout', array(
             'class' => ($date == 'all') ? 'action-bar-input btn btn-action-bar btn-emerald btn-sm active' : 'action-bar-input btn btn-action-bar btn-link btn-emerald btn-sm'
         ));
+        echo $this->Form->end();
     ?>
 
     <!-- Current day shares -->
     <?php
-        echo $this->Html->link('Aujourd\'hui', '/share/'.$this->action.'/day'.$suffixUrl, array(
+        echo $this->Form->create('Share', array(
+            'action' => 'search',
+            'class' => 'form-inline'
+        ));
+        echo $this->Form->hidden('date', array(
+            'value' => 'day'
+        ));
+        echo $this->Form->hidden('share_type_category', array(
+            'value' => $shareTypeCategory
+        ));
+        echo $this->Form->hidden('share_type', array(
+            'value' => $shareType
+        ));
+        echo $this->Form->submit('Aujourd\'hui', array(
             'class' => ($date == 'day') ? 'action-bar-input btn btn-action-bar btn-emerald btn-sm active' : 'action-bar-input btn btn-action-bar btn-link btn-emerald btn-sm'
         ));
+        echo $this->Form->end();
     ?>
 
     <!-- Current week shares -->
     <?php
-        echo $this->Html->link('Cette semaine', '/share/'.$this->action.'/week'.$suffixUrl, array(
+        echo $this->Form->create('Share', array(
+            'action' => 'search',
+            'class' => 'form-inline'
+        ));
+        echo $this->Form->hidden('date', array(
+            'value' => 'week'
+        ));
+        echo $this->Form->hidden('share_type_category', array(
+            'value' => $shareTypeCategory
+        ));
+        echo $this->Form->hidden('share_type', array(
+            'value' => $shareType
+        ));
+        echo $this->Form->submit('Cette semaine', array(
             'class' => ($date == 'week') ? 'action-bar-input btn btn-action-bar btn-emerald btn-sm active' : 'action-bar-input btn btn-action-bar btn-link btn-emerald btn-sm'
         ));
+        echo $this->Form->end();
     ?>
 
     <!-- Current month shares -->
     <?php
-        echo $this->Html->link('Ce mois-ci', '/share/'.$this->action.'/month'.$suffixUrl, array(
+        echo $this->Form->create('Share', array(
+            'action' => 'search',
+            'class' => 'form-inline'
+        ));
+        echo $this->Form->hidden('date', array(
+            'value' => 'month'
+        ));
+        echo $this->Form->hidden('share_type_category', array(
+            'value' => $shareTypeCategory
+        ));
+        echo $this->Form->hidden('share_type', array(
+            'value' => $shareType
+        ));
+        echo $this->Form->submit('Ce mois-ci', array(
             'class' => ($date == 'month') ? 'action-bar-input btn btn-action-bar btn-emerald btn-sm active' : 'action-bar-input btn btn-action-bar btn-link btn-emerald btn-sm'
         ));
+        echo $this->Form->end();
     ?>
 </div>
