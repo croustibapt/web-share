@@ -397,34 +397,49 @@
         }
     }
 
-    function loadShares(page) {
+    function loadShares(page, startDate, endDate, types) {
         var bounds = map.getBounds();
         var ne = bounds.getNorthEast();
         var sw = bounds.getSouthWest();
 
         var jsonData =
             '   {' +
-            '       "page": "' + page + '",' +
-            <?php if (isset($startDate)) : ?>
-            '       "start": "<?php echo $startDate; ?>",' +
-            <?php endif; ?>
-            <?php if (isset($endDate)) : ?>
-            '       "end": "<?php echo $endDate; ?>",' +
-            <?php endif; ?>
-            <?php if ($types != NULL) : ?>
-            '       "types": [' +
-            <?php
-                $typeIndex = 0;
-                foreach($types as $type) :
-            ?>
-            <?php if ($typeIndex++ > 0) : ?>
-            '               , <?php echo $type; ?>' +
-            <?php else : ?>
-            '               <?php echo $type; ?>' +
-            <?php endif; ?>
-            <?php endforeach; ?>
-            '       ],' +
-            <?php endif; ?>
+            '       "page": "' + page + '",';
+
+        //Start date
+        if (startDate != null) {
+            jsonData +=
+                '   "start": "' + startDate + '",';
+        }
+
+        //End date
+        if (endDate != null) {
+            jsonData +=
+                '   "end": "' + endDate + '",';
+        }
+
+        //Types
+        if (types != null) {
+            jsonData +=
+                '   "types": [';
+
+            //Loop on types
+            for (var i = 0; i < types.length; i++) {
+                var shareTypeId = types[i];
+
+                if (i > 0) {
+                    jsonData += ', ' + shareTypeId;
+                } else {
+                    jsonData += shareTypeId;
+                }
+            }
+
+            jsonData +=
+                '   ],';
+        }
+
+        //Region
+        jsonData +=
             '       "region": [' +
             '           {' +
             '               "latitude": "' + ne.lat() + '",' +
@@ -445,8 +460,7 @@
             '       ]' +
             '   }';
 
-        //console.log(jsonData);
-
+        //
         var url = webroot + 'api/share/search';
         //console.log(url);
 
@@ -482,12 +496,26 @@
 
     function initialize() {
         var mapOptions = {
+            //Zoom
+            <?php if ($searchZoom != NULL) : ?>
+            zoom: <?php echo $searchZoom; ?>,
+            <?php else : ?>
             zoom: 8,
+            <?php endif; ?>
+
+            //Center
+            <?php if (($searchLatitude != NULL) && ($searchLongitude != NULL)) : ?>
+            center: new google.maps.LatLng(<?php echo $searchLatitude; ?>, <?php echo $searchLongitude; ?>)
+            <?php else : ?>
             center: new google.maps.LatLng(43.594484, 1.447947)
+            <?php endif; ?>
         };
         map = new google.maps.Map(document.getElementById('div-share-search-google-map'), mapOptions);
 
         google.maps.event.addListener(map, 'idle', function() {
+            $('.hidden-search-zoom').val(map.getZoom());
+            $('.hidden-search-latitude').val(map.getCenter().lat());
+            $('.hidden-search-longitude').val(map.getCenter().lng());
             loadShares(<?php echo $page; ?>);
         });
     }

@@ -83,12 +83,32 @@ class SharesController extends ApiSharesController {
     }
     
     //
-    public function search($date = 'all', $shareTypeCategory = NULL, $shareType = NULL) {
-        $startDate = NULL;
-        $endDate = NULL;
+    public function search($shareTypeCategory = NULL, $shareType = NULL) {
+        $date = 'all';
         $page = 1;
         $types = NULL;
-        
+        $searchZoom = NULL;
+        $searchLatitude = NULL;
+        $searchLongitude = NULL;
+
+        //Get types
+        $types = $this->getTypes($shareTypeCategory, $shareType);
+
+        //Day
+        $this->getStartAndEndDate($startDateDay, $endDateDay, 'day');
+        $startDateTimestampDay = $startDateDay->getTimestamp();
+        $endDateTimestampDay = $endDateDay->getTimestamp();
+
+        //Week
+        $this->getStartAndEndDate($startDateWeek, $endDateWeek, 'week');
+        $startDateTimestampWeek = $startDateWeek->getTimestamp();
+        $endDateTimestampWeek = $endDateWeek->getTimestamp();
+
+        //Month
+        $this->getStartAndEndDate($startDateMonth, $endDateMonth, 'month');
+        $startDateTimestampMonth = $startDateMonth->getTimestamp();
+        $endDateTimestampMonth = $endDateMonth->getTimestamp();
+
         /*//Page
         if (isset($this->params['url']['page']) && is_numeric($this->params['url']['page'])) {
             $page = $this->params['url']['page'];
@@ -99,29 +119,38 @@ class SharesController extends ApiSharesController {
 
             //Get start and end date
             $date = $data['Share']['date'];
-            $this->getStartAndEndDate($startDate, $endDate, $date);
 
-            $shareTypeCategory = $data['Share']['share_type_category'];
-            $shareType = $data['Share']['share_type'];
-
-            //Get types
-            $types = $this->getTypes($shareTypeCategory, $shareType);
             //pr($types);
+
+            /*//Search zoom
+            $searchZoom = $data['Share']['search_zoom'];
+
+            //Search latitude
+            $searchLatitude = $data['Share']['search_latitude'];
+
+            //Search longitude
+            $searchLongitude = $data['Share']['search_longitude'];*/
         }
 
         $this->set('date', $date);
-        if ($startDate != NULL) {
-            $this->set('startDate', $startDate->getTimestamp());
-        }
-        if ($endDate != NULL) {
-            $this->set('endDate', $endDate->getTimestamp());
-        }
+
+        $this->set('startDateDay', $startDateTimestampDay);
+        $this->set('endDateDay', $endDateTimestampDay);
+
+        $this->set('startDateWeek', $startDateTimestampWeek);
+        $this->set('endDateWeek', $endDateTimestampWeek);
+
+        $this->set('startDateMonth', $startDateTimestampMonth);
+        $this->set('endDateMonth', $endDateTimestampMonth);
         /*pr($startDate);
         pr($endDate);*/
 
         $this->set('types', $types);
         $this->set('shareTypeCategory', $shareTypeCategory);
         $this->set('shareType', $shareType);
+        $this->set('searchZoom', $searchZoom);
+        $this->set('searchLatitude', $searchLatitude);
+        $this->set('searchLongitude', $searchLongitude);
         $this->set('page', $page);
         
         //

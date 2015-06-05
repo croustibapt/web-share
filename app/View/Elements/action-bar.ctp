@@ -23,153 +23,176 @@
 ?>
 
 <div id="div-action-bar">
-    <!-- Share type category, types -->
-    <div class="dropdown" style="display: inline-block; margin-right: 10px; padding-right: 10px; border-right: 1px solid #dddddd;">
-        <a data-toggle="dropdown" class="btn btn-action-bar btn-peter-river btn-sm" href="#" style="width: 150px;">
-            <?php echo $selectedShareTypeLabel; ?> <span class="caret"></span>
-        </a>
-        <ul class="dropdown-menu multi-level" role="menu" aria-labelledby="dropdownMenu">
+    <div class="row">
+        <div class="col-md-8">
 
-            <?php if ($shareTypeCategory == NULL) : ?>
+            <ul class="nav nav-pills text-center" role="tablist">
+                <!-- All shares -->
+                <li role="presentation" <?php echo ($date == 'all') ? 'class="active"' : ""; ?>>
+                    <?php
+                    echo $this->Html->link('Tout', '#', array(
+                        'class' => 'a-action-bar-date',
+                        'role' => 'tab',
+                        'data-toggle' => 'tab'
+                    ));
+                    ?>
+                </li>
+                <!-- Current day shares -->
+                <li role="presentation" <?php echo ($date == 'day') ? 'class="active"' : ""; ?>>
+                    <?php
+                    echo $this->Html->link('Aujourd\'hui', '#', array(
+                        'class' => 'a-action-bar-date',
+                        'start-date' => $startDateDay,
+                        'end-date' => $endDateDay,
+                        'role' => 'tab',
+                        'data-toggle' => 'tab'
+                    ));
+                    ?>
+                </li>
+                <!-- Current week shares -->
+                <li role="presentation" <?php echo ($date == 'week') ? 'class="active"' : ""; ?>>
+                    <?php
+                    echo $this->Html->link('Cette semaine', '#', array(
+                        'class' => 'a-action-bar-date',
+                        'start-date' => $startDateWeek,
+                        'end-date' => $endDateWeek,
+                        'role' => 'tab',
+                        'data-toggle' => 'tab'
+                    ));
+                    ?>
+                </li>
+                <!-- Current month shares -->
+                <li role="presentation" <?php echo ($date == 'month') ? 'class="active"' : ""; ?>>
+                    <?php
+                    echo $this->Html->link('Ce mois-ci', '#', array(
+                        'class' => 'a-action-bar',
+                        'start-date' => $startDateMonth,
+                        'end-date' => $endDateMonth,
+                        'role' => 'tab',
+                        'data-toggle' => 'tab'
+                    ));
+                    ?>
+                </li>
+            </ul>
 
-            <li class="li-action-bar-selected">
+        </div>
 
-            <?php else : ?>
+        <div class="col-md-4 text-right">
+            <form class="form-inline">
+                <div class="row">
+                    <div class="col-md-6">
+                        <select id="select-action-bar-share-type-category" class="form-control select-action-bar">
 
-            <li>
-
-            <?php endif; ?>
-
-                <?php
-                    echo $this->Html->link('all', '/shares/'.$this->action.'/'.$date.'/');
-                ?>
-            </li>
-
-            <?php foreach ($shareTypeCategories as $shareTypeCategoryLabel => $shareTypes) : ?>
-
-            <?php if ($shareTypeCategoryLabel == $shareTypeCategory) : ?>
-
-            <li class="li-action-bar-selected dropdown-submenu">
-
-            <?php else : ?>
-
-            <li class="dropdown-submenu">
-
-            <?php endif; ?>
-
-                <?php
-                    echo $this->Html->link($shareTypeCategoryLabel, '/share/'.$this->action.'/'.$date.'/'.$shareTypeCategoryLabel);
-                ?>
-
-                <ul class="dropdown-menu">
-
-                    <?php foreach ($shareTypes as $type) : ?>
-
-                    <?php if (($shareTypeCategoryLabel == $shareTypeCategory) && ($type['label'] == $shareType)) : ?>
-
-                    <li class="li-action-bar-selected">
-
-                    <?php else : ?>
-
-                    <li>
-
-                    <?php endif; ?>
-
-                        <?php
-                            echo $this->Html->link($type['label'], '/share/'.$this->action.'/'.$date.'/'.$shareTypeCategoryLabel.'/'.$type['label']);
-                        ?>
-                    </li>
-
-                    <?php endforeach; ?>
-                </ul>
-            </li>
-
-            <?php endforeach; ?>
-        </ul>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <select id="select-action-bar-share-type" class="form-control select-action-bar" disabled>
+                            <option>Type ?</option>
+                        </select>
+                    </div>
+                </div>
+            </form>
+        </div>
     </div>
-
-
-    <!-- All shares -->
-    <?php
-        echo $this->Form->create('Share', array(
-            'action' => 'search',
-            'class' => 'form-inline'
-        ));
-        echo $this->Form->hidden('date', array(
-            'value' => 'all'
-        ));
-        echo $this->Form->hidden('share_type_category', array(
-            'value' => $shareTypeCategory
-        ));
-        echo $this->Form->hidden('share_type', array(
-            'value' => $shareType
-        ));
-        echo $this->Form->submit('Tout', array(
-            'class' => ($date == 'all') ? 'action-bar-input btn btn-action-bar btn-emerald btn-sm active' : 'action-bar-input btn btn-action-bar btn-link btn-emerald btn-sm'
-        ));
-        echo $this->Form->end();
-    ?>
-
-    <!-- Current day shares -->
-    <?php
-        echo $this->Form->create('Share', array(
-            'action' => 'search',
-            'class' => 'form-inline'
-        ));
-        echo $this->Form->hidden('date', array(
-            'value' => 'day'
-        ));
-        echo $this->Form->hidden('share_type_category', array(
-            'value' => $shareTypeCategory
-        ));
-        echo $this->Form->hidden('share_type', array(
-            'value' => $shareType
-        ));
-        echo $this->Form->submit('Aujourd\'hui', array(
-            'class' => ($date == 'day') ? 'action-bar-input btn btn-action-bar btn-emerald btn-sm active' : 'action-bar-input btn btn-action-bar btn-link btn-emerald btn-sm'
-        ));
-        echo $this->Form->end();
-    ?>
-
-    <!-- Current week shares -->
-    <?php
-        echo $this->Form->create('Share', array(
-            'action' => 'search',
-            'class' => 'form-inline'
-        ));
-        echo $this->Form->hidden('date', array(
-            'value' => 'week'
-        ));
-        echo $this->Form->hidden('share_type_category', array(
-            'value' => $shareTypeCategory
-        ));
-        echo $this->Form->hidden('share_type', array(
-            'value' => $shareType
-        ));
-        echo $this->Form->submit('Cette semaine', array(
-            'class' => ($date == 'week') ? 'action-bar-input btn btn-action-bar btn-emerald btn-sm active' : 'action-bar-input btn btn-action-bar btn-link btn-emerald btn-sm'
-        ));
-        echo $this->Form->end();
-    ?>
-
-    <!-- Current month shares -->
-    <?php
-        echo $this->Form->create('Share', array(
-            'action' => 'search',
-            'class' => 'form-inline'
-        ));
-        echo $this->Form->hidden('date', array(
-            'value' => 'month'
-        ));
-        echo $this->Form->hidden('share_type_category', array(
-            'value' => $shareTypeCategory
-        ));
-        echo $this->Form->hidden('share_type', array(
-            'value' => $shareType
-        ));
-        echo $this->Form->submit('Ce mois-ci', array(
-            'class' => ($date == 'month') ? 'action-bar-input btn btn-action-bar btn-emerald btn-sm active' : 'action-bar-input btn btn-action-bar btn-link btn-emerald btn-sm'
-        ));
-        echo $this->Form->end();
-    ?>
 </div>
+
+<script>
+    var shareTypeCategories = $.parseJSON('<?php echo json_encode($shareTypeCategories); ?>');
+
+    //Share type categories select
+    $('#select-action-bar-share-type-category').empty();
+    $('#select-action-bar-share-type-category').append('<option value="all">Catégorie ?</option>');
+
+    for (var shareTypeCategory in shareTypeCategories) {
+        var optionHtml =
+            '   <option value="' + shareTypeCategory + '">' +
+            '       ' + shareTypeCategory +
+            '   </option>';
+
+        $('#select-action-bar-share-type-category').append(optionHtml);
+    }
+
+    var startDate = null;
+    var endDate = null;
+    var types = null;
+
+    //Share type category
+    $('#select-action-bar-share-type-category').change(function() {
+        var shareTypeCategory = $(this).val();
+        //console.log(shareTypeCategory);
+
+        $('#select-action-bar-share-type').empty();
+        $('#select-action-bar-share-type').append('<option value="all">Type ?</option>');
+
+        if (shareTypeCategory == 'all') {
+            $('#select-action-bar-share-type').removeAttr('share-type-category');
+
+            $('#select-action-bar-share-type').prop('disabled', true);
+
+            types = null;
+        } else {
+            $('#select-action-bar-share-type').attr('share-type-category', shareTypeCategory);
+
+            var shareTypes = shareTypeCategories[shareTypeCategory];
+            //console.log(shareTypes);
+
+            for (var shareTypeId in shareTypes) {
+                var shareType = shareTypes[shareTypeId];
+                $('#select-action-bar-share-type').append('<option value="' + shareType.id + '">' + shareType.label + '</option>');
+            }
+
+            $('#select-action-bar-share-type').prop('disabled', false);
+
+            types = [];
+            var shareTypes = shareTypeCategories[shareTypeCategory];
+            for (var shareTypeId in shareTypes) {
+                types.push(shareTypeId);
+            }
+        }
+
+        loadShares(<?php echo $page; ?>, startDate, endDate, types);
+    });
+
+    //Share type
+    $('#select-action-bar-share-type').change(function() {
+        var shareTypeId = $(this).val();
+        console.log(shareTypeId);
+
+        if (shareTypeId !== 'all') {
+            types = [];
+            types.push(shareTypeId);
+        } else {
+            var shareTypeCategory = $(this).attr('share-type-category');
+            console.log(shareTypeCategory);
+
+            var shareTypes = shareTypeCategories[shareTypeCategory];
+            console.log(shareTypes);
+
+            types = [];
+            var shareTypes = shareTypeCategories[shareTypeCategory];
+            for (var shareTypeId in shareTypes) {
+                types.push(shareTypeId);
+            }
+        }
+
+        loadShares(<?php echo $page; ?>, startDate, endDate, types);
+    });
+
+    //Date
+    $('.a-action-bar-date').click(function() {
+        startDate = $(this).attr('start-date');
+        endDate = $(this).attr('end-date');
+
+        //Start date
+        if ((typeof startDate === typeof undefined) || (startDate === false)) {
+            startDate = null;
+        }
+
+        //End date
+        if ((typeof endDate === typeof undefined) || (endDate === false)) {
+            endDate = null;
+        }
+
+        loadShares(<?php echo $page; ?>, startDate, endDate, types);
+    });
+</script>

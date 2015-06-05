@@ -81,5 +81,4 @@
         $('#select-home-share-type').prop('disabled', false);
     });
 
-
 </script>

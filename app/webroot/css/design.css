@@ -24,20 +24,9 @@ body {
     padding-bottom: 10px;
 }
 
-.action-bar-input {
-    width: 100px;
-}
-
-.li-action-bar-selected {
-    background-color: #3498db;
-}
-
-.li-action-bar-selected>a {
-    color: #ffffff!important;
-}
-
-.li-action-bar-selected a:hover {
-    color: #333333!important;
+.select-action-bar {
+    height: 40px;
+    width: 100%!important;
 }
 
 /* Navigation bar */
