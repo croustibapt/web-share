@@ -4,7 +4,36 @@
     //pr($types);
 ?>
 
-<div class="content" style="height: 100%; position: relative;">
+<script>
+    app.controller('SearchController', ['$scope', function($scope) {
+        //items come from somewhere, from where doesn't matter for this example
+        $scope.shares = [];
+
+        $scope.loadShares = function(newShares) {
+            console.log(newShares);
+
+            for (var i = 0; i < newShares.length; i++) {
+                var share = newShares[i];
+                $scope.shares.push(share.share_id);
+            }
+            //$scope.shares = shares;
+            console.log($scope.shares);
+        };
+
+        $scope.addShare = function(categName) {
+            $scope.shares.push(categName);
+        };
+    }]);
+</script>
+
+<div id="div-angular" ng-controller="SearchController" class="content" style="height: 100%; position: relative;">
+    <button ng-click="addShare('sdf');">Add</button>
+    <ul>
+        <li ng-repeat="share in shares">
+            {{ share }}
+        </li>
+    </ul>
+
     <div style="float: left; width: 50%; height: 100%; overflow-y: scroll; overflow-x: hidden;">
         <!-- Action bar -->
         <?php echo $this->element('action-bar'); ?>
@@ -18,17 +47,17 @@
         </div>
 
         <?php
-            $baseUrl = 'share/search/'.$date;
+        $baseUrl = 'share/search/'.$date;
 
-            //Share type category
-            if ($shareTypeCategory != NULL) {
-                $baseUrl .= '/'.$shareTypeCategory;
-            }
+        //Share type category
+        if ($shareTypeCategory != NULL) {
+            $baseUrl .= '/'.$shareTypeCategory;
+        }
 
-            //Share type
-            if ($shareType != NULL) {
-                $baseUrl .= '/'.$shareType;
-            }
+        //Share type
+        if ($shareType != NULL) {
+            $baseUrl .= '/'.$shareType;
+        }
         ?>
     </div>
     <div style="margin-left: 50%; width: 50%; height: 100%;">
@@ -475,7 +504,17 @@
             .done(function(response) {
                 console.log(response);
 
-                $('#div-search-results').empty();
+                var results = response['results'];
+
+                var angularDiv = $('#div-angular');
+                    var scope = angular.element(angularDiv).scope();
+                    console.log(scope);
+
+                    scope.$apply(function(){
+                        scope.loadShares(results);
+                    });
+
+                /*$('#div-search-results').empty();
                 $('#div-search-pagination').empty();
                 clearMarkers();
 
@@ -486,7 +525,7 @@
                     addShare(share);
                 }
 
-                addPagination(response);
+                addPagination(response);*/
             })
             .fail(function(jqXHR, textStatus) {
                 console.log(jqXHR);
@@ -516,6 +555,7 @@
             $('.hidden-search-zoom').val(map.getZoom());
             $('.hidden-search-latitude').val(map.getCenter().lat());
             $('.hidden-search-longitude').val(map.getCenter().lng());
+
             loadShares(<?php echo $page; ?>);
         });
     }

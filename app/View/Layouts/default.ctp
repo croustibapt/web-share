@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html ng-app="app">
     <head>
         <?php echo $this->Html->charset(); ?>
         <title>
@@ -8,7 +8,7 @@
         
         <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
         <script src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>
-        
+
         <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
         
@@ -29,6 +29,7 @@
             echo $this->Html->script('jquery.datetimepicker');
             echo $this->Html->script('jquery-gmaps-latlon-picker');
             echo $this->Html->script('markerwithlabel');
+            echo $this->Html->script('angular.min');
 
             //Moment
             echo $this->Html->script('moment/moment');
@@ -44,8 +45,21 @@
         <script>
             //Webroot global variable
             var webroot = "<?php echo $this->webroot; ?>";
+
+            var app = angular.module("app", []);
+            app.controller('PrintController', function() {
+                var print = this;
+                print.greeting = "TEST";
+            });
         </script>
-        
+
+        <div ng-controller="PrintController as print">
+            <input type="text" ng-model="first.greeting">
+            <div>
+                {{first.greeting}} {{"World"}}
+            </div>
+        </div>
+
         <!-- Navigation bar -->
         <?php echo $this->element('nav-bar'); ?>
 
@@ -60,7 +74,6 @@
         </div>
 
         <?php endif; ?>
-
         <!-- CONTENT -->
         <?php echo $this->fetch('content'); ?>
 
