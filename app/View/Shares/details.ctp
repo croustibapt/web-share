@@ -2,6 +2,28 @@
     $shareTypeColor = $this->ShareType->shareTypeColor($share['share_type_category']['label']);
 ?>
 
+<script>
+    //Create SearchController
+    app.controller('DetailsController', ['$scope', function($scope) {
+        $scope.comments = [];
+        $scope.page = 0;
+        $scope.total_pages = 0;
+
+        $scope.getNumber = function(num) {
+            return new Array(num);
+        }
+
+        //Method used to handle the Ajax response
+        $scope.handleResponse = function(response) {
+            //TODO:
+
+            //Create pagination
+            $scope.page = parseInt(response.page);
+            $scope.total_pages = parseInt(response.total_pages);
+        };
+    }]);
+</script>
+
 <script src="http://js.nicedit.com/nicEdit-latest.js"></script>
 
 <div class="container" style="margin-top: 20px;">

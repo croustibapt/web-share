@@ -31,6 +31,8 @@
             echo $this->Html->script('markerwithlabel');
             echo $this->Html->script('angular.min');
 
+            echo $this->Html->script('share');
+
             //Moment
             echo $this->Html->script('moment/moment');
             echo $this->Html->script('moment/moment-timezone-with-data');
