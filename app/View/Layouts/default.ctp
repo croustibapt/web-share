@@ -45,20 +45,10 @@
         <script>
             //Webroot global variable
             var webroot = "<?php echo $this->webroot; ?>";
-
+            
+            //Main AngularJS app
             var app = angular.module("app", []);
-            app.controller('PrintController', function() {
-                var print = this;
-                print.greeting = "TEST";
-            });
         </script>
-
-        <div ng-controller="PrintController as print">
-            <input type="text" ng-model="first.greeting">
-            <div>
-                {{first.greeting}} {{"World"}}
-            </div>
-        </div>
 
         <!-- Navigation bar -->
         <?php echo $this->element('nav-bar'); ?>

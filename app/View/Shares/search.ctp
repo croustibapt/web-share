@@ -11,10 +11,47 @@
 
         $scope.loadShares = function(newShares) {
             console.log(newShares);
+            $scope.shares = [];
 
             for (var i = 0; i < newShares.length; i++) {
                 var share = newShares[i];
-                $scope.shares.push(share.share_id);
+
+                var shareColor = getIconColor(share.share_type_category.label);
+                share.share_color = shareColor;
+                
+                //Share icon
+                var shareIcon = getMarkerIcon(share.share_type_category.label, share.share_type.label);
+                share.share_icon = shareIcon;
+
+                var htmlDate = share.event_date;
+                var eventDate = new Date(htmlDate);
+                var isoEventDate = eventDate.toISOString();
+
+                var momentDay = moment(isoEventDate).format('dddd D MMMM', 'fr');
+                share.moment_day = momentDay;
+                
+                var momentHour = moment(isoEventDate).format('LT', 'fr');
+                share.moment_hour = momentHour;
+                
+                var momentModifiedTimeAgo = moment(isoEventDate).fromNow();
+                share.moment_modified_time_ago = momentModifiedTimeAgo;
+                
+                var totalPlaces = share.places + 1;
+                var participationCount = share.participation_count + 1;
+                var placesLeft = totalPlaces - participationCount;
+                share.places_left = placesLeft;
+                
+                var percentage = (participationCount * 100) / totalPlaces;
+                share.percentage = percentage;
+                
+                var price = parseFloat(share.price);
+                share.round_price = price.toFixed(1);
+                
+                //Details link
+                var detailsLink = webroot + 'users/details/' + share.user.external_id;
+                share.details_link = detailsLink;
+        
+                $scope.shares.push(share);
             }
             //$scope.shares = shares;
             console.log($scope.shares);
@@ -27,19 +64,14 @@
 </script>
 
 <div id="div-angular" ng-controller="SearchController" class="content" style="height: 100%; position: relative;">
-    <button ng-click="addShare('sdf');">Add</button>
-    <ul>
-        <li ng-repeat="share in shares">
-            {{ share }}
-        </li>
-    </ul>
-
     <div style="float: left; width: 50%; height: 100%; overflow-y: scroll; overflow-x: hidden;">
         <!-- Action bar -->
         <?php echo $this->element('action-bar'); ?>
 
         <div id="div-search-results" class="row" style="padding: 30px;">
-
+            <div ng-repeat="share in shares">
+                <?php echo $this->element('share-card'); ?>
+            </div>
         </div>
 
         <div id="div-search-pagination">
@@ -73,134 +105,6 @@
     //Google maps
     var map;
     var markers = [];
-    var shares = [];
-
-    function addShare(share) {
-        var shareHtml = '<div class="col-md-6">';
-
-        var shareColor = getIconColor(share.share_type_category.label);
-
-        var htmlDate = share.event_date;
-        var eventDate = new Date(htmlDate);
-        var isoEventDate = eventDate.toISOString();
-
-        var momentDay = moment(isoEventDate).format('dddd D MMMM', 'fr');
-        var momentHour = moment(isoEventDate).format('LT', 'fr');
-        var momentModifiedTimeAgo = moment(isoEventDate).fromNow();
-
-        shareHtml +=
-            '<div class="div-share-card card" share-id="' + share.share_id + '">' +
-            '   <div class="card-header" style="background-color: ' + shareColor + ';">' +
-            '       <div class="row">' +
-            '           <div class="col-md-10">' +
-            '               <span class="span-share-card-date text-capitalize moment-day">' + momentDay + '</span>' +
-            '           </div>' +
-            '           <div class="col-md-2 text-right">' +
-            '               <span class="span-share-card-date-hour moment-hour">' + momentHour + '</span>' +
-            '           </div>' +
-            '       </div>' +
-            '   </div>' +
-            '   <div class="div-share-card-subtitle">' +
-            '       <div class="row">' +
-            '           <div class="col-md-6">' +
-            '               <a href="' + webroot + 'users/details/' + share.user.external_id + '"><span class="span-share-card-user">' + share.user.username + '</span></a>' +
-            '               <span class="span-share-card-modified moment-time-ago">' + momentModifiedTimeAgo + '</span>' +
-            '           </div>' +
-            '           <div class="col-md-6 text-right">' +
-            '               <span class="span-share-card-city">' + share.city + '</span> <span class="span-share-card-zip-code">' + share.zip_code + '</span>' +
-            '           </div>' +
-            '       </div>' +
-            '   </div>' +
-            '   <div class="div-share-card-main row">' +
-            '       <div class="col-md-12">' +
-            '           <div class="div-share-card-icon text-center">' +
-            '               <div style="color: ' + shareColor + ';">' +
-            '                   <i class="' + getMarkerIcon(share.share_type_category.label, share.share_type.label) + '"></i>' +
-            '               </div>' +
-            '           </div>' +
-            '           <div class="div-share-card-title">' +
-            '               <blockquote class="blockquote-share-card-title">' +
-            '                   <h3 class="media-heading">' + share.title + '</h3>';
-
-        //Limitations
-        if ((typeof share.limitations != "undefined") && (share.limitations != "")) {
-            shareHtml +=
-                '               <footer class="footer-share-details-limitations text-danger">' +
-                '                   <i class="fa fa-asterisk"></i> ' + share.limitations + '' +
-                '               </footer>';
-        }
-
-        //Comment count
-        if (share.comment_count > 1) {
-            shareHtml +=
-                '               <u class="text-default" style="font-size: 14px;">' +
-                '                   ' + share.comment_count + ' commentaires' +
-                '               </u>';
-        } else if (share.comment_count > 0) {
-            shareHtml +=
-                '               <u class="text-default" style="font-size: 14px;">' +
-                '                   1 commentaire' +
-                '               </u>';
-        }
-
-        var totalPlaces = share.places + 1;
-        var participationCount = share.participation_count + 1;
-        var placesLeft = totalPlaces - participationCount;
-        var percentage = (participationCount * 100) / totalPlaces;
-        var full = (placesLeft == 0);
-
-        shareHtml +=
-            '               </blockquote>' +
-            '           </div>' +
-            '       </div>' +
-            '   </div>' +
-            '   <div class="div-share-card-places-price">' +
-            '       <div class="row">' +
-            '           <div class="col-md-12">';
-
-        if (placesLeft > 1)  {
-            shareHtml +=
-                '           <p class="text-info p-share-card-left-places">' +
-                '               ' + placesLeft + ' places restantes' +
-                '           </p>';
-        } else if (placesLeft > 0)  {
-            shareHtml +=
-                '           <p class="text-warning p-share-card-left-places">' +
-                '               1 place restante' +
-                '           </p>';
-        } else {
-            shareHtml +=
-                '           <p class="text-success p-share-card-left-places">' +
-                '               Complet' +
-                '           </p>';
-        }
-
-        var price = parseFloat(share.price);
-        shareHtml +=
-            '           </div>' +
-            '       </div>' +
-            '       <div class="row">' +
-            '           <div class="col-md-12">' +
-            '               <div class="div-share-card-progress">' +
-            '                   <div class="div-share-card-progress-cell">' +
-            '                       <div class="progress">' +
-            '                           <div class="progress-bar ' + (full ? "progress-bar-success" : "") + '" role="progressbar" aria-valuenow="' + percentage + '" aria-valuemin="0" aria-valuemax="100" style="width: ' + percentage + '%;">' +
-            '                           </div>' +
-            '                       </div>' +
-            '                   </div>' +
-            '                   <div class="div-share-card-progress-cell text-right">' +
-            '                       <p class="p-share-card-price lead">' +
-            '                           ' + price.toFixed(1) + '€ <small class="p-share-card-price-label">/ Pers.</small>' +
-            '                       </p>' +
-            '                   </div>' +
-            '               </div>' +
-            '           </div>' +
-            '       </div>' +
-            '   </div>' +
-            '</div>';
-
-        $('#div-search-results').append(shareHtml);
-    }
     
     function addPagination(response) {
         var paginationHtml = '';
@@ -284,7 +188,6 @@
              },*/
         });
         markers.push(marker);
-        shares.push(share);
 
         google.maps.event.addListener(marker, 'click', function() {
             var infowindow = new google.maps.InfoWindow({
@@ -299,7 +202,6 @@
             markers[i].setMap(null);
         }
         markers.length = 0;
-        shares.length = 0;
     }
 
     function getMarkerIcon(shareTypeCategory, shareType) {
@@ -507,14 +409,13 @@
                 var results = response['results'];
 
                 var angularDiv = $('#div-angular');
-                    var scope = angular.element(angularDiv).scope();
-                    console.log(scope);
+                var scope = angular.element(angularDiv).scope();
+                console.log(scope);
 
-                    scope.$apply(function(){
-                        scope.loadShares(results);
-                    });
+                scope.$apply(function(){
+                    scope.loadShares(results);
+                });
 
-                /*$('#div-search-results').empty();
                 $('#div-search-pagination').empty();
                 clearMarkers();
 
@@ -522,10 +423,9 @@
                 for (var i = 0; i < results.length; i++) {
                     var share = results[i];
                     addMarker(share);
-                    addShare(share);
                 }
 
-                addPagination(response);*/
+                addPagination(response);
             })
             .fail(function(jqXHR, textStatus) {
                 console.log(jqXHR);
