@@ -42,7 +42,7 @@
                     <u ng-if="(share.comment_count > 1)" class="text-default" style="font-size: 14px;">
                         {{ share.comment_count }} commentaires
                     </u>
-                    <u ng-if="(share.comment_count > 0)" class="text-default" style="font-size: 14px;">
+                    <u ng-if="(share.comment_count === 1)" class="text-default" style="font-size: 14px;">
                         1 commentaire
                     </u>
                 </blockquote>
@@ -55,7 +55,7 @@
                 <p ng-if="(share.places_left > 1)" class="text-info p-share-card-left-places">
                     {{ share.places_left }} places restantes
                 </p>
-                <p ng-if="(share.places_left > 0)" class="text-warning p-share-card-left-places">
+                <p ng-if="(share.places_left === 1)" class="text-warning p-share-card-left-places">
                     1 place restante
                 </p>
                 <p ng-if="(share.places_left === 0)" class="text-success p-share-card-left-places">

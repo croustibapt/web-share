@@ -8,13 +8,20 @@
     app.controller('SearchController', ['$scope', function($scope) {
         //items come from somewhere, from where doesn't matter for this example
         $scope.shares = [];
+        $scope.page = 0;
+        $scope.total_pages = 0;
 
-        $scope.loadShares = function(newShares) {
-            console.log(newShares);
+        $scope.getNumber = function(num) {
+            return new Array(num);
+        }
+
+        $scope.handleResponse = function(response) {
+            //Handle shares
+            var shares = response.results;
             $scope.shares = [];
 
-            for (var i = 0; i < newShares.length; i++) {
-                var share = newShares[i];
+            for (var i = 0; i < shares.length; i++) {
+                var share = shares[i];
 
                 var shareColor = getIconColor(share.share_type_category.label);
                 share.share_color = shareColor;
@@ -36,8 +43,8 @@
                 var momentModifiedTimeAgo = moment(isoEventDate).fromNow();
                 share.moment_modified_time_ago = momentModifiedTimeAgo;
                 
-                var totalPlaces = share.places + 1;
-                var participationCount = share.participation_count + 1;
+                var totalPlaces = parseInt(share.places) + 1;
+                var participationCount = parseInt(share.participation_count) + 1;
                 var placesLeft = totalPlaces - participationCount;
                 share.places_left = placesLeft;
                 
@@ -53,12 +60,10 @@
         
                 $scope.shares.push(share);
             }
-            //$scope.shares = shares;
-            console.log($scope.shares);
-        };
 
-        $scope.addShare = function(categName) {
-            $scope.shares.push(categName);
+            //Create pagination
+            $scope.page = parseInt(response.page);
+            $scope.total_pages = parseInt(response.total_pages);
         };
     }]);
 </script>
@@ -72,25 +77,12 @@
             <div ng-repeat="share in shares">
                 <?php echo $this->element('share-card'); ?>
             </div>
+            <?php echo $this->element('pagination'); ?>
         </div>
 
         <div id="div-search-pagination">
 
         </div>
-
-        <?php
-        $baseUrl = 'share/search/'.$date;
-
-        //Share type category
-        if ($shareTypeCategory != NULL) {
-            $baseUrl .= '/'.$shareTypeCategory;
-        }
-
-        //Share type
-        if ($shareType != NULL) {
-            $baseUrl .= '/'.$shareType;
-        }
-        ?>
     </div>
     <div style="margin-left: 50%; width: 50%; height: 100%;">
         <div id="div-share-search-google-map" style="width: 100%; height: 100%;">
@@ -100,70 +92,9 @@
 </div>
 
 <script>
-    var baseUrl = webroot + '<?php echo $baseUrl; ?>';
-
     //Google maps
     var map;
     var markers = [];
-    
-    function addPagination(response) {
-        var paginationHtml = '';
-        
-        if (response.total_pages > 1) {
-            paginationHtml +=
-                '<nav class="text-center">' +
-                '   <ul class="pagination">';
-        
-            //Previous
-            if (response.page > 1) {
-                paginationHtml +=
-                    '   <li>' +
-                    '       <a class="a-search-pagination" href="#" page="' + (response.page - 1) + '" aria-label="previous"><span aria-hidden="true">&laquo;</span></a>' +
-                    '   </li>';
-            } else {
-                paginationHtml +=
-                    '   <li class="disabled">' +
-                    '       <span aria-hidden="true">&laquo;</span>' +
-                    '   </li>';
-            }
-            
-            //Other pages
-            for (var i = 1; i <= response.total_pages; i++) {
-                //Middle
-                if (i == response.page) {
-                    paginationHtml +=
-                        '   <li class="active">' +
-                        '       <a href="#">' + i + '</a>' +
-                        '   </li>';
-                } else {
-                    paginationHtml +=
-                        '   <li>' +
-                        '       <a class="a-search-pagination" href="#" page="' + i + '">' + i + '</a>' +
-                        '   </li>';
-                }
-            }
-            
-            //Next
-            if (response.page < response.total_pages) {
-                paginationHtml +=
-                    '   <li>' +
-                    '       <a class="a-search-pagination" href="#" page="' + (response.page + 1) + '" aria-label="next"><span aria-hidden="true">&raquo;</span></a>' +
-                    '   </li>';
-            } else {
-                paginationHtml +=
-                    '   <li class="disabled">' +
-                    '       <span aria-hidden="true">&raquo;</span>' +
-                    '   </li>';
-            }
-            
-            paginationHtml +=
-                '   </ul>' +
-                '</nav>';
-        
-            //console.log(paginationHtml);
-            $('#div-search-pagination').append(paginationHtml);
-        }
-    }
 
     function addMarker(share) {
         var myLatlng = new google.maps.LatLng(share.latitude, share.longitude);
@@ -406,26 +337,19 @@
             .done(function(response) {
                 console.log(response);
 
-                var results = response['results'];
-
                 var angularDiv = $('#div-angular');
                 var scope = angular.element(angularDiv).scope();
-                console.log(scope);
 
                 scope.$apply(function(){
-                    scope.loadShares(results);
+                    scope.handleResponse(response);
                 });
 
-                $('#div-search-pagination').empty();
                 clearMarkers();
-
                 var results = response['results'];
                 for (var i = 0; i < results.length; i++) {
                     var share = results[i];
                     addMarker(share);
                 }
-
-                addPagination(response);
             })
             .fail(function(jqXHR, textStatus) {
                 console.log(jqXHR);
