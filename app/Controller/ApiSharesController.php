@@ -84,7 +84,7 @@ class ApiSharesController extends AppController {
         $offset = ($page - 1) * SHARE_SEARCH_LIMIT;
         $sqlOffset = " OFFSET ".$offset;
 
-        $query = $sqlPrefix.$sql." GROUP BY Share.id ORDER BY Share.event_date DESC".$sqlLimit.$sqlOffset.";";
+        $query = $sqlPrefix.$sql." GROUP BY Share.id ORDER BY Share.event_date ASC".$sqlLimit.$sqlOffset.";";
 
         //pr($query);
 
