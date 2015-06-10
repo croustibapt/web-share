@@ -1,81 +1,64 @@
 <!-- Comments -->
-<div id="div-share-details-comments" class="card">
+<div id="div-share-details-comments" ng-controller="DetailsController" class="card">
     <div class="card-header" style="background-color: #3498db;">
         Commentaires
     </div>
     <div class="row">
         <div class="col-md-12">
-            <div id="div-share-details-comments-list">
+            <div id="div-share-details-comments-list" ng-if="(comments.length > 0)">
+                <!-- All comments -->
+                <div ng-repeat="comment in comments">
 
-                <?php if ($comments['total_results'] > 0) : ?>
+                    <!-- Creator comment -->
+                    <div ng-if="(shareUserExternalId === comment.user.external_id)" class="media">
+                        <div class="media-body">
+                            <blockquote class="blockquote-reverse">
 
-                    <?php foreach ($comments['results'] as $comment) : ?>
+                                <h4 class="media-heading">{{ comment.user.username }}</h4>
 
-                        <?php
-                            $isMe = ($share['user']['external_id'] == $comment['user']['external_id']);
-                            $blockquoteClass = $isMe ? "blockquote-reverse" : "blockquote-normal";
-                        ?>
+                                <p class="lead">{{ comment.message }}</p>
 
-                        <?php if ($isMe) : ?>
+                                <footer>
+                                    <span>{{ comment.moment_created_time_ago }}</span>
+                                </footer>
 
-                            <div class="media">
-                                <div class="media-body">
-                                    <blockquote class="blockquote-reverse">
+                            </blockquote>
+                        </div>
+                        <div class="media-right">
+                            <img class="comment-user-img img-circle img-thumbnail" ng-src="https://graph.facebook.com/v2.3/{{ comment.user.external_id }}/picture" />
+                        </div>
+                    </div>
 
-                                        <h4 class="media-heading"><?php echo $comment['user']['username']; ?></h4>
+                    <!-- Other user comment -->
+                    <div ng-if="(shareUserExternalId !== comment.user.external_id)" class="media">
+                        <div class="media-left">
+                            <img class="comment-user-img img-circle img-thumbnail" ng-src="https://graph.facebook.com/v2.3/{{ comment.user.external_id }}/picture" />
+                        </div>
+                        <div class="media-body">
+                            <blockquote class="blockquote-normal">
 
-                                        <p class="lead"><?php echo $comment['message']; ?></p>
+                                <h4 class="media-heading">{{ comment.user.username }}</h4>
 
-                                        <footer>
-                                            <span class="moment-time-ago" title="' + created + '"><?php echo $comment['created']; ?></span>
-                                        </footer>
+                                <p class="lead">{{ comment.message }}</p>
 
-                                    </blockquote>
-                                </div>
-                                <div class="media-right">
-                                    <img class="comment-user-img img-circle img-thumbnail" src="https://graph.facebook.com/v2.3/<?php echo $comment['user']['external_id']; ?>/picture" />
-                                </div>
-                            </div>
+                                <footer>
+                                    <span>{{ comment.moment_created_time_ago }}</span>
+                                </footer>
 
-                        <?php else : ?>
+                            </blockquote>
+                        </div>
+                    </div>
+                </div>
 
-                            <div class="media">
-                                <div class="media-left">
-                                    <img class="comment-user-img img-circle img-thumbnail" src="https://graph.facebook.com/v2.3/<?php echo $comment['user']['external_id']; ?>/picture" />
-                                </div>
-                                <div class="media-body">
-                                    <blockquote class="blockquote-normal">
+                <!-- Pagination -->
+                <?php echo $this->element('pagination'); ?>
+            </div>
 
-                                        <h4 class="media-heading"><?php echo $comment['user']['username']; ?></h4>
-
-                                        <p class="lead"><?php echo $comment['message']; ?></p>
-
-                                        <footer>
-                                            <span class="moment-time-ago"><?php echo $comment['created']; ?></span>
-                                        </footer>
-
-                                    </blockquote>
-                                </div>
-                            </div>
-
-                        <?php endif; ?>
-
-                    <?php endforeach; ?>
-
-                    <?php
-                        echo $this->element('pagination', array(
-                            'results' => $comments,
-                            'baseUrl' => '/share/details/'.$share['share_id']
-                        ));
-                    ?>
-
-                <?php else : ?>
-
+            <!-- No comments -->
+            <div ng-if="(comments.length == 0)">
                 <p class="lead text-center">
                     Aucun commentaire
                 </p>
-
-                <?php endif; ?>
             </div>
         </div>
 
@@ -132,7 +115,7 @@
     function sendComment(message) {
         //Check message length
         if (message.length >= <?php echo SHARE_COMMENT_MESSAGE_MIN_LENGTH; ?>) {
-            //Get the message and push it to the correpsonding hidden input
+            //Get the message and push it to the corresponding hidden input
             $('#hidden-comment-add-message').val(message);
 
             //And submit the form

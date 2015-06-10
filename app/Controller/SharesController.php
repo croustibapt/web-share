@@ -225,13 +225,13 @@ class SharesController extends ApiSharesController {
         $this->set('requestStatus', $requestStatus);
 
         //Get comments
-        $page = 1;
+        /*$page = 1;
         if (isset($this->params['url']['page']) && is_numeric($this->params['url']['page'])) {
             $page = $this->params['url']['page'];
         }
 
         $commentsResponse = $this->internGetComments($shareId, $page);
-        $this->set('comments', $commentsResponse);
+        $this->set('comments', $commentsResponse);*/
     }
 
     /*public function delete() {

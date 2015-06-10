@@ -3,7 +3,7 @@
         <ul class="pagination">
             <!-- Previous -->
             <li ng-if="(page > 1)">
-                <a class="a-search-pagination" href="#" page="{{ (page - 1) }}" aria-label="previous">
+                <a class="a-search-pagination" href="javascript:void(0)" page="{{ (page - 1) }}" aria-label="previous">
                     <span aria-hidden="true">&laquo;</span>
                 </a>
             </li>
@@ -13,17 +13,17 @@
 
             <!-- Other pages -->
             <li ng-repeat="i in getNumber(total_pages) track by $index" ng-class="(($index + 1) === page) ? 'active' : ''">
-                <a ng-if="(($index + 1) === page)" href="#">
+                <a ng-if="(($index + 1) === page)" href="javascript:void(0)">
                     {{ $index + 1 }}
                 </a>
-                <a ng-if="(($index + 1) !== page)" class="a-search-pagination" href="#" page="{{ ($index + 1) }}">
+                <a ng-if="(($index + 1) !== page)" class="a-search-pagination" href="javascript:void(0)" page="{{ ($index + 1) }}">
                     {{ $index + 1 }}
                 </a>
             </li>
 
             <!-- Next -->
             <li ng-if="(page < total_pages)">
-                <a class="a-search-pagination" href="#" page="{{ (page + 1) }}" aria-label="next">
+                <a class="a-search-pagination" href="javascript:void(0)" page="{{ (page + 1) }}" aria-label="next">
                     <span aria-hidden="true">&raquo;</span>
                 </a>
             </li>
