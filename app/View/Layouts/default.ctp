@@ -31,7 +31,9 @@
             echo $this->Html->script('markerwithlabel');
             echo $this->Html->script('angular.min');
 
-            echo $this->Html->script('share');
+            echo $this->Html->script('share/share');
+            echo $this->Html->script('share/search');
+            echo $this->Html->script('share/pagination');
 
             //Moment
             echo $this->Html->script('moment/moment');
@@ -47,9 +49,6 @@
         <script>
             //Webroot global variable
             var webroot = "<?php echo $this->webroot; ?>";
-            
-            //Main AngularJS app
-            var app = angular.module("app", []);
         </script>
 
         <!-- Navigation bar -->

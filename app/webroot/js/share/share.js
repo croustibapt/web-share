@@ -2,6 +2,9 @@
  * Created by bleguelvouit on 09/06/15.
  */
 
+//Main AngularJS app
+var app = angular.module("app", []);
+
 var CARROT_COLOR = '#e67e22';
 var BELIZE_HOLE_COLOR = '#2980b9';
 var GREEN_SEA_COLOR = '#16a085';
@@ -145,4 +148,66 @@ function getIconColor(shareTypeCategory) {
     } else {
         return CONCRETE_COLOR;
     }
+}
+
+/**
+ * 
+ * @param {type} page
+ * @param {type} startDate
+ * @param {type} endDate
+ * @param {type} types
+ * @returns {createSearchJson.jsonData}
+ */
+function createSearchJson(page, startDate, endDate, types) {        
+    var jsonData = {};
+    
+    //Page
+    jsonData['page'] = page;
+
+    //Start date
+    if (startDate) {
+        jsonData['start'] = startDate;
+    }
+
+    //End date
+    if (endDate) {
+        jsonData['end'] = endDate;
+    }
+
+    //Types
+    if (types) {
+        //Create types array
+        jsonData['types'] = [];
+
+        //Loop on types
+        for (var i = 0; i < types.length; i++) {
+            jsonData['types'][i] = types[i];
+        }
+    }
+
+    //Region
+    var bounds = map.getBounds();
+    var ne = bounds.getNorthEast();
+    var sw = bounds.getSouthWest();
+
+    //Create region array
+    jsonData['region'] = [];
+
+    jsonData['region'][0] = {};
+    jsonData['region'][0]['latitude'] = ne.lat();
+    jsonData['region'][0]['longitude'] = sw.lng();
+
+    jsonData['region'][1] = {};
+    jsonData['region'][1]['latitude'] = ne.lat();
+    jsonData['region'][1]['longitude'] = ne.lng();
+
+    jsonData['region'][2] = {};
+    jsonData['region'][2]['latitude'] = sw.lat();
+    jsonData['region'][2]['longitude'] = ne.lng();
+
+    jsonData['region'][3] = {};
+    jsonData['region'][3]['latitude'] = sw.lat();
+    jsonData['region'][3]['longitude'] = sw.lng();
+        
+    return jsonData;
 }

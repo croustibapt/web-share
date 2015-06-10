@@ -1,89 +1,16 @@
-<?php
-    /*echo $startDate;
-    echo $endDate;*/
-    //pr($types);
-?>
-
-<script>
-    //Create SearchController
-    app.controller('SearchController', ['$scope', function($scope) {
-        $scope.shares = [];
-        $scope.page = 0;
-        $scope.total_pages = 0;
-
-        $scope.getNumber = function(num) {
-            return new Array(num);
-        }
-
-        //Method used to handle the Ajax response
-        $scope.handleResponse = function(response) {
-            //Handle shares
-            var shares = response.results;
-            $scope.shares = [];
-
-            for (var i = 0; i < shares.length; i++) {
-                var share = shares[i];
-
-                var shareColor = getIconColor(share.share_type_category.label);
-                share.share_color = shareColor;
-                
-                //Share icon
-                var shareIcon = getMarkerIcon(share.share_type_category.label, share.share_type.label);
-                share.share_icon = shareIcon;
-
-                var htmlDate = share.event_date;
-                var eventDate = new Date(htmlDate);
-                var isoEventDate = eventDate.toISOString();
-
-                var momentDay = moment(isoEventDate).format('dddd D MMMM', 'fr');
-                share.moment_day = momentDay;
-                
-                var momentHour = moment(isoEventDate).format('LT', 'fr');
-                share.moment_hour = momentHour;
-                
-                var momentModifiedTimeAgo = moment(isoEventDate).fromNow();
-                share.moment_modified_time_ago = momentModifiedTimeAgo;
-                
-                var totalPlaces = parseInt(share.places) + 1;
-                var participationCount = parseInt(share.participation_count) + 1;
-                var placesLeft = totalPlaces - participationCount;
-                share.places_left = placesLeft;
-                
-                var percentage = (participationCount * 100) / totalPlaces;
-                share.percentage = percentage;
-                
-                var price = parseFloat(share.price);
-                share.round_price = price.toFixed(1);
-                
-                //Details link
-                var detailsLink = webroot + 'users/details/' + share.user.external_id;
-                share.details_link = detailsLink;
-        
-                $scope.shares.push(share);
-            }
-
-            //Create pagination
-            $scope.page = parseInt(response.page);
-            $scope.total_pages = parseInt(response.total_pages);
-        };
-    }]);
-</script>
-
-<div id="div-angular" ng-controller="SearchController" class="content" style="height: 100%; position: relative;">
+<div class="content" style="height: 100%; position: relative;">
     <div style="float: left; width: 50%; height: 100%; overflow-y: scroll; overflow-x: hidden;">
         <!-- Action bar -->
         <?php echo $this->element('action-bar'); ?>
 
-        <div id="div-search-results" class="row" style="padding: 30px;">
+        <div id="div-search-results" ng-controller="SearchController" class="row" style="padding: 30px;">
             <div ng-repeat="share in shares">
                 <?php echo $this->element('share-card'); ?>
             </div>
-            <?php echo $this->element('pagination'); ?>
         </div>
-
-        <div id="div-search-pagination">
-
-        </div>
+        
+        <!-- Pagination -->
+        <?php echo $this->element('pagination'); ?>
     </div>
     <div style="margin-left: 50%; width: 50%; height: 100%;">
         <div id="div-share-search-google-map" style="width: 100%; height: 100%;">
@@ -136,90 +63,26 @@
         markers.length = 0;
     }
 
-    function loadShares(page, startDate, endDate, types) {
-        var bounds = map.getBounds();
-        var ne = bounds.getNorthEast();
-        var sw = bounds.getSouthWest();
-
-        var jsonData =
-            '   {' +
-            '       "page": "' + page + '",';
-
-        //Start date
-        if (startDate != null) {
-            jsonData +=
-                '   "start": "' + startDate + '",';
-        }
-
-        //End date
-        if (endDate != null) {
-            jsonData +=
-                '   "end": "' + endDate + '",';
-        }
-
-        //Types
-        if (types != null) {
-            jsonData +=
-                '   "types": [';
-
-            //Loop on types
-            for (var i = 0; i < types.length; i++) {
-                var shareTypeId = types[i];
-
-                if (i > 0) {
-                    jsonData += ', ' + shareTypeId;
-                } else {
-                    jsonData += shareTypeId;
-                }
-            }
-
-            jsonData +=
-                '   ],';
-        }
-
-        //Region
-        jsonData +=
-            '       "region": [' +
-            '           {' +
-            '               "latitude": "' + ne.lat() + '",' +
-            '               "longitude": "' + sw.lng() + '"' +
-            '           },' +
-            '           {' +
-            '               "latitude": "' + ne.lat() + '",' +
-            '               "longitude": "' + ne.lng() + '"' +
-            '           },' +
-            '           {' +
-            '               "latitude": "' + sw.lat() + '",' +
-            '               "longitude": "' + ne.lng() + '"' +
-            '           },' +
-            '           {' +
-            '               "latitude": "' + sw.lat() + '",' +
-            '               "longitude": "' + sw.lng() + '"' +
-            '           }' +
-            '       ]' +
-            '   }';
-
-        //
-        var url = webroot + 'api/share/search';
-        //console.log(url);
+    function loadShares(page, startDate, endDate, types) {        
+        //Create JSON data
+        var jsonData = createSearchJson(page, startDate, endDate, types);
 
         //Load share
         $(function() {
             $.ajax({
-                url: url,
+                url: webroot + 'api/share/search',
                 method: 'POST',
-                data: jsonData,
+                data: JSON.stringify(jsonData),
                 dataType: 'json'
             })
             .done(function(response) {
                 console.log(response);
 
-                var angularDiv = $('#div-angular');
-                var scope = angular.element(angularDiv).scope();
-
-                scope.$apply(function(){
-                    scope.handleResponse(response);
-                });
+                //Results
+                searchHandleResponse(response);
+                
+                //Pagination
+                paginationHandleResponse(response);
 
                 clearMarkers();
                 var results = response['results'];
