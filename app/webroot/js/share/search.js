@@ -72,37 +72,37 @@ app.controller('SearchController', ['$scope', '$http', function($scope, $http) {
      * @param bounds
      * @returns {*}
      */
-    $scope.createSearchJson = function(page, startDate, endDate, types, bounds) {
+    $scope.createSearchJson = function() {
         var jsonData = {};
 
         //Page
-        jsonData['page'] = page;
+        jsonData['page'] = $scope.page;
 
         //Start date
-        if (startDate) {
-            jsonData['start'] = startDate;
+        if ($scope.startDate) {
+            jsonData['start'] = $scope.startDate;
         }
 
         //End date
-        if (endDate) {
-            jsonData['end'] = endDate;
+        if ($scope.endDate) {
+            jsonData['end'] = $scope.endDate;
         }
 
         //Types
-        if (types) {
+        if ($scope.types) {
             //Create types array
             jsonData['types'] = [];
 
             //Loop on types
-            for (var i = 0; i < types.length; i++) {
-                jsonData['types'][i] = types[i];
+            for (var i = 0; i < $scope.types.length; i++) {
+                jsonData['types'][i] = $scope.types[i];
             }
         }
 
         //Region
-        if (bounds != null) {
-            var ne = bounds.getNorthEast();
-            var sw = bounds.getSouthWest();
+        if ($scope.bounds != null) {
+            var ne = $scope.bounds.getNorthEast();
+            var sw = $scope.bounds.getSouthWest();
 
             //Create region array
             jsonData['region'] = [];
@@ -123,6 +123,7 @@ app.controller('SearchController', ['$scope', '$http', function($scope, $http) {
             jsonData['region'][3]['latitude'] = sw.lat();
             jsonData['region'][3]['longitude'] = sw.lng();
         }
+        console.log(jsonData);
 
         return JSON.stringify(jsonData);
     }
@@ -136,12 +137,21 @@ app.controller('SearchController', ['$scope', '$http', function($scope, $http) {
      * @param bounds
      */
     $scope.search = function(page, startDate, endDate, types, bounds) {
+        //Store values
+        $scope.page = page;
+        $scope.startDate = startDate;
+        $scope.endDate = endDate;
+        $scope.types = types;
+        $scope.bounds = bounds;
+
         //Create JSON data
-        var jsonData = $scope.createSearchJson(page, startDate, endDate, types, bounds);
+        var jsonData = $scope.createSearchJson();
 
         //
         $http.post(webroot + 'api/share/search', jsonData).
         success(function(data, status, headers, config) {
+            console.log(data);
+
             //Results
             $scope.handleResponse(data);
         }).
