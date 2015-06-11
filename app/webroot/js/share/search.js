@@ -318,8 +318,8 @@ function initialize(zoom, latitude, longitude) {
         var searchScope = angular.element(searchResultsDiv).scope();
 
         searchScope.$apply(function() {
-            //
-            searchScope.search(searchScope.page, searchScope.startDate, searchScope.endDate, searchScope.types, map.getBounds());
+            //Restart search from page 1
+            searchScope.search(1, searchScope.startDate, searchScope.endDate, searchScope.types, map.getBounds());
         });
     });
 }
