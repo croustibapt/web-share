@@ -1,9 +1,9 @@
-<div class="content" style="height: 100%; position: relative;">
+<div ng-controller="SearchController" class="content" style="height: 100%; position: relative;">
     <div style="float: left; width: 50%; height: 100%; overflow-y: scroll; overflow-x: hidden;">
         <!-- Action bar -->
         <?php echo $this->element('action-bar'); ?>
 
-        <div id="div-search-results" ng-controller="SearchController" class="row" style="padding: 30px;">
+        <div id="div-search-results" class="row" style="padding: 30px;">
             <div ng-repeat="share in shares">
                 <?php echo $this->element('share-card'); ?>
             </div>

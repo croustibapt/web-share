@@ -22,50 +22,7 @@
     }
 ?>
 
-<script>
-    //Create ActionBarController
-    app.controller('ActionBarController', ['$scope', function($scope) {
-        $scope.date = '<?php echo $date; ?>';
-        $scope.startDate = null;
-        $scope.endDate = null;
-        $scope.types = null;
-        $scope.shareTypeCategory = 'all';
-        $scope.shareType = null;
-
-        $scope.shareTypeCategories = $.parseJSON('<?php echo json_encode($shareTypeCategories); ?>');
-        $scope.shareTypeCategories['all'] = [];
-        console.log($scope.shareTypeCategories);
-
-        //
-        $scope.onShareTypeCategoryChanged = function() {
-            if ($scope.shareTypeCategory == 'all') {
-                $scope.types = null;
-            } else {
-                $scope.types = [];
-
-                var shareTypes = $scope.shareTypeCategories[$scope.shareTypeCategory];
-
-                for (var shareTypeId in shareTypes) {
-                    $scope.types.push(shareTypeId);
-                }
-            }
-
-            loadShares(<?php echo $page; ?>, $scope.startDate, $scope.endDate, $scope.types);
-        };
-
-        //
-        $scope.onShareTypeChanged = function() {
-            console.log($scope.shareType);
-        };
-
-        //
-        $scope.formatShareTypeCategory = function (shareTypeCategory) {
-            return shareTypeCategory;
-        };
-    }]);
-</script>
-
-<div id="div-action-bar" ng-controller="ActionBarController">
+<div id="div-action-bar">
     <div class="row">
         <div class="col-md-8">
 
@@ -130,11 +87,11 @@
             <form class="form-inline">
                 <div class="row">
                     <div class="col-md-6">
-                        <select id="select-action-bar-share-type-category" class="form-control select-action-bar" ng-change="onShareTypeCategoryChanged();" ng-model="shareTypeCategory" ng-options="shareTypeCategoryLabel as formatShareTypeCategory(shareTypeCategoryLabel) for (shareTypeCategoryLabel, shareTypeCategoryTypes) in shareTypeCategories">
+                        <select id="select-action-bar-share-type-category" class="form-control select-action-bar" ng-change="onShareTypeCategoryChanged();" ng-model="shareTypeCategory" ng-options="category.share_type_category_id as category.label for (shareTypeCategoryId, category) in shareTypeCategories" ng-init="0">
                         </select>
                     </div>
                     <div class="col-md-6">
-                        <select id="select-action-bar-share-type" class="form-control select-action-bar" ng-change="onShareTypeChanged();" ng-model="shareType" ng-options="shareTypeId as shareType.label for (shareTypeId, shareType) in shareTypeCategories[shareTypeCategory]">
+                        <select id="select-action-bar-share-type" class="form-control select-action-bar" ng-change="onShareTypeChanged();" ng-model="shareType" ng-options="type.share_type_id as type.label for type in shareTypeCategories[shareTypeCategory].share_types">
                         </select>
                     </div>
                 </div>
@@ -144,14 +101,8 @@
 </div>
 
 <script>
-    var shareTypeCategories = $.parseJSON('<?php echo json_encode($shareTypeCategories); ?>');
-
     //Share type categories select
     //$('#select-action-bar-share-type-category').append('<option value="all">Catégorie ?</option>');
-
-    var startDate = null;
-    var endDate = null;
-    var types = null;
 
     //Share type category
     /*$('#select-action-bar-share-type-category').change(function() {
@@ -189,32 +140,7 @@
 
         loadShares(<?php echo $page; ?>, startDate, endDate, types);
     });*/
-
-    //Share type
-    $('#select-action-bar-share-type').change(function() {
-        var shareTypeId = $(this).val();
-        console.log(shareTypeId);
-
-        if (shareTypeId !== 'all') {
-            types = [];
-            types.push(shareTypeId);
-        } else {
-            var shareTypeCategory = $(this).attr('share-type-category');
-            console.log(shareTypeCategory);
-
-            var shareTypes = shareTypeCategories[shareTypeCategory];
-            console.log(shareTypes);
-
-            types = [];
-            var shareTypes = shareTypeCategories[shareTypeCategory];
-            for (var shareTypeId in shareTypes) {
-                types.push(shareTypeId);
-            }
-        }
-
-        loadShares(<?php echo $page; ?>, startDate, endDate, types);
-    });
-
+    
     //Date
     $('.a-action-bar-date').click(function() {
         startDate = $(this).attr('start-date');

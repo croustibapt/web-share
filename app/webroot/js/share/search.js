@@ -5,8 +5,35 @@
  */
 
 //Create SearchController
-app.controller('SearchController', ['$scope', function($scope) {
+app.controller('SearchController', ['$scope', '$http', function($scope, $http) {
+    $scope.date = 'all';
+    $scope.startDate = null;
+    $scope.endDate = null;
+    $scope.types = null;
+    $scope.shareTypeCategory = 0;
+    $scope.shareType = 0;
+    
+    $scope.shareTypeCategories = [];
     $scope.shares = [];
+    
+    //$scope.shareTypeCategories['all'] = [];
+    
+    $http.get(webroot + 'api/share_type_categories/get').
+    success(function(data, status, headers, config) {
+        $scope.shareTypeCategories.push({"label": "all", "share_type_category_id": -1, "share_types": []});
+        
+        for (var shareTypeCategoryIndex in data.results) {
+            var shareTypeCategory = data.results[shareTypeCategoryIndex];
+            shareTypeCategory['share_types'].unshift({"label": "all", "share_type_category_id": shareTypeCategory.share_type_category_id, "share_type_id": -1});
+            
+            $scope.shareTypeCategories.push(shareTypeCategory);
+        }
+        
+        console.log($scope.shareTypeCategories);
+    }).
+    error(function(data, status, headers, config) {
+        console.log(data);
+    });
 
     //Method used to handle the Ajax response
     $scope.handleResponse = function(response) {
@@ -54,6 +81,35 @@ app.controller('SearchController', ['$scope', function($scope) {
 
             $scope.shares.push(share);
         }
+    };
+    
+    //
+    $scope.onShareTypeCategoryChanged = function() {
+        console.log($scope.shareTypeCategory);
+        
+        if ($scope.shareTypeCategory === 'all') {
+            $scope.types = null;
+        } else {
+            $scope.types = [];
+
+            var shareTypes = $scope.shareTypeCategories[$scope.shareTypeCategory];
+
+            for (var shareTypeId in shareTypes) {
+                $scope.types.push(shareTypeId);
+            }
+        }
+
+        //loadShares(<?php echo $page; ?>, $scope.startDate, $scope.endDate, $scope.types);
+    };
+
+    //
+    $scope.onShareTypeChanged = function() {
+        console.log($scope.shareType);
+    };
+
+    //
+    $scope.formatShareTypeCategory = function (shareTypeCategory) {
+        return shareTypeCategory;
     };
 }]);
 
