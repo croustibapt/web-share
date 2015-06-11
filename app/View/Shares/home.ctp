@@ -22,8 +22,7 @@
                         echo $this->Form->input('date', array(
                             'class' => 'form-control input-lg',
                             'label' => false,
-                            'options' => array('day' => 'Aujourd\'hui', 'week' => 'Cette semaine', 'month' => 'Ce mois-ci'),
-                            'empty' => 'Quand ?'
+                            'options' => array('all' => 'Quand ?', 'day' => 'Aujourd\'hui', 'week' => 'Cette semaine', 'month' => 'Ce mois-ci'),
                         ));
                     ?>
                 </div>

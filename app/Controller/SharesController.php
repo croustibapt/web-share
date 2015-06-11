@@ -29,7 +29,7 @@ class SharesController extends ApiSharesController {
             $shareType = $data['Share']['share_type'];
 
             //Location
-            $address = $date = $data['Share']['address'];
+            $address = $data['Share']['address'];
             $cityGeocodingUrl = "https://maps.googleapis.com/maps/api/geocode/json?address=".$address."&key=".SHARE_GOOGLE_MAPS_API_KEY;
 
             $ch = curl_init();
