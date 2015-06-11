@@ -6,43 +6,171 @@
 
 //Create SearchController
 app.controller('SearchController', ['$scope', '$http', function($scope, $http) {
+    $scope.page = 1;
+    $scope.total_pages = 1;
+
     $scope.date = 'all';
     $scope.startDate = null;
     $scope.endDate = null;
     $scope.types = null;
-    $scope.shareTypeCategory = 0;
-    $scope.shareType = 0;
+    $scope.shareTypeCategory = "-1";
+    $scope.shareType = "-1";
+    $scope.bounds = null;
     
     $scope.shareTypeCategories = [];
     $scope.shares = [];
-    
-    //$scope.shareTypeCategories['all'] = [];
-    
+
+    //
     $http.get(webroot + 'api/share_type_categories/get').
     success(function(data, status, headers, config) {
-        $scope.shareTypeCategories.push({"label": "all", "share_type_category_id": -1, "share_types": []});
+        $scope.shareTypeCategories[-1] = {
+            "label": "all",
+            "share_type_category_id": -1,
+            "share_types": []
+        };
         
         for (var shareTypeCategoryIndex in data.results) {
             var shareTypeCategory = data.results[shareTypeCategoryIndex];
-            shareTypeCategory['share_types'].unshift({"label": "all", "share_type_category_id": shareTypeCategory.share_type_category_id, "share_type_id": -1});
-            
-            $scope.shareTypeCategories.push(shareTypeCategory);
+
+            var shareTypes = shareTypeCategory['share_types'];
+            shareTypeCategory['share_types'] = {};
+            shareTypeCategory['share_types'][-1] = {
+                "label": "all",
+                "share_type_category_id": shareTypeCategory.share_type_category_id,
+                "share_type_id": -1
+            };
+
+            for (var shareTypeIndex in shareTypes) {
+                var shareType = shareTypes[shareTypeIndex];
+                shareTypeCategory['share_types'][shareType.share_type_id] = shareType;
+            }
+
+            $scope.shareTypeCategories[shareTypeCategory.share_type_category_id] = shareTypeCategory;
         }
         
-        console.log($scope.shareTypeCategories);
+        //console.log($scope.shareTypeCategories);
     }).
     error(function(data, status, headers, config) {
         console.log(data);
     });
 
-    //Method used to handle the Ajax response
+    /**
+     *
+     * @param num
+     * @returns {Array}
+     */
+    $scope.getNumber = function(num) {
+        return new Array(num);
+    };
+
+    /**
+     *
+     * @param page
+     * @param startDate
+     * @param endDate
+     * @param types
+     * @param bounds
+     * @returns {*}
+     */
+    $scope.createSearchJson = function(page, startDate, endDate, types, bounds) {
+        var jsonData = {};
+
+        //Page
+        jsonData['page'] = page;
+
+        //Start date
+        if (startDate) {
+            jsonData['start'] = startDate;
+        }
+
+        //End date
+        if (endDate) {
+            jsonData['end'] = endDate;
+        }
+
+        //Types
+        if (types) {
+            //Create types array
+            jsonData['types'] = [];
+
+            //Loop on types
+            for (var i = 0; i < types.length; i++) {
+                jsonData['types'][i] = types[i];
+            }
+        }
+
+        //Region
+        if (bounds != null) {
+            var ne = bounds.getNorthEast();
+            var sw = bounds.getSouthWest();
+
+            //Create region array
+            jsonData['region'] = [];
+
+            jsonData['region'][0] = {};
+            jsonData['region'][0]['latitude'] = ne.lat();
+            jsonData['region'][0]['longitude'] = sw.lng();
+
+            jsonData['region'][1] = {};
+            jsonData['region'][1]['latitude'] = ne.lat();
+            jsonData['region'][1]['longitude'] = ne.lng();
+
+            jsonData['region'][2] = {};
+            jsonData['region'][2]['latitude'] = sw.lat();
+            jsonData['region'][2]['longitude'] = ne.lng();
+
+            jsonData['region'][3] = {};
+            jsonData['region'][3]['latitude'] = sw.lat();
+            jsonData['region'][3]['longitude'] = sw.lng();
+        }
+
+        return JSON.stringify(jsonData);
+    }
+
+    /**
+     *
+     * @param page
+     * @param startDate
+     * @param endDate
+     * @param types
+     * @param bounds
+     */
+    $scope.search = function(page, startDate, endDate, types, bounds) {
+        //Create JSON data
+        var jsonData = $scope.createSearchJson(page, startDate, endDate, types, bounds);
+
+        //
+        $http.post(webroot + 'api/share/search', jsonData).
+        success(function(data, status, headers, config) {
+            //Results
+            $scope.handleResponse(data);
+        }).
+        error(function(data, status, headers, config) {
+            console.log(data);
+        });
+    }
+
+    /**
+     * Method used to handle the Ajax response
+     * @param response
+     */
     $scope.handleResponse = function(response) {
+        //Handle pagination
+        $scope.page = parseInt(response.page);
+        $scope.total_pages = parseInt(response.total_pages);
+
+        //Clear markers on map
+        clearMarkers();
+
         //Handle shares
         var shares = response.results;
         $scope.shares = [];
 
         for (var i = 0; i < shares.length; i++) {
             var share = shares[i];
+
+            //Add to map
+            addMarker(share);
 
             var shareColor = getIconColor(share.share_type_category.label);
             share.share_color = shareColor;
@@ -85,26 +213,38 @@ app.controller('SearchController', ['$scope', '$http', function($scope, $http) {
     
     //
     $scope.onShareTypeCategoryChanged = function() {
-        console.log($scope.shareTypeCategory);
-        
-        if ($scope.shareTypeCategory === 'all') {
+        //
+        if ($scope.shareTypeCategory == -1) {
             $scope.types = null;
         } else {
             $scope.types = [];
 
-            var shareTypes = $scope.shareTypeCategories[$scope.shareTypeCategory];
+            var shareTypes = $scope.shareTypeCategories[$scope.shareTypeCategory]['share_types'];
 
             for (var shareTypeId in shareTypes) {
                 $scope.types.push(shareTypeId);
             }
         }
 
-        //loadShares(<?php echo $page; ?>, $scope.startDate, $scope.endDate, $scope.types);
+        $scope.search(1, $scope.startDate, $scope.endDate, $scope.types);
     };
 
     //
     $scope.onShareTypeChanged = function() {
-        console.log($scope.shareType);
+        //
+        if ($scope.shareType == -1) {
+            $scope.types = [];
+
+            var shareTypes = $scope.shareTypeCategories[$scope.shareTypeCategory]['share_types'];
+
+            for (var shareTypeId in shareTypes) {
+                $scope.types.push(shareTypeId);
+            }
+        } else {
+            $scope.types = [$scope.shareType];
+        }
+
+        $scope.search(1, $scope.startDate, $scope.endDate, $scope.types);
     };
 
     //
@@ -113,11 +253,63 @@ app.controller('SearchController', ['$scope', '$http', function($scope, $http) {
     };
 }]);
 
-function searchHandleResponse(response) {
-    var searchResultsDiv = $('#div-search-results');
-    var searchScope = angular.element(searchResultsDiv).scope();
+//Google maps
+var map;
+var markers = [];
 
-    searchScope.$apply(function(){
-        searchScope.handleResponse(response);
+function addMarker(share) {
+    var myLatlng = new google.maps.LatLng(share.latitude, share.longitude);
+    var iconClass = getMarkerIcon(share['share_type_category']['label'], share['share_type']['label'])
+    var iconColor = getIconColor(share['share_type_category']['label']);
+
+    var marker = new MarkerWithLabel({
+        position: myLatlng,
+        map: map,
+        title: share.title,
+        labelContent: '<div class="img-circle text-center" style="border: 4px solid white; background-color: ' + iconColor + '; display: table; min-width: 40px; width: 40px; min-height: 40px; height: 40px;"><i class="' + iconClass + '" style="display: table-cell; vertical-align: middle; color: #ffffff; font-size: 18px;"></i></div>',
+        labelAnchor: new google.maps.Point(16, 16),
+        icon: ' '
+        /*icon: {
+         path: fontawesome.markers.FOLDER,
+         scale: 0.5,
+         strokeWeight: 0.0,
+         strokeColor: '#ffffff',
+         strokeOpacity: 1,
+         fillColor: '#2ecc71',
+         fillOpacity: 1.0,
+         },*/
+    });
+    markers.push(marker);
+
+    google.maps.event.addListener(marker, 'click', function() {
+        var infowindow = new google.maps.InfoWindow({
+            content: marker.getTitle()
+        });
+        infowindow.open(map, marker);
+    });
+}
+
+function clearMarkers() {
+    for (var i = 0; i < markers.length; i++ ) {
+        markers[i].setMap(null);
+    }
+    markers.length = 0;
+}
+
+function initialize(zoom, latitude, longitude) {
+    var mapOptions = {
+        zoom: zoom,
+        center: new google.maps.LatLng(latitude, longitude)
+    };
+    map = new google.maps.Map(document.getElementById('div-share-search-google-map'), mapOptions);
+
+    google.maps.event.addListener(map, 'idle', function() {
+        var searchResultsDiv = $('#div-search-results');
+        var searchScope = angular.element(searchResultsDiv).scope();
+
+        searchScope.$apply(function() {
+            //
+            searchScope.search(searchScope.page, searchScope.startDate, searchScope.endDate, searchScope.types, map.getBounds());
+        });
     });
 }

@@ -1,9 +1,9 @@
-<div id="div-search-pagination" ng-controller="PaginationController">
+<div id="div-search-pagination">
     <nav ng-if="(total_pages > 1)" class="text-center">
         <ul class="pagination">
             <!-- Previous -->
             <li ng-if="(page > 1)">
-                <a class="a-search-pagination" href="javascript:void(0)" page="{{ (page - 1) }}" aria-label="previous">
+                <a href="javascript:void(0)" aria-label="previous" ng-click="search((page - 1), startDate, endDate, types, bounds);">
                     <span aria-hidden="true">&laquo;</span>
                 </a>
             </li>
@@ -16,14 +16,14 @@
                 <a ng-if="(($index + 1) === page)" href="javascript:void(0)">
                     {{ $index + 1 }}
                 </a>
-                <a ng-if="(($index + 1) !== page)" class="a-search-pagination" href="javascript:void(0)" page="{{ ($index + 1) }}">
+                <a ng-if="(($index + 1) !== page)" href="javascript:void(0)" ng-click="search(($index + 1), startDate, endDate, types, bounds);">
                     {{ $index + 1 }}
                 </a>
             </li>
 
             <!-- Next -->
             <li ng-if="(page < total_pages)">
-                <a class="a-search-pagination" href="javascript:void(0)" page="{{ (page + 1) }}" aria-label="next">
+                <a href="javascript:void(0)" aria-label="next" ng-click="search((page + 1), startDate, endDate, types, bounds);">
                     <span aria-hidden="true">&raquo;</span>
                 </a>
             </li>

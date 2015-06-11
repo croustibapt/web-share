@@ -85,7 +85,6 @@ class SharesController extends ApiSharesController {
     //
     public function search($shareTypeCategory = NULL, $shareType = NULL) {
         $date = 'all';
-        $page = 1;
         $types = NULL;
         $searchZoom = NULL;
         $searchLatitude = NULL;
@@ -120,16 +119,14 @@ class SharesController extends ApiSharesController {
             //Get start and end date
             $date = $data['Share']['date'];
 
-            //pr($types);
-
-            /*//Search zoom
+            //Search zoom
             $searchZoom = $data['Share']['search_zoom'];
 
             //Search latitude
             $searchLatitude = $data['Share']['search_latitude'];
 
             //Search longitude
-            $searchLongitude = $data['Share']['search_longitude'];*/
+            $searchLongitude = $data['Share']['search_longitude'];
         }
 
         $this->set('date', $date);
@@ -142,17 +139,15 @@ class SharesController extends ApiSharesController {
 
         $this->set('startDateMonth', $startDateTimestampMonth);
         $this->set('endDateMonth', $endDateTimestampMonth);
-        /*pr($startDate);
-        pr($endDate);*/
 
         $this->set('types', $types);
         $this->set('shareTypeCategory', $shareTypeCategory);
         $this->set('shareType', $shareType);
+
         $this->set('searchZoom', $searchZoom);
         $this->set('searchLatitude', $searchLatitude);
         $this->set('searchLongitude', $searchLongitude);
-        $this->set('page', $page);
-        
+
         //
         $this->setShareTypeCategories();
     }
