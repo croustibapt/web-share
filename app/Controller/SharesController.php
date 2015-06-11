@@ -14,9 +14,10 @@ class SharesController extends ApiSharesController {
         $shareTypeCategory = -1;
         $shareType = -1;
 
-        $searchZoom = NULL;
-        $searchLatitude = NULL;
-        $searchLongitude = NULL;
+        $searchNELatitude = NULL;
+        $searchNELongitude = NULL;
+        $searchSWLatitude = NULL;
+        $searchSWLongitude = NULL;
 
         if ($this->request->is('POST')) {
             $data = $this->request->data;
