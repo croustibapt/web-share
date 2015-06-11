@@ -3,115 +3,20 @@ App::uses('ApiSharesController', 'Controller');
 
 class SharesController extends ApiSharesController {
     //
-    private function setShareTypeCategories() {
-        //Get share types
-        $this->ShareType->unbindModel(
-            array('hasMany' => array('Share'))
-        );
-        $shareTypeCategories = $this->ShareType->find('all', array(
-            'fields' => array('ShareType.id', 'ShareType.label', 'ShareType.share_type_category_id', 'ShareTypeCategory.label'),
-        ));
-        $shareTypeCategories = Set::combine($shareTypeCategories, '{n}.ShareType.id', '{n}.ShareType', '{n}.ShareTypeCategory.label');
-        $this->set('shareTypeCategories', $shareTypeCategories);
-    }
-    
-    private function getStartAndEndDate(& $startDate, & $endDate, $date = NULL) {
-        if (($date != NULL) && ($date != 'all')) {
-            //Prepare date computation
-            $now = new DateTime();
-            $utcTimeZone = new DateTimeZone("UTC");
-
-            //Current day
-            if ($date == 'day') {
-                $currentDay = $now->format('Y-m-d');
-
-                $startDate = new DateTime($currentDay, $utcTimeZone);
-
-                $dayInterval = DateInterval::createfromdatestring('1 day - 1 second');
-
-                $endDate = new DateTime($currentDay, $utcTimeZone);;
-                $endDate->add($dayInterval);
-            } else if ($date == 'week') {
-                //Current week
-                $currentDay = $now->format('Y-m-d');
-
-                $currentDayTimestamp = strtotime($currentDay);
-                $start = (date('w', $currentDayTimestamp) == 1) ? $currentDayTimestamp : strtotime('last monday', $currentDayTimestamp);
-
-                $startDateString = date('Y-m-d', $start);
-                $startDate = new DateTime($startDateString, $utcTimeZone);
-
-                $endDateString = date('Y-m-d', strtotime('next monday', $start));
-                $endDate = new DateTime($endDateString, $utcTimeZone);
-
-                $dayInterval = DateInterval::createfromdatestring('-1 second');
-                $endDate->add($dayInterval);
-            } else if ($date == 'month') {
-                //Current month
-                $currentMonth = $now->format('Y-m');
-
-                $startDate = new DateTime($currentMonth, $utcTimeZone);
-
-                $monthInterval = DateInterval::createfromdatestring('1 month - 1 second');
-                $endDate = new DateTime($currentMonth, $utcTimeZone);;
-                $endDate->add($monthInterval);
-            }
-        }
-    }
-    
-    private function getTypes($shareTypeCategory = NULL, $shareType = NULL) {
-        $types = NULL;
-        
-        //Parse types
-        if ($shareTypeCategory != NULL) {
-            if ($shareType != NULL) {
-                $type = $this->getShareType($shareTypeCategory, $shareType);
-                $types = [$type['ShareType']['id']];
-            } else {
-                $types = $this->getShareTypeCategoryTypes($shareTypeCategory);
-            }
-        } else {
-            $types = NULL;
-        }
-        
-        return $types;
-    }
-
     public function home() {
-        //
-        $this->setShareTypeCategories();
+
     }
     
     //
-    public function search($shareTypeCategory = NULL, $shareType = NULL) {
+    public function search() {
         $date = 'all';
-        $types = NULL;
+
+        $shareTypeCategory = -1;
+        $shareType = -1;
+
         $searchZoom = NULL;
         $searchLatitude = NULL;
         $searchLongitude = NULL;
-
-        //Get types
-        $types = $this->getTypes($shareTypeCategory, $shareType);
-
-        //Day
-        $this->getStartAndEndDate($startDateDay, $endDateDay, 'day');
-        $startDateTimestampDay = $startDateDay->getTimestamp();
-        $endDateTimestampDay = $endDateDay->getTimestamp();
-
-        //Week
-        $this->getStartAndEndDate($startDateWeek, $endDateWeek, 'week');
-        $startDateTimestampWeek = $startDateWeek->getTimestamp();
-        $endDateTimestampWeek = $endDateWeek->getTimestamp();
-
-        //Month
-        $this->getStartAndEndDate($startDateMonth, $endDateMonth, 'month');
-        $startDateTimestampMonth = $startDateMonth->getTimestamp();
-        $endDateTimestampMonth = $endDateMonth->getTimestamp();
-
-        /*//Page
-        if (isset($this->params['url']['page']) && is_numeric($this->params['url']['page'])) {
-            $page = $this->params['url']['page'];
-        }*/
 
         if ($this->request->is('POST')) {
             $data = $this->request->data;
@@ -119,37 +24,40 @@ class SharesController extends ApiSharesController {
             //Get start and end date
             $date = $data['Share']['date'];
 
-            //Search zoom
-            $searchZoom = $data['Share']['search_zoom'];
+            //
+            $shareTypeCategory = $data['Share']['share_type_category'];
+            $shareType = $data['Share']['share_type'];
 
-            //Search latitude
-            $searchLatitude = $data['Share']['search_latitude'];
+            //Location
+            $address = $date = $data['Share']['address'];
+            $cityGeocodingUrl = "https://maps.googleapis.com/maps/api/geocode/json?address=".$address."&key=".SHARE_GOOGLE_MAPS_API_KEY;
 
-            //Search longitude
-            $searchLongitude = $data['Share']['search_longitude'];
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, $cityGeocodingUrl);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+            $geocodingCityResponse = json_decode(curl_exec($ch), true);
+
+            $bestResult = $geocodingCityResponse['results'][0];
+            //pr($bestResult);
+            $searchNELatitude = $bestResult['geometry']['viewport']['northeast']['lat'];
+            $searchNELongitude = $bestResult['geometry']['viewport']['northeast']['lng'];
+
+            $searchSWLatitude = $bestResult['geometry']['viewport']['southwest']['lat'];
+            $searchSWLongitude = $bestResult['geometry']['viewport']['southwest']['lng'];
+
+            /*//Search zoom
+            $searchZoom = $data['Share']['search_zoom'];*/
         }
 
         $this->set('date', $date);
 
-        $this->set('startDateDay', $startDateTimestampDay);
-        $this->set('endDateDay', $endDateTimestampDay);
-
-        $this->set('startDateWeek', $startDateTimestampWeek);
-        $this->set('endDateWeek', $endDateTimestampWeek);
-
-        $this->set('startDateMonth', $startDateTimestampMonth);
-        $this->set('endDateMonth', $endDateTimestampMonth);
-
-        $this->set('types', $types);
         $this->set('shareTypeCategory', $shareTypeCategory);
         $this->set('shareType', $shareType);
 
-        $this->set('searchZoom', $searchZoom);
-        $this->set('searchLatitude', $searchLatitude);
-        $this->set('searchLongitude', $searchLongitude);
-
-        //
-        $this->setShareTypeCategories();
+        $this->set('searchNELatitude', $searchNELatitude);
+        $this->set('searchNELongitude', $searchNELongitude);
+        $this->set('searchSWLatitude', $searchSWLatitude);
+        $this->set('searchSWLongitude', $searchSWLongitude);
     }
         
 	public function add() {
@@ -218,15 +126,6 @@ class SharesController extends ApiSharesController {
         //Request status
         $requestStatus = $this->getRequestStatus($share, $userExternalId);
         $this->set('requestStatus', $requestStatus);
-
-        //Get comments
-        /*$page = 1;
-        if (isset($this->params['url']['page']) && is_numeric($this->params['url']['page'])) {
-            $page = $this->params['url']['page'];
-        }
-
-        $commentsResponse = $this->internGetComments($shareId, $page);
-        $this->set('comments', $commentsResponse);*/
     }
 
     /*public function delete() {

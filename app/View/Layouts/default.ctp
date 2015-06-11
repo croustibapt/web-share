@@ -32,6 +32,7 @@
             echo $this->Html->script('angular.min');
 
             echo $this->Html->script('share/share');
+            echo $this->Html->script('share/home');
             echo $this->Html->script('share/search');
             echo $this->Html->script('share/details');
 

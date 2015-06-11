@@ -5,22 +5,22 @@
             <ul class="nav nav-pills text-center" role="tablist">
                 <!-- All shares -->
                 <li role="presentation" ng-class="(date === 'all') ? 'active' : ''">
-                    <a href="javascript:void(0)" class="a-action-bar-date" role="tab" data-toggle="tab" ng-click="search(page, null, null, types, bounds);">Tout</a>
+                    <a href="javascript:void(0)" class="a-action-bar-date" role="tab" data-toggle="tab" ng-click="search(shareTypeCategory, shareType, page, 'all', bounds);">Tout</a>
                 </li>
 
                 <!-- Current day shares -->
                 <li role="presentation" ng-class="(date === 'day') ? 'active' : ''">
-                    <a href="javascript:void(0)" class="a-action-bar-date" role="tab" data-toggle="tab" ng-click="search(page, <?php echo $startDateDay; ?>, <?php echo $endDateDay; ?>, types, bounds);">Aujourd'hui</a>
+                    <a href="javascript:void(0)" class="a-action-bar-date" role="tab" data-toggle="tab" ng-click="search(shareTypeCategory, shareType, page, 'day', bounds);">Aujourd'hui</a>
                 </li>
 
                 <!-- Current week shares -->
                 <li role="presentation" ng-class="(date === 'week') ? 'active' : ''">
-                    <a href="javascript:void(0)" class="a-action-bar-date" role="tab" data-toggle="tab" ng-click="search(page, <?php echo $startDateWeek; ?>, <?php echo $endDateWeek; ?>, types, bounds);">Cette semaine</a>
+                    <a href="javascript:void(0)" class="a-action-bar-date" role="tab" data-toggle="tab" ng-click="search(shareTypeCategory, shareType, page, 'week', bounds);">Cette semaine</a>
                 </li>
 
                 <!-- Current month shares -->
                 <li role="presentation" ng-class="(date === 'month') ? 'active' : ''">
-                    <a href="javascript:void(0)" class="a-action-bar-date" role="tab" data-toggle="tab" ng-click="search(page, <?php echo $startDateMonth; ?>, <?php echo $endDateMonth; ?>, types, bounds);">Ce mois-ci</a>
+                    <a href="javascript:void(0)" class="a-action-bar-date" role="tab" data-toggle="tab" ng-click="search(shareTypeCategory, shareType, page, 'month', bounds);">Ce mois-ci</a>
                 </li>
             </ul>
 

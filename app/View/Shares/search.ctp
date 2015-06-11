@@ -22,9 +22,13 @@
 <script>
     //
     google.maps.event.addDomListener(window, 'load', initialize(
-        <?php echo ($searchZoom != NULL) ? $searchZoom : 8; ?>,
-        <?php echo ($searchLatitude != NULL) ? $searchLatitude : 43.594484; ?>,
-        <?php echo ($searchLongitude != NULL) ? $searchLongitude : 1.447947; ?>
+        '<?php echo $shareTypeCategory; ?>',
+        '<?php echo $shareType; ?>',
+        '<?php echo $date; ?>',
+        <?php echo ($searchNELatitude != NULL) ? $searchNELatitude : 43.594484; ?>,
+        <?php echo ($searchNELongitude != NULL) ? $searchNELongitude : 1.447947; ?>,
+        <?php echo ($searchSWLatitude != NULL) ? $searchSWLatitude : 43.594484; ?>,
+        <?php echo ($searchSWLongitude != NULL) ? $searchSWLongitude : 43.594484; ?>
     ));
 
     //

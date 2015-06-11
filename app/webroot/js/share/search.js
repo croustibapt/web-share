@@ -12,45 +12,24 @@ app.controller('SearchController', ['$scope', '$http', function($scope, $http) {
     $scope.date = 'all';
     $scope.startDate = null;
     $scope.endDate = null;
+
     $scope.types = null;
+
+    $scope.bounds = null;
+
+    $scope.shareTypeCategories = {};
     $scope.shareTypeCategory = "-1";
     $scope.shareType = "-1";
-    $scope.bounds = null;
-    
-    $scope.shareTypeCategories = [];
+
     $scope.shares = [];
 
     //
-    $http.get(webroot + 'api/share_type_categories/get').
-    success(function(data, status, headers, config) {
-        $scope.shareTypeCategories[-1] = {
-            "label": "all",
-            "share_type_category_id": -1,
-            "share_types": []
-        };
-        
-        for (var shareTypeCategoryIndex in data.results) {
-            var shareTypeCategory = data.results[shareTypeCategoryIndex];
-
-            var shareTypes = shareTypeCategory['share_types'];
-            shareTypeCategory['share_types'] = {};
-            shareTypeCategory['share_types'][-1] = {
-                "label": "all",
-                "share_type_category_id": shareTypeCategory.share_type_category_id,
-                "share_type_id": -1
-            };
-
-            for (var shareTypeIndex in shareTypes) {
-                var shareType = shareTypes[shareTypeIndex];
-                shareTypeCategory['share_types'][shareType.share_type_id] = shareType;
-            }
-
-            $scope.shareTypeCategories[shareTypeCategory.share_type_category_id] = shareTypeCategory;
-        }
-        
-        //console.log($scope.shareTypeCategories);
-    }).
-    error(function(data, status, headers, config) {
+    $http.get(webroot + 'api/share_type_categories/get')
+    .success(function(data, status, headers, config) {
+        //
+        getShareTypeCategories($scope, data);
+    })
+    .error(function(data, status, headers, config) {
         console.log(data);
     });
 
@@ -72,30 +51,34 @@ app.controller('SearchController', ['$scope', '$http', function($scope, $http) {
      * @param bounds
      * @returns {*}
      */
-    $scope.createSearchJson = function() {
+    $scope.createSearchJson = function(startDate, endDate, types) {
         var jsonData = {};
 
         //Page
         jsonData['page'] = $scope.page;
 
         //Start date
-        if ($scope.startDate) {
-            jsonData['start'] = $scope.startDate;
+        if (startDate) {
+            jsonData['start'] = startDate;
         }
 
         //End date
-        if ($scope.endDate) {
-            jsonData['end'] = $scope.endDate;
+        if (endDate) {
+            jsonData['end'] = endDate;
         }
 
         //Types
-        if ($scope.types) {
+        if (types) {
             //Create types array
             jsonData['types'] = [];
 
             //Loop on types
-            for (var i = 0; i < $scope.types.length; i++) {
-                jsonData['types'][i] = $scope.types[i];
+            for (var i = 0; i < types.length; i++) {
+                var typeId = types[i];
+
+                if (Number.isInteger(typeId)) {
+                    jsonData['types'][i] = typeId;
+                }
             }
         }
 
@@ -136,16 +119,32 @@ app.controller('SearchController', ['$scope', '$http', function($scope, $http) {
      * @param types
      * @param bounds
      */
-    $scope.search = function(page, startDate, endDate, types, bounds) {
+    $scope.search = function(shareTypeCategory, shareType, page, date, bounds) {
         //Store values
+        $scope.shareTypeCategory = shareTypeCategory;
+        $scope.shareType = shareType;
         $scope.page = page;
-        $scope.startDate = startDate;
-        $scope.endDate = endDate;
-        $scope.types = types;
+        $scope.date = date;
         $scope.bounds = bounds;
 
+        var types = getTypesWithShareType($scope.shareType, $scope.shareTypeCategory, $scope.shareTypeCategories);
+
+        var startDate = null;
+        var endDate = null;
+
+        if (date == 'day') {
+            startDate = moment().startOf('day').unix();
+            endDate = moment().endOf('day').unix();
+        } else if (date == 'week') {
+            startDate = moment().startOf('week').unix();
+            endDate = moment().endOf('week').unix();
+        } else if (date == 'month') {
+            startDate = moment().startOf('month').unix();
+            endDate = moment().endOf('month').unix();
+        }
+
         //Create JSON data
-        var jsonData = $scope.createSearchJson();
+        var jsonData = $scope.createSearchJson(startDate, endDate, types);
 
         //
         $http.post(webroot + 'api/share/search', jsonData).
@@ -224,37 +223,12 @@ app.controller('SearchController', ['$scope', '$http', function($scope, $http) {
     //
     $scope.onShareTypeCategoryChanged = function() {
         //
-        if ($scope.shareTypeCategory == -1) {
-            $scope.types = null;
-        } else {
-            $scope.types = [];
-
-            var shareTypes = $scope.shareTypeCategories[$scope.shareTypeCategory]['share_types'];
-
-            for (var shareTypeId in shareTypes) {
-                $scope.types.push(shareTypeId);
-            }
-        }
-
-        $scope.search(1, $scope.startDate, $scope.endDate, $scope.types);
+        $scope.search($scope.shareTypeCategory, $scope.shareType, 1, $scope.date, $scope.bounds);
     };
 
     //
     $scope.onShareTypeChanged = function() {
-        //
-        if ($scope.shareType == -1) {
-            $scope.types = [];
-
-            var shareTypes = $scope.shareTypeCategories[$scope.shareTypeCategory]['share_types'];
-
-            for (var shareTypeId in shareTypes) {
-                $scope.types.push(shareTypeId);
-            }
-        } else {
-            $scope.types = [$scope.shareType];
-        }
-
-        $scope.search(1, $scope.startDate, $scope.endDate, $scope.types);
+        $scope.search($scope.shareTypeCategory, $scope.shareType, 1, $scope.date, $scope.bounds);
     };
 
     //
@@ -306,12 +280,13 @@ function clearMarkers() {
     markers.length = 0;
 }
 
-function initialize(zoom, latitude, longitude) {
-    var mapOptions = {
-        zoom: zoom,
-        center: new google.maps.LatLng(latitude, longitude)
-    };
-    map = new google.maps.Map(document.getElementById('div-share-search-google-map'), mapOptions);
+function initialize(shareTypeCategory, shareType, date, neLatitude, neLongitude, swLatitude, swLongitude) {
+    map = new google.maps.Map(document.getElementById('div-share-search-google-map'), null);
+
+    var sw = new google.maps.LatLng(swLatitude, swLongitude);
+    var ne = new google.maps.LatLng(neLatitude, neLongitude);
+    var mapBounds = new google.maps.LatLngBounds(sw, ne);
+    map.fitBounds(mapBounds);
 
     google.maps.event.addListener(map, 'idle', function() {
         var searchResultsDiv = $('#div-search-results');
@@ -319,7 +294,7 @@ function initialize(zoom, latitude, longitude) {
 
         searchScope.$apply(function() {
             //Restart search from page 1
-            searchScope.search(1, searchScope.startDate, searchScope.endDate, searchScope.types, map.getBounds());
+            searchScope.search(shareTypeCategory, shareType, 1, date, map.getBounds());
         });
     });
 }

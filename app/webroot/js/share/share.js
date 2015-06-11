@@ -149,3 +149,69 @@ function getIconColor(shareTypeCategory) {
         return CONCRETE_COLOR;
     }
 }
+
+function getTypesWithShareTypeCategory(shareTypeCategory, shareTypeCategories) {
+    var types = null;
+
+    if (shareTypeCategory != -1) {
+        types = [];
+
+        var shareTypes = shareTypeCategories[shareTypeCategory]['share_types'];
+
+        for (var shareTypeId in shareTypes) {
+            types.push(shareTypeId);
+        }
+    }
+
+    return types;
+}
+
+function getTypesWithShareType(shareType, shareTypeCategory, shareTypeCategories) {
+    var types = null;
+
+    if (shareType == -1) {
+        types = [];
+
+        var shareTypes = shareTypeCategories[shareTypeCategory]['share_types'];
+
+        for (var shareTypeId in shareTypes) {
+            types.push(shareTypeId);
+        }
+    } else {
+        types = [shareType];
+    }
+
+    return types;
+}
+
+function getShareTypeCategories(scope, data) {
+
+    //All category
+    scope.shareTypeCategories[-1] = {
+        "label": "all",
+        "share_type_category_id": -1,
+        "share_types": []
+    };
+
+    //Loop on results
+    for (var shareTypeCategoryIndex in data.results) {
+        var shareTypeCategory = data.results[shareTypeCategoryIndex];
+        var shareTypes = shareTypeCategory['share_types'];
+
+        //
+        shareTypeCategory['share_types'] = {};
+        shareTypeCategory['share_types'][-1] = {
+            "label": "all",
+            "share_type_category_id": shareTypeCategory.share_type_category_id,
+            "share_type_id": -1
+        };
+
+        //
+        for (var shareTypeIndex in shareTypes) {
+            var shareType = shareTypes[shareTypeIndex];
+            shareTypeCategory['share_types'][shareType.share_type_id] = shareType;
+        }
+
+        scope.shareTypeCategories[shareTypeCategory.share_type_category_id] = shareTypeCategory;
+    }
+}
