@@ -185,7 +185,6 @@ function getTypesWithShareType(shareType, shareTypeCategory, shareTypeCategories
 }
 
 function getShareTypeCategories(scope, data) {
-
     //All category
     scope.shareTypeCategories[-1] = {
         "label": "all",

@@ -36,7 +36,6 @@ define('SHARE_LOCAL_USER_SESSION_PREFIX', 'LocalUser');
 //Auth
 define('SHARE_HEADER_AUTH_EXTERNAL_ID', 'auth-user-external-id');
 define('SHARE_HEADER_AUTH_TOKEN', 'auth-user-token');
-define('SHARE_HEADER_AUTH_TOKEN_SECRET', 'auth-user-token-secret');
 define('SHARE_HEADER_AUTH_MAIL', 'auth-user-mail');
 define('SHARE_HEADER_AUTH_USERNAME', 'auth-user-username');
 

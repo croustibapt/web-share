@@ -62,13 +62,13 @@ function initializeHome(inputId) {
 
         //
         $http.get(webroot + 'api/share_type_categories/get')
-            .success(function (data, status, headers, config) {
-                //
-                getShareTypeCategories($scope, data);
-            })
-            .error(function (data, status, headers, config) {
-                console.log(data);
-            });
+        .success(function (data, status, headers, config) {
+            //
+            getShareTypeCategories($scope, data);
+        })
+        .error(function (data, status, headers, config) {
+            console.log(data);
+        });
 
         //
         $scope.initializeAutocompleteInput(inputId);

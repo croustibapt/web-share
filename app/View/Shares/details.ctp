@@ -4,7 +4,7 @@
 
 <script src="http://js.nicedit.com/nicEdit-latest.js"></script>
 
-<div class="container" style="margin-top: 20px;">
+<div class="container" ng-controller="DetailsController" style="margin-top: 20px;">
     <div class="div-share card">
         <div class="card-header" style="background-color: <?php echo $shareTypeColor; ?>;">
             Détails
@@ -157,13 +157,14 @@
 
     <!-- Comments -->
     <?php
-        echo $this->element('share-comments', array(
-            'share' => $share
-        ));
+        echo $this->element('share-comments');
     ?>
 </div>
 
 <script>
+    //Get comments
+    initializeDetails(<?php echo $share['share_id']; ?>);
+
     //Initialize google maps image
     function initializeGoogleMapsImage(latitude, longitude) {
         var width = $('#img-gmaps').width();
@@ -177,16 +178,5 @@
     $(document).ready(function() {
         //Initialize Google Maps image
         initializeGoogleMapsImage(<?php echo $share['latitude']; ?>, <?php echo $share['longitude']; ?>);
-
-        //Get comments
-        loadComments(<?php echo $share['share_id']; ?>, 1);
-    });
-
-    $(document).on("click", ".a-search-pagination" , function() {
-        //
-        var page = $(this).attr('page');
-
-        //
-        loadComments(<?php echo $share['share_id']; ?>, page);
     });
 </script>

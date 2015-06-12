@@ -1,5 +1,5 @@
 <!-- Comments -->
-<div id="div-share-details-comments" ng-controller="DetailsController" class="card">
+<div id="div-share-details-comments" class="card">
     <div class="card-header" style="background-color: #3498db;">
         Commentaires
     </div>
@@ -66,31 +66,14 @@
 
             <div class="col-md-10 div-share-details-comments-editor">
                 <div style="padding-left: 15px;">
-                    <textarea id="textarea-comment-add" class="form-control" rows="3"></textarea>
+                    <textarea id="textarea-comment-add" class="form-control" rows="3" ng-model="message"></textarea>
                 </div>
             </div>
             <div class="col-md-2 div-share-details-comments-editor">
                 <div style="padding-right: 15px;">
-                    <!-- Send form -->
-                    <?php
-                        echo $this->Form->create('Comment', array(
-                            'action' => 'add',
-                            'id' => 'form-comment-add'
-                        ));
-
-                        echo $this->Form->hidden('shareId', array(
-                            'value' => $share['share_id']
-                        ));
-
-                        echo $this->Form->hidden('message', array(
-                            'value' => '',
-                            'id' => 'hidden-comment-add-message'
-                        ));
-
-                        echo $this->Form->end();
-                    ?>
-
-                    <button id="btn-comment-add" type="submit" class="btn btn-primary">Envoyer</button>
+                    <button id="btn-comment-add" type="submit" class="btn btn-primary" ng-click="onSendButtonClicked();">
+                        Envoyer
+                    </button>
                 </div>
             </div>
 
@@ -111,33 +94,6 @@
 <?php if ($this->LocalUser->isAuthenticated($this)) : ?>
 
 <script>
-    //Function used to send a comment
-    function sendComment(message) {
-        //Check message length
-        if (message.length >= <?php echo SHARE_COMMENT_MESSAGE_MIN_LENGTH; ?>) {
-            //Get the message and push it to the corresponding hidden input
-            $('#hidden-comment-add-message').val(message);
-
-            //And submit the form
-            $('#form-comment-add').submit();
-        } else {
-            //Empty message
-            toastr.warning('Veuillez saisir un message d\'au moins <?php echo SHARE_COMMENT_MESSAGE_MIN_LENGTH; ?> caractères.', 'Attention');
-        }
-    }
-
-    //Method called when the user click on the comment send button
-    $('#btn-comment-add').click(function () {
-        //Get editor
-        var editor = nicEditors.findEditor('textarea-comment-add');
-
-        //And its message
-        var message = editor.getContent();
-
-        //Finally send the comment
-        sendComment(message);
-    });
-
     //On ready
     $(document).ready(function() {
         //Create editor
@@ -149,7 +105,6 @@
         //Initial empty content
         var editor = nicEditors.findEditor('textarea-comment-add');
         editor.setContent('');
-
     });
 </script>
 

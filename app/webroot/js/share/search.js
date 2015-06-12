@@ -24,16 +24,6 @@ function initializeSearch(shareTypeCategory, shareType, date) {
 
         $scope.shares = [];
 
-        //
-        $http.get(webroot + 'api/share_type_categories/get')
-            .success(function(data, status, headers, config) {
-                //
-                getShareTypeCategories($scope, data);
-            })
-            .error(function(data, status, headers, config) {
-                console.log(data);
-            });
-
         /**
          *
          * @param num
@@ -70,6 +60,8 @@ function initializeSearch(shareTypeCategory, shareType, date) {
 
             //Types
             if (types) {
+                console.log(types.length);
+
                 //Create types array
                 jsonData['types'] = [];
 
@@ -77,7 +69,7 @@ function initializeSearch(shareTypeCategory, shareType, date) {
                 for (var i = 0; i < types.length; i++) {
                     var typeId = types[i];
 
-                    if (Number.isInteger(typeId)) {
+                    if (parseInt(typeId) >= 0) {
                         jsonData['types'][i] = typeId;
                     }
                 }
@@ -115,9 +107,17 @@ function initializeSearch(shareTypeCategory, shareType, date) {
         /**
          *
          * @param page
-         * @param startDate
-         * @param endDate
-         * @param types
+         */
+        $scope.showPage = function(page) {
+            $scope.search($scope.shareTypeCategory, $scope.shareType, page, $scope.date, $scope.bounds);
+        };
+
+        /**
+         *
+         * @param shareTypeCategory
+         * @param shareType
+         * @param page
+         * @param date
          * @param bounds
          */
         $scope.search = function(shareTypeCategory, shareType, page, date, bounds) {
@@ -129,6 +129,7 @@ function initializeSearch(shareTypeCategory, shareType, date) {
             $scope.bounds = bounds;
 
             var types = getTypesWithShareType($scope.shareType, $scope.shareTypeCategory, $scope.shareTypeCategories);
+            console.log(types);
 
             var startDate = moment().unix();
             var endDate = null;
@@ -155,7 +156,7 @@ function initializeSearch(shareTypeCategory, shareType, date) {
             .error(function(data, status, headers, config) {
                 console.log(data);
             });
-        }
+        };
 
         /**
          * Method used to handle the Ajax response
@@ -230,9 +231,27 @@ function initializeSearch(shareTypeCategory, shareType, date) {
         };
 
         //
-        $scope.formatShareTypeCategory = function (shareTypeCategory) {
+        $scope.formatShareTypeCategory = function(shareTypeCategory) {
             return shareTypeCategory;
         };
+
+        /**
+         *
+         */
+        $scope.initialize = function() {
+            //
+            $http.get(webroot + 'api/share_type_categories/get')
+            .success(function(data, status, headers, config) {
+                //
+                getShareTypeCategories($scope, data);
+            })
+            .error(function(data, status, headers, config) {
+                console.log(data);
+            });
+        };
+
+        //
+        $scope.initialize();
     }]);
 }
 

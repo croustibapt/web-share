@@ -2,57 +2,119 @@
  * Created by bleguelvouit on 10/06/15.
  */
 
-//Create DetailsController
-app.controller('DetailsController', ['$scope', function($scope) {
-    $scope.comments = [];
-    $scope.shareUserExternalId = -1;
+function initializeDetails(shareId) {
+    //Create DetailsController
+    app.controller('DetailsController', ['$scope', '$http', function($scope, $http) {
+        $scope.page = 1;
+        $scope.total_pages = 1;
 
-    //Method used to handle the Ajax response
-    $scope.handleResponse = function(response) {
-        //Handle comments
-        var comments = response.results;
+        $scope.shareId = shareId;
+        $scope.shareUserExternalId = -1;
+
+        $scope.message = null;
+
         $scope.comments = [];
 
-        for (var i = 0; i < comments.length; i++) {
-            var comment = comments[i];
+        /**
+         *
+         * @param num
+         * @returns {Array}
+         */
+        $scope.getNumber = function(num) {
+            return new Array(num);
+        };
 
-            var htmlDate = comment.created;
-            var eventDate = new Date(htmlDate);
-            var isoEventDate = eventDate.toISOString();
+        /**
+         *
+         * @param page
+         */
+        $scope.showPage = function(page) {
+            $scope.page = page;
 
-            var momentModifiedTimeAgo = moment(isoEventDate).fromNow();
-            comment.moment_created_time_ago = momentModifiedTimeAgo;
+            //Get call
+            $http.get(webroot + 'api/comment/get?shareId=' + $scope.shareId + '&page=' + $scope.page)
+            .success(function (data, status, headers, config) {
+                //Results
+                $scope.handleResponse(data);
+            })
+            .error(function (data, status, headers, config) {
+                console.log(data);
+            });
+        };
 
-            $scope.comments.push(comment);
+        /**
+         * Method used to handle the Ajax response
+         * @param response
+         */
+        $scope.handleResponse = function(response) {
+            //Handle pagination
+            $scope.page = parseInt(response.page);
+            $scope.total_pages = parseInt(response.total_pages);
+
+            //Handle comments
+            var comments = response.results;
+            $scope.comments = [];
+
+            for (var i = 0; i < comments.length; i++) {
+                var comment = comments[i];
+
+                var htmlDate = comment.created;
+                var eventDate = new Date(htmlDate);
+                var isoEventDate = eventDate.toISOString();
+
+                var momentModifiedTimeAgo = moment(isoEventDate).fromNow();
+                comment.moment_created_time_ago = momentModifiedTimeAgo;
+
+                //Add to array
+                $scope.comments.push(comment);
+            }
+        };
+
+        $scope.onSendButtonClicked = function() {
+            console.log($scope.message);
+
+            //And its message
+            var editor = nicEditors.findEditor('textarea-comment-add');
+            var message = editor.getContent();
+
+            $scope.sendComment(message);
+        };
+
+        $scope.sendComment = function(message) {
+            var jsonData = {
+                share_id: $scope.shareId,
+                message: encodeURI(message)
+            };
+
+            //Check message length
+            if (message.length >= 3) {
+                //
+                $http.put(webroot + 'api/comment/add', JSON.stringify(jsonData))
+                .success(function(data, status, headers, config) {
+                    console.log(data);
+
+                    //Reset content
+                    var editor = nicEditors.findEditor('textarea-comment-add');
+                    editor.setContent('');
+
+                    $scope.showPage(1);
+                })
+                .error(function(data, status, headers, config) {
+                    console.log(data);
+                });
+            } else {
+                //Empty message
+                toastr.warning('Veuillez saisir un message d\'au moins <?php echo SHARE_COMMENT_MESSAGE_MIN_LENGTH; ?> caractères.', 'Attention');
+            }
+        };
+
+        /**
+         *
+         */
+        $scope.initialize = function() {
+            $scope.showPage(1);
         }
-    };
-}]);
 
-function loadComments(shareId, page) {
-    $.ajax({
-        url: webroot + 'api/comment/get?shareId=' + shareId + '&page=' + page,
-        method: 'GET',
-        dataType: 'json'
-    })
-    .done(function(response) {
-        console.log(response);
-
-        //Results
-        detailsHandleResponse(response);
-
-        //Pagination
-        paginationHandleResponse(response);
-    })
-    .fail(function(jqXHR, textStatus) {
-        console.log(jqXHR);
-    });
-}
-
-function detailsHandleResponse(response) {
-    var detailsResultsDiv = $('#div-share-details-comments');
-    var detailsScope = angular.element(detailsResultsDiv).scope();
-
-    detailsScope.$apply(function(){
-        detailsScope.handleResponse(response);
-    });
+        $scope.initialize();
+    }]);
 }
