@@ -19,6 +19,8 @@ class SharesController extends ApiSharesController {
         $searchSWLatitude = NULL;
         $searchSWLongitude = NULL;
 
+        $address = '';
+
         if ($this->request->is('POST')) {
             $data = $this->request->data;
 
@@ -47,8 +49,9 @@ class SharesController extends ApiSharesController {
                     
                     if (count($results) > 0) {
                         $bestResult = $results[0];
-                        //pr($bestResult);
-                        
+
+                        $address = $bestResult['formatted_address'];
+
                         $searchNELatitude = $bestResult['geometry']['viewport']['northeast']['lat'];
                         $searchNELongitude = $bestResult['geometry']['viewport']['northeast']['lng'];
 
@@ -66,6 +69,8 @@ class SharesController extends ApiSharesController {
 
         $this->set('shareTypeCategory', $shareTypeCategory);
         $this->set('shareType', $shareType);
+
+        $this->set('address', $address);
 
         $this->set('searchNELatitude', $searchNELatitude);
         $this->set('searchNELongitude', $searchNELongitude);

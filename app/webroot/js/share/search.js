@@ -281,17 +281,45 @@ function clearMarkers() {
 }
 
 function initialize(shareTypeCategory, shareType, date, neLatitude, neLongitude, swLatitude, swLongitude) {
-    map = new google.maps.Map(document.getElementById('div-share-search-google-map'), null);
+    //Create map
+    var mapOptions = {
+        panControl: false,
+        zoomControl: false,
+        scaleControl: true,
+        streetViewControl: false
+    }
+    map = new google.maps.Map(document.getElementById('div-share-search-google-map'), mapOptions);
 
+    //Add search box
+    var input = document.getElementById('input-search-address');
+    map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+
+    //Configure autocomplete control
+    var autocomplete = new google.maps.places.Autocomplete(input);
+    google.maps.event.addListener(autocomplete, 'place_changed', function() {
+        var place = autocomplete.getPlace();
+
+        //If the place has a geometry, then present it on a map.
+        if (place.geometry.viewport) {
+            map.fitBounds(place.geometry.viewport);
+        } else {
+            map.setCenter(place.geometry.location);
+            map.setZoom(17);  // Why 17? Because it looks good.
+        }
+    });
+
+    //Center on wanted bounds
     var sw = new google.maps.LatLng(swLatitude, swLongitude);
     var ne = new google.maps.LatLng(neLatitude, neLongitude);
     var mapBounds = new google.maps.LatLngBounds(sw, ne);
     map.fitBounds(mapBounds);
 
+    //Add idle listener
     google.maps.event.addListener(map, 'idle', function() {
         var searchResultsDiv = $('#div-search-results');
         var searchScope = angular.element(searchResultsDiv).scope();
 
+        //
         searchScope.$apply(function() {
             //Restart search from page 1
             searchScope.search(shareTypeCategory, shareType, 1, date, map.getBounds());
