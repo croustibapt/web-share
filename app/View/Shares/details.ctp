@@ -163,7 +163,7 @@
 
 <script>
     //Get comments
-    initializeDetails(<?php echo $share['share_id']; ?>);
+    initializeDetails(<?php echo $share['share_id']; ?>, 'textarea-comment-add');
 
     //Initialize google maps image
     function initializeGoogleMapsImage(latitude, longitude) {

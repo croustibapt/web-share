@@ -2,7 +2,7 @@
  * Created by bleguelvouit on 10/06/15.
  */
 
-function initializeDetails(shareId) {
+function initializeDetails(shareId, textAreaId) {
     //Create DetailsController
     app.controller('DetailsController', ['$scope', '$http', function($scope, $http) {
         $scope.page = 1;
@@ -11,6 +11,7 @@ function initializeDetails(shareId) {
         $scope.shareId = shareId;
         $scope.shareUserExternalId = -1;
 
+        $scope.textAreaId = textAreaId;
         $scope.message = null;
 
         $scope.comments = [];
@@ -71,10 +72,8 @@ function initializeDetails(shareId) {
         };
 
         $scope.onSendButtonClicked = function() {
-            console.log($scope.message);
-
             //And its message
-            var editor = nicEditors.findEditor('textarea-comment-add');
+            var editor = nicEditors.findEditor($scope.textAreaId);
             var message = editor.getContent();
 
             $scope.sendComment(message);
@@ -91,10 +90,8 @@ function initializeDetails(shareId) {
                 //
                 $http.put(webroot + 'api/comment/add', JSON.stringify(jsonData))
                 .success(function(data, status, headers, config) {
-                    console.log(data);
-
                     //Reset content
-                    var editor = nicEditors.findEditor('textarea-comment-add');
+                    var editor = nicEditors.findEditor($scope.textAreaId);
                     editor.setContent('');
 
                     $scope.showPage(1);
