@@ -27,24 +27,36 @@ class SharesController extends ApiSharesController {
 
             //
             $shareTypeCategory = $data['Share']['share_type_category'];
-            $shareType = $data['Share']['share_type'];
+            
+            if (isset($data['Share']['share_type'])) {
+                $shareType = $data['Share']['share_type'];
+            }
 
             //Location
             $address = $data['Share']['address'];
-            $cityGeocodingUrl = "https://maps.googleapis.com/maps/api/geocode/json?address=".$address."&key=".SHARE_GOOGLE_MAPS_API_KEY;
+            if ($address != '') {
+                $cityGeocodingUrl = "https://maps.googleapis.com/maps/api/geocode/json?address=".urlencode($address)."&key=".SHARE_GOOGLE_MAPS_API_KEY;
 
-            $ch = curl_init();
-            curl_setopt($ch, CURLOPT_URL, $cityGeocodingUrl);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-            $geocodingCityResponse = json_decode(curl_exec($ch), true);
+                $ch = curl_init();
+                curl_setopt($ch, CURLOPT_URL, $cityGeocodingUrl);
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+                $geocodingResponse = json_decode(curl_exec($ch), true);
+                
+                if ($geocodingResponse != null) {
+                    $results = $geocodingResponse['results'];
+                    
+                    if (count($results) > 0) {
+                        $bestResult = $results[0];
+                        //pr($bestResult);
+                        
+                        $searchNELatitude = $bestResult['geometry']['viewport']['northeast']['lat'];
+                        $searchNELongitude = $bestResult['geometry']['viewport']['northeast']['lng'];
 
-            $bestResult = $geocodingCityResponse['results'][0];
-            //pr($bestResult);
-            $searchNELatitude = $bestResult['geometry']['viewport']['northeast']['lat'];
-            $searchNELongitude = $bestResult['geometry']['viewport']['northeast']['lng'];
-
-            $searchSWLatitude = $bestResult['geometry']['viewport']['southwest']['lat'];
-            $searchSWLongitude = $bestResult['geometry']['viewport']['southwest']['lng'];
+                        $searchSWLatitude = $bestResult['geometry']['viewport']['southwest']['lat'];
+                        $searchSWLongitude = $bestResult['geometry']['viewport']['southwest']['lng'];
+                    }
+                }
+            }
 
             /*//Search zoom
             $searchZoom = $data['Share']['search_zoom'];*/

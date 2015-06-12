@@ -13,7 +13,13 @@
         <?php echo $this->element('pagination'); ?>
     </div>
     <div style="margin-left: 50%; width: 50%; height: 100%;">
-        <div id="div-share-search-google-map" style="width: 100%; height: 100%;">
+        <form class="navbar-form navbar-left" role="search" style="height: 20%; margin: 0px;">
+            <div class="form-group">
+                <input id="input-address" type="text" class="form-control" placeholder="Search">
+            </div>
+            <button type="submit" class="btn btn-default">Submit</button>
+        </form>
+        <div id="div-share-search-google-map" style="width: 100%; height: 80%;">
 
         </div>
     </div>
