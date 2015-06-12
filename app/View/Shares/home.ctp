@@ -1,49 +1,3 @@
-<script>
-    var autocomplete;
-
-    function initializeGMAC() {
-        var input = document.getElementById('input-home-address');
-        var types = {
-            types: ['geocode']
-        };
-
-        //Create the autocomplete object, restricting the search to geographical location types.
-        autocomplete = new google.maps.places.Autocomplete(input, types);
-        google.maps.event.addListener(autocomplete, 'place_changed', function() {
-            var place = autocomplete.getPlace();
-
-            //If the place has a geometry, then present it on a map.
-            if (place.geometry.viewport) {
-                console.log(place.geometry.viewport);
-
-                var jsonViewport = JSON.stringify(place.geometry.viewport);
-                console.log(jsonViewport);
-                $('#hidden-home-viewport').val(encodeURI(jsonViewport));
-            }
-        });
-    }
-
-    //Bias the autocomplete object to the user's geographical location, as supplied by the browser's 'navigator.geolocation' object.
-    function geolocate() {
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(function(position) {
-                var geolocation = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-
-                var circle = new google.maps.Circle({
-                    center: geolocation,
-                    radius: position.coords.accuracy
-                });
-
-                autocomplete.setBounds(circle.getBounds());
-            });
-        }
-    }
-
-    $(document).ready(function() {
-        initializeGMAC();
-    });
-</script>
-
 <div ng-controller="HomeController" style="background-color: #2c3e50; padding: 50px; color:#ffffff;">
     <div class="container">
         <?php
@@ -61,11 +15,12 @@
                         'class' => 'form-control input-lg',
                         'placeholder' => 'ex : Toulouse',
                         'label' => 'Où recherchez vous ?',
-                        'onFocus' => 'geolocate();'
+                        'ng-focus' => 'geolocate();'
                     ));
 
                     echo $this->Form->hidden('viewport', array(
-                        'id' => 'hidden-home-viewport'
+                        'id' => 'hidden-home-viewport',
+                        'ng-value' => 'viewport'
                     ));
                 ?>
             </div>
@@ -112,7 +67,8 @@
             <div class="col-md-3">
                 <?php
                     echo $this->Form->submit('Rechercher', array(
-                        'class' => 'btn btn-danger btn-lg'
+                        'class' => 'btn btn-danger btn-lg',
+                        'style' => 'margin-top: 25px;'
                     ));
                 ?>
             </div>
@@ -122,3 +78,8 @@
         ?>
     </div>
 </div>
+
+<script>
+    //
+    initializeHome('input-home-address', 'hidden-home-viewport');
+</script>

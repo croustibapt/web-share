@@ -29,10 +29,10 @@
 
     //
     google.maps.event.addDomListener(window, 'load', initialize(
-        <?php echo ($searchNELatitude != NULL) ? $searchNELatitude : 43.594484; ?>,
-        <?php echo ($searchNELongitude != NULL) ? $searchNELongitude : 1.447947; ?>,
-        <?php echo ($searchSWLatitude != NULL) ? $searchSWLatitude : 43.594484; ?>,
-        <?php echo ($searchSWLongitude != NULL) ? $searchSWLongitude : 1.447947; ?>
+        <?php echo $viewPort['northeast']['lat']; ?>,
+        <?php echo $viewPort['northeast']['lng']; ?>,
+        <?php echo $viewPort['southwest']['lat']; ?>,
+        <?php echo $viewPort['southwest']['lng']; ?>
     ));
 
     //

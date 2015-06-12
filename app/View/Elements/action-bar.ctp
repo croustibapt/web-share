@@ -3,11 +3,6 @@
         <div class="col-md-8">
 
             <ul class="nav nav-pills text-center" role="tablist">
-                <!-- All shares -->
-                <li role="presentation" ng-class="(date === 'all') ? 'active' : ''">
-                    <a href="javascript:void(0)" class="a-action-bar-date" role="tab" data-toggle="tab" ng-click="search(shareTypeCategory, shareType, page, 'all', bounds);">Tout</a>
-                </li>
-
                 <!-- Current day shares -->
                 <li role="presentation" ng-class="(date === 'day') ? 'active' : ''">
                     <a href="javascript:void(0)" class="a-action-bar-date" role="tab" data-toggle="tab" ng-click="search(shareTypeCategory, shareType, page, 'day', bounds);">Aujourd'hui</a>

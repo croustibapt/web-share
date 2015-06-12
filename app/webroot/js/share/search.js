@@ -121,8 +121,6 @@ function initializeSearch(shareTypeCategory, shareType, date) {
          * @param bounds
          */
         $scope.search = function(shareTypeCategory, shareType, page, date, bounds) {
-            console.log(bounds);
-
             //Store values
             $scope.shareTypeCategory = shareTypeCategory;
             $scope.shareType = shareType;
@@ -132,17 +130,14 @@ function initializeSearch(shareTypeCategory, shareType, date) {
 
             var types = getTypesWithShareType($scope.shareType, $scope.shareTypeCategory, $scope.shareTypeCategories);
 
-            var startDate = null;
+            var startDate = moment().unix();
             var endDate = null;
 
             if (date == 'day') {
-                startDate = moment().startOf('day').unix();
                 endDate = moment().endOf('day').unix();
             } else if (date == 'week') {
-                startDate = moment().startOf('week').unix();
                 endDate = moment().endOf('week').unix();
             } else if (date == 'month') {
-                startDate = moment().startOf('month').unix();
                 endDate = moment().endOf('month').unix();
             }
 
@@ -285,11 +280,6 @@ function clearMarkers() {
 }
 
 function initialize(neLatitude, neLongitude, swLatitude, swLongitude) {
-    console.log(neLatitude);
-    console.log(neLongitude);
-    console.log(swLatitude);
-    console.log(swLongitude);
-
     //Create map
     var mapOptions = {
         panControl: false,
@@ -321,7 +311,7 @@ function initialize(neLatitude, neLongitude, swLatitude, swLongitude) {
     var sw = new google.maps.LatLng(swLatitude, swLongitude);
     var ne = new google.maps.LatLng(neLatitude, neLongitude);
     var mapBounds = new google.maps.LatLngBounds(sw, ne);
-    console.log(mapBounds);
+    //console.log(mapBounds);
     map.fitBounds(mapBounds);
 
     //Add idle listener

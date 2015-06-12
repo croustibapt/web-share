@@ -9,17 +9,13 @@ class SharesController extends ApiSharesController {
     
     //
     public function search() {
-        $date = 'all';
+        $date = 'day';
 
         $shareTypeCategory = -1;
         $shareType = -1;
 
-        $searchNELatitude = NULL;
-        $searchNELongitude = NULL;
-        $searchSWLatitude = NULL;
-        $searchSWLongitude = NULL;
-
         $address = '';
+        $viewPort = NULL;
 
         if ($this->request->is('POST')) {
             $data = $this->request->data;
@@ -27,54 +23,57 @@ class SharesController extends ApiSharesController {
             //Get start and end date
             $date = $data['Share']['date'];
 
-            //
+            //Share type category
             $shareTypeCategory = $data['Share']['share_type_category'];
-            
+
+            //Share type
             if (isset($data['Share']['share_type'])) {
                 $shareType = $data['Share']['share_type'];
             }
 
             $address = $data['Share']['address'];
 
-            //Location
-            $viewport = json_decode(urldecode($data['Share']['viewport']));
-            //pr($viewport);
+            //ViewPort
+            $viewPortObject = json_decode(urldecode($data['Share']['viewport']));
 
-            if ($viewport != '') {
-                $searchSWLatitude = $viewport->za->A;
-                $searchSWLongitude = $viewport->qa->j;
+            if ($viewPortObject != '') {
+                $viewPort['northeast']['lat'] = $viewPortObject->za->A;
+                $viewPort['northeast']['lng'] = $viewPortObject->qa->j;
+                $viewPort['southwest']['lat'] = $viewPortObject->za->j;
+                $viewPort['southwest']['lng'] = $viewPortObject->qa->A;
+            }
+        }
 
-                $searchNELatitude = $viewport->za->j;
-                $searchNELongitude = $viewport->qa->A;
-            } else {
-                if ($address != '') {
-                    $cityGeocodingUrl = "https://maps.googleapis.com/maps/api/geocode/json?address=" . urlencode($address) . "&key=" . SHARE_GOOGLE_MAPS_API_KEY;
+        //
+        if ($viewPort == NULL) {
+            if ($address != '') {
+                $cityGeocodingUrl = "https://maps.googleapis.com/maps/api/geocode/json?address=" . urlencode($address) . "&key=" . SHARE_GOOGLE_MAPS_API_KEY;
 
-                    $ch = curl_init();
-                    curl_setopt($ch, CURLOPT_URL, $cityGeocodingUrl);
-                    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-                    $geocodingResponse = json_decode(curl_exec($ch), true);
+                $ch = curl_init();
+                curl_setopt($ch, CURLOPT_URL, $cityGeocodingUrl);
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+                $geoCodingResponse = json_decode(curl_exec($ch), true);
 
-                    if ($geocodingResponse != null) {
-                        $results = $geocodingResponse['results'];
+                if ($geoCodingResponse != null) {
+                    $results = $geoCodingResponse['results'];
 
-                        if (count($results) > 0) {
-                            $bestResult = $results[0];
+                    if (count($results) > 0) {
+                        $bestResult = $results[0];
 
-                            $address = $bestResult['formatted_address'];
+                        $address = $bestResult['formatted_address'];
 
-                            $searchNELatitude = $bestResult['geometry']['viewport']['northeast']['lat'];
-                            $searchNELongitude = $bestResult['geometry']['viewport']['northeast']['lng'];
-
-                            $searchSWLatitude = $bestResult['geometry']['viewport']['southwest']['lat'];
-                            $searchSWLongitude = $bestResult['geometry']['viewport']['southwest']['lng'];
-                        }
+                        $viewPort['northeast']['lat'] = $bestResult['geometry']['viewport']['northeast']['lat'];
+                        $viewPort['northeast']['lng'] = $bestResult['geometry']['viewport']['northeast']['lng'];
+                        $viewPort['southwest']['lat'] = $bestResult['geometry']['viewport']['southwest']['lat'];
+                        $viewPort['southwest']['lng'] = $bestResult['geometry']['viewport']['southwest']['lng'];
                     }
                 }
+            } else {
+                $viewPort['northeast']['lat'] = 41.3423276;
+                $viewPort['northeast']['lng'] = 9.55979339999999;
+                $viewPort['southwest']['lat'] = 51.0891658;
+                $viewPort['southwest']['lng'] = -5.14214190000007;
             }
-
-            /*//Search zoom
-            $searchZoom = $data['Share']['search_zoom'];*/
         }
 
         $this->set('date', $date);
@@ -83,11 +82,7 @@ class SharesController extends ApiSharesController {
         $this->set('shareType', $shareType);
 
         $this->set('address', $address);
-
-        $this->set('searchNELatitude', $searchNELatitude);
-        $this->set('searchNELongitude', $searchNELongitude);
-        $this->set('searchSWLatitude', $searchSWLatitude);
-        $this->set('searchSWLongitude', $searchSWLongitude);
+        $this->set('viewPort', $viewPort);
     }
         
 	public function add() {
