@@ -71,7 +71,7 @@
             </div>
             <div class="col-md-2 div-share-details-comments-editor">
                 <div style="padding-right: 15px;">
-                    <button id="btn-comment-add" type="submit" class="btn btn-primary" ng-click="onSendButtonClicked();">
+                    <button id="btn-comment-add" type="submit" class="btn btn-primary" data-loading-text="Sending..." ng-click="onSendButtonClicked($event);">
                         Envoyer
                     </button>
                 </div>

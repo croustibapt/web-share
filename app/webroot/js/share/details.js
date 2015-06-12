@@ -71,15 +71,18 @@ function initializeDetails(shareId, textAreaId) {
             }
         };
 
-        $scope.onSendButtonClicked = function() {
+        $scope.onSendButtonClicked = function($event) {
+            var button = angular.element($event.target);
+            button.button('loading');
+
             //And its message
             var editor = nicEditors.findEditor($scope.textAreaId);
             var message = editor.getContent();
 
-            $scope.sendComment(message);
+            $scope.sendComment(message, button);
         };
 
-        $scope.sendComment = function(message) {
+        $scope.sendComment = function(message, button) {
             var jsonData = {
                 share_id: $scope.shareId,
                 message: encodeURI(message)
@@ -95,9 +98,12 @@ function initializeDetails(shareId, textAreaId) {
                     editor.setContent('');
 
                     $scope.showPage(1);
+
+                    button.button('reset');
                 })
                 .error(function(data, status, headers, config) {
                     console.log(data);
+                    button.button('reset');
                 });
             } else {
                 //Empty message
