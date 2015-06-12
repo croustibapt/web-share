@@ -34,29 +34,41 @@ class SharesController extends ApiSharesController {
                 $shareType = $data['Share']['share_type'];
             }
 
-            //Location
             $address = $data['Share']['address'];
-            if ($address != '') {
-                $cityGeocodingUrl = "https://maps.googleapis.com/maps/api/geocode/json?address=".urlencode($address)."&key=".SHARE_GOOGLE_MAPS_API_KEY;
 
-                $ch = curl_init();
-                curl_setopt($ch, CURLOPT_URL, $cityGeocodingUrl);
-                curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-                $geocodingResponse = json_decode(curl_exec($ch), true);
-                
-                if ($geocodingResponse != null) {
-                    $results = $geocodingResponse['results'];
-                    
-                    if (count($results) > 0) {
-                        $bestResult = $results[0];
+            //Location
+            $viewport = json_decode(urldecode($data['Share']['viewport']));
+            //pr($viewport);
 
-                        $address = $bestResult['formatted_address'];
+            if ($viewport != '') {
+                $searchSWLatitude = $viewport->za->A;
+                $searchSWLongitude = $viewport->qa->j;
 
-                        $searchNELatitude = $bestResult['geometry']['viewport']['northeast']['lat'];
-                        $searchNELongitude = $bestResult['geometry']['viewport']['northeast']['lng'];
+                $searchNELatitude = $viewport->za->j;
+                $searchNELongitude = $viewport->qa->A;
+            } else {
+                if ($address != '') {
+                    $cityGeocodingUrl = "https://maps.googleapis.com/maps/api/geocode/json?address=" . urlencode($address) . "&key=" . SHARE_GOOGLE_MAPS_API_KEY;
 
-                        $searchSWLatitude = $bestResult['geometry']['viewport']['southwest']['lat'];
-                        $searchSWLongitude = $bestResult['geometry']['viewport']['southwest']['lng'];
+                    $ch = curl_init();
+                    curl_setopt($ch, CURLOPT_URL, $cityGeocodingUrl);
+                    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+                    $geocodingResponse = json_decode(curl_exec($ch), true);
+
+                    if ($geocodingResponse != null) {
+                        $results = $geocodingResponse['results'];
+
+                        if (count($results) > 0) {
+                            $bestResult = $results[0];
+
+                            $address = $bestResult['formatted_address'];
+
+                            $searchNELatitude = $bestResult['geometry']['viewport']['northeast']['lat'];
+                            $searchNELongitude = $bestResult['geometry']['viewport']['northeast']['lng'];
+
+                            $searchSWLatitude = $bestResult['geometry']['viewport']['southwest']['lat'];
+                            $searchSWLongitude = $bestResult['geometry']['viewport']['southwest']['lng'];
+                        }
                     }
                 }
             }

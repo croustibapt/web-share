@@ -9,6 +9,18 @@
 
         //Create the autocomplete object, restricting the search to geographical location types.
         autocomplete = new google.maps.places.Autocomplete(input, types);
+        google.maps.event.addListener(autocomplete, 'place_changed', function() {
+            var place = autocomplete.getPlace();
+
+            //If the place has a geometry, then present it on a map.
+            if (place.geometry.viewport) {
+                console.log(place.geometry.viewport);
+
+                var jsonViewport = JSON.stringify(place.geometry.viewport);
+                console.log(jsonViewport);
+                $('#hidden-home-viewport').val(encodeURI(jsonViewport));
+            }
+        });
     }
 
     //Bias the autocomplete object to the user's geographical location, as supplied by the browser's 'navigator.geolocation' object.
@@ -50,6 +62,10 @@
                         'placeholder' => 'ex : Toulouse',
                         'label' => 'Où recherchez vous ?',
                         'onFocus' => 'geolocate();'
+                    ));
+
+                    echo $this->Form->hidden('viewport', array(
+                        'id' => 'hidden-home-viewport'
                     ));
                 ?>
             </div>
