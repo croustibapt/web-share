@@ -30,6 +30,7 @@ function initializeHome(inputId) {
             //
             google.maps.event.addListener($scope.autocomplete, 'place_changed', function() {
                 var place = $scope.autocomplete.getPlace();
+                //console.log(place);
 
                 //If the place has a geometry, then present it on a map.
                 if (place.geometry.viewport) {

@@ -63,15 +63,20 @@ function initializeSearch(shareTypeCategory, shareType, date) {
                 console.log(types.length);
 
                 //Create types array
-                jsonData['types'] = [];
+                var realTypes = [];
+
 
                 //Loop on types
                 for (var i = 0; i < types.length; i++) {
                     var typeId = types[i];
 
                     if (parseInt(typeId) >= 0) {
-                        jsonData['types'][i] = typeId;
+                        realTypes[i] = typeId;
                     }
+                }
+
+                if (realTypes.length > 0) {
+                    jsonData['types'] = realTypes;
                 }
             }
 
@@ -319,6 +324,7 @@ function initialize(neLatitude, neLongitude, swLatitude, swLongitude) {
 
         //If the place has a geometry, then present it on a map.
         if (place.geometry.viewport) {
+            console.log(place.geometry.viewport);
             map.fitBounds(place.geometry.viewport);
         } else {
             map.setCenter(place.geometry.location);
@@ -330,7 +336,7 @@ function initialize(neLatitude, neLongitude, swLatitude, swLongitude) {
     var sw = new google.maps.LatLng(swLatitude, swLongitude);
     var ne = new google.maps.LatLng(neLatitude, neLongitude);
     var mapBounds = new google.maps.LatLngBounds(sw, ne);
-    //console.log(mapBounds);
+    console.log(mapBounds);
     map.fitBounds(mapBounds);
 
     //Add idle listener

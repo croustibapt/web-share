@@ -35,12 +35,13 @@ class SharesController extends ApiSharesController {
 
             //ViewPort
             $viewPortObject = json_decode(urldecode($data['Share']['viewport']));
+            //pr($viewPortObject);
 
-            if ($viewPortObject != '') {
-                $viewPort['northeast']['lat'] = $viewPortObject->za->A;
-                $viewPort['northeast']['lng'] = $viewPortObject->qa->j;
-                $viewPort['southwest']['lat'] = $viewPortObject->za->j;
-                $viewPort['southwest']['lng'] = $viewPortObject->qa->A;
+            if ($viewPortObject != NULL) {
+                $viewPort['northeast']['lat'] = $viewPortObject->za->j;
+                $viewPort['northeast']['lng'] = $viewPortObject->qa->A;
+                $viewPort['southwest']['lat'] = $viewPortObject->za->A;
+                $viewPort['southwest']['lng'] = $viewPortObject->qa->j;
             }
         }
 
@@ -82,6 +83,7 @@ class SharesController extends ApiSharesController {
         $this->set('shareType', $shareType);
 
         $this->set('address', $address);
+        //pr($viewPort);
         $this->set('viewPort', $viewPort);
     }
         
