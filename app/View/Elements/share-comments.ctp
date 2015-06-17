@@ -1,8 +1,10 @@
+<!-- Title -->
+<div class="container">
+    <h3>13 commentaires</h3>
+</div>
+
 <!-- Comments -->
-<div id="div-share-details-comments" class="card">
-    <div class="card-header" style="background-color: #3498db;">
-        Commentaires
-    </div>
+<div id="div-share-details-comments" class="container">
     <div class="row">
         <div class="col-md-12">
             <div id="div-share-details-comments-list" ng-if="(comments.length > 0)">
