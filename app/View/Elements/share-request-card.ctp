@@ -13,7 +13,8 @@
     <?php
         echo $this->element('share-card-date-header', array(
             'color' => $shareColor,
-            'date' => $share['event_date']
+            'date' => $share['event_date'],
+            'time' => $share['event_time']
         ));
     ?>
 

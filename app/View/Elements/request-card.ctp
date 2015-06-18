@@ -19,7 +19,8 @@
     <?php
         echo $this->element('share-card-date-header', array(
             'color' => $shareColor,
-            'date' => $request['share']['event_date']
+            'date' => $request['share']['event_date'],
+            'time' => $request['share']['event_time']
         ));
     ?>
 

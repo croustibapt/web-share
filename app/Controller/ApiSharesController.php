@@ -47,12 +47,17 @@ class ApiSharesController extends AppController {
 
         //Start date
         if ($startDate != NULL) {
-            $sql .= ' AND Share.event_date >= \''.$startDate->format('Y-m-d H:i:s').'\'';
+            $sqlStartDate = $startDate->format('Y-m-d');
+            $sqlStartTime = $startDate->format('H:i:s');
+
+            $sql .= ' AND (Share.event_date >= \''.$sqlStartDate.'\''.' AND Share.event_time >= \''.$sqlStartTime.'\')';
         }
 
         //End date
         if ($endDate != NULL) {
-            $sql .= ' AND Share.event_date <= \''.$endDate->format('Y-m-d H:i:s').'\'';
+            $sqlEndDate = $endDate->format('Y-m-d');
+            $sqlEndTime = $endDate->format('H:i:s');
+            $sql .= ' AND ((Share.event_date == \''.$sqlEndDate.'\''.' AND Share.event_time <= \''.$sqlEndTime.'\')'.' OR (Share.event_date <= \''.$sqlEndDate.'\''.'))';
         }
 
         //Region
@@ -84,7 +89,7 @@ class ApiSharesController extends AppController {
         $offset = ($page - 1) * SHARE_SEARCH_LIMIT;
         $sqlOffset = " OFFSET ".$offset;
 
-        $query = $sqlPrefix.$sql." GROUP BY Share.id ORDER BY Share.event_date ASC".$sqlLimit.$sqlOffset.";";
+        $query = $sqlPrefix.$sql." GROUP BY Share.id ORDER BY Share.event_date ASC, Share.event_time ASC".$sqlLimit.$sqlOffset.";";
 
         //pr($query);
 
@@ -165,7 +170,7 @@ class ApiSharesController extends AppController {
         }
     }
     
-    protected function internAdd($userId = NULL, $latitude = NULL, $longitude = NULL, $city = NULL, $zipCode = NULL, $shareTypeId = NULL, $eventDate = NULL, $title = NULL, $price = NULL, $places = NULL, $waitingTime = NULL, $meetPlace = NULL, $limitations = NULL, $supplement = NULL, $message = NULL, $accuracy = NULL, $radius = NULL) {
+    protected function internAdd($userId = NULL, $latitude = NULL, $longitude = NULL, $city = NULL, $zipCode = NULL, $shareTypeId = NULL, $eventDate = NULL, $eventTime = NULL, $title = NULL, $price = NULL, $places = NULL, $waitingTime = NULL, $meetPlace = NULL, $limitations = NULL, $message = NULL, $accuracy = NULL, $radius = NULL) {
         $response = NULL;
         
         //Check credentials
@@ -204,6 +209,7 @@ class ApiSharesController extends AppController {
                 $dataShare['Share']['share_type_id'] = $shareTypeId;
             }
             $dataShare['Share']['event_date'] = $eventDate;
+            $dataShare['Share']['event_time'] = $eventTime;
             $dataShare['Share']['title'] = $title;
             $dataShare['Share']['price'] = $price;
             $dataShare['Share']['places'] = $places;
@@ -211,7 +217,6 @@ class ApiSharesController extends AppController {
             $dataShare['Share']['waiting_time'] = $waitingTime;
             $dataShare['Share']['meet_place'] = $meetPlace;
             $dataShare['Share']['limitations'] = $limitations;
-            $dataShare['Share']['supplement'] = $supplement;
             $dataShare['Share']['message'] = $message;
             $dataShare['Share']['latitude'] = $latitude;
             $dataShare['Share']['longitude'] = $longitude;
@@ -272,7 +277,6 @@ class ApiSharesController extends AppController {
             $data = $this->request->input('json_decode', true);
             
             //Check empty fields
-            $this->checkField($data, 'supplement');
             $this->checkField($data, 'message');
             $this->checkField($data, 'city');
             $this->checkField($data, 'zip_code');
@@ -282,7 +286,7 @@ class ApiSharesController extends AppController {
             
             try {
                 //Intern add
-                $response = $this->internAdd($userId, $data['latitude'], $data['longitude'], NULL, NULL, $data['share_type_id'], $data['event_date'], $data['title'], $data['price'], $data['places'], $data['waiting_time'], $data['meet_place'], $data['limitations'], $data['supplement'], $data['message'], $data['accuracy'], $data['radius']);
+                $response = $this->internAdd($userId, $data['latitude'], $data['longitude'], NULL, NULL, $data['share_type_id'], $data['event_date'], $data['event_time'], $data['title'], $data['price'], $data['places'], $data['waiting_time'], $data['meet_place'], $data['limitations'], $data['message'], $data['accuracy'], $data['radius']);
 
                 //Send JSON respsonse
                 $this->sendResponse(SHARE_STATUS_CODE_CREATED, $response);

@@ -192,17 +192,19 @@ function initializeSearch(shareTypeCategory, shareType, date) {
                 var shareIcon = getMarkerIcon(share.share_type_category.label, share.share_type.label);
                 share.share_icon = shareIcon;
 
-                var htmlDate = share.event_date;
-                var eventDate = new Date(htmlDate);
+                var eventDate = new Date(share.event_date);
                 var isoEventDate = eventDate.toISOString();
-
                 var momentDay = moment(isoEventDate).format('dddd D MMMM', 'fr');
                 share.moment_day = momentDay;
 
-                var momentHour = moment(isoEventDate).format('LT', 'fr');
+                var eventTime = new Date(share.event_time);
+                var isoEventTime = eventTime.toISOString();
+                var momentHour = moment(isoEventTime).format('LT', 'fr');
                 share.moment_hour = momentHour;
 
-                var momentModifiedTimeAgo = moment(isoEventDate).fromNow();
+                var modifiedDate = new Date(share.modifed);
+                var isoModifiedDate = modifiedDate.toISOString();
+                var momentModifiedTimeAgo = moment(isoModifiedDate).fromNow();
                 share.moment_modified_time_ago = momentModifiedTimeAgo;
 
                 var totalPlaces = parseInt(share.places) + 1;

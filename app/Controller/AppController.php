@@ -381,7 +381,6 @@ class AppController extends Controller {
             $response['meet_place'] = $share['Share']['meet_place'];
             $response['limitations'] = $share['Share']['limitations'];
             $response['status'] = $share['Share']['status'];
-            $response['supplement'] = $share['Share']['supplement'];
             $response['image_url'] = $share['Share']['image_url'];
             $response['message'] = $share['Share']['message'];
 

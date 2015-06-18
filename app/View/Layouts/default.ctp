@@ -27,7 +27,6 @@
             echo $this->Html->script('jquery-2.1.3.min');
             echo $this->Html->script('bootstrap.min');
             echo $this->Html->script('bootstrap-select.min');
-            echo $this->Html->script('jquery.datetimepicker');
             echo $this->Html->script('jquery-gmaps-latlon-picker');
             echo $this->Html->script('markerwithlabel');
             echo $this->Html->script('angular.min');
@@ -46,6 +45,8 @@
             echo $this->fetch('css');
             echo $this->fetch('script');
         ?>
+        <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+        <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
     </head>
     <body>
         <script>

@@ -4,7 +4,7 @@
             <span class="span-share-card-date text-capitalize moment-day"><?php echo $date; ?></span>
         </div>
         <div class="col-md-2 text-right">
-            <span class="span-share-card-date-hour moment-hour"><?php echo $date; ?></span>
+            <span class="span-share-card-date-hour moment-hour"><?php echo $time; ?></span>
         </div>
     </div>
 </div>

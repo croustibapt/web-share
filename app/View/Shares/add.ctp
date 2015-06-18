@@ -48,7 +48,7 @@
                                 echo $this->element('share-add-input', array(
                                     'name' => 'share_date',
                                     'placeholder' => 'Date',
-                                    'class' => 'datetimepicker',
+                                    'class' => 'datepicker',
                                     'icon' => 'fa-calendar-o'
                                 ));
 
@@ -176,7 +176,7 @@
 </div>
 
 <script>
-    $('.datetimepicker').datetimepicker({
+    /*$('.datetimepicker').datetimepicker({
         lang: 'fr',
         minDate: new Date(),
         format: 'Y-m-d H:i',
@@ -186,12 +186,15 @@
 
             $('#hidden-share-add-event-date').val(timestamp);
         }
-    });
+    });*/
 
     $('.selectpicker').selectpicker();
 
     //On load
     $(function() {
+        //
+        $(".datepicker").datepicker();
+
         //
         $('#button-share-add-less-details').click(function () {
             $('#div-more-details-collapse').toggle();
