@@ -193,7 +193,15 @@
     //On load
     $(function() {
         //
-        $(".datepicker").datepicker();
+        $(".datepicker").datepicker({
+            dateFormat: 'yy-mm-dd',
+            onSelect: function(dateText) {
+                var eventDate = new Date(this.value);
+                var timestamp = (eventDate.getTime() / 1000.0);
+
+                $('#hidden-share-add-event-date').val(timestamp);
+            }
+        });
 
         //
         $('#button-share-add-less-details').click(function () {

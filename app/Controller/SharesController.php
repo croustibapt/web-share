@@ -95,14 +95,15 @@ class SharesController extends ApiSharesController {
 
             //Get POST data
             $data = $this->request->data;
+            //pr($data);
 
             try {
                 $eventDate = date('Y-m-d', $data['Share']['event_date']);
-                $eventTime = date('H:i:s', $data['Share']['event_time']);
+                //$eventTime = date('H:i:s', $data['Share']['event_time']);
 
                 //Intern add
                 $response = $this->internAdd($userId, $data['Share']['latitude'], $data['Share']['longitude'], NULL, NULL,
-                    $data['Share']['share_type_id'], $eventDate, $eventTime, $data['Share']['title'],
+                    $data['Share']['share_type_id'], $eventDate, NULL, $data['Share']['title'],
                     $data['Share']['price'], $data['Share']['places'], $data['Share']['waiting_time'],
                     $data['Share']['meet_place'], $data['Share']['limitations'], NULL,
                     $data['Share']['message'],

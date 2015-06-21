@@ -36,7 +36,7 @@ class Share extends AppModel {
                 'allowEmpty' => false,
                 'message' => 'FieldRequired'
             ),
-            'datetime' => array(
+            'date' => array(
                 'rule'     => 'date',
                 'message'  => 'FieldNotValid'
             )

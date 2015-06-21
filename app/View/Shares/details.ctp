@@ -22,7 +22,11 @@
                         <h2 class="h2-share-details-date text-capitalize moment-day" style=" color: <?php echo $shareTypeColor; ?>;"><?php echo $share['event_date']; ?></h2>
 
                         <!-- Hour -->
+                        <?php if (isset($share['event_time'])) : ?>
+
                         <h2 class="h2-share-details-hour moment-hour"><?php echo $share['event_time']; ?></h2>
+
+                        <?php endif; ?>
                     </div>
                     
                 </div>

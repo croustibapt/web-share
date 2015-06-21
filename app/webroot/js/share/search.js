@@ -197,12 +197,12 @@ function initializeSearch(shareTypeCategory, shareType, date) {
                 var momentDay = moment(isoEventDate).format('dddd D MMMM', 'fr');
                 share.moment_day = momentDay;
 
-                var eventTime = new Date(share.event_time);
+                /*var eventTime = new Date(share.event_time);
                 var isoEventTime = eventTime.toISOString();
                 var momentHour = moment(isoEventTime).format('LT', 'fr');
-                share.moment_hour = momentHour;
+                share.moment_hour = momentHour;*/
 
-                var modifiedDate = new Date(share.modifed);
+                var modifiedDate = new Date(share.modified);
                 var isoModifiedDate = modifiedDate.toISOString();
                 var momentModifiedTimeAgo = moment(isoModifiedDate).fromNow();
                 share.moment_modified_time_ago = momentModifiedTimeAgo;

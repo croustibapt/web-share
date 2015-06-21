@@ -48,16 +48,17 @@ class ApiSharesController extends AppController {
         //Start date
         if ($startDate != NULL) {
             $sqlStartDate = $startDate->format('Y-m-d');
-            $sqlStartTime = $startDate->format('H:i:s');
+            //$sqlStartTime = $startDate->format('H:i:s');
 
-            $sql .= ' AND (Share.event_date >= \''.$sqlStartDate.'\''.' AND Share.event_time >= \''.$sqlStartTime.'\')';
+            $sql .= ' AND Share.event_date >= \''.$sqlStartDate.'\'';
         }
 
         //End date
         if ($endDate != NULL) {
             $sqlEndDate = $endDate->format('Y-m-d');
-            $sqlEndTime = $endDate->format('H:i:s');
-            $sql .= ' AND ((Share.event_date == \''.$sqlEndDate.'\''.' AND Share.event_time <= \''.$sqlEndTime.'\')'.' OR (Share.event_date <= \''.$sqlEndDate.'\''.'))';
+            //$sqlEndTime = $endDate->format('H:i:s');
+
+            $sql .= ' AND Share.event_date <= \''.$sqlEndDate.'\'';
         }
 
         //Region
