@@ -5,10 +5,12 @@
 <script src="http://js.nicedit.com/nicEdit-latest.js"></script>
 
 <div ng-controller="DetailsController" style="background-color: #ffffff;">
-    <div class="container div-share">
+
+    <div class="container div-share" style="padding-right: 0px; padding-left: 0px; padding-top: 30px; padding-bottom: 30px;">
         <div class="row">
             <div class="col-md-2 text-left">
-                <div style="">
+                <div class="text-center">
+
                     <!-- Share type icon -->
                     <h1 class="h1-share-details-type" style="color: <?php echo $shareTypeColor; ?>;">
                         <?php
@@ -16,33 +18,30 @@
                         ?>
                     </h1>
 
-                    <!-- Datetime -->
-                    <div class="div-share-details-date">
-                        <!-- Date -->
-                        <h2 class="h2-share-details-date text-capitalize moment-day" style=" color: <?php echo $shareTypeColor; ?>;"><?php echo $share['event_date']; ?></h2>
-
-                        <!-- Hour -->
-                        <?php if (isset($share['event_time'])) : ?>
-
-                        <h2 class="h2-share-details-hour moment-hour"><?php echo $share['event_time']; ?></h2>
-
-                        <?php endif; ?>
-                    </div>
+                    <span style="color: <?php echo $shareTypeColor; ?>; font-size: 30px;">#<?php echo $this->ShareType->shareTypeLabel($share['share_type_category']['label'], $share['share_type']['label']); ?></span>
                     
                 </div>
             </div>
 
             <!-- Description -->
             <div class="col-md-8 div-share-details-description">
+                <!-- Datetime -->
+                <div class="div-share-details-date">
+                    <!-- Date -->
+                    <h2 class="h2-share-details-date text-capitalize moment-day" style=" color: <?php echo $shareTypeColor; ?>;"><?php echo $share['event_date']; ?></h2>
+
+                    <!-- Hour -->
+                    <?php if (isset($share['event_time'])) : ?>
+
+                        <h2 class="h2-share-details-hour moment-hour"><?php echo $share['event_time']; ?></h2>
+
+                    <?php endif; ?>
+                </div>
+
                 <!-- Title -->
                 <h1 class="h1-share-details-title">
-                    <?php echo $share['title']; ?> <span style="color: <?php echo $shareTypeColor; ?>;">#<?php echo $this->ShareType->shareTypeLabel($share['share_type_category']['label'], $share['share_type']['label']); ?></span>
+                    <?php echo $share['title']; ?>
                 </h1>
-
-                <!-- Price -->
-                <h2 class="h2-share-details-price">
-                    <span class="span-share-details-price"><?php echo number_format($share['price'], 1); ?>€</span> par personne
-                </h2>
 
                 <hr />
 
@@ -66,6 +65,49 @@
             <div class="col-md-2 text-center">
                 
                 <div style="padding-right: 15px;">
+                    <!-- Price -->
+                    <h2 class="h2-share-details-price">
+                        <span class="span-share-details-price"><?php echo number_format($share['price'], 1); ?>€</span>/pers.
+                    </h2>
+
+                    <?php if ($this->LocalUser->isAuthenticated($this)) : ?>
+
+                        <?php if ($canRequest) : ?>
+
+                            <!-- Participate button -->
+                            <?php
+                            echo $this->Form->create('Request', array(
+                                'action' => 'add',
+                                'class' => 'form-share-card-request form-inline',
+                            ));
+
+                            echo $this->Form->hidden('shareId', array(
+                                'value' => $share['share_id']
+                            ));
+
+                            echo $this->Form->submit('Participer', array(
+                                'class' => 'btn btn-success button-share-details-participate'
+                            ));
+
+                            echo $this->Form->end();
+                            ?>
+
+                        <?php else : ?>
+
+                            <?php if (!$doesUserOwnShare) : ?>
+
+                                <button class="btn btn-<?php echo $this->Share->getShareDetailsRequestStatusClass($requestStatus); ?> disabled button-share-details-participate-status"><?php echo $this->Share->getShareDetailsRequestStatusLabel($requestStatus); ?></button>
+
+                            <?php endif; ?>
+
+                        <?php endif; ?>
+
+                    <?php else : ?>
+                        <div data-toggle="tooltip" data-placement="top" title="Vous devez être authentifié pour pouvoir participer">
+                            <button class="btn btn-success disabled button-share-details-participate">Participer</button>
+                        </div>
+                    <?php endif; ?>
+
                     <!-- Places -->
                     <?php
                         $placesLeft = $share['places'] - $share['participation_count'];
@@ -85,43 +127,6 @@
 
                     <?php endif; ?>
 
-                    <?php if ($this->LocalUser->isAuthenticated($this)) : ?>
-
-                        <?php if ($canRequest) : ?>
-
-                        <!-- Participate button -->
-                        <?php
-                            echo $this->Form->create('Request', array(
-                                'action' => 'add',
-                                'class' => 'form-share-card-request form-inline',
-                            ));
-
-                            echo $this->Form->hidden('shareId', array(
-                                'value' => $share['share_id']
-                            ));
-
-                            echo $this->Form->submit('Participer', array(
-                                'class' => 'btn btn-success button-share-details-participate'
-                            ));
-
-                            echo $this->Form->end();
-                        ?>
-
-                        <?php else : ?>
-
-                            <?php if (!$doesUserOwnShare) : ?>
-
-                            <button class="btn btn-<?php echo $this->Share->getShareDetailsRequestStatusClass($requestStatus); ?> disabled button-share-details-participate-status"><?php echo $this->Share->getShareDetailsRequestStatusLabel($requestStatus); ?></button>
-
-                            <?php endif; ?>
-
-                        <?php endif; ?>
-
-                    <?php else : ?>
-                        <div data-toggle="tooltip" data-placement="top" title="Vous devez être authentifié pour pouvoir participer">
-                            <button class="btn btn-success disabled button-share-details-participate">Participer</button>
-                        </div>
-                    <?php endif; ?>
                 </div>
                 
             </div>
@@ -143,22 +148,30 @@
             </div>
         </div>
     </div>
-    
-    <!-- City -->
-    <div class="container">
-        <h3><?php echo ($share['city'] != "") ? $share['city'] : "Inconnu" ; ?></h3>
 
-        <!-- Meet place -->
-        <?php if ($share['meet_place'] != "") : ?>
+    <div style="position: relative;">
+        <!-- Google maps -->
+        <div id="div-share-details-google-map" style="width: 100%; height: 500px;">
 
-        <p class="text-info"><i class="fa fa-location-arrow"></i> <?php echo $share['meet_place']; ?></p>
+        </div>
 
-        <?php endif; ?>
-    </div>
-    
-    <!-- Google maps -->
-    <div id="div-share-details-google-map" style="width: 100%; height: 400px;">
+        <div style="position: absolute; top: 30px; left: 0px; width: 100%;">
+            <div class="container">
+                <div class="panel" style="width: 25%;">
+                    <!-- City -->
+                    <h3><?php echo ($share['city'] != "") ? $share['city'] : "Inconnu" ; ?></h3>
 
+                    <!-- Meet place -->
+                    <?php if ($share['meet_place'] != "") : ?>
+
+                        <p class="text-info"><i class="fa fa-location-arrow"></i> <?php echo $share['meet_place']; ?></p>
+
+                    <?php endif; ?>
+                </div>
+
+            </div>
+
+        </div>
     </div>
 
     <!-- Comments -->

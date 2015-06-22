@@ -178,6 +178,8 @@ class ApiSharesController extends AppController {
         if ($this->checkCredentials($this->request)) {
             $cityGeocodingUrl = "https://maps.googleapis.com/maps/api/geocode/json?latlng=".$latitude.",".$longitude."&result_type=locality|postal_code&key=".SHARE_GOOGLE_MAPS_API_KEY;
 
+            //pr($cityGeocodingUrl);
+
             /*echo json_encode($cityGeocodingUrl);
             exit();*/
 
