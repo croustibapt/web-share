@@ -18,8 +18,21 @@
                         ?>
                     </h1>
 
+                    <!-- Share type -->
                     <span style="color: <?php echo $shareTypeColor; ?>; font-size: 30px;">#<?php echo $this->ShareType->shareTypeLabel($share['share_type_category']['label'], $share['share_type']['label']); ?></span>
-                    
+
+                    <!-- Created by -->
+                    <p class="p-share-details-created text-muted" style="margin-top: 10px;">
+                        Créée par
+                        <?php
+                        echo $this->Html->link('<span class="span-share-card-user">'.$share['user']['username'].'</span>', '/users/details/'.$share['user']['external_id'], array(
+                            'escape' => false
+                        ));
+                        ?>
+                        <br />
+                        <span class="moment-time-ago"><?php echo $share['modified']; ?></span>
+                    </p>
+
                 </div>
             </div>
 
@@ -129,22 +142,6 @@
 
                 </div>
                 
-            </div>
-
-            <!-- User -->
-            <div class="col-md-12 text-right">
-                <div style="padding-right: 15px; padding-left: 15px;">
-                    <!-- Created by -->
-                    <p class="p-share-details-created text-muted">
-                        Créée par
-                        <?php
-                            echo $this->Html->link('<span class="span-share-card-user">'.$share['user']['username'].'</span>', '/users/details/'.$share['user']['external_id'], array(
-                                'escape' => false
-                            ));
-                        ?>
-                         <span class="moment-time-ago"><?php echo $share['modified']; ?></span>
-                    </p>
-                </div>
             </div>
         </div>
     </div>
