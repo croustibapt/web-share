@@ -412,20 +412,6 @@ body {
     margin-top: 15px;
 }
 
-/* MENU */
-
-.panel {
-    border: none;
-    border-radius: initial;
-}
-
-.panel-primary .panel-heading {
-    background-color: #2ecc71;
-    color: #ffffff;
-    border: none;
-    border-radius: initial;
-}
-
 /* USER */
 
 .user-card-picture-div {

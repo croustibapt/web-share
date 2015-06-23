@@ -77,71 +77,72 @@
             <!-- Place -->
             <div class="col-md-2 text-center">
                 
-                <div style="padding-right: 15px;">
-                    <!-- Price -->
-                    <h2 class="h2-share-details-price">
-                        <span class="span-share-details-price"><?php echo number_format($share['price'], 1); ?>€</span>/pers.
-                    </h2>
+                <div class="panel panel-default" style="margin-top: 10px; background-color: #fbfcfc;">
+                    <div class="panel-body">
+                        <!-- Price -->
+                        <h2 class="h2-share-details-price" style="margin-top: 0px; margin-bottom: 20px;">
+                            <span class="span-share-details-price"><?php echo number_format($share['price'], 1); ?>€</span>
+                            <br />/ pers.
+                        </h2>
 
-                    <?php if ($this->LocalUser->isAuthenticated($this)) : ?>
+                        <?php if ($this->LocalUser->isAuthenticated($this)) : ?>
 
-                        <?php if ($canRequest) : ?>
+                            <?php if ($canRequest) : ?>
 
-                            <!-- Participate button -->
-                            <?php
-                            echo $this->Form->create('Request', array(
-                                'action' => 'add',
-                                'class' => 'form-share-card-request form-inline',
-                            ));
+                                <!-- Participate button -->
+                                <?php
+                                echo $this->Form->create('Request', array(
+                                    'action' => 'add',
+                                    'class' => 'form-share-card-request form-inline',
+                                ));
 
-                            echo $this->Form->hidden('shareId', array(
-                                'value' => $share['share_id']
-                            ));
+                                echo $this->Form->hidden('shareId', array(
+                                    'value' => $share['share_id']
+                                ));
 
-                            echo $this->Form->submit('Participer', array(
-                                'class' => 'btn btn-success button-share-details-participate'
-                            ));
+                                echo $this->Form->submit('Participer', array(
+                                    'class' => 'btn btn-success button-share-details-participate'
+                                ));
 
-                            echo $this->Form->end();
-                            ?>
+                                echo $this->Form->end();
+                                ?>
 
-                        <?php else : ?>
+                            <?php else : ?>
 
-                            <?php if (!$doesUserOwnShare) : ?>
+                                <?php if (!$doesUserOwnShare) : ?>
 
-                                <button class="btn btn-<?php echo $this->Share->getShareDetailsRequestStatusClass($requestStatus); ?> disabled button-share-details-participate-status"><?php echo $this->Share->getShareDetailsRequestStatusLabel($requestStatus); ?></button>
+                                    <button class="btn btn-<?php echo $this->Share->getShareDetailsRequestStatusClass($requestStatus); ?> disabled button-share-details-participate-status"><?php echo $this->Share->getShareDetailsRequestStatusLabel($requestStatus); ?></button>
+
+                                <?php endif; ?>
 
                             <?php endif; ?>
 
+                        <?php else : ?>
+                            <div data-toggle="tooltip" data-placement="top" title="Vous devez être authentifié pour pouvoir participer">
+                                <button class="btn btn-success disabled button-share-details-participate">Participer</button>
+                            </div>
                         <?php endif; ?>
 
-                    <?php else : ?>
-                        <div data-toggle="tooltip" data-placement="top" title="Vous devez être authentifié pour pouvoir participer">
-                            <button class="btn btn-success disabled button-share-details-participate">Participer</button>
-                        </div>
-                    <?php endif; ?>
+                        <!-- Places -->
+                        <?php
+                            $placesLeft = $share['places'] - $share['participation_count'];
+                        ?>
 
-                    <!-- Places -->
-                    <?php
-                        $placesLeft = $share['places'] - $share['participation_count'];
-                    ?>
+                        <?php if ($placesLeft > 1) : ?>
 
-                    <?php if ($placesLeft > 1) : ?>
+                        <p class="text-success"><strong><?php echo $placesLeft; ?></strong> places restantes</p>
 
-                    <p class="text-success"><strong><?php echo $placesLeft; ?></strong> places restantes</p>
+                        <?php elseif ($placesLeft > 0) : ?>
 
-                    <?php elseif ($placesLeft > 0) : ?>
+                        <p class="text-warning"><strong><?php echo $placesLeft; ?></strong> place restante</p>
 
-                    <p class="text-warning"><strong><?php echo $placesLeft; ?></strong> place restante</p>
+                        <?php else : ?>
 
-                    <?php else : ?>
+                        <p class="text-danger">Complet</p>
 
-                    <p class="text-danger">Complet</p>
-
-                    <?php endif; ?>
-
+                        <?php endif; ?>
+                    </div>
                 </div>
-                
             </div>
         </div>
     </div>
@@ -154,18 +155,21 @@
 
         <div style="position: absolute; top: 30px; left: 0px; width: 100%;">
             <div class="container">
-                <div class="panel" style="width: 25%;">
-                    <!-- City -->
-                    <h3><?php echo ($share['city'] != "") ? $share['city'] : "Inconnu" ; ?></h3>
+                <div class="panel panel-default" style="width: 25%;">
+                    <div class="panel-body">
+                        <!-- City -->
+                        <h3 style="margin-top: 0px;">
+                            <?php echo ($share['city'] != "") ? $share['city'] : "Inconnu" ; ?>
+                        </h3>
 
-                    <!-- Meet place -->
-                    <?php if ($share['meet_place'] != "") : ?>
+                        <!-- Meet place -->
+                        <?php if ($share['meet_place'] != "") : ?>
 
-                        <p class="text-info"><i class="fa fa-location-arrow"></i> <?php echo $share['meet_place']; ?></p>
+                            <p class="text-info"><i class="fa fa-location-arrow"></i> <?php echo $share['meet_place']; ?></p>
 
-                    <?php endif; ?>
+                        <?php endif; ?>
+                    </div>
                 </div>
-
             </div>
 
         </div>
@@ -195,5 +199,18 @@
             center: myLatlng
         };
         map = new google.maps.Map(document.getElementById('div-share-details-google-map'), mapOptions);
+        
+        var myLatlng = new google.maps.LatLng(<?php echo $share['latitude']; ?>, <?php echo $share['longitude']; ?>);
+        var iconClass = getMarkerIcon('<?php echo $share['share_type_category']['label']; ?>', '<?php echo $share['share_type']['label']; ?>')
+        var iconColor = getIconColor('<?php echo $share['share_type_category']['label']; ?>');
+
+        var marker = new MarkerWithLabel({
+            position: myLatlng,
+            map: map,
+            title: '<?php echo $share['title']; ?>',
+            labelContent: '<div class="img-circle text-center" style="border: 4px solid white; background-color: ' + iconColor + '; display: table; min-width: 40px; width: 40px; min-height: 40px; height: 40px;"><i class="' + iconClass + '" style="display: table-cell; vertical-align: middle; color: #ffffff; font-size: 18px;"></i></div>',
+            labelAnchor: new google.maps.Point(16, 16),
+            icon: ' '
+        });
     });
 </script>
