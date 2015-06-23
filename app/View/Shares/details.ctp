@@ -23,7 +23,7 @@
 
                     <!-- Created by -->
                     <p class="p-share-details-created text-muted" style="margin-top: 10px;">
-                        Créée par
+                        Créé par
                         <?php
                         echo $this->Html->link('<span class="span-share-card-user">'.$share['user']['username'].'</span>', '/users/details/'.$share['user']['external_id'], array(
                             'escape' => false
