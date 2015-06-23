@@ -1,6 +1,8 @@
 <!-- Title -->
-<div class="container">
-    <h3>13 commentaires</h3>
+<div id="div-share-details-comments-header" class="container" style="padding-top: 50px; margin-top: -50px;">
+    <h3 ng-if="(comments.length == 0)">Aucun commentaire</h3>
+    <h3 ng-if="(comments.length == 1)">1 commentaire</h3>
+    <h3 ng-if="(comments.length > 1)">{{ comments.length }} commentaires</h3>
 </div>
 
 <!-- Comments -->
@@ -57,19 +59,17 @@
             </div>
 
             <!-- No comments -->
-            <div ng-if="(comments.length == 0)">
+            <!--<div ng-if="(comments.length == 0)">
                 <p class="lead text-center">
                     Aucun commentaire
                 </p>
-            </div>
+            </div>-->
         </div>
 
         <?php if ($this->LocalUser->isAuthenticated($this)) : ?>
 
             <div class="col-md-10 div-share-details-comments-editor">
-                <div style="padding-left: 15px;">
-                    <textarea id="textarea-comment-add" class="form-control" rows="3" ng-model="message"></textarea>
-                </div>
+                <textarea id="textarea-comment-add" class="form-control" rows="3" ng-model="message"></textarea>
             </div>
             <div class="col-md-2 div-share-details-comments-editor">
                 <div style="padding-right: 15px;">
@@ -82,10 +82,8 @@
         <?php else : ?>
 
             <div class="col-md-12 div-share-details-comments-editor">
-                <div style="padding-left: 15px; padding-right: 15px;">
-                    <div class="alert alert-info" role="alert">
-                        <strong>Information :</strong> Vous devez être authentifié pour commenter.
-                    </div>
+                <div class="alert alert-info" role="alert">
+                    <strong>Information :</strong> Vous devez être authentifié pour commenter.
                 </div>
             </div>
 

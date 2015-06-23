@@ -6,7 +6,7 @@
 
 <div ng-controller="DetailsController" style="background-color: #ffffff;">
 
-    <div class="container div-share" style="padding-right: 0px; padding-left: 0px; padding-top: 30px; padding-bottom: 30px;">
+    <div class="container div-share" style="padding-top: 30px; padding-bottom: 30px;">
         <div class="row">
             <div class="col-md-2 text-left">
                 <div class="text-center">
@@ -38,24 +38,33 @@
 
             <!-- Description -->
             <div class="col-md-8 div-share-details-description">
-                <!-- Datetime -->
-                <div class="div-share-details-date">
-                    <!-- Date -->
-                    <h2 class="h2-share-details-date text-capitalize moment-day" style=" color: <?php echo $shareTypeColor; ?>;"><?php echo $share['event_date']; ?></h2>
+                <div class="row">
+                    <div class="col-md-6">
+                        <!-- Date -->
+                        <h2 class="h2-share-details-date text-capitalize moment-day" style=" color: <?php echo $shareTypeColor; ?>;"><?php echo $share['event_date']; ?></h2>
 
-                    <!-- Hour -->
-                    <?php if (isset($share['event_time'])) : ?>
+                        <!-- Hour -->
+                        <?php if (isset($share['event_time'])) : ?>
 
-                        <h2 class="h2-share-details-hour moment-hour"><?php echo $share['event_time']; ?></h2>
+                            <h2 class="h2-share-details-hour moment-hour"><?php echo $share['event_time']; ?></h2>
 
-                    <?php endif; ?>
+                        <?php endif; ?>
+                    </div>
+                    <div class="col-md-6 text-right">
+
+                        <!-- City -->
+                        <a href="#div-share-details-place-header" class="btn btn-lg btn-link scroll-a" style="margin-top: 20px;">
+                            <?php echo ($share['city'] != "") ? $share['city'] : "Lieu non renseigné" ; ?>
+                        </a>
+
+
+                    </div>
                 </div>
 
                 <!-- Title -->
                 <h1 class="h1-share-details-title">
                     <?php echo $share['title']; ?>
                 </h1>
-
                 <hr />
 
                 <!-- Message and limitations -->
@@ -72,6 +81,17 @@
 
                     <?php endif; ?>
                 </blockquote>
+
+                <!-- Comments count -->
+                <?php if ($share['comment_count'] > 1) : ?>
+
+                    <a href="#div-share-details-comments-header" class="btn btn-link scroll-a"><?php echo $share['comment_count']; ?> Commentaires <i class="fa fa-level-down"></i></a>
+
+                <?php elseif ($share['comment_count'] > 0) : ?>
+
+                    <a href="#div-share-details-comments-header" class="btn btn-link scroll-a">1 Commentaire <i class="fa fa-level-down"></i></a>
+
+                <?php endif; ?>
             </div>
 
             <!-- Place -->
@@ -79,6 +99,7 @@
                 
                 <div class="panel panel-default" style="margin-top: 10px; background-color: #fbfcfc;">
                     <div class="panel-body">
+
                         <!-- Price -->
                         <h2 class="h2-share-details-price" style="margin-top: 0px; margin-bottom: 20px;">
                             <span class="span-share-details-price"><?php echo number_format($share['price'], 1); ?>€</span>
@@ -147,30 +168,22 @@
         </div>
     </div>
 
+    <div id="div-share-details-place-header" style="position: relative; padding-top: 50px; margin-top: -50px;">
+
+    </div>
     <div style="position: relative;">
         <!-- Google maps -->
         <div id="div-share-details-google-map" style="width: 100%; height: 500px;">
 
         </div>
 
-        <div style="position: absolute; top: 30px; left: 0px; width: 100%;">
-            <div class="container">
-                <div class="panel panel-default" style="width: 25%;">
-                    <div class="panel-body">
-                        <!-- City -->
-                        <h3 style="margin-top: 0px;">
-                            <?php echo ($share['city'] != "") ? $share['city'] : "Inconnu" ; ?>
-                        </h3>
+        <!-- Header shadow -->
+        <div style="position: absolute; top: -10px; left: 0px; width: 100%; height:10px; -webkit-box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175); box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);">
 
-                        <!-- Meet place -->
-                        <?php if ($share['meet_place'] != "") : ?>
+        </div>
 
-                            <p class="text-info"><i class="fa fa-location-arrow"></i> <?php echo $share['meet_place']; ?></p>
-
-                        <?php endif; ?>
-                    </div>
-                </div>
-            </div>
+        <!-- Footer shadow -->
+        <div style="position: absolute; bottom: -10px; left: 0px; width: 100%; height:10px; -webkit-box-shadow: 0 -6px 12px rgba(0, 0, 0, 0.175); box-shadow: 0 -6px 12px rgba(0, 0, 0, 0.175);">
 
         </div>
     </div>

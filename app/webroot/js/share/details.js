@@ -72,7 +72,7 @@ function initializeDetails(shareId, textAreaId) {
         };
 
         $scope.onSendButtonClicked = function($event) {
-            var button = angular.element($event.target);
+            var button = angular.element($event.currentTarget);
             button.button('loading');
 
             //And its message

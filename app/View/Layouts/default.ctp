@@ -12,7 +12,8 @@
 
         <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
-        
+        <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+
         <?php
             echo $this->Html->meta('icon');
 
@@ -25,6 +26,9 @@
             echo $this->Html->css('jquery-gmaps-latlon-picker');
 
             echo $this->Html->script('jquery-2.1.3.min');
+        ?>
+        <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+        <?php
             echo $this->Html->script('bootstrap.min');
             echo $this->Html->script('bootstrap-select.min');
             echo $this->Html->script('jquery-gmaps-latlon-picker');
@@ -45,8 +49,6 @@
             echo $this->fetch('css');
             echo $this->fetch('script');
         ?>
-        <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
-        <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
     </head>
     <body>
         <script>
@@ -114,6 +116,14 @@
             $(document).ready(function() {
                 //Moment tags
                 handleMomentTags();
+
+                //Animate scroll
+                $('.scroll-a').click(function(){
+                    $('html, body').animate({
+                        scrollTop: $( $(this).attr('href') ).offset().top
+                    }, 500);
+                    return false;
+                });
                 
                 //Tooltip
                 $('[data-toggle="tooltip"]').tooltip();
