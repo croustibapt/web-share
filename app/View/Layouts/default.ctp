@@ -119,8 +119,10 @@
 
                 //Animate scroll
                 $('.scroll-a').click(function(){
+                    var offset = $($(this).attr('href')).offset().top + 50;
+
                     $('html, body').animate({
-                        scrollTop: $( $(this).attr('href') ).offset().top
+                        scrollTop: offset
                     }, 500);
                     return false;
                 });

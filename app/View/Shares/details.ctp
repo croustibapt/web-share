@@ -83,15 +83,9 @@
                 </blockquote>
 
                 <!-- Comments count -->
-                <?php if ($share['comment_count'] > 1) : ?>
+                <a ng-if="(comments.length > 1)" href="#div-share-details-comments-header2" class="btn btn-link scroll-a">{{ comments.length }} Commentaires <i class="fa fa-level-down"></i></a>
+                <a ng-if="(comments.length == 1)" href="#div-share-details-comments-header2" class="btn btn-link scroll-a">1 Commentaire <i class="fa fa-level-down"></i></a>
 
-                    <a href="#div-share-details-comments-header" class="btn btn-link scroll-a"><?php echo $share['comment_count']; ?> Commentaires <i class="fa fa-level-down"></i></a>
-
-                <?php elseif ($share['comment_count'] > 0) : ?>
-
-                    <a href="#div-share-details-comments-header" class="btn btn-link scroll-a">1 Commentaire <i class="fa fa-level-down"></i></a>
-
-                <?php endif; ?>
             </div>
 
             <!-- Place -->
@@ -168,24 +162,21 @@
         </div>
     </div>
 
-    <div id="div-share-details-place-header" style="position: relative; padding-top: 50px; margin-top: -50px;">
-
-    </div>
-    <div style="position: relative;">
+    <div id="div-share-details-place-header">
         <!-- Google maps -->
-        <div id="div-share-details-google-map" style="width: 100%; height: 500px;">
+        <div id="div-share-details-google-map" style="width: 100%; height: 500px; border-top: 1px solid #bdc3c7; border-bottom: 1px solid #bdc3c7;">
 
         </div>
 
         <!-- Header shadow -->
-        <div style="position: absolute; top: -10px; left: 0px; width: 100%; height:10px; -webkit-box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175); box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);">
+        <!--<div style="position: absolute; top: -10px; left: 0px; width: 100%; height: 10px; -webkit-box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175); box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);">
 
-        </div>
+        </div>-->
 
         <!-- Footer shadow -->
-        <div style="position: absolute; bottom: -10px; left: 0px; width: 100%; height:10px; -webkit-box-shadow: 0 -6px 12px rgba(0, 0, 0, 0.175); box-shadow: 0 -6px 12px rgba(0, 0, 0, 0.175);">
+        <!--<div style="position: absolute; bottom: -10px; left: 0px; width: 100%; height: 10px; -webkit-box-shadow: 0 -6px 12px rgba(0, 0, 0, 0.175); box-shadow: 0 -6px 12px rgba(0, 0, 0, 0.175);">
 
-        </div>
+        </div>-->
     </div>
 
     <!-- Comments -->

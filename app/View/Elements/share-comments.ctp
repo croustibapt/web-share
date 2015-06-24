@@ -1,5 +1,5 @@
 <!-- Title -->
-<div id="div-share-details-comments-header" class="container" style="padding-top: 50px; margin-top: -50px;">
+<div id="div-share-details-comments-header2" class="container">
     <h3 ng-if="(comments.length == 0)">Aucun commentaire</h3>
     <h3 ng-if="(comments.length == 1)">1 commentaire</h3>
     <h3 ng-if="(comments.length > 1)">{{ comments.length }} commentaires</h3>
@@ -11,16 +11,14 @@
         <div class="col-md-12">
             <div id="div-share-details-comments-list" ng-if="(comments.length > 0)">
                 <!-- All comments -->
-                <div ng-repeat="comment in comments">
+                <div ng-repeat="comment in comments" style="margin-bottom: 30px;">
 
                     <!-- Creator comment -->
                     <div ng-if="(shareUserExternalId === comment.user.external_id)" class="media">
                         <div class="media-body">
                             <blockquote class="blockquote-reverse">
 
-                                <h4 class="media-heading">{{ comment.user.username }}</h4>
-
-                                <p class="lead">{{ comment.message }}</p>
+                                <p class="media-heading lead">{{ comment.message }}</p>
 
                                 <footer>
                                     <span>{{ comment.moment_created_time_ago }}</span>
@@ -28,22 +26,22 @@
 
                             </blockquote>
                         </div>
-                        <div class="media-right">
-                            <img class="comment-user-img img-circle img-thumbnail" ng-src="https://graph.facebook.com/v2.3/{{ comment.user.external_id }}/picture" />
+                        <div class="media-right text-center">
+                            <img class="comment-user-img img-circle img-thumbnail" ng-src="https://graph.facebook.com/v2.3/{{ comment.user.external_id }}/picture" style="margin-bottom: 4px;" />
+                            <small>{{ comment.user.username }}</small>
                         </div>
                     </div>
 
                     <!-- Other user comment -->
                     <div ng-if="(shareUserExternalId !== comment.user.external_id)" class="media">
-                        <div class="media-left">
-                            <img class="comment-user-img img-circle img-thumbnail" ng-src="https://graph.facebook.com/v2.3/{{ comment.user.external_id }}/picture" />
+                        <div class="media-left text-center">
+                            <img class="comment-user-img img-circle img-thumbnail" ng-src="https://graph.facebook.com/v2.3/{{ comment.user.external_id }}/picture" style="margin-bottom: 4px;" />
+                            <small>{{ comment.user.username }}</small>
                         </div>
                         <div class="media-body">
                             <blockquote class="blockquote-normal">
 
-                                <h4 class="media-heading">{{ comment.user.username }}</h4>
-
-                                <p class="lead">{{ comment.message }}</p>
+                                <p class="media-heading lead">{{ comment.message }}</p>
 
                                 <footer>
                                     <span>{{ comment.moment_created_time_ago }}</span>
