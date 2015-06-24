@@ -10,7 +10,7 @@ function initializeDetails(shareId, textAreaId, shareUserExternalId, commentCoun
 
         $scope.shareId = shareId;
         $scope.shareUserExternalId = shareUserExternalId;
-        $scope.sharePrice = numeral(price).format('0a');
+        $scope.sharePrice = numeral(price).format('0.0a');
 
         $scope.textAreaId = textAreaId;
         $scope.message = null;
