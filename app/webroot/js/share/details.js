@@ -2,18 +2,19 @@
  * Created by bleguelvouit on 10/06/15.
  */
 
-function initializeDetails(shareId, textAreaId) {
+function initializeDetails(shareId, textAreaId, shareUserExternalId, commentCount) {
     //Create DetailsController
     app.controller('DetailsController', ['$scope', '$http', function($scope, $http) {
         $scope.page = 1;
         $scope.total_pages = 1;
 
         $scope.shareId = shareId;
-        $scope.shareUserExternalId = -1;
+        $scope.shareUserExternalId = shareUserExternalId;
 
         $scope.textAreaId = textAreaId;
         $scope.message = null;
 
+        $scope.commentCount = commentCount;
         $scope.comments = [];
 
         /**
@@ -48,6 +49,8 @@ function initializeDetails(shareId, textAreaId) {
          * @param response
          */
         $scope.handleResponse = function(response) {
+            console.log(response);
+
             //Handle pagination
             $scope.page = parseInt(response.page);
             $scope.total_pages = parseInt(response.total_pages);

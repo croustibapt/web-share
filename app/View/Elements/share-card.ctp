@@ -1,29 +1,17 @@
-<div class="div-share-card card" share-id="{{ share.share_id }}">
+<div class="div-share-card card" share-id="{{ share.share_id }}" style="max-height: 260px; height: 260px;">
     <div class="card-header" ng-style="{'background-color': share.share_color}">
         <div class="row">
-            <div class="col-md-10">
+            <div class="col-md-6">
                 <span class="span-share-card-date text-capitalize moment-day">{{ share.moment_day }}</span>
-            </div>
-            <div class="col-md-2 text-right">
                 <span class="span-share-card-date-hour moment-hour">{{ share.moment_hour }}</span>
             </div>
-        </div>
-    </div>
-    <div class="div-share-card-subtitle">
-        <div class="row">
-            <div class="col-md-6">
-                <a ng-href="share.details_link">
-                    <span class="span-share-card-user">{{ share.user.username }}</span>
-                </a>
-                <span class="span-share-card-modified moment-time-ago">{{ share.moment_modifed_time_ago }}</span>
-            </div>
             <div class="col-md-6 text-right">
-                <span class="span-share-card-city">{{ share.city }}</span> <span class="span-share-card-zip-code">{{ share.zip_code }}</span>
+                {{ share.city }}
             </div>
         </div>
     </div>
     <div class="div-share-card-main row">
-        <div class="col-md-12">
+        <div class="col-md-12" style="height: 150px;">
             <div class="div-share-card-icon text-center">
                 <div ng-style="{'color': share.share_color}">
                     <i ng-class="share.share_icon"></i>
@@ -31,19 +19,28 @@
             </div>
             <div class="div-share-card-title">
                 <blockquote class="blockquote-share-card-title">
-                    <h3 class="media-heading">{{ share.title }}</h3>
+                    <!-- Share type -->
+                    <p class="text-capitalize" style="color: {{ share.share_color }}; font-size: 20px; margin-bottom: 5px;">{{ share.share_type_category.label }} / <span style="font-weight: 200;">{{ share.share_type.label }}</span></p>
+
+                    <!-- Title -->
+                    <p class="media-heading lead line-clamp line-clamp-3" style="margin-bottom: 10px;">{{ share.title }}</p>
+
+
 
                     <!-- Limitations -->
-                    <footer ng-if="((typeof(share.limitations) !== 'undefined') && (share.limitations !== ''))" class="footer-share-details-limitations text-danger">
+                    <!--<footer ng-if="((typeof(share.limitations) !== 'undefined') && (share.limitations !== ''))" class="footer-share-details-limitations text-danger line-clamp line-clamp-1" style="margin-bottom: 5px;">
                         <i class="fa fa-asterisk"></i> {{ share.limitations }}
-                    </footer>
+                    </footer>-->
 
                     <!-- Comment count -->
                     <u ng-if="(share.comment_count > 1)" class="text-default" style="font-size: 14px;">
                         {{ share.comment_count }} commentaires
                     </u>
-                    <u ng-if="(share.comment_count === 1)" class="text-default" style="font-size: 14px;">
+                    <u ng-if="(share.comment_count == 1)" class="text-default" style="font-size: 14px;">
                         1 commentaire
+                    </u>
+                    <u ng-if="(share.comment_count == 0)" class="text-default" style="font-size: 14px;">
+                        Aucun commentaire
                     </u>
                 </blockquote>
             </div>

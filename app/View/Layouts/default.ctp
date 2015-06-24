@@ -24,6 +24,7 @@
             echo $this->Html->css('jquery.datetimepicker');
             echo $this->Html->css('design');
             echo $this->Html->css('jquery-gmaps-latlon-picker');
+            echo $this->Html->css('clamp');
 
             echo $this->Html->script('jquery-2.1.3.min');
         ?>
@@ -96,7 +97,7 @@
                     var htmlDate = $(this).text();
                     var eventDate = new Date(htmlDate);
                     var isoEventDate = eventDate.toISOString();
-                    var formattedDate = moment(isoEventDate).format('dddd D MMMM', 'fr');
+                    var formattedDate = moment(isoEventDate).format('D MMMM', 'fr');
 
                     $(this).html(formattedDate);
                 });
@@ -118,12 +119,17 @@
                 handleMomentTags();
 
                 //Animate scroll
-                $('.scroll-a').click(function(){
-                    var offset = $($(this).attr('href')).offset().top + 50;
+                $(document).on('click', '.scroll-a' , function() {
+                    var href = $(this).attr('href');
+                    console.log(href);
+
+                    var offset = $(href).offset().top - 50;
+                    console.log(offset);
 
                     $('html, body').animate({
                         scrollTop: offset
                     }, 500);
+
                     return false;
                 });
                 

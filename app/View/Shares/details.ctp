@@ -18,57 +18,39 @@
                         ?>
                     </h1>
 
-                    <!-- Share type -->
-                    <span style="color: <?php echo $shareTypeColor; ?>; font-size: 30px;">#<?php echo $this->ShareType->shareTypeLabel($share['share_type_category']['label'], $share['share_type']['label']); ?></span>
+                    <!-- Date -->
+                    <h2 class="h2-share-details-date text-capitalize moment-day" style=" color: <?php echo $shareTypeColor; ?>; margin-top: 10px;"><?php echo $share['event_date']; ?></h2>
 
-                    <!-- Created by -->
-                    <p class="p-share-details-created text-muted" style="margin-top: 10px;">
-                        Créé par
-                        <?php
-                        echo $this->Html->link('<span class="span-share-card-user">'.$share['user']['username'].'</span>', '/users/details/'.$share['user']['external_id'], array(
-                            'escape' => false
-                        ));
-                        ?>
-                        <br />
-                        <span class="moment-time-ago"><?php echo $share['modified']; ?></span>
-                    </p>
+                    <!-- Hour -->
+                    <?php if (isset($share['event_time'])) : ?>
+
+                        <h3 class="h2-share-details-hour moment-hour"><?php echo $share['event_date']; ?> <?php echo $share['event_time']; ?></h3>
+
+                    <?php endif; ?>
+
+                    <!-- City -->
+                    <a href="#div-share-details-place-header" class="btn btn-lg btn-link scroll-a">
+                        <?php echo ($share['city'] != "") ? $share['city'] : "Lieu non renseigné" ; ?>
+                    </a>
 
                 </div>
             </div>
 
             <!-- Description -->
             <div class="col-md-8 div-share-details-description">
-                <div class="row">
-                    <div class="col-md-6">
-                        <!-- Date -->
-                        <h2 class="h2-share-details-date text-capitalize moment-day" style=" color: <?php echo $shareTypeColor; ?>;"><?php echo $share['event_date']; ?></h2>
 
-                        <!-- Hour -->
-                        <?php if (isset($share['event_time'])) : ?>
-
-                            <h2 class="h2-share-details-hour moment-hour"><?php echo $share['event_time']; ?></h2>
-
-                        <?php endif; ?>
-                    </div>
-                    <div class="col-md-6 text-right">
-
-                        <!-- City -->
-                        <a href="#div-share-details-place-header" class="btn btn-lg btn-link scroll-a" style="margin-top: 20px;">
-                            <?php echo ($share['city'] != "") ? $share['city'] : "Lieu non renseigné" ; ?>
-                        </a>
-
-
-                    </div>
-                </div>
+                <!-- Share type -->
+                <h2 class="text-capitalize" style="color: <?php echo $shareTypeColor; ?>;"><?php echo $share['share_type_category']['label']; ?> / <span style="font-weight: 200;"><?php echo $share['share_type']['label']; ?></span></h2>
 
                 <!-- Title -->
-                <h1 class="h1-share-details-title">
+                <p class="lead" style="font-size: 28px;">
                     <?php echo $share['title']; ?>
-                </h1>
+                </p>
+
                 <hr />
 
                 <!-- Message and limitations -->
-                <blockquote>
+                <blockquote style="margin-bottom: ">
                     <p class="lead">
                         <?php echo ($share['message'] != "") ? $share['message'] : "Pas de message"; ?>
                     </p>
@@ -83,20 +65,22 @@
                 </blockquote>
 
                 <!-- Comments count -->
-                <a ng-if="(comments.length > 1)" href="#div-share-details-comments-header2" class="btn btn-link scroll-a">{{ comments.length }} Commentaires <i class="fa fa-level-down"></i></a>
-                <a ng-if="(comments.length == 1)" href="#div-share-details-comments-header2" class="btn btn-link scroll-a">1 Commentaire <i class="fa fa-level-down"></i></a>
+                <a ng-if="(commentCount > 1)" href="#div-share-details-comments-header2" class="scroll-a btn btn-link">{{ commentCount }} Commentaires <i class="fa fa-level-down"></i></a>
+                <a ng-if="(commentCount == 1)" href="#div-share-details-comments-header2" class="scroll-a btn btn-link">1 Commentaire <i class="fa fa-level-down"></i></a>
 
             </div>
 
             <!-- Place -->
             <div class="col-md-2 text-center">
+
+
                 
-                <div class="panel panel-default" style="margin-top: 10px; background-color: #fbfcfc;">
+                <div class="panel panel-default" style="margin-top: 10px; background-color: #fbfcfc; margin-bottom: 0px;">
                     <div class="panel-body">
 
                         <!-- Price -->
                         <h2 class="h2-share-details-price" style="margin-top: 0px; margin-bottom: 20px;">
-                            <span class="span-share-details-price"><?php echo number_format($share['price'], 1); ?>€</span>
+                            <span class="span-share-details-price" style="color: #3498db;"><?php echo number_format($share['price'], 1); ?>€</span>
                             <br />/ pers.
                         </h2>
 
@@ -158,6 +142,19 @@
                         <?php endif; ?>
                     </div>
                 </div>
+
+                <!-- Created by -->
+                <p class="p-share-details-created text-muted" style="margin-top: 10px;">
+                    Créé par
+                    <?php
+                    echo $this->Html->link('<span class="span-share-card-user">'.$share['user']['username'].'</span>', '/users/details/'.$share['user']['external_id'], array(
+                        'escape' => false
+                    ));
+                    ?>
+                    <br />
+                    <span class="moment-time-ago"><?php echo $share['modified']; ?></span>
+                </p>
+
             </div>
         </div>
     </div>
@@ -187,7 +184,7 @@
 
 <script>
     //Get comments
-    initializeDetails(<?php echo $share['share_id']; ?>, 'textarea-comment-add');
+    initializeDetails(<?php echo $share['share_id']; ?>, 'textarea-comment-add', '<?php echo $share['user']['external_id']; ?>', <?php echo $share['comment_count']; ?>);
 
     //On ready
     $(document).ready(function() {

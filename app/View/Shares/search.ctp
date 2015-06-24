@@ -4,7 +4,7 @@
         <?php echo $this->element('search-bar'); ?>
 
         <div class="row" style="padding: 30px;">
-            <div ng-repeat="share in shares">
+            <div ng-repeat="share in shares" class="col-md-6">
                 <?php echo $this->element('share-card'); ?>
             </div>
         </div>

@@ -364,8 +364,9 @@ class AppController extends Controller {
 
             $response['title'] = $share['Share']['title'];
 
-            //Event date
-            $this->formatISODate($response['event_date'], $share['Share']['event_date']);
+            //Event date and time
+            $response['event_date'] = $share['Share']['event_date'];
+            $response['event_time'] = $share['Share']['event_time'];
 
             $response['share_type']['share_type_id'] = $share['ShareType']['id'];
             $response['share_type']['label'] = $share['ShareType']['label'];

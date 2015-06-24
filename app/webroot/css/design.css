@@ -123,7 +123,7 @@ body {
     padding-left: 0px;
     display: table-cell;
     vertical-align: top;
-    text-align: justify;
+    /*text-align: justify;*/
 }
 
 .blockquote-share-card-title {
@@ -270,7 +270,7 @@ body {
 }
 
 .h2-share-details-price {
-    color: #3498db;
+    color: #95a5a6;
     font-weight: 200;
 }
 
