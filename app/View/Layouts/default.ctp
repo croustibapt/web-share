@@ -46,6 +46,9 @@
             echo $this->Html->script('moment/moment-timezone-with-data');
             echo $this->Html->script('moment/locale/fr');
 
+            //Numeral
+            echo $this->Html->script('numeral/numeral.min');
+
             echo $this->fetch('meta');
             echo $this->fetch('css');
             echo $this->fetch('script');

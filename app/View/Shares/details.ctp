@@ -73,14 +73,14 @@
             <!-- Place -->
             <div class="col-md-2 text-center">
 
-
-                
                 <div class="panel panel-default" style="margin-top: 10px; background-color: #fbfcfc; margin-bottom: 0px;">
                     <div class="panel-body">
 
                         <!-- Price -->
                         <h2 class="h2-share-details-price" style="margin-top: 0px; margin-bottom: 20px;">
-                            <span class="span-share-details-price" style="color: #3498db;"><?php echo number_format($share['price'], 1); ?>€</span>
+                            <span class="span-share-details-price" style="color: #3498db;">
+                                {{ sharePrice }} €
+                            </span>
                             <br />/ pers.
                         </h2>
 
@@ -184,7 +184,7 @@
 
 <script>
     //Get comments
-    initializeDetails(<?php echo $share['share_id']; ?>, 'textarea-comment-add', '<?php echo $share['user']['external_id']; ?>', <?php echo $share['comment_count']; ?>);
+    initializeDetails(<?php echo $share['share_id']; ?>, 'textarea-comment-add', '<?php echo $share['user']['external_id']; ?>', <?php echo $share['comment_count']; ?>, <?php echo $share['price']; ?>);
 
     //On ready
     $(document).ready(function() {

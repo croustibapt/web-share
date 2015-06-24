@@ -2,7 +2,7 @@
  * Created by bleguelvouit on 10/06/15.
  */
 
-function initializeDetails(shareId, textAreaId, shareUserExternalId, commentCount) {
+function initializeDetails(shareId, textAreaId, shareUserExternalId, commentCount, price) {
     //Create DetailsController
     app.controller('DetailsController', ['$scope', '$http', function($scope, $http) {
         $scope.page = 1;
@@ -10,6 +10,7 @@ function initializeDetails(shareId, textAreaId, shareUserExternalId, commentCoun
 
         $scope.shareId = shareId;
         $scope.shareUserExternalId = shareUserExternalId;
+        $scope.sharePrice = numeral(price).format('0a');
 
         $scope.textAreaId = textAreaId;
         $scope.message = null;

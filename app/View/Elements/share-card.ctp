@@ -25,13 +25,6 @@
                     <!-- Title -->
                     <p class="media-heading lead line-clamp line-clamp-3" style="margin-bottom: 10px;">{{ share.title }}</p>
 
-
-
-                    <!-- Limitations -->
-                    <!--<footer ng-if="((typeof(share.limitations) !== 'undefined') && (share.limitations !== ''))" class="footer-share-details-limitations text-danger line-clamp line-clamp-1" style="margin-bottom: 5px;">
-                        <i class="fa fa-asterisk"></i> {{ share.limitations }}
-                    </footer>-->
-
                     <!-- Comment count -->
                     <u ng-if="(share.comment_count > 1)" class="text-default" style="font-size: 14px;">
                         {{ share.comment_count }} commentaires
@@ -73,7 +66,7 @@
                     </div>
                     <div class="div-share-card-progress-cell text-right">
                         <p class="p-share-card-price lead">
-                            {{ share.round_price }}€ <small class="p-share-card-price-label">/ Pers.</small>
+                            {{ share.round_price }} € <small class="p-share-card-price-label">/ Pers.</small>
                         </p>
                     </div>
                 </div>

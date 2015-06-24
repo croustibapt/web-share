@@ -216,7 +216,7 @@ function initializeSearch(shareTypeCategory, shareType, date) {
                 share.percentage = percentage;
 
                 var price = parseFloat(share.price);
-                share.round_price = price.toFixed(1);
+                share.round_price = numeral(price).format('0.0a');
 
                 //Details link
                 var detailsLink = webroot + 'users/details/' + share.user.external_id;
