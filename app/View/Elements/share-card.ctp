@@ -66,7 +66,7 @@
                     </div>
                     <div class="div-share-card-progress-cell text-right">
                         <p class="p-share-card-price lead">
-                            {{ share.round_price }} € <small class="p-share-card-price-label">/ Pers.</small>
+                            {{ share.round_price }} € <small class="p-share-card-price-label">/ pers.</small>
                         </p>
                     </div>
                 </div>

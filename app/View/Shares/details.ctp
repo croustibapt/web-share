@@ -77,12 +77,12 @@
                     <div class="panel-body">
 
                         <!-- Price -->
-                        <h2 class="h2-share-details-price" style="margin-top: 0px; margin-bottom: 20px;">
-                            <span class="span-share-details-price" style="color: #3498db;">
-                                {{ sharePrice }} €
-                            </span>
-                            <br />/ pers.
+                        <h2 class="h2-share-details-price" style="margin-top: 0px; margin-bottom: 0px; color: #3498db;">
+                            <span class="span-share-details-price">{{ sharePrice }} €</span>
                         </h2>
+                        <h3 style="margin-top: 0px; color: #95a5a6; margin-bottom: 20px;">
+                            / pers.
+                        </h3>
 
                         <?php if ($this->LocalUser->isAuthenticated($this)) : ?>
 
