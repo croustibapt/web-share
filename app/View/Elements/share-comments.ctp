@@ -60,11 +60,11 @@
             </div>
 
             <!-- No comments -->
-            <!--<div ng-if="(comments.length == 0)">
-                <p class="lead text-center">
-                    Aucun commentaire
-                </p>
-            </div>-->
+            <div ng-if="(comments.length == 0)">
+                <h3 style="margin-top: 0px; margin-bottom: 0px;">
+                    <small>Soyez le premier à commenter ce partage</small>
+                </h3>
+            </div>
         </div>
 
         <?php if ($this->LocalUser->isAuthenticated($this)) : ?>

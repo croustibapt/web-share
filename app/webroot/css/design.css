@@ -341,8 +341,7 @@ body {
 }
 
 .div-share-details-comments-editor {
-    border-top: 1px solid #ecf0f1;
-    padding-top: 30px;
+    margin-top: 20px;
 }
 
 /* SHARE/ADD */
