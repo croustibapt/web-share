@@ -59,12 +59,21 @@
                 <?php echo $this->element('pagination'); ?>
             </div>
 
+            <?php if ($this->LocalUser->isAuthenticated($this)) : ?>
+
             <!-- No comments -->
-            <div ng-if="(comments.length == 0)">
-                <h3 style="margin-top: 0px; margin-bottom: 0px;">
-                    <small>Soyez le premier à commenter ce partage</small>
-                </h3>
-            </div>
+            <h3 ng-if="(comments.length == 0)" style="margin-top: 0px; margin-bottom: 0px;">
+                <small>Soyez le premier à commenter ce partage</small>
+            </h3>
+
+            <?php else : ?>
+
+            <!-- Not authenticated -->
+            <h3 ng-if="(comments.length == 0)" style="margin-top: 0px; margin-bottom: 0px;">
+                <small><a class="authenticate-button" href="#">Authentifiez-vous</a> pour être le premier à commenter ce partage</small>
+            </h3>
+
+            <?php endif; ?>
         </div>
 
         <?php if ($this->LocalUser->isAuthenticated($this)) : ?>
@@ -81,6 +90,7 @@
             </div>
 
         <?php endif; ?>
+
     </div>
 </div>
 

@@ -50,7 +50,7 @@
 
                 <?php else : ?>
 
-                <a id="navbar-authenticate-button" href="#">Authenticate</a>
+                <a class="authenticate-button" href="#">Authenticate</a>
 
                 <?php endif; ?>
             </li>
@@ -147,27 +147,29 @@
     };
 
     //Authenticate button clicked
-    $('#navbar-authenticate-button').click(function() {
-        //Start Facebook login process
-        FB.login(function(response) {
-            //console.log(response);
+    $(document).ready(function() {
+        $('.authenticate-button').click(function () {
+            //Start Facebook login process
+            FB.login(function (response) {
+                //console.log(response);
 
-            //Check login status
-            FB.getLoginStatus(function(response) {
-                //If we are connected
-                if (response.status === 'connected') {
-                    //Try to authenticate the user
-                    authenticate(response);
-                } else if (response.status === 'not_authorized') {
-                    //The person is logged into Facebook, but not your app.
-                    console.log('Please log ' + 'into this app.');
-                } else {
-                    //The person is not logged into Facebook, so we're not sure if they are logged into this app or not.
-                    console.log('Please log ' + 'into Facebook.');
-                }
+                //Check login status
+                FB.getLoginStatus(function (response) {
+                    //If we are connected
+                    if (response.status === 'connected') {
+                        //Try to authenticate the user
+                        authenticate(response);
+                    } else if (response.status === 'not_authorized') {
+                        //The person is logged into Facebook, but not your app.
+                        console.log('Please log ' + 'into this app.');
+                    } else {
+                        //The person is not logged into Facebook, so we're not sure if they are logged into this app or not.
+                        console.log('Please log ' + 'into Facebook.');
+                    }
+                });
+            }, {
+                scope: 'public_profile, email'
             });
-        }, {
-            scope: 'public_profile, email'
         });
     });
 
