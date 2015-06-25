@@ -1,8 +1,8 @@
 <!-- Title -->
-<div id="div-share-details-comments-header2" class="container">
-    <h3 ng-if="(commentCount == 0)">Aucun commentaire</h3>
-    <h3 ng-if="(commentCount == 1)">1 commentaire</h3>
-    <h3 ng-if="(commentCount > 1)">{{ commentCount }} commentaires</h3>
+<div id="div-share-details-comments-header" class="container">
+    <h3 ng-if="(share.comment_count == 0)">Aucun commentaire</h3>
+    <h3 ng-if="(share.comment_count == 1)">1 commentaire</h3>
+    <h3 ng-if="(share.comment_count > 1)">{{ share.comment_count }} commentaires</h3>
 </div>
 
 <!-- Comments -->
@@ -77,14 +77,6 @@
                     <button id="btn-comment-add" type="submit" class="btn btn-primary" data-loading-text="Sending..." ng-click="onSendButtonClicked($event);">
                         Envoyer
                     </button>
-                </div>
-            </div>
-
-        <?php else : ?>
-
-            <div class="col-md-12 div-share-details-comments-editor">
-                <div class="alert alert-info" role="alert">
-                    <strong>Information :</strong> Vous devez être authentifié pour commenter.
                 </div>
             </div>
 

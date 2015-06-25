@@ -3,7 +3,7 @@
         <div class="row">
             <div class="col-md-6">
                 <span class="span-share-card-date text-capitalize moment-day">{{ share.moment_day }}</span>
-                <span class="span-share-card-date-hour moment-hour">{{ share.moment_hour }}</span>
+                <span ng-if="(share.moment_hour != null)" class="span-share-card-date-hour moment-hour"><i class="fa fa-long-arrow-right"></i> {{ share.moment_hour }}</span>
             </div>
             <div class="col-md-6 text-right">
                 {{ share.city }}
@@ -66,7 +66,7 @@
                     </div>
                     <div class="div-share-card-progress-cell text-right">
                         <p class="p-share-card-price lead">
-                            {{ share.round_price }} € <small class="p-share-card-price-label">/ pers.</small>
+                            {{ share.formatted_price }} € <small class="p-share-card-price-label">/ pers.</small>
                         </p>
                     </div>
                 </div>

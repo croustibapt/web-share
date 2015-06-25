@@ -126,7 +126,9 @@ class SharesController extends ApiSharesController {
     
     public function details($shareId = NULL) {
         $response = $this->internDetails($shareId);
-        $this->set('share', $response);
+        //$this->set('share', $response);
+        $this->set('shareId', $response['share_id']);
+        $this->set('shareUserExternalId', $response['user']['external_id']);
 
         //Get user identifier
         $userExternalId = $this->getUserExternalId($this->request);

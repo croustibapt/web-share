@@ -2,21 +2,28 @@
  * Created by bleguelvouit on 10/06/15.
  */
 
-function initializeDetails(shareId, textAreaId, shareUserExternalId, commentCount, price) {
+function initializeDetails(shareId, shareUserExternalId, textAreaId, divGoogleMapId) {
     //Create DetailsController
     app.controller('DetailsController', ['$scope', '$http', function($scope, $http) {
+        //Pagination
         $scope.page = 1;
         $scope.total_pages = 1;
 
+        //Share
         $scope.shareId = shareId;
-        $scope.shareUserExternalId = shareUserExternalId;
-        $scope.sharePrice = numeral(price).format('0.0a');
+        $scope.share = null;
 
+        //Google map
+        $scope.divGoogleMapId = divGoogleMapId;
+
+        //Comments
         $scope.textAreaId = textAreaId;
         $scope.message = null;
-
-        $scope.commentCount = commentCount;
         $scope.comments = [];
+
+        //User
+        $scope.shareUserExternalId = shareUserExternalId;
+        $scope.user = null;
 
         /**
          *
@@ -38,7 +45,7 @@ function initializeDetails(shareId, textAreaId, shareUserExternalId, commentCoun
             $http.get(webroot + 'api/comment/get?shareId=' + $scope.shareId + '&page=' + $scope.page)
             .success(function (data, status, headers, config) {
                 //Results
-                $scope.handleResponse(data);
+                $scope.handleCommentsResponse(data);
             })
             .error(function (data, status, headers, config) {
                 console.log(data);
@@ -46,10 +53,10 @@ function initializeDetails(shareId, textAreaId, shareUserExternalId, commentCoun
         };
 
         /**
-         * Method used to handle the Ajax response
+         * Method used to handle the comments Ajax response
          * @param response
          */
-        $scope.handleResponse = function(response) {
+        $scope.handleCommentsResponse = function(response) {
             console.log(response);
 
             //Handle pagination
@@ -73,6 +80,117 @@ function initializeDetails(shareId, textAreaId, shareUserExternalId, commentCoun
                 //Add to array
                 $scope.comments.push(comment);
             }
+        };
+
+        //
+        $scope.getUser = function(userExternalId) {
+            //Get call
+            $http.get(webroot + 'api/user/details/' + userExternalId)
+            .success(function (data, status, headers, config) {
+                //Results
+                $scope.handleUserResponse(data);
+            })
+            .error(function (data, status, headers, config) {
+                console.log(data);
+            });
+        };
+
+        //
+        $scope.handleUserResponse = function(response) {
+            console.log(response);
+
+            $scope.user = response;
+
+            //Created
+            var createdDate = new Date($scope.user.created);
+            var isoCreatedDate = createdDate.toISOString();
+            var momentCreated = moment(isoCreatedDate).format('D MMMM YYYY', 'fr');
+            $scope.user.moment_created = momentCreated;
+        };
+
+        //
+        $scope.getShare = function(shareId) {
+            //Get call
+            $http.get(webroot + 'api/share/details/' + shareId)
+            .success(function (data, status, headers, config) {
+                //Results
+                $scope.handleShareResponse(data);
+            })
+            .error(function (data, status, headers, config) {
+                console.log(data);
+            });
+        };
+
+        $scope.createMap = function() {
+            //Create map
+            var myLatlng = new google.maps.LatLng($scope.share.latitude, $scope.share.longitude);
+            var mapOptions = {
+                panControl: false,
+                zoomControl: true,
+                scaleControl: false,
+                streetViewControl: false,
+                scrollwheel: false,
+                zoom: 17,
+                center: myLatlng
+            };
+            map = new google.maps.Map(document.getElementById($scope.divGoogleMapId), mapOptions);
+
+            var marker = new MarkerWithLabel({
+                position: myLatlng,
+                map: map,
+                title: $scope.share.title,
+                labelContent: '<div class="img-circle text-center" style="border: 4px solid white; background-color: ' + $scope.share.share_color + '; display: table; min-width: 40px; width: 40px; min-height: 40px; height: 40px;"><i class="' + $scope.share.share_icon + '" style="display: table-cell; vertical-align: middle; color: #ffffff; font-size: 18px;"></i></div>',
+                labelAnchor: new google.maps.Point(16, 16),
+                icon: ' '
+            });
+        };
+
+        //
+        $scope.handleShareResponse = function(response) {
+            console.log(response);
+
+            $scope.share = response;
+
+            //Event date
+            var eventDate = new Date($scope.share.event_date);
+            var isoEventDate = eventDate.toISOString();
+            var momentDay = moment(isoEventDate).format('D MMMM', 'fr');
+            $scope.share.moment_day = momentDay;
+
+            //Event time
+            if ($scope.share.event_time != null) {
+                var eventTime = new Date($scope.share.event_date + ' ' + $scope.share.event_time);
+                var isoEventTime = eventTime.toISOString();
+                var momentHour = moment(isoEventTime).format('LT', 'fr');
+                $scope.share.moment_hour = momentHour;
+            }
+
+            //Share color
+            var shareColor = getIconColor($scope.share.share_type_category.label);
+            $scope.share.share_color = shareColor;
+
+            //Share icon
+            var shareIcon = getMarkerIcon($scope.share.share_type_category.label, $scope.share.share_type.label);
+            $scope.share.share_icon = shareIcon;
+
+            //Created
+            var createdDate = new Date($scope.share.created);
+            var isoCreatedDate = createdDate.toISOString();
+            var momentCreatedTimeAgo = moment(isoCreatedDate).fromNow();
+            $scope.share.moment_created_time_ago = momentCreatedTimeAgo;
+
+            //Places left
+            var totalPlaces = parseInt($scope.share.places) + 1;
+            var participationCount = parseInt($scope.share.participation_count) + 1;
+            var placesLeft = totalPlaces - participationCount;
+            $scope.share.places_left = placesLeft;
+
+            //Formatted price
+            var price = parseFloat($scope.share.price);
+            $scope.share.formatted_price = numeral(price).format('0.0a');
+
+            //Create map
+            $scope.createMap();
         };
 
         $scope.onSendButtonClicked = function($event) {
@@ -119,7 +237,14 @@ function initializeDetails(shareId, textAreaId, shareUserExternalId, commentCoun
          *
          */
         $scope.initialize = function() {
+            //Get share
+            $scope.getShare($scope.shareId);
+
+            //Show comments page 1
             $scope.showPage(1);
+
+            //Get user information
+            $scope.getUser($scope.shareUserExternalId);
         }
 
         $scope.initialize();

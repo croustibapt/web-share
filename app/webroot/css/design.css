@@ -231,6 +231,7 @@ body {
 
 .div-share {
     background-color: #ffffff;
+    padding-bottom: 30px;
 }
 
 .h1-share-details-type {
@@ -300,7 +301,7 @@ body {
 /* COMMENT */
 
 #div-share-details-comments {
-    margin-bottom: 15px;
+    padding-bottom: 30px;
     background-color: #ffffff;
 }
 
@@ -341,8 +342,7 @@ body {
 
 .div-share-details-comments-editor {
     border-top: 1px solid #ecf0f1;
-    padding-top: 15px;
-    padding-bottom: 15px;
+    padding-top: 30px;
 }
 
 /* SHARE/ADD */
@@ -419,13 +419,11 @@ body {
 }
 
 .user-card-picture-img {
-    width: 75%;
-    margin-top: 15px;
+
 }
 
 .user-card-summary-div {
     padding-top: 15px;
-    padding-bottom: 15px;
     padding-left: 0px;
 }
 
