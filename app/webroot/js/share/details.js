@@ -215,6 +215,9 @@ function initializeDetails(shareId, shareUserExternalId, textAreaId, divGoogleMa
                 //
                 $http.put(webroot + 'api/comment/add', JSON.stringify(jsonData))
                 .success(function(data, status, headers, config) {
+                    //Add one comment
+                    $scope.share.comment_count++;
+
                     //Reset content
                     var editor = nicEditors.findEditor($scope.textAreaId);
                     editor.setContent('');
