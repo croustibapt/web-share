@@ -1,5 +1,5 @@
 <div id="div-search-results" ng-controller="SearchController" class="content" style="height: 100%; position: relative;">
-    <div style="float: left; width: 50%; height: 100%; overflow-y: scroll; overflow-x: hidden;">
+    <div style="float: left; width: 50%; height: 100%; overflow-y: scroll; overflow-x: hidden; background-color: #eeeeee;">
         <!-- Search bar -->
         <?php echo $this->element('search-bar'); ?>
 

@@ -7,7 +7,7 @@ html {
 body {
     height: 100%;
     padding-top: 50px;
-    background-color: #eeeeee;
+    background-color: #ffffff;
 }
 
 /* Home */
@@ -347,15 +347,12 @@ body {
 /* SHARE/ADD */
 
 #div-share-add-google-map {
-    height: 290px;
-    margin-bottom: 15px;
+    height: 400px;
 }
 
 .div-add-section {
-    padding: 15px;
-    padding-bottom: 0px;
     background-color: #ffffff;
-    margin-bottom: 15px;
+    margin-bottom: 30px;
 }
 
 .div-add-section .input-group {
@@ -390,11 +387,11 @@ body {
 }
 
 #div-add-section-more .input-group-addon, #div-add-section-more .input-group input, #div-add-section-more .selectpicker {
-    border-color: #9b59b6;
+    border-color: #8c9899;
 }
 
 #div-add-section-more .input-group-addon {
-    background-color: #9b59b6;
+    background-color: #8c9899;
     color: #ffffff;
     min-width: 40px;
 }

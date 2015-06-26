@@ -25,6 +25,7 @@
             echo $this->Html->css('design');
             echo $this->Html->css('jquery-gmaps-latlon-picker');
             echo $this->Html->css('clamp');
+            echo $this->Html->css('jquery.timepicker');
 
             echo $this->Html->script('jquery-2.1.3.min');
         ?>
@@ -35,6 +36,7 @@
             echo $this->Html->script('jquery-gmaps-latlon-picker');
             echo $this->Html->script('markerwithlabel');
             echo $this->Html->script('angular.min');
+            echo $this->Html->script('jquery.timepicker.min');
 
             echo $this->Html->script('share/share');
             echo $this->Html->script('share/home');

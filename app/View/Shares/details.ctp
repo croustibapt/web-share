@@ -66,7 +66,7 @@
             <!-- Place -->
             <div class="col-md-2 text-center">
 
-                <div class="panel panel-default" style="margin-top: 10px; background-color: #fbfcfc; margin-bottom: 0px;">
+                <div class="panel panel-default" style="margin-top: 20px; background-color: #fbfcfc; margin-bottom: 0px;">
                     <div class="panel-body">
 
                         <!-- Price -->

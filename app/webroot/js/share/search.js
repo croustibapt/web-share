@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 function initializeSearch(shareTypeCategory, shareType, date) {
     //Create SearchController
     app.controller('SearchController', ['$scope', '$http', function($scope, $http) {
