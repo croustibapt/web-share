@@ -89,7 +89,7 @@
                                 ));
 
                                 echo $this->Form->hidden('shareId', array(
-                                    'value' => $share['share_id']
+                                    'value' => $shareId
                                 ));
 
                                 echo $this->Form->submit('Participer', array(
