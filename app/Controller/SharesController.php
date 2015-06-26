@@ -142,11 +142,6 @@ class SharesController extends ApiSharesController {
         $share['User'] = $share['Share']['user'];
         unset($share['Share']['user']);
 
-        if (isset($share['Share']['requests'])) {
-            $share['Request'] = $share['Share']['requests'];
-            unset($share['Share']['requests']);
-        }
-
         $canRequest = $this->canRequest($share, $userExternalId);
         $this->set('canRequest', $canRequest);
 

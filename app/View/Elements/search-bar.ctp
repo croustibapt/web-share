@@ -17,6 +17,11 @@
                 <li role="presentation" ng-class="(date === 'month') ? 'active' : ''">
                     <a href="javascript:void(0)" class="a-action-bar-date" role="tab" data-toggle="tab" ng-click="search(shareTypeCategory, shareType, page, 'month', bounds);">Ce mois-ci</a>
                 </li>
+
+                <!-- All -->
+                <li role="presentation" ng-class="(date === 'all') ? 'active' : ''">
+                    <a href="javascript:void(0)" class="a-action-bar-date" role="tab" data-toggle="tab" ng-click="search(shareTypeCategory, shareType, page, 'all', bounds);">Tout</a>
+                </li>
             </ul>
 
         </div>

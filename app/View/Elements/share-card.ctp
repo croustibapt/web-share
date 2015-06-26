@@ -6,7 +6,8 @@
                 <span ng-if="(share.moment_hour != null)" class="span-share-card-date-hour moment-hour"><i class="fa fa-long-arrow-right"></i> {{ share.moment_hour }}</span>
             </div>
             <div class="col-md-6 text-right">
-                {{ share.city }}
+                <span ng-if="(share.city != null)">{{ share.city }}</span>
+                <span ng-if="(share.city == null)">Lieu inconnu</span>
             </div>
         </div>
     </div>

@@ -25,9 +25,8 @@
                     <h3 ng-if="(share.event_time != null)" class="h2-share-details-hour">{{ share.moment_hour }}</h3>
 
                     <!-- City -->
-                    <a href="#div-share-details-place-header" class="btn btn-lg btn-link scroll-a">
-                        {{ (share.city != '') ? share.city : 'Lieu non renseigné' }}
-                    </a>
+                    <a ng-if="(share.city != null)" href="#div-share-details-place-header" class="btn btn-lg btn-link scroll-a">{{ share.city }}</a>
+                    <a ng-if="(share.city == null)" href="#div-share-details-place-header" class="btn btn-lg btn-link scroll-a">Lieu inconnu</a>
 
                 </div>
             </div>
@@ -100,19 +99,21 @@
                                 echo $this->Form->end();
                                 ?>
 
+                            <?php elseif (!$doesUserOwnShare) : ?>
+
+                                <button class="btn btn-<?php echo $this->Share->getShareDetailsRequestStatusClass($requestStatus); ?> disabled button-share-details-participate-status"><?php echo $this->Share->getShareDetailsRequestStatusLabel($requestStatus); ?></button>
+
                             <?php else : ?>
 
-                                <?php if (!$doesUserOwnShare) : ?>
-
-                                    <button class="btn btn-<?php echo $this->Share->getShareDetailsRequestStatusClass($requestStatus); ?> disabled button-share-details-participate-status"><?php echo $this->Share->getShareDetailsRequestStatusLabel($requestStatus); ?></button>
-
-                                <?php endif; ?>
+                                <div data-toggle="tooltip" data-placement="bottom" title="Vous êtes le créateur" style="margin-top: 10px; margin-bottom: 10px;">
+                                    <button class="btn btn-success disabled button-share-details-participate" style="margin: 0px;">Participer</button>
+                                </div>
 
                             <?php endif; ?>
 
                         <?php else : ?>
-                            <div data-toggle="tooltip" data-placement="top" title="Vous devez être authentifié pour pouvoir participer">
-                                <button class="btn btn-success disabled button-share-details-participate">Participer</button>
+                            <div data-toggle="tooltip" data-placement="bottom" title="Vous devez être authentifié pour pouvoir participer" style="margin-top: 10px; margin-bottom: 10px;">
+                                <button class="btn btn-success disabled button-share-details-participate" style="margin: 0px;">Participer</button>
                             </div>
                         <?php endif; ?>
 

@@ -7,6 +7,7 @@
             <div ng-repeat="share in shares" class="col-md-6">
                 <?php echo $this->element('share-card'); ?>
             </div>
+            <span class="text-center">{{ shares.length }} résultats</span>
         </div>
         
         <!-- Pagination -->
