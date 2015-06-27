@@ -5,11 +5,13 @@
         echo $this->Form->create('Share', array(
             'class' => 'form-horizontal'
         ));
+
+        //pr($shareTypes);
     ?>
 
     <?php endif; ?>
 
-    <h2 style="margin-bottom: 20px;">Décrivez ce que vous partagez</h2>
+    <h3 style="margin-bottom: 20px;">Décrivez votre partage <small>Les champs grisés sont optionnels</small></h3>
     <div id="div-add-section-description" class="div-add-section">
         <div class="row">
             <div id="div-share-add-description-left" class="col-md-6">
@@ -23,22 +25,36 @@
                 ?>
 
                 <div class="row">
-                    <div class="col-md-4">
+                    <div class="col-md-6">
                         <!-- Type -->
+                        <?php
+                            foreach ($shareTypes as $shareTypeCategoryLabel => $shareTypeCategoryTypes) {
+                                foreach ($shareTypeCategoryTypes as $shareTypeId => $shareTypeLabel) {
+                                    if ($shareTypeLabel == 'other') {
+                                        $shareTypeLabel = 'autre';
+                                    }
+                                    $shareTypeOptions[$shareTypeCategoryLabel][$shareTypeId] = $shareTypeLabel;
+                                }
+                            }
+
+                            //pr($shareTypeOptions);
+                        ?>
+
                         <div class="input-group">
                             <span class="input-group-addon"><i class="fa fa-tag"></i></span>
                             <?php
-                            echo $this->Form->input('share_type_id', array(
-                                'label' => false,
-                                'class' => 'selectpicker',
-                                'type' => 'select',
-                                'div' => false,
-                                'data-style' => 'btn btn-default form-control input-lg'
-                            ));
+                                echo $this->Form->input('share_type_id', array(
+                                    'label' => false,
+                                    'class' => 'selectpicker',
+                                    'type' => 'select',
+                                    'options' => $shareTypeOptions,
+                                    'div' => false,
+                                    'data-style' => 'btn btn-default form-control input-lg'
+                                ));
                             ?>
                         </div>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-6">
                         <!-- Date -->
                         <?php
                             echo $this->element('share-add-input', array(
@@ -49,21 +65,7 @@
                             ));
                         ?>
                     </div>
-                    <div class="col-md-4">
-                        <!-- Time -->
-                        <?php
-                            echo $this->element('share-add-input', array(
-                                'name' => 'event_time',
-                                'placeholder' => 'Heure',
-                                'class' => 'timepicker',
-                                'icon' => 'fa-clock-o'
-                            ));
 
-                            echo $this->Form->hidden('event_time2', array(
-                                'id' => 'hidden-share-add-event-time'
-                            ));
-                        ?>
-                    </div>
                 </div>
 
                 <div class="row">
@@ -100,14 +102,46 @@
                 ));
                 ?>
 
-                <!-- Limitations -->
-                <?php
-                echo $this->element('share-add-input', array(
-                    'name' => 'limitations',
-                    'placeholder' => 'Limitations',
-                    'icon' => 'fa-asterisk'
-                ));
-                ?>
+                <div class="row">
+                    <div class="col-md-6">
+                        <!-- Time -->
+                        <?php
+                        $eventTimeOptions[''] = 'Heure';
+                        for ($i = 0; $i < 24; $i++) {
+                            $hour = sprintf("%02d", $i);
+                            $eventTimeOptions[''.$hour.':00:00'] = ''.$hour.':00';
+                            $eventTimeOptions[''.$hour.':15:00'] = ''.$hour.':15';
+                            $eventTimeOptions[''.$hour.':30:00'] = ''.$hour.':30';
+                            $eventTimeOptions[''.$hour.':45:00'] = ''.$hour.':45';
+                        }
+                        ?>
+
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="fa fa-tag"></i></span>
+                            <?php
+                            echo $this->Form->input('event_time', array(
+                                'label' => false,
+                                'class' => 'selectpicker',
+                                'type' => 'select',
+                                'div' => false,
+                                'options' => $eventTimeOptions,
+                                'data-style' => 'btn btn-default form-control input-lg'
+                            ));
+                            ?>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <!-- Limitations -->
+                        <?php
+                            echo $this->element('share-add-input', array(
+                                'name' => 'limitations',
+                                'placeholder' => 'Limitations',
+                                'icon' => 'fa-asterisk'
+                            ));
+                        ?>
+                    </div>
+                </div>
+
                 <div class="row">
                     <div class="col-md-6">
                         <!-- Meeting place -->
@@ -131,9 +165,6 @@
                     </div>
                 </div>
 
-
-
-
             </div>
         </div>
     </div>
@@ -143,10 +174,13 @@
     <h3>Localisation</h3>
 </div>-->
 <!-- Google maps -->
+<div class="container">
+    <h3><small>Déplacez le curseur pour localiser votre partage</small></h3>
+</div>
 <div style="border-top: 1px solid #bdc3c7; border-bottom: 1px solid #bdc3c7;">
 
-    <div id="input-search-address" class="container">
-        <input type="text" value=""  class="form-control" placeholder="Où partagez vous ?" style="margin-top: 10px; height: 40px; width: 100%;">
+    <div id="div-search-address" class="container">
+        <input id="input-search-address" type="text" value=""  class="form-control" placeholder="Où partagez vous ?" style="margin-top: 10px; height: 40px; width: 100%;">
     </div>
 
     <div id="div-share-add-google-map" class="img-rounded">
@@ -154,16 +188,14 @@
     </div>
 
     <?php
-    echo $this->Form->hidden('latitude', array(
-        'class' => 'gllpLatitude',
-        'value' => '43.594857'
-    ));
-    ?>
-    <?php
-    echo $this->Form->hidden('longitude', array(
-        'class' => 'gllpLongitude',
-        'value' => '1.439707'
-    ));
+        echo $this->Form->hidden('latitude', array(
+            'id' => 'hidden-share-add-latitude'
+        ));
+        ?>
+        <?php
+        echo $this->Form->hidden('longitude', array(
+            'id' => 'hidden-share-add-longitude'
+        ));
     ?>
 </div>
 
@@ -203,13 +235,15 @@
     var addMap = new google.maps.Map(document.getElementById('div-share-add-google-map'), mapOptions);
 
     //Add search box
-    var input = document.getElementById('input-search-address');
-    addMap.controls[google.maps.ControlPosition.TOP_CENTER].push(input);
+    var divSearch = document.getElementById('div-search-address');
+    addMap.controls[google.maps.ControlPosition.TOP_CENTER].push(divSearch);
 
     var marker = null;
 
     //Configure autocomplete control
-    var autocomplete = new google.maps.places.Autocomplete(input);
+    var inputSearch = document.getElementById('input-search-address');
+    var autocomplete = new google.maps.places.Autocomplete(inputSearch);
+    
     google.maps.event.addListener(autocomplete, 'place_changed', function() {
         var place = autocomplete.getPlace();
 
@@ -223,6 +257,7 @@
         }
 
         marker.setPosition(place.geometry.location);
+        updateLatitudeLongitude();
     });
 
     //Center on wanted bounds
@@ -231,6 +266,11 @@
     var mapBounds = new google.maps.LatLngBounds(sw, ne);
     console.log(mapBounds);
     map.fitBounds(mapBounds);*/
+
+    function updateLatitudeLongitude() {
+        $('#hidden-share-add-latitude').val(marker.getPosition().lat());
+        $('#hidden-share-add-longitude').val(marker.getPosition().lng());
+    }
 
     //Add idle listener
     google.maps.event.addListener(addMap, 'idle', function() {
@@ -241,14 +281,13 @@
                 title: 'Hello World!',
                 draggable: true
             });
+            updateLatitudeLongitude();
 
             google.maps.event.addListener(marker, 'dragend', function() {
-                console.log(marker.getPosition());
+                updateLatitudeLongitude();
             });
         }
     });
-
-    $('.selectpicker').selectpicker();
 
     //On load
     $(function() {
@@ -257,17 +296,7 @@
             dateFormat: 'yy-mm-dd'
         });
 
-        $('.timepicker').timepicker({
-            timeFormat: 'H:i',
-            useSelect: true,
-            className: 'form-control input-lg',
-            noneOption: [
-                {
-                    'label': '',
-                    'value': null
-                }
-            ]
-        });
+        $('.selectpicker').selectpicker();
 
         //
         $('#button-share-add-less-details').click(function () {
