@@ -243,7 +243,7 @@
     //Configure autocomplete control
     var inputSearch = document.getElementById('input-search-address');
     var autocomplete = new google.maps.places.Autocomplete(inputSearch);
-    
+
     google.maps.event.addListener(autocomplete, 'place_changed', function() {
         var place = autocomplete.getPlace();
 

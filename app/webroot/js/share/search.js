@@ -184,6 +184,14 @@ function initializeSearch(shareTypeCategory, shareType, date) {
                 //Add to map
                 addMarker(share);
 
+                //Share type category label
+                var shareTypeCategoryLabel = getShareTypeCategoryLabel(share.share_type_category.label);
+                share.share_type_category_label = shareTypeCategoryLabel;
+
+                //Share type label
+                var shareTypeLabel = getShareTypeLabel(share.share_type_category.label, share.share_type.label);
+                share.share_type_label = shareTypeLabel;
+
                 //Share color
                 var shareColor = getIconColor(share.share_type_category.label);
                 share.share_color = shareColor;
@@ -247,7 +255,12 @@ function initializeSearch(shareTypeCategory, shareType, date) {
 
         //
         $scope.formatShareTypeCategory = function(shareTypeCategory) {
-            return shareTypeCategory;
+            return getShareTypeCategoryLabel(shareTypeCategory);
+        };
+
+        //
+        $scope.formatShareType = function(shareTypeCategory, shareType) {
+            return getShareTypeLabel(shareTypeCategory, shareType);
         };
 
         /**

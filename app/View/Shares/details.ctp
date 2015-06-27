@@ -36,7 +36,7 @@
 
                 <!-- Share type -->
                 <h2 class="text-capitalize" ng-style="{'color': share.share_color}">
-                    {{ share.share_type_category.label }} / <span style="font-weight: 200;">{{ share.share_type.label }}</span>
+                    {{ share.share_type_category_label }} / <span style="font-weight: 200;">{{ share.share_type_label }}</span>
                 </h2>
 
                 <!-- Title -->
@@ -48,18 +48,18 @@
 
                 <!-- Message and limitations -->
                 <blockquote style="margin-bottom: ">
-                    <p ng-if="(share.message != '')" class="lead">{{ share.message }}</p>
-                    <p ng-if="(share.message == null)" class="lead">Pas de message</p>
+                    <p ng-if="(share.message)" class="lead text-muted">{{ share.message }}</p>
+                    <p ng-if="(!share.message)" class="lead text-muted">Pas de message</p>
 
-                    <footer ng-if="(share.limitations != '')" class="footer-share-details-limitations text-danger">
+                    <footer ng-if="(share.limitations)" class="footer-share-details-limitations text-danger">
                         <i class="fa fa-asterisk"></i> {{ share.limitations }}
                     </footer>
 
                 </blockquote>
 
                 <!-- Comments count -->
-                <a ng-if="(share.comment_count > 1)" href="#div-share-details-comments-header" class="scroll-a btn btn-link">{{ share.comment_count }} Commentaires <i class="fa fa-level-down"></i></a>
-                <a ng-if="(share.comment_count == 1)" href="#div-share-details-comments-header" class="scroll-a btn btn-link">1 Commentaire <i class="fa fa-level-down"></i></a>
+                <a ng-if="(share.comment_count > 1)" href="#div-share-details-comments-header" class="scroll-a btn btn-link">{{ share.comment_count }} Commentaires</a>
+                <a ng-if="(share.comment_count == 1)" href="#div-share-details-comments-header" class="scroll-a btn btn-link">1 Commentaire</a>
 
             </div>
 

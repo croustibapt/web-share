@@ -214,3 +214,145 @@ function getShareTypeCategories(scope, data) {
         scope.shareTypeCategories[shareTypeCategory.share_type_category_id] = shareTypeCategory;
     }
 }
+
+function getShareTypeLabel(shareTypeCategory, shareType) {
+    if (shareTypeCategory == "food") {
+        if (shareType == "pizza") {
+            return 'Pizza';
+        } else if (shareType == "snack") {
+            return 'Snack';
+        } else if (shareType == "all") {
+            return 'Tout';
+        } else {
+            return 'Autre';
+        }
+    } else if (shareTypeCategory == "hightech") {
+        if (shareType == "component") {
+            return 'Composants';
+        } else if (shareType == "computer") {
+            return 'Ordinateur';
+        } else if (shareType == "phone") {
+            return 'Téléphonie';
+        } else if (shareType == "storage") {
+            return 'Stockage';
+        } else if (shareType == "application") {
+            return 'Application';
+        } else if (shareType == "all") {
+            return 'Tout';
+        } else {
+            return 'Autre';
+        }
+    } else if (shareTypeCategory == "audiovisual") {
+        if (shareType == "picture") {
+            return 'Images';
+        } else if (shareType == "sound") {
+            return 'Audio';
+        } else if (shareType == "photo") {
+            return 'Photo';
+        } else if (shareType == "disc") {
+            return 'CD/DVD';
+        } else if (shareType == "game") {
+            return 'Jeux';
+        } else if (shareType == "all") {
+            return 'Tout';
+        } else {
+            return 'Autre';
+        }
+    } else if (shareTypeCategory == "recreation") {
+        if (shareType == "cinema") {
+            return 'Cinéma';
+        } else if (shareType == "show") {
+            return 'Spectacles';
+        } else if (shareType == "game") {
+            return 'Jeux';
+        } else if (shareType == "book") {
+            return 'Livres';
+        } else if (shareType == "outdoor") {
+            return 'Extérieur';
+        } else if (shareType == "sport") {
+            return 'Sports';
+        } else if (shareType == "auto") {
+            return 'Auto';
+        } else if (shareType == "moto") {
+            return 'Moto';
+        } else if (shareType == "music") {
+            return 'Musique';
+        } else if (shareType == "pet") {
+            return 'Animaux';
+        } else if (shareType == "all") {
+            return 'Tout';
+        } else {
+            return 'Autre';
+        }
+    } else if (shareTypeCategory == "mode") {
+        if (shareType == "man") {
+            return 'Homme';
+        } else if (shareType == "woman") {
+            return 'Femme';
+        } else if (shareType == "mixte") {
+            return 'Mixte';
+        } else if (shareType == "child") {
+            return 'Enfant';
+        } else if (shareType == "jewelry") {
+            return 'Bijoux';
+        } else if (shareType == "all") {
+            return 'Tout';
+        } else {
+            return 'Autre';
+        }
+    } else if (shareTypeCategory == "house") {
+        if (shareType == "furniture") {
+            return 'Meubles';
+        } else if (shareType == "kitchen") {
+            return 'Cuisine';
+        } else if (shareType == "diy") {
+            return 'Bricolage';
+        } else if (shareType == "all") {
+            return 'Tout';
+        } else {
+            return 'Autre';
+        }
+    } else if (shareTypeCategory == "service") {
+        if (shareType == "travel") {
+            return 'Voyage';
+        } else if (shareType == "hotel") {
+            return 'Hôtel';
+        } else if (shareType == "wellness") {
+            return 'Bien-être';
+        } else if (shareType == "all") {
+            return 'Tout';
+        } else {
+            return 'Autre';
+        }
+    } else if (shareTypeCategory == "other") {
+        if (shareType == "all") {
+            return 'Tout';
+        }return 'Autre';
+    } else {
+        return 'Inconnu';
+    }
+}
+
+function getShareTypeCategoryLabel(shareTypeCategory) {
+    if (shareTypeCategory == "food") {
+        return 'Restauration';
+    } else if (shareTypeCategory == "hightech") {
+        return 'High-Tech';
+    } else if (shareTypeCategory == "audiovisual") {
+        return 'Audiovisuel';
+    } else if (shareTypeCategory == "recreation") {
+        return 'Loisirs';
+    } else if (shareTypeCategory == "mode") {
+        return 'Mode';
+    } else if (shareTypeCategory == "house") {
+        return 'Maison';
+    } else if (shareTypeCategory == "service") {
+        return 'Services';
+    } else if (shareTypeCategory == "other") {
+        return 'Autre';
+    } else if (shareTypeCategory == "all") {
+        return 'Tout';
+    } else {
+        return 'Inconnu';
+    }
+}

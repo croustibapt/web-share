@@ -34,7 +34,7 @@
                         <select id="select-action-bar-share-type-category" class="form-control select-action-bar"
                                 ng-change="onShareTypeCategoryChanged();"
                                 ng-model="shareTypeCategory"
-                                ng-options="shareTypeCategoryId as category.label for (shareTypeCategoryId, category) in shareTypeCategories">
+                                ng-options="shareTypeCategoryId as formatShareTypeCategory(category.label) for (shareTypeCategoryId, category) in shareTypeCategories">
                         </select>
 
                     </div>
@@ -43,7 +43,7 @@
                         <select id="select-action-bar-share-type" class="form-control select-action-bar"
                                 ng-change="onShareTypeChanged();"
                                 ng-model="shareType"
-                                ng-options="shareTypeId as type.label for (shareTypeId, type) in shareTypeCategories[shareTypeCategory].share_types">
+                                ng-options="shareTypeId as formatShareType(shareTypeCategories[shareTypeCategory].label, type.label) for (shareTypeId, type) in shareTypeCategories[shareTypeCategory].share_types">
                         </select>
 
                     </div>

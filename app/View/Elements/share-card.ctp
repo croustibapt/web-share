@@ -21,7 +21,7 @@
             <div class="div-share-card-title">
                 <blockquote class="blockquote-share-card-title">
                     <!-- Share type -->
-                    <p class="text-capitalize" style="color: {{ share.share_color }}; font-size: 20px; margin-bottom: 5px;">{{ share.share_type_category.label }} / <span style="font-weight: 200;">{{ share.share_type.label }}</span></p>
+                    <p class="text-capitalize" style="color: {{ share.share_color }}; font-size: 20px; margin-bottom: 5px;">{{ share.share_type_category_label }} / <span style="font-weight: 200;">{{ share.share_type_label }}</span></p>
 
                     <!-- Title -->
                     <p class="media-heading lead line-clamp line-clamp-3" style="margin-bottom: 10px;">{{ share.title }}</p>

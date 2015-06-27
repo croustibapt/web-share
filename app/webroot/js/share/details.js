@@ -151,6 +151,14 @@ function initializeDetails(shareId, shareUserExternalId, textAreaId, divGoogleMa
 
             $scope.share = response;
 
+            //Share type category label
+            var shareTypeCategoryLabel = getShareTypeCategoryLabel($scope.share.share_type_category.label);
+            $scope.share.share_type_category_label = shareTypeCategoryLabel;
+
+            //Share type label
+            var shareTypeLabel = getShareTypeLabel($scope.share.share_type_category.label, $scope.share.share_type.label);
+            $scope.share.share_type_label = shareTypeLabel;
+
             //Event date
             var eventDate = new Date($scope.share.event_date);
             var isoEventDate = eventDate.toISOString();
