@@ -62,6 +62,16 @@ function initializeHome(inputId) {
         };
 
         //
+        $scope.formatShareTypeCategory = function(shareTypeCategory) {
+            return getShareTypeCategoryLabel(shareTypeCategory);
+        };
+
+        //
+        $scope.formatShareType = function(shareTypeCategory, shareType) {
+            return getShareTypeLabel(shareTypeCategory, shareType);
+        };
+
+        //
         $http.get(webroot + 'api/share_type_categories/get')
         .success(function (data, status, headers, config) {
             //

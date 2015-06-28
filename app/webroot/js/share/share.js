@@ -27,6 +27,12 @@ function getMarkerIcon(shareTypeCategory, shareType) {
             return 'icon ion-pizza';
         } else if (shareType == "snack") {
             return 'fa fa-coffee';
+        } else if (shareType == "burger") {
+            return 'fa fa-cutlery';
+        } else if (shareType == "sushi") {
+            return 'fa fa-cutlery';
+        } else if (shareType == "restaurant") {
+            return 'fa fa-cutlery';
         } else {
             return 'fa fa-cutlery';
         }
@@ -208,7 +214,11 @@ function getShareTypeCategories(scope, data) {
         //
         for (var shareTypeIndex in shareTypes) {
             var shareType = shareTypes[shareTypeIndex];
+            shareType['share_type_category_label'] = shareTypeCategory.label;
             shareTypeCategory['share_types'][shareType.share_type_id] = shareType;
+
+            console.log(shareType);
+            scope.shareTypes.push(shareType);
         }
 
         scope.shareTypeCategories[shareTypeCategory.share_type_category_id] = shareTypeCategory;
@@ -221,6 +231,12 @@ function getShareTypeLabel(shareTypeCategory, shareType) {
             return 'Pizza';
         } else if (shareType == "snack") {
             return 'Snack';
+        } else if (shareType == "burger") {
+            return 'Burger';
+        } else if (shareType == "sushi") {
+            return 'Sushi';
+        } else if (shareType == "restaurant") {
+            return 'Restaurant';
         } else if (shareType == "all") {
             return 'Tout';
         } else {

@@ -43,7 +43,7 @@
                         'label' => 'Catégorie ?',
                         'ng-change' => 'onShareTypeCategoryChanged();',
                         'ng-model' => 'shareTypeCategory',
-                        'ng-options' => 'shareTypeCategoryId as category.label for (shareTypeCategoryId, category) in shareTypeCategories'
+                        'ng-options' => 'shareTypeCategoryId as formatShareTypeCategory(category.label) for (shareTypeCategoryId, category) in shareTypeCategories'
                     ));
                 ?>
 
@@ -59,7 +59,7 @@
                         'ng-disabled' => '(shareTypeCategory == -1)',
                         'ng-change' => 'onShareTypeChanged();',
                         'ng-model' => 'shareType',
-                        'ng-options' => 'shareTypeId as type.label for (shareTypeId, type) in shareTypeCategories[shareTypeCategory].share_types'
+                        'ng-options' => 'shareTypeId as formatShareType(shareTypeCategories[shareTypeCategory].label, type.label) for (shareTypeId, type) in shareTypeCategories[shareTypeCategory].share_types'
                     ));
                 ?>
 
