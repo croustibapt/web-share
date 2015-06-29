@@ -30,7 +30,7 @@
 
             <select id="select-action-bar-share-type-category" class="form-control select-action-bar"
                     ng-change="onShareTypeChanged();"
-                    ng-model="shareTypeCategory"
+                    ng-model="shareType"
                     ng-options="shareType.share_type_id as formatShareType(shareType.share_type_category_label, shareType.label) group by formatShareTypeCategory(shareType.share_type_category_label) for shareType in shareTypes">
             </select>
 
