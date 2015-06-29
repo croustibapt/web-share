@@ -62,6 +62,12 @@ function initializeHome(inputId) {
         };
 
         //
+        $scope.onShareTypeCategoryChanged = function() {
+            //
+            $scope.shareType = '-1';
+        };
+
+        //
         $scope.formatShareTypeCategory = function(shareTypeCategory) {
             return getShareTypeCategoryLabel(shareTypeCategory);
         };

@@ -9,7 +9,7 @@ class SharesController extends ApiSharesController {
     
     //
     public function search() {
-        $date = 'day';
+        $date = 'all';
 
         $shareTypeCategory = -1;
         $shareType = -1;
@@ -39,9 +39,9 @@ class SharesController extends ApiSharesController {
 
             if ($viewPortObject != NULL) {
                 $viewPort['northeast']['lat'] = $viewPortObject->za->j;
-                $viewPort['northeast']['lng'] = $viewPortObject->qa->A;
+                $viewPort['northeast']['lng'] = $viewPortObject->ra->A;
                 $viewPort['southwest']['lat'] = $viewPortObject->za->A;
-                $viewPort['southwest']['lng'] = $viewPortObject->qa->j;
+                $viewPort['southwest']['lng'] = $viewPortObject->ra->j;
             }
         }
 

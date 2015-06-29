@@ -8,6 +8,8 @@ function initializeDetails(shareId, shareUserExternalId, textAreaId, divGoogleMa
         //Pagination
         $scope.page = 1;
         $scope.total_pages = 1;
+        $scope.total_results = 0;
+        $scope.results_count = 0;
 
         //Share
         $scope.shareId = shareId;
@@ -62,6 +64,8 @@ function initializeDetails(shareId, shareUserExternalId, textAreaId, divGoogleMa
             //Handle pagination
             $scope.page = parseInt(response.page);
             $scope.total_pages = parseInt(response.total_pages);
+            $scope.total_results = parseInt(response.total_results);
+            $scope.results_count = response.results.length;
 
             //Handle comments
             var comments = response.results;
@@ -149,53 +153,55 @@ function initializeDetails(shareId, shareUserExternalId, textAreaId, divGoogleMa
         $scope.handleShareResponse = function(response) {
             console.log(response);
 
-            $scope.share = response;
+            var share = response;
 
             //Share type category label
-            var shareTypeCategoryLabel = getShareTypeCategoryLabel($scope.share.share_type_category.label);
-            $scope.share.share_type_category_label = shareTypeCategoryLabel;
+            var shareTypeCategoryLabel = getShareTypeCategoryLabel(share.share_type_category.label);
+            share.share_type_category_label = shareTypeCategoryLabel;
 
             //Share type label
-            var shareTypeLabel = getShareTypeLabel($scope.share.share_type_category.label, $scope.share.share_type.label);
-            $scope.share.share_type_label = shareTypeLabel;
+            var shareTypeLabel = getShareTypeLabel(share.share_type_category.label, share.share_type.label);
+            share.share_type_label = shareTypeLabel;
 
             //Event date
-            var eventDate = new Date($scope.share.event_date);
+            var eventDate = new Date(share.event_date);
             var isoEventDate = eventDate.toISOString();
             var momentDay = moment(isoEventDate).format('D MMMM', 'fr');
-            $scope.share.moment_day = momentDay;
+            share.moment_day = momentDay;
 
             //Event time
-            if ($scope.share.event_time != null) {
-                var eventTime = new Date($scope.share.event_date + ' ' + $scope.share.event_time);
+            if (share.event_time != null) {
+                var eventTime = new Date(share.event_date + ' ' + share.event_time);
                 var isoEventTime = eventTime.toISOString();
                 var momentHour = moment(isoEventTime).format('LT', 'fr');
-                $scope.share.moment_hour = momentHour;
+                share.moment_hour = momentHour;
             }
 
             //Share color
-            var shareColor = getIconColor($scope.share.share_type_category.label);
-            $scope.share.share_color = shareColor;
+            var shareColor = getIconColor(share.share_type_category.label);
+            share.share_color = shareColor;
 
             //Share icon
-            var shareIcon = getMarkerIcon($scope.share.share_type_category.label, $scope.share.share_type.label);
-            $scope.share.share_icon = shareIcon;
+            var shareIcon = getMarkerIcon(share.share_type_category.label, share.share_type.label);
+            share.share_icon = shareIcon;
 
             //Created
-            var createdDate = new Date($scope.share.created);
+            var createdDate = new Date(share.created);
             var isoCreatedDate = createdDate.toISOString();
             var momentCreatedTimeAgo = moment(isoCreatedDate).fromNow();
-            $scope.share.moment_created_time_ago = momentCreatedTimeAgo;
+            share.moment_created_time_ago = momentCreatedTimeAgo;
 
             //Places left
-            var totalPlaces = parseInt($scope.share.places) + 1;
-            var participationCount = parseInt($scope.share.participation_count) + 1;
+            var totalPlaces = parseInt(share.places) + 1;
+            var participationCount = parseInt(share.participation_count) + 1;
             var placesLeft = totalPlaces - participationCount;
-            $scope.share.places_left = placesLeft;
+            share.places_left = placesLeft;
 
             //Formatted price
-            var price = parseFloat($scope.share.price);
-            $scope.share.formatted_price = numeral(price).format('0.0a');
+            var price = parseFloat(share.price);
+            share.formatted_price = numeral(price).format('0.0a');
+
+            $scope.share = share;
 
             //Create map
             $scope.createMap();

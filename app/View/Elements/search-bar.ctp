@@ -1,37 +1,52 @@
 <div id="div-action-bar">
     <div class="row">
-        <div class="col-md-8">
+        <div class="col-md-3">
 
-            <ul class="nav nav-pills text-center" role="tablist">
-                <!-- Current day shares -->
-                <li role="presentation" ng-class="(date === 'day') ? 'active' : ''">
-                    <a href="javascript:void(0)" class="a-action-bar-date" role="tab" data-toggle="tab" ng-click="search(shareTypeCategory, shareType, page, 'day', bounds);">Aujourd'hui</a>
-                </li>
+            <select id="select-action-bar-date" class="form-control select-action-bar"
+                    ng-change="onDateChanged();"
+                    ng-model="date">
 
-                <!-- Current week shares -->
-                <li role="presentation" ng-class="(date === 'week') ? 'active' : ''">
-                    <a href="javascript:void(0)" class="a-action-bar-date" role="tab" data-toggle="tab" ng-click="search(shareTypeCategory, shareType, page, 'week', bounds);">Cette semaine</a>
-                </li>
+                <option value="all">
+                    Période
+                </option>
 
-                <!-- Current month shares -->
-                <li role="presentation" ng-class="(date === 'month') ? 'active' : ''">
-                    <a href="javascript:void(0)" class="a-action-bar-date" role="tab" data-toggle="tab" ng-click="search(shareTypeCategory, shareType, page, 'month', bounds);">Ce mois-ci</a>
-                </li>
+                <option value="day">
+                    Aujourd'hui
+                </option>
 
-                <!-- All -->
-                <li role="presentation" ng-class="(date === 'all') ? 'active' : ''">
-                    <a href="javascript:void(0)" class="a-action-bar-date" role="tab" data-toggle="tab" ng-click="search(shareTypeCategory, shareType, page, 'all', bounds);">Tout</a>
-                </li>
-            </ul>
+                <option value="week">
+                    Cette semaine
+                </option>
+
+                <option value="month">
+                    Ce mois-ci
+                </option>
+
+            </select>
 
         </div>
 
-        <div class="col-md-4 text-right">
+        <div class="col-md-3">
+
+        </div>
+
+        <div class="col-md-3">
 
             <select id="select-action-bar-share-type-category" class="form-control select-action-bar"
+                    ng-change="onShareTypeCategoryChanged();"
+                    ng-model="shareTypeCategory"
+                    ng-options="shareTypeCategoryId as formatShareTypeCategory(category.label) for (shareTypeCategoryId, category) in shareTypeCategories">
+            </select>
+
+        </div>
+
+        <div class="col-md-3">
+
+            <select id="select-action-bar-share-type" class="form-control select-action-bar"
                     ng-change="onShareTypeChanged();"
                     ng-model="shareType"
-                    ng-options="shareType.share_type_id as formatShareType(shareType.share_type_category_label, shareType.label) group by formatShareTypeCategory(shareType.share_type_category_label) for shareType in shareTypes">
+                    ng-disabled="(shareTypeCategory == -1)"
+                    ng-options="shareTypeId as formatShareType(shareTypeCategories[shareTypeCategory].label, type.label) for (shareTypeId, type) in shareTypeCategories[shareTypeCategory].share_types">
             </select>
 
         </div>

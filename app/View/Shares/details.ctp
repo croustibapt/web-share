@@ -58,8 +58,8 @@
                 </blockquote>
 
                 <!-- Comments count -->
-                <a ng-if="(share.comment_count > 1)" href="#div-share-details-comments-header" class="scroll-a btn btn-link">{{ share.comment_count }} Commentaires</a>
-                <a ng-if="(share.comment_count == 1)" href="#div-share-details-comments-header" class="scroll-a btn btn-link">1 Commentaire</a>
+                <a ng-if="(share.comment_count > 1)" href="#div-share-details-comments-header" class="scroll-a btn btn-link">{{ share.comment_count }} commentaires</a>
+                <a ng-if="(share.comment_count == 1)" href="#div-share-details-comments-header" class="scroll-a btn btn-link">1 commentaire</a>
 
             </div>
 

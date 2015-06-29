@@ -8,6 +8,8 @@ function initializeSearch(shareTypeCategory, shareType, date) {
     app.controller('SearchController', ['$scope', '$http', function($scope, $http) {
         $scope.page = 1;
         $scope.total_pages = 1;
+        $scope.total_results = 0;
+        $scope.results_count = 0;
 
         $scope.date = date;
         $scope.startDate = null;
@@ -20,7 +22,6 @@ function initializeSearch(shareTypeCategory, shareType, date) {
         $scope.shareTypeCategories = {};
         $scope.shareTypeCategory = shareTypeCategory;
         $scope.shareType = shareType;
-        $scope.shareTypes = [];
 
         $scope.shares = [];
 
@@ -171,6 +172,8 @@ function initializeSearch(shareTypeCategory, shareType, date) {
             //Handle pagination
             $scope.page = parseInt(response.page);
             $scope.total_pages = parseInt(response.total_pages);
+            $scope.total_results = parseInt(response.total_results);
+            $scope.results_count = response.results.length;
 
             //Clear markers on map
             clearMarkers();
@@ -243,14 +246,21 @@ function initializeSearch(shareTypeCategory, shareType, date) {
             }
         };
 
+        $scope.onDateChanged = function() {
+            $scope.search($scope.shareTypeCategory, $scope.shareType, 1, $scope.date, $scope.bounds);
+        };
+
         //
         $scope.onShareTypeCategoryChanged = function() {
+            console.log('onShareTypeCategoryChanged');
+            $scope.shareType = '-1';
             //
             $scope.search($scope.shareTypeCategory, $scope.shareType, 1, $scope.date, $scope.bounds);
         };
 
         //
         $scope.onShareTypeChanged = function() {
+            console.log('onShareTypeChanged');
             $scope.search($scope.shareTypeCategory, $scope.shareType, 1, $scope.date, $scope.bounds);
         };
 

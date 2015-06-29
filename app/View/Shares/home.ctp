@@ -13,8 +13,8 @@
                         'id' => 'input-home-address',
                         'type' => 'text',
                         'class' => 'form-control input-lg',
-                        'placeholder' => 'ex : Toulouse',
-                        'label' => 'Où recherchez vous ?',
+                        'placeholder' => 'Où recherchez-vous ?',
+                        'label' => false,
                         'ng-focus' => 'geolocate();'
                     ));
 
@@ -28,8 +28,8 @@
                 <?php
                     echo $this->Form->input('date', array(
                         'class' => 'form-control input-lg',
-                        'label' => 'Quand ?',
-                        'options' => array('day' => 'Aujourd\'hui', 'week' => 'Cette semaine', 'month' => 'Ce mois-ci', 'all' => 'Tout'),
+                        'label' => false,
+                        'options' => array('all' => 'Période', 'day' => 'Aujourd\'hui', 'week' => 'Cette semaine', 'month' => 'Ce mois-ci'),
                     ));
                 ?>
             </div>
@@ -40,7 +40,7 @@
                         'type' => 'select',
                         'id' => 'select-home-share-type-category',
                         'class' => 'form-control input-lg',
-                        'label' => 'Catégorie ?',
+                        'label' => false,
                         'ng-change' => 'onShareTypeCategoryChanged();',
                         'ng-model' => 'shareTypeCategory',
                         'ng-options' => 'shareTypeCategoryId as formatShareTypeCategory(category.label) for (shareTypeCategoryId, category) in shareTypeCategories'
@@ -55,9 +55,8 @@
                         'type' => 'select',
                         'id' => 'select-home-share-type',
                         'class' => 'form-control input-lg',
-                        'label' => 'Type ?',
+                        'label' => false,
                         'ng-disabled' => '(shareTypeCategory == -1)',
-                        'ng-change' => 'onShareTypeChanged();',
                         'ng-model' => 'shareType',
                         'ng-options' => 'shareTypeId as formatShareType(shareTypeCategories[shareTypeCategory].label, type.label) for (shareTypeId, type) in shareTypeCategories[shareTypeCategory].share_types'
                     ));
@@ -67,8 +66,7 @@
             <div class="col-md-3">
                 <?php
                     echo $this->Form->submit('Rechercher', array(
-                        'class' => 'btn btn-danger btn-lg',
-                        'style' => 'margin-top: 25px;'
+                        'class' => 'btn btn-danger btn-lg'
                     ));
                 ?>
             </div>

@@ -159,7 +159,7 @@ function getIconColor(shareTypeCategory) {
 function getTypesWithShareTypeCategory(shareTypeCategory, shareTypeCategories) {
     var types = null;
 
-    if (shareTypeCategory != -1) {
+    if (shareTypeCategory != "-1") {
         types = [];
 
         var shareTypes = shareTypeCategories[shareTypeCategory]['share_types'];
@@ -175,7 +175,7 @@ function getTypesWithShareTypeCategory(shareTypeCategory, shareTypeCategories) {
 function getTypesWithShareType(shareType, shareTypeCategory, shareTypeCategories) {
     var types = null;
 
-    if (shareType == -1) {
+    if (shareType == "-1") {
         types = [];
 
         var shareTypes = shareTypeCategories[shareTypeCategory]['share_types'];
@@ -194,7 +194,7 @@ function getShareTypeCategories(scope, data) {
     //All category
     scope.shareTypeCategories[-1] = {
         "label": "all",
-        "share_type_category_id": -1,
+        "share_type_category_id": "-1",
         "share_types": []
     };
 
@@ -205,20 +205,16 @@ function getShareTypeCategories(scope, data) {
 
         //
         shareTypeCategory['share_types'] = {};
-        shareTypeCategory['share_types'][-1] = {
+        shareTypeCategory['share_types']['-1'] = {
             "label": "all",
             "share_type_category_id": shareTypeCategory.share_type_category_id,
-            "share_type_id": -1
+            "share_type_id": "-1"
         };
 
         //
         for (var shareTypeIndex in shareTypes) {
             var shareType = shareTypes[shareTypeIndex];
-            shareType['share_type_category_label'] = shareTypeCategory.label;
             shareTypeCategory['share_types'][shareType.share_type_id] = shareType;
-
-            console.log(shareType);
-            scope.shareTypes.push(shareType);
         }
 
         scope.shareTypeCategories[shareTypeCategory.share_type_category_id] = shareTypeCategory;
@@ -238,7 +234,7 @@ function getShareTypeLabel(shareTypeCategory, shareType) {
         } else if (shareType == "restaurant") {
             return 'Restaurant';
         } else if (shareType == "all") {
-            return 'Tout';
+            return 'Type';
         } else {
             return 'Autre';
         }
@@ -254,7 +250,7 @@ function getShareTypeLabel(shareTypeCategory, shareType) {
         } else if (shareType == "application") {
             return 'Application';
         } else if (shareType == "all") {
-            return 'Tout';
+            return 'Type';
         } else {
             return 'Autre';
         }
@@ -270,7 +266,7 @@ function getShareTypeLabel(shareTypeCategory, shareType) {
         } else if (shareType == "game") {
             return 'Jeux';
         } else if (shareType == "all") {
-            return 'Tout';
+            return 'Type';
         } else {
             return 'Autre';
         }
@@ -296,7 +292,7 @@ function getShareTypeLabel(shareTypeCategory, shareType) {
         } else if (shareType == "pet") {
             return 'Animaux';
         } else if (shareType == "all") {
-            return 'Tout';
+            return 'Type';
         } else {
             return 'Autre';
         }
@@ -312,7 +308,7 @@ function getShareTypeLabel(shareTypeCategory, shareType) {
         } else if (shareType == "jewelry") {
             return 'Bijoux';
         } else if (shareType == "all") {
-            return 'Tout';
+            return 'Type';
         } else {
             return 'Autre';
         }
@@ -324,7 +320,7 @@ function getShareTypeLabel(shareTypeCategory, shareType) {
         } else if (shareType == "diy") {
             return 'Bricolage';
         } else if (shareType == "all") {
-            return 'Tout';
+            return 'Type';
         } else {
             return 'Autre';
         }
@@ -336,13 +332,13 @@ function getShareTypeLabel(shareTypeCategory, shareType) {
         } else if (shareType == "wellness") {
             return 'Bien-être';
         } else if (shareType == "all") {
-            return 'Tout';
+            return 'Type';
         } else {
             return 'Autre';
         }
     } else if (shareTypeCategory == "other") {
         if (shareType == "all") {
-            return 'Tout';
+            return 'Type';
         }return 'Autre';
     } else {
         return 'Inconnu';
@@ -367,7 +363,7 @@ function getShareTypeCategoryLabel(shareTypeCategory) {
     } else if (shareTypeCategory == "other") {
         return 'Autre';
     } else if (shareTypeCategory == "all") {
-        return 'Tout';
+        return 'Catégorie';
     } else {
         return 'Inconnu';
     }

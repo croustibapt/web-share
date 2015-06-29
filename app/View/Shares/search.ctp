@@ -3,11 +3,12 @@
         <!-- Search bar -->
         <?php echo $this->element('search-bar'); ?>
 
-        <div class="row" style="padding: 30px;">
+        <div class="row" style="padding: 30px; padding-bottom: 0px;">
+
             <div ng-repeat="share in shares" class="col-md-6">
                 <?php echo $this->element('share-card'); ?>
             </div>
-            <span class="text-center">{{ shares.length }} résultats</span>
+
         </div>
         
         <!-- Pagination -->
@@ -15,7 +16,7 @@
     </div>
     <div style="margin-left: 50%; width: 50%; height: 100%;">
         <!-- Search box -->
-        <input type="text" value="<?php echo $address; ?>" id="input-search-address" class="form-control" placeholder="Où recherchez vous ?" style="margin-top: 10px; margin-left: 10px; height: 40px; width: 50%;">
+        <input type="text" value="<?php echo $address; ?>" id="input-search-address" class="form-control" placeholder="Où recherchez vous ?" style="margin-top: 10px; margin-left: 10px; width: 50%;">
 
         <!-- Google maps -->
         <div id="div-share-search-google-map" style="width: 100%; height: 100%;">
