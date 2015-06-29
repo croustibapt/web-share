@@ -27,28 +27,13 @@
         </div>
 
         <div class="col-md-4 text-right">
-            <form class="form-inline">
-                <div class="row">
-                    <div class="col-md-6">
 
-                        <select id="select-action-bar-share-type-category" class="form-control select-action-bar"
-                                ng-change="onShareTypeCategoryChanged();"
-                                ng-model="shareTypeCategory"
-                                ng-options="shareTypeCategoryId as formatShareTypeCategory(category.label) for (shareTypeCategoryId, category) in shareTypeCategories">
-                        </select>
+            <select id="select-action-bar-share-type-category" class="form-control select-action-bar"
+                    ng-change="onShareTypeChanged();"
+                    ng-model="shareTypeCategory"
+                    ng-options="shareType.share_type_id as formatShareType(shareType.share_type_category_label, shareType.label) group by formatShareTypeCategory(shareType.share_type_category_label) for shareType in shareTypes">
+            </select>
 
-                    </div>
-                    <div class="col-md-6">
-
-                        <select id="select-action-bar-share-type" class="form-control select-action-bar"
-                                ng-change="onShareTypeChanged();"
-                                ng-model="shareType"
-                                ng-options="shareTypeId as formatShareType(shareTypeCategories[shareTypeCategory].label, type.label) for (shareTypeId, type) in shareTypeCategories[shareTypeCategory].share_types">
-                        </select>
-
-                    </div>
-                </div>
-            </form>
         </div>
     </div>
 </div>

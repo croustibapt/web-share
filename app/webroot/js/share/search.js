@@ -20,6 +20,7 @@ function initializeSearch(shareTypeCategory, shareType, date) {
         $scope.shareTypeCategories = {};
         $scope.shareTypeCategory = shareTypeCategory;
         $scope.shareType = shareType;
+        $scope.shareTypes = [];
 
         $scope.shares = [];
 
