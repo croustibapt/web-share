@@ -10,7 +10,7 @@
             </div>
 
         </div>
-        
+
         <!-- Pagination -->
         <?php echo $this->element('pagination'); ?>
     </div>

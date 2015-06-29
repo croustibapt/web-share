@@ -16,45 +16,45 @@
 
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-        <ul class="nav navbar-nav">
-            <li class="<?php echo (($this->name == 'Shares') && ($this->action == 'search')) ? "active" : ""; ?>">
-                <?php
-                    echo $this->Html->link('Rechercher un partage', '/shares/search');
-                ?>
-            </li>
-            <li class="<?php echo (($this->name == 'Shares') && ($this->action == 'add')) ? "active" : ""; ?>">
-                <?php
-                    echo $this->Html->link('Partager un coupon', '/shares/add');
-                ?>
-            </li>
-        </ul>
         <ul class="nav navbar-nav navbar-right">
-            <li class="dropdown">
+
+
+            <li>
+                <form class="navbar-form" role="search">
+                    <button type="submit" class="btn btn-default" style="background-color: transparent; border: 1px solid white; color: white;">
+                        Proposer un partage
+                    </button>
+                </form>
+            </li>
+            <li class="dropdown" style="margin-right: 15px;">
                 <?php if ($this->LocalUser->isAuthenticated($this)) : ?>
 
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
-                   aria-expanded="false">
-                    <img class="nav-bar-user-img img-circle" src="https://graph.facebook.com/v2.3/<?php echo $this->LocalUser->getExternalId($this); ?>/picture" /> Hi <?php echo $this->LocalUser->getUsername($this); ?> <span class="caret"></span>
-                </a>
-                <ul class="dropdown-menu" role="menu">
-                    <li>
-                        <?php
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
+                       aria-expanded="false">
+                        <img class="nav-bar-user-img img-circle" src="https://graph.facebook.com/v2.3/<?php echo $this->LocalUser->getExternalId($this); ?>/picture" /> Hi <?php echo $this->LocalUser->getUsername($this); ?> <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li>
+                            <?php
                             echo $this->Html->link('My account', '/user/home');
-                        ?>
-                    </li>
-                    <li class="divider"></li>
-                    <li>
-                        <a id="a-nav-bar-logout" href="#">Logout</a>
-                    </li>
-                </ul>
+                            ?>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a id="a-nav-bar-logout" href="#">Logout</a>
+                        </li>
+                    </ul>
 
                 <?php else : ?>
 
-                <a class="authenticate-button" href="#">Authenticate</a>
+                    <a class="authenticate-button" href="#">Authenticate</a>
 
                 <?php endif; ?>
             </li>
+
         </ul>
+
+
     </div><!-- /.navbar-collapse -->
 </nav>
 
