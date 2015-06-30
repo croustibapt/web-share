@@ -136,7 +136,7 @@
 
 /* Custom buttons */
 
-.btn-navbar {
+.btn-outline {
     background-color: transparent;
     border: 1px solid white;
     color: white!important;
@@ -147,6 +147,11 @@
     margin-top: 10px;
     margin-bottom: 10px;
     margin-right: 15px;
+}
+
+.btn-outline:hover {
+    background-color: white!important;
+    color: #000000!important;
 }
 
 .btn-navbar:hover {

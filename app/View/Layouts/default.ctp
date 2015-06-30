@@ -41,6 +41,7 @@
             echo $this->Html->script('share/share');
             echo $this->Html->script('share/home');
             echo $this->Html->script('share/search');
+            echo $this->Html->script('share/add');
             echo $this->Html->script('share/details');
 
             //Moment
@@ -79,6 +80,13 @@
 
         <!-- CONTENT -->
         <?php echo $this->fetch('content'); ?>
+
+        <!-- Footer -->
+        <?php
+            if (!(($this->action == 'search') && ($this->name == 'Shares'))) {
+                echo $this->element('footer');
+            }
+        ?>
 
         <script>
             //Function used to handle AJAX error and display a toast

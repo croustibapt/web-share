@@ -190,9 +190,24 @@ function getTypesWithShareType(shareType, shareTypeCategory, shareTypeCategories
     return types;
 }
 
+function getShareTypes(scope, data) {
+    //Loop on results
+    for (var shareTypeCategoryIndex in data.results) {
+        var shareTypeCategory = data.results[shareTypeCategoryIndex];
+        var shareTypes = shareTypeCategory['share_types'];
+        //
+        for (var shareTypeIndex in shareTypes) {
+            var shareType = shareTypes[shareTypeIndex];
+            shareType['share_type_category_label'] = shareTypeCategory.label;
+
+            scope.shareTypes[shareType.share_type_id] = shareType;
+        }
+    }
+}
+
 function getShareTypeCategories(scope, data) {
     //All category
-    scope.shareTypeCategories[-1] = {
+    scope.shareTypeCategories['-1'] = {
         "label": "all",
         "share_type_category_id": "-1",
         "share_types": []
@@ -339,9 +354,11 @@ function getShareTypeLabel(shareTypeCategory, shareType) {
     } else if (shareTypeCategory == "other") {
         if (shareType == "all") {
             return 'Type';
-        }return 'Autre';
+        } else {
+            return 'Autre';
+        }
     } else {
-        return 'Inconnu';
+        return 'Type';
     }
 }
 
@@ -365,6 +382,12 @@ function getShareTypeCategoryLabel(shareTypeCategory) {
     } else if (shareTypeCategory == "all") {
         return 'Catégorie';
     } else {
-        return 'Inconnu';
+        return null;
     }
+}
+
+function pad(num, size) {
+    var s = num+"";
+    while (s.length < size) s = "0" + s;
+    return s;
 }

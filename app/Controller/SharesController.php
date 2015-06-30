@@ -112,13 +112,6 @@ class SharesController extends ApiSharesController {
                 $this->Share->validationErrors = $e->getValidationErrors();
             }
         }
-
-        //Get share types
-        $shareTypes = $this->ShareType->find('list', array(
-            'fields' => array('ShareType.id', 'ShareType.label', 'ShareTypeCategory.label'),
-            'recursive' => 0
-        ));
-        $this->set('shareTypes', $shareTypes);
 	}
     
     public function details($shareId = NULL) {

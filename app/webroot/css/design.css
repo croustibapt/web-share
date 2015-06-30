@@ -14,6 +14,34 @@ body {
 
 /* Home */
 
+.col-select-home {
+    padding: 0px;
+}
+
+.div-select-home {
+    position: relative;
+    background-color: white;
+    border: 1px solid #ccc;
+    border-left: none;
+}
+
+.input-home {
+    border-top-right-radius: 0px;
+    border-bottom-right-radius: 0px;
+}
+
+.select-home {
+    border-radius: 0px;
+    border: none;
+    height: 44px!important;
+}
+
+.submit-home {
+    width: 100%;
+    border-top-left-radius: 0px;
+    border-bottom-left-radius: 0px;
+}
+
 /* Action bar */
 
 #div-action-bar {
@@ -377,11 +405,22 @@ body {
     border-bottom-right-radius: 5px!important;
 }
 
-#div-add-section-description .input-group.has-error .input-group-addon, #div-add-section-description .input-group.has-error input, #div-add-section-description .input-group.has-error .selectpicker {
+.div-select-add {
+    border: 1px solid #3498db;
+    height: 46px;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+
+#div-add-section-description .input-group.has-error .input-group-addon,
+#div-add-section-description .input-group.has-error input,
+#div-add-section-description .input-group.has-error .div-select-add {
     border-color: #e74c3c;
 }
 
-#div-add-section-description .input-group-addon, #div-add-section-description .input-group input, #div-add-section-description .selectpicker {
+#div-add-section-description .input-group-addon,
+#div-add-section-description .input-group input,
+#div-add-section-description .div-select-add {
     border-color: #3498db;
 }
 
@@ -395,7 +434,9 @@ body {
     background-color: #e74c3c;
 }
 
-#div-add-section-more .input-group-addon, #div-add-section-more .input-group input, #div-add-section-more .selectpicker {
+#div-add-section-more .input-group-addon,
+#div-add-section-more .input-group input,
+#div-add-section-more .div-select-add {
     border-color: #8c9899;
 }
 
@@ -457,8 +498,20 @@ body {
 #footer {
     background-color: #333333;
     color: #FFFFFF;
-    font-weight: 100;
     text-align: left;
     width: 100%;
     height: 180px;
+    padding-top: 30px;
+    padding-bottom: 30px;
+}
+
+#footer a {
+    color: #FFFFFF;
+    padding: 0px;
+}
+
+#footer a:hover {
+    color: #3498db;
+    cursor: pointer;
+    text-decoration: none;
 }

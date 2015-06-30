@@ -44,10 +44,10 @@
         <div class="row">
             <div class="col-md-12">
                 <p ng-if="(share.places_left > 1)" class="text-info p-share-card-left-places">
-                    {{ share.places_left }} places restantes
+                    {{ share.places_left }} places
                 </p>
                 <p ng-if="(share.places_left === 1)" class="text-warning p-share-card-left-places">
-                    1 place restante
+                    1 place
                 </p>
                 <p ng-if="(share.places_left === 0)" class="text-success p-share-card-left-places">
                     Complet

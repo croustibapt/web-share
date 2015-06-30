@@ -35,7 +35,7 @@
             <li>
                 <?php
                     echo $this->Html->link('Proposer un partage', '/share/add', array(
-                        'class' => 'btn btn-navbar'
+                        'class' => 'btn btn-outline btn-navbar'
                     ));
                 ?>
             </li>
@@ -60,7 +60,7 @@
 
                 <?php else : ?>
 
-                    <a class="btn btn-navbar authenticate-button" href="#">Authenticate</a>
+                    <a class="btn btn-outline btn-navbar authenticate-button" href="#">Authenticate</a>
 
                 <?php endif; ?>
             </li>

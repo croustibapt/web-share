@@ -1,4 +1,4 @@
-<div class="container" style="margin-top: 20px;">
+<div ng-controller="AddController" class="container" style="margin-top: 20px;">
     <?php if ($this->LocalUser->isAuthenticated($this)) : ?>
 
     <?php
@@ -26,33 +26,17 @@
 
                 <div class="row">
                     <div class="col-md-6">
+
                         <!-- Type -->
                         <?php
-                            foreach ($shareTypes as $shareTypeCategoryLabel => $shareTypeCategoryTypes) {
-                                foreach ($shareTypeCategoryTypes as $shareTypeId => $shareTypeLabel) {
-                                    if ($shareTypeLabel == 'other') {
-                                        $shareTypeLabel = 'autre';
-                                    }
-                                    $shareTypeOptions[$shareTypeCategoryLabel][$shareTypeId] = $shareTypeLabel;
-                                }
-                            }
-
-                            //pr($shareTypeOptions);
+                            echo $this->element('share-add-select', array(
+                                'name' => 'share_type_id',
+                                'ngModel' => 'shareType',
+                                'ngOptions' => 'shareTypeId as formatShareType(shareType.share_type_category_label, shareType.label) group by formatShareTypeCategory(shareType.share_type_category_label) for (shareTypeId, shareType) in shareTypes',
+                                'icon' => 'fa-tag'
+                            ));
                         ?>
 
-                        <div class="input-group">
-                            <span class="input-group-addon"><i class="fa fa-tag"></i></span>
-                            <?php
-                                echo $this->Form->input('share_type_id', array(
-                                    'label' => false,
-                                    'class' => 'selectpicker',
-                                    'type' => 'select',
-                                    'options' => $shareTypeOptions,
-                                    'div' => false,
-                                    'data-style' => 'btn btn-default form-control input-lg'
-                                ));
-                            ?>
-                        </div>
                     </div>
                     <div class="col-md-6">
                         <!-- Date -->
@@ -104,31 +88,16 @@
 
                 <div class="row">
                     <div class="col-md-6">
-                        <!-- Time -->
-                        <?php
-                        $eventTimeOptions[''] = 'Heure';
-                        for ($i = 0; $i < 24; $i++) {
-                            $hour = sprintf("%02d", $i);
-                            $eventTimeOptions[''.$hour.':00:00'] = ''.$hour.':00';
-                            $eventTimeOptions[''.$hour.':15:00'] = ''.$hour.':15';
-                            $eventTimeOptions[''.$hour.':30:00'] = ''.$hour.':30';
-                            $eventTimeOptions[''.$hour.':45:00'] = ''.$hour.':45';
-                        }
-                        ?>
 
-                        <div class="input-group">
-                            <span class="input-group-addon"><i class="fa fa-tag"></i></span>
-                            <?php
-                            echo $this->Form->input('event_time', array(
-                                'label' => false,
-                                'class' => 'selectpicker',
-                                'type' => 'select',
-                                'div' => false,
-                                'options' => $eventTimeOptions,
-                                'data-style' => 'btn btn-default form-control input-lg'
+                        <!-- Event time -->
+                        <?php
+                            echo $this->element('share-add-select', array(
+                                'name' => 'event_time',
+                                'ngModel' => 'eventTime',
+                                'ngOptions' => 'eventTime as eventTimeDisplay for (eventTime, eventTimeDisplay) in eventTimes',
+                                'icon' => 'fa-clock-o'
                             ));
-                            ?>
-                        </div>
+                        ?>
                     </div>
                     <div class="col-md-6">
                         <!-- Limitations -->
@@ -222,72 +191,8 @@
 </div>
 
 <script>
-    //Create map
-    var mapOptions = {
-        panControl: false,
-        zoomControl: true,
-        scaleControl: true,
-        streetViewControl: false,
-        scrollwheel: false,
-        zoom: 8,
-        center: new google.maps.LatLng(-34.397, 150.644)
-    }
-    var addMap = new google.maps.Map(document.getElementById('div-share-add-google-map'), mapOptions);
-
-    //Add search box
-    var divSearch = document.getElementById('div-search-address');
-    addMap.controls[google.maps.ControlPosition.TOP_CENTER].push(divSearch);
-
-    var marker = null;
-
-    //Configure autocomplete control
-    var inputSearch = document.getElementById('input-search-address');
-    var autocomplete = new google.maps.places.Autocomplete(inputSearch);
-
-    google.maps.event.addListener(autocomplete, 'place_changed', function() {
-        var place = autocomplete.getPlace();
-
-        //If the place has a geometry, then present it on a map.
-        if (place.geometry.viewport) {
-            console.log(place.geometry.viewport);
-            addMap.fitBounds(place.geometry.viewport);
-        } else {
-            addMap.setCenter(place.geometry.location);
-            addMap.setZoom(17);  // Why 17? Because it looks good.
-        }
-
-        marker.setPosition(place.geometry.location);
-        updateLatitudeLongitude();
-    });
-
-    //Center on wanted bounds
-    /*var sw = new google.maps.LatLng(swLatitude, swLongitude);
-    var ne = new google.maps.LatLng(neLatitude, neLongitude);
-    var mapBounds = new google.maps.LatLngBounds(sw, ne);
-    console.log(mapBounds);
-    map.fitBounds(mapBounds);*/
-
-    function updateLatitudeLongitude() {
-        $('#hidden-share-add-latitude').val(marker.getPosition().lat());
-        $('#hidden-share-add-longitude').val(marker.getPosition().lng());
-    }
-
-    //Add idle listener
-    google.maps.event.addListener(addMap, 'idle', function() {
-        if (marker == null) {
-            marker = new google.maps.Marker({
-                position: addMap.getCenter(),
-                map: addMap,
-                title: 'Hello World!',
-                draggable: true
-            });
-            updateLatitudeLongitude();
-
-            google.maps.event.addListener(marker, 'dragend', function() {
-                updateLatitudeLongitude();
-            });
-        }
-    });
+    //
+    initializeAdd();
 
     //On load
     $(function() {

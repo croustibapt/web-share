@@ -1,50 +1,53 @@
 <div id="footer">
-    <div class="container" style="background-color: #333333;">
+    <div class="container">
         <div class="row">
             <div class="col-md-3">
-                <h4>FOLLOW US</h4>
+                <h4>Société</h4>
                 <ul class="list-unstyled">
                     <li>
-                        <a href="https://www.facebook.com/Insiteo" target="_blank" class="btn btn-link" disabled="disabled">Facebook</a>
+                        <a href="https://www.facebook.com/Insiteo" target="_blank">A propos</a>
                     </li>
                     <li>
-                        <a href="https://twitter.com/Insiteo" target="_blank" class="btn btn-link" disabled="disabled">Twitter</a>
+                        <a href="https://twitter.com/Insiteo" target="_blank">Contact</a>
                     </li>
                 </ul>
             </div>
             <div class="col-md-3">
-                <h4>APPS</h4>
+                <h4>Applications mobiles</h4>
                 <ul class="list-unstyled">
                     <li>
-                        <a href="https://itunes.apple.com/us/app/lbs-tester/id910156587?l=fr&amp;ls=1&amp;mt=8" target="_blank" class="btn btn-link">Tester 4 iOS</a>
+                        <a href="https://itunes.apple.com/us/app/lbs-tester/id910156587?l=fr&amp;ls=1&amp;mt=8" target="_blank">Application iOS</a>
                     </li>
                     <li>
-                        <a href="https://play.google.com/store/apps/details?id=com.insiteo.tester" target="_blank" class="btn btn-link">Tester 4 Android</a>
-                    </li>
-                    <li>
-                        <a href="https://itunes.apple.com/us/app/insiteo-lbs/id925704335?mt=8" target="_blank" class="btn btn-link">Insiteo LBS</a>
+                        <a href="https://play.google.com/store/apps/details?id=com.insiteo.tester" target="_blank">Application Android</a>
                     </li>
                 </ul>
             </div>
             <div class="col-md-3">
-                <h4>SDK</h4>
+                <h4>Informations</h4>
                 <ul class="list-unstyled">
                     <li>
-                        <a href="https://github.com/Insiteo/iOS/" target="_blank" class="btn btn-link">iOS</a>
+                        <a href="https://github.com/Insiteo/iOS/" target="_blank">Plan du site</a>
                     </li>
                     <li>
-                        <a href="https://github.com/Insiteo/Android/" target="_blank" class="btn btn-link">Android</a>
+                        <a href="https://github.com/Insiteo/Android/" target="_blank">Mode d'emploi</a>
+                    </li>
+                    <li>
+                        <a href="https://www.facebook.com/Insiteo" target="_blank">Conditions générales</a>
                     </li>
                 </ul>
             </div>
             <div class="col-md-3">
-                <h4>CONTACT</h4>
+                <h4>Informations</h4>
                 <ul class="list-unstyled">
                     <li>
-                        <a href="mailto:augustin.monsaingeon@insiteo.com" target="_blank" class="btn btn-link">Technical</a>
+                        <a href="https://github.com/Insiteo/iOS/" target="_blank">Plan du site</a>
                     </li>
                     <li>
-                        <a href="mailto:olivier.devienne@insiteo.com" target="_blank" class="btn btn-link">Sales</a>
+                        <a href="https://github.com/Insiteo/Android/" target="_blank">Mode d'emploi</a>
+                    </li>
+                    <li>
+                        <a href="https://www.facebook.com/Insiteo" target="_blank">Conditions générales</a>
                     </li>
                 </ul>
             </div>
