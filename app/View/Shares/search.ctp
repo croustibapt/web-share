@@ -16,7 +16,7 @@
     </div>
     <div style="margin-left: 50%; width: 50%; height: 100%;">
         <!-- Search box -->
-        <input type="text" value="<?php echo $address; ?>" id="input-search-address" class="form-control" placeholder="Où recherchez vous ?" style="margin-top: 10px; margin-left: 10px; width: 50%;">
+        <!--<input type="text" value="<?php echo $address; ?>" class="form-control" placeholder="Où recherchez vous ?" style="margin-top: 10px; margin-left: 10px; width: 50%;">-->
 
         <!-- Google maps -->
         <div id="div-share-search-google-map" style="width: 100%; height: 100%;">

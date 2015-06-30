@@ -10,6 +10,8 @@ body {
     background-color: #ffffff;
 }
 
+.pac-container { z-index: 9999;}
+
 /* Home */
 
 /* Action bar */
@@ -18,10 +20,9 @@ body {
     background-color: #ffffff;
     border-bottom: 1px solid #e0e0e0;
     width: 100%;
+    padding: 15px;
     padding-left: 30px;
     padding-right: 30px;
-    padding-top: 10px;
-    padding-bottom: 10px;
 }
 
 /*#div-action-bar .form-group {
@@ -29,7 +30,13 @@ body {
 }*/
 
 .select-action-bar {
+    border-color: #3498db;
+    color: #3498db;
+}
 
+.select-action-bar-date {
+    border-color: #9b59b6;
+    color: #9b59b6;
 }
 
 /* Navigation bar */

@@ -2,7 +2,7 @@
     <div class="row">
         <div class="col-md-3">
 
-            <select id="select-action-bar-date" class="form-control select-action-bar"
+            <select id="select-action-bar-date" class="form-control select-action-bar select-action-bar-date"
                     ng-change="onDateChanged();"
                     ng-model="date">
 

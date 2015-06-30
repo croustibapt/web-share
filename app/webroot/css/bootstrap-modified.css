@@ -133,3 +133,48 @@
     -moz-border-radius: 6px 0 6px 6px;
     border-radius: 6px 0 6px 6px;
 }
+
+/* Custom buttons */
+
+.btn-navbar {
+    background-color: transparent;
+    border: 1px solid white;
+    color: white!important;
+    text-transform: uppercase;
+    font-weight: 200;
+    padding-top: 5px!important;
+    padding-bottom: 5px!important;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    margin-right: 15px;
+}
+
+.btn-navbar:hover {
+    background-color: white!important;
+    color: #3498db!important;
+}
+
+.input-navbar {
+    box-shadow: none;
+    -webkit-box-shadow: none;
+    background: rgba(255, 255, 255, 0.15);
+    border: none;
+    color: white;
+    /*border-radius: 25px;*/
+    width: 400px!important;
+}
+
+.input-group-addon-navbar {
+    background: rgba(255, 255, 255, 0.15);
+    border: none;
+    color: white;
+}
+
+.input-navbar::-webkit-input-placeholder {
+    color: #ecf0f1;
+    font-weight: 200;
+}
+.input-navbar:-moz-placeholder {
+    color: #ecf0f1;
+    font-weight: 200;
+}

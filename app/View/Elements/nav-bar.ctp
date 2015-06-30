@@ -16,15 +16,26 @@
 
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+        
+        <?php if (($this->action == 'search') && ($this->name == 'Shares')) : ?>
+        
+        <form class="navbar-form navbar-left" role="search">
+            <div class="input-group">
+            <span class="input-group-addon input-group-addon-navbar"><i class="fa fa-search"></i></span>
+            <input id="input-search-address" type="text" class="form-control input-navbar" placeholder="Où recherchez-vous ?" value="<?php echo $address; ?>">
+            </div>
+        </form>
+        
+        <?php endif; ?>
+        
         <ul class="nav navbar-nav navbar-right">
 
-
             <li>
-                <form class="navbar-form" role="search">
-                    <button type="submit" class="btn btn-default" style="background-color: transparent; border: 1px solid white; color: white;">
-                        Proposer un partage
-                    </button>
-                </form>
+                <?php
+                    echo $this->Html->link('Proposer un partage', '/share/add', array(
+                        'class' => 'btn btn-navbar'
+                    ));
+                ?>
             </li>
             <li class="dropdown" style="margin-right: 15px;">
                 <?php if ($this->LocalUser->isAuthenticated($this)) : ?>
@@ -36,7 +47,7 @@
                     <ul class="dropdown-menu" role="menu">
                         <li>
                             <?php
-                            echo $this->Html->link('My account', '/user/home');
+                                echo $this->Html->link('My account', '/user/home');
                             ?>
                         </li>
                         <li class="divider"></li>
@@ -47,7 +58,7 @@
 
                 <?php else : ?>
 
-                    <a class="authenticate-button" href="#">Authenticate</a>
+                    <a class="btn btn-navbar authenticate-button" href="#">Authenticate</a>
 
                 <?php endif; ?>
             </li>

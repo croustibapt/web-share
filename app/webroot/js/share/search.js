@@ -349,7 +349,7 @@ function initialize(neLatitude, neLongitude, swLatitude, swLongitude) {
 
     //Add search box
     var input = document.getElementById('input-search-address');
-    map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+    //map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
 
     //Configure autocomplete control
     var autocomplete = new google.maps.places.Autocomplete(input);
