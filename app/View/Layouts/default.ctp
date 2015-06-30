@@ -76,6 +76,7 @@
         </div>
 
         <?php endif; ?>
+
         <!-- CONTENT -->
         <?php echo $this->fetch('content'); ?>
 

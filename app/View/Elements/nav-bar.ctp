@@ -21,8 +21,10 @@
         
         <form class="navbar-form navbar-left" role="search">
             <div class="input-group">
-            <span class="input-group-addon input-group-addon-navbar"><i class="fa fa-search"></i></span>
-            <input id="input-search-address" type="text" class="form-control input-navbar" placeholder="Où recherchez-vous ?" value="<?php echo $address; ?>">
+            <span class="input-group-addon input-group-addon-navbar" style="padding-left: 12px; padding-right: 0px;">
+                <i class="fa fa-search"></i>
+            </span>
+            <input id="input-search-address" type="text" class="form-control input-navbar" placeholder="Où recherchez-vous ?" value="<?php echo isset($address) ? $address : ""; ?>">
             </div>
         </form>
         
