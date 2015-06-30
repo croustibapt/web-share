@@ -1,4 +1,4 @@
-<div class="div-share-card card" share-id="{{ share.share_id }}" style="max-height: 260px; height: 260px;">
+<div ng-mouseover="bouncerMarker(share.share_id);" class="div-share-card card" share-id="{{ share.share_id }}" style="max-height: 260px; height: 260px;">
     <div class="card-header" ng-style="{'background-color': share.share_color}">
         <div class="row">
             <div class="col-md-6">
