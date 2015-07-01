@@ -2,3 +2,39 @@
     background-color: white!important;
     color: #000000!important;
 }
+
+/* Title */
+
+.title-div {
+    text-align: center;
+    margin-top: 50px;
+    margin-bottom: 50px;
+}
+
+.title-div h2 {
+    color: #fdba33;
+    font-weight: 100;
+    font-size: 36px;
+    background: url(../img/heading.png) no-repeat center center;
+}
+
+.title-div span {
+    padding-left: 20px;
+    padding-right: 20px;
+    background: url(../img/content-light.png) repeat 0 0;
+}
+
+.information-strong {
+    color: #009688;
+}
+
+#information-div h1 {
+    margin-bottom: 15px;
+    color: #009688;
+    font-weight: 100;
+}
+
+#information-div img {
+    margin-top: 20px;
+    margin-bottom: 10px;
+}

@@ -10,7 +10,8 @@
             <div class="container">
                 <?php
                 echo $this->Form->create('Share', array(
-                    'action' => 'search'
+                    'action' => 'search',
+                    'type' => 'GET'
                 ));
                 ?>
 
@@ -93,6 +94,37 @@
         </div>
     </div>
 
+</div>
+<div id="information-div" class="container">
+    <div class="title-div">
+        <h2><span>OUR RULES</span></h2>
+    </div>
+    <div class="row">
+        <div class="col-md-3 text-center">
+            <img src="img/device.png" alt="">            <h1>Platform first</h1>
+            <p class="lead">
+                We follow the OS design guidelines to ensure a <span class="information-strong">quality</span> level.
+            </p>
+        </div>
+        <div class="col-md-3 text-center">
+            <img src="img/device.png" alt="">            <h1>Performance</h1>
+            <p class="lead">
+                We pay special attention to the <span class="information-strong">performance</span> of our applications.
+            </p>
+        </div>
+        <div class="col-md-3 text-center">
+            <img src="img/device.png" alt="">            <h1>User friendly</h1>
+            <p class="lead">
+                We <span class="information-strong">adapt</span> to a final user's needs for a better experience.
+            </p>
+        </div>
+        <div class="col-md-3 text-center">
+            <img src="img/device.png" alt="">            <h1>Feedback</h1>
+            <p class="lead">
+                We stay <span class="information-strong">in tune</span> with the client feedback to improve our applications.
+            </p>
+        </div>
+    </div>
 </div>
 
 <script>

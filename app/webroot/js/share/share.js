@@ -129,6 +129,114 @@ function getMarkerIcon(shareTypeCategory, shareType) {
     }
 }
 
+function getShareMarkerImage(shareTypeCategory, shareType) {
+    if (shareTypeCategory == "food") {
+        if (shareType == "pizza") {
+            return 'marker-cultery.png';
+        } else if (shareType == "snack") {
+            return 'marker-coffee.png';
+        } else if (shareType == "burger") {
+            return 'marker-cultery.png';
+        } else if (shareType == "sushi") {
+            return 'marker-cultery.png';
+        } else if (shareType == "restaurant") {
+            return 'marker-cultery.png';
+        } else {
+            return 'marker-cultery.png';
+        }
+    } else if (shareTypeCategory == "hightech") {
+        if (shareType == "component") {
+            return 'marker-keyboard.png';
+        } else if (shareType == "computer") {
+            return 'marker-desktop.png';
+        } else if (shareType == "phone") {
+            return 'marker-mobile.png';
+        } else if (shareType == "storage") {
+            return 'marker-hdd-o.png';
+        } else if (shareType == "application") {
+            return 'marker-tablet.png';
+        } else {
+            return 'marker-laptop.png';
+        }
+    } else if (shareTypeCategory == "audiovisual") {
+        if (shareType == "picture") {
+            return 'marker-picture-o.png';
+        } else if (shareType == "sound") {
+            return 'marker-volume-up.png';
+        } else if (shareType == "photo") {
+            return 'marker-camera-retro.png';
+        } else if (shareType == "disc") {
+            return 'marker-microphone.png';
+        } else if (shareType == "game") {
+            return 'marker-gamepad.png';
+        } else {
+            return 'marker-headphones.png';
+        }
+    } else if (shareTypeCategory == "recreation") {
+        if (shareType == "cinema") {
+            return 'marker-film.png';
+        } else if (shareType == "show") {
+            return 'marker-ticket.png';
+        } else if (shareType == "game") {
+            return 'marker-puzzle-piece.png';
+        } else if (shareType == "book") {
+            return 'marker-book.png';
+        } else if (shareType == "outdoor") {
+            return 'marker-sun-o.png';
+        } else if (shareType == "sport") {
+            return 'marker-futbol-o.png';
+        } else if (shareType == "auto") {
+            return 'marker-car.png';
+        } else if (shareType == "moto") {
+            return 'marker-motorcycle.png';
+        } else if (shareType == "music") {
+            return 'marker-music.png';
+        } else if (shareType == "pet") {
+            return 'marker-paw.png';
+        } else {
+            return 'marker-paint-brush.png';
+        }
+    } else if (shareTypeCategory == "mode") {
+        if (shareType == "man") {
+            return 'marker-male.png';
+        } else if (shareType == "woman") {
+            return 'marker-female.png';
+        } else if (shareType == "mixte") {
+            return 'marker-male.png';
+        } else if (shareType == "child") {
+            return 'marker-child.png';
+        } else if (shareType == "jewelry") {
+            return 'marker-diamond.png';
+        } else {
+            return 'marker-male.png';
+        }
+    } else if (shareTypeCategory == "house") {
+        if (shareType == "furniture") {
+            return 'marker-archive.png';
+        } else if (shareType == "kitchen") {
+            return 'marker-home.png';
+        } else if (shareType == "diy") {
+            return 'marker-wrench.png';
+        } else {
+            return 'marker-home.png';
+        }
+    } else if (shareTypeCategory == "service") {
+        if (shareType == "travel") {
+            return 'marker-suitcase.png';
+        } else if (shareType == "hotel") {
+            return 'marker-bed.png';
+        } else if (shareType == "wellness") {
+            return 'marker-smile-o.png';
+        } else {
+            return 'marker-briefcase.png';
+        }
+    } else if (shareTypeCategory == "other") {
+        return 'marker-ellipsis-h.png';
+    } else {
+        return 'marker-question-circle.png';
+    }
+}
+
 /**
  * Method used to get a color corresponding to a specific share type category
  * @param shareTypeCategory

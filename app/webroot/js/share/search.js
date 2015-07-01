@@ -284,8 +284,7 @@ function initializeSearch(shareTypeCategory, shareType, date) {
         $scope.cancelBounceMarker = function(shareId) {
             console.log('cancel bounce');
             var marker = markers[shareId];
-            console.log(marker);
-            marker.setZIndex(1);
+            marker.setZIndex(null);
             marker.setAnimation(null);
         };
 
@@ -315,16 +314,18 @@ var markers = {};
 
 function addMarker(share) {
     var myLatlng = new google.maps.LatLng(share.latitude, share.longitude);
-    var iconClass = getMarkerIcon(share['share_type_category']['label'], share['share_type']['label'])
-    var iconColor = getIconColor(share['share_type_category']['label']);
+    var icon = getShareMarkerImage(share['share_type_category']['label'], share['share_type']['label']);
 
-    var marker = new MarkerWithLabel({
+    var marker = new google.maps.Marker({
         position: myLatlng,
         map: map,
+        share: share,
         title: share.title,
         /*labelContent: '<div class="img-circle text-center" style="border: 4px solid white; background-color: ' + iconColor + '; display: table; min-width: 40px; width: 40px; min-height: 40px; height: 40px;"><i class="' + iconClass + '" style="display: table-cell; vertical-align: middle; color: #ffffff; font-size: 18px;"></i></div>',*/
-        /*labelAnchor: new google.maps.Point(16, 16)*/
-        icon: '../img/marker-purple.png'
+        /*labelContent: '<i class="' + iconClass + '" style="display: table-cell; vertical-align: middle; color: #ffffff; font-size: 18px;"></i>',*/
+        /*labelAnchor: new google.maps.Point(16, 16),*/
+        icon: '../img/' + icon
+        /*icon: ' '*/
         /*icon: {
          path: fontawesome.markers.FOLDER,
          scale: 0.5,
@@ -339,8 +340,27 @@ function addMarker(share) {
     markers[share.share_id] = marker;
 
     google.maps.event.addListener(marker, 'click', function() {
+        var share = marker.share;
+
+        var contentHtml =
+            '<div class="row" style="margin: 0px;">' +
+            '   <div class="col-md-2 text-center" style="padding-right: 0px;">' +
+            '       <span style="font-size: 24px; color: ' + share.share_color + ';"><i class="' + share.share_icon + '"></i></span>' +
+            '   </div>' +
+            '   <div class="col-md-10">' +
+            '       <span class="text-capitalize">' +
+                        share.moment_day +
+            '       </span>' +
+            '       <p>' +
+                        share.title +
+            '       </p>'
+            '   </div>' +
+            '</div>'
+
+            ;
+
         var infowindow = new google.maps.InfoWindow({
-            content: marker.getTitle()
+            content: contentHtml
         });
         infowindow.open(map, marker);
     });

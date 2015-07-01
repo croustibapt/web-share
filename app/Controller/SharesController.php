@@ -17,24 +17,25 @@ class SharesController extends ApiSharesController {
         $address = '';
         $viewPort = NULL;
 
-        if ($this->request->is('POST')) {
-            $data = $this->request->data;
+        if ($this->request->is('GET')) {
+            $data = $this->request->query;
+            //pr($data);
 
             //Get start and end date
-            $date = $data['Share']['date'];
+            $date = $data['date'];
 
             //Share type category
-            $shareTypeCategory = $data['Share']['share_type_category'];
+            $shareTypeCategory = $data['share_type_category'];
 
             //Share type
-            if (isset($data['Share']['share_type'])) {
-                $shareType = $data['Share']['share_type'];
+            if (isset($data['share_type'])) {
+                $shareType = $data['share_type'];
             }
 
-            $address = $data['Share']['address'];
+            $address = $data['address'];
 
             //ViewPort
-            $viewPortObject = json_decode(urldecode($data['Share']['viewport']));
+            $viewPortObject = json_decode(urldecode($data['viewport']));
             //pr($viewPortObject);
 
             if ($viewPortObject != NULL) {
