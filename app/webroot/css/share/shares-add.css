@@ -1,0 +1,63 @@
+/* SHARE/ADD */
+
+#div-share-add-google-map {
+    height: 400px;
+}
+
+.div-add-section {
+    background-color: #ffffff;
+}
+
+.div-add-section .input-group {
+    margin-bottom: 15px;
+}
+
+.div-add-section .bootstrap-select {
+    width: 100%;
+}
+
+.div-add-section .selectpicker {
+    border-top-right-radius: 5px!important;
+    border-bottom-right-radius: 5px!important;
+}
+
+.div-select-add {
+    border: 1px solid #3498db;
+    height: 46px;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+
+#div-add-section-description .input-group.has-error .input-group-addon,
+#div-add-section-description .input-group.has-error input,
+#div-add-section-description .input-group.has-error .div-select-add {
+    border-color: #e74c3c;
+}
+
+#div-add-section-description .input-group-addon,
+#div-add-section-description .input-group input,
+#div-add-section-description .div-select-add {
+    border-color: #3498db;
+}
+
+#div-add-section-description .input-group-addon {
+    background-color: #3498db;
+    color: #ffffff;
+    min-width: 40px;
+}
+
+#div-add-section-description .input-group.has-error .input-group-addon {
+    background-color: #e74c3c;
+}
+
+#div-add-section-more .input-group-addon,
+#div-add-section-more .input-group input,
+#div-add-section-more .div-select-add {
+    border-color: #8c9899;
+}
+
+#div-add-section-more .input-group-addon {
+    background-color: #8c9899;
+    color: #ffffff;
+    min-width: 40px;
+}

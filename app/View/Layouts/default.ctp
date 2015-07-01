@@ -22,18 +22,14 @@
             echo $this->Html->css('bootstrap-select.min');
             echo $this->Html->css('ionicons.min');
             echo $this->Html->css('jquery.datetimepicker');
-            echo $this->Html->css('design');
             echo $this->Html->css('jquery-gmaps-latlon-picker');
             echo $this->Html->css('clamp');
             echo $this->Html->css('jquery.timepicker');
         ?>
 
         <?php
-            if (($this->action == 'home') && ($this->name == 'Shares')) {
-                echo $this->Html->css('home');
-            } else {
-                echo $this->Html->css('search');
-            }
+            echo $this->Html->css('share/common');
+            echo $this->Html->css('share/'.strtolower($this->name).'-'.$this->action);
         ?>
 
         <?php

@@ -1,0 +1,201 @@
+html {
+    height: 100%;
+}
+
+body {
+    height: 100%;
+}
+
+.li-navbar-right {
+    margin-right: 15px;
+}
+
+/* Card */
+
+.card {
+    border-radius: 2px;
+    -webkit-box-shadow: 0px 2px 2px rgba(0, 2, 5, 0.15);
+    box-shadow: 0px 2px 2px rgba(0, 2, 5, 0.15);
+    background-color: #ffffff;
+    margin-bottom: 30px;
+}
+
+.card:hover {
+    -webkit-box-shadow: 0px 2px 10px rgba(0, 2, 5, 0.25);
+    box-shadow: 0px 2px 10px rgba(0, 2, 5, 0.25);
+}
+
+.card-header {
+    background-color: #35cf76;
+    color: #ffffff;
+    border-top-left-radius: 2px;
+    border-top-right-radius: 2px;
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+/* SHARE CARD */
+
+.div-share-card {
+    cursor: pointer;
+}
+
+.span-share-card-date {
+    font-weight: 200;
+}
+
+.span-share-card-date-hour {
+    font-weight: 400;
+}
+
+.div-share-card-subtitle {
+    padding-top: 5px;
+    padding-left: 15px;
+    padding-right: 15px;
+    color: #333333;
+}
+
+.span-share-card-user {
+    color: #2980b9;
+}
+
+.span-share-card-modified {
+    color: #95a5a6;
+    font-weight: 200;
+}
+
+.span-share-card-city {
+    color: #34495e;
+}
+
+.span-share-card-zip-code {
+    color: #95a5a6;
+    font-weight: 200;
+}
+
+.div-share-card-main {
+    margin-top: 10px;
+}
+
+.div-share-card-icon {
+    display: table-cell;
+    vertical-align: top;
+    padding-left:15px;
+    padding-right: 15px;
+    margin-top: 10px;
+    font-size: 40px;
+    width: 80px;
+    height: 80px;
+    max-width: 80px;
+    max-height: 80px;
+}
+
+.div-share-card-title {
+    padding-left: 0px;
+    display: table-cell;
+    vertical-align: top;
+    /*text-align: justify;*/
+}
+
+.blockquote-share-card-title {
+    border-left: none;
+    margin-bottom: 0px;
+    padding-left: 0px;
+}
+
+.a-share-card-title {
+    color: #2c3e50;
+}
+
+.a-share-card-title:hover {
+    color: #34495e;
+    text-decoration: underline;
+}
+
+.div-share-card-title footer:before  {
+    content: normal;
+}
+
+.footer-share-card-summary {
+    margin-bottom: 10px;
+    color: #34495e;
+}
+
+.div-share-card-limitations {
+    padding-left: 15px;
+    padding-right: 15px;
+    margin-top: 10px;
+}
+
+.form-share-card-request {
+    display: inline;
+}
+
+.form-share-card-request-input {
+    width: 70px;
+}
+
+.p-share-card-left-places {
+    margin-bottom: 0px;
+}
+
+.div-share-card-places-price {
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-bottom: 10px;
+    margin-top: 10px;
+}
+
+.div-share-card-progress {
+    display: table;
+    width: 100%;
+}
+
+.div-share-card-progress .progress {
+    margin-bottom: 0px;
+    height: 10px;
+}
+
+.div-share-card-progress .progress-bar {
+    line-height: 10px;
+}
+
+.div-share-card-progress-cell {
+    display: table-cell;
+    width: 50%;
+    vertical-align: middle;
+}
+
+.p-share-card-price {
+    color: #2980b9;
+    font-weight: bold;
+    margin-bottom: 0px;
+}
+
+.p-share-card-price-label {
+    color: #95a5a6;
+    font-weight: 200;
+}
+
+.table-share-request-card-requests {
+    margin-bottom: 0px;
+}
+
+.tr-share-card-request td {
+    padding-left: 15px!important;
+    padding-right: 15px!important;
+}
+
+.p-share-card-request {
+    margin-bottom: 0px;
+}
+
+.p-share-card-request-user {
+    font-weight: 400;
+}
+
+.footer-request-card {
+    margin-bottom: 10px;
+}

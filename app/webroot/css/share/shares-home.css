@@ -1,6 +1,40 @@
+body {
+    padding-top: 0px;
+}
+
+/* Home */
+
 .navbar-home .btn-navbar:hover {
     background-color: white!important;
     color: #000000!important;
+}
+
+.col-select-home {
+    padding: 0px;
+}
+
+.div-select-home {
+    position: relative;
+    background-color: white;
+    border: 1px solid #ccc;
+    border-left: none;
+}
+
+.input-home {
+    border-top-right-radius: 0px;
+    border-bottom-right-radius: 0px;
+}
+
+.select-home {
+    border-radius: 0px;
+    border: none;
+    height: 44px!important;
+}
+
+.submit-home {
+    width: 100%;
+    border-top-left-radius: 0px;
+    border-bottom-left-radius: 0px;
 }
 
 /* Title */

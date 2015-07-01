@@ -1,0 +1,116 @@
+/* SHARE */
+
+.div-share {
+    background-color: #ffffff;
+    padding-bottom: 30px;
+}
+
+.h1-share-details-type {
+    font-size: 100px;
+    margin-bottom: 0px;
+}
+
+.div-share-details-date {
+    margin-top: 15px;
+}
+
+.h2-share-details-date {
+    margin-bottom: 5px;
+}
+
+.h2-share-details-hour {
+    margin-top: 0px;
+    font-weight: 200;
+}
+
+.button-share-details-participate, .button-share-details-participate-status {
+    width: 100%;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.button-share-details-participate-status.disabled {
+    opacity: 1.0;
+}
+
+.div-share-details-description {
+    background-color: #ffffff;
+}
+
+.h1-share-details-title {
+    margin-top: 15px;
+}
+
+.h2-share-details-price {
+    color: #95a5a6;
+    font-weight: 200;
+}
+
+.span-share-details-price {
+    font-size: 35px;
+    font-weight: 600;
+}
+
+.footer-share-details-limitations:before {
+    content: normal;
+}
+
+.div-share-details-place {
+    margin-top: 15px;
+    margin-bottom: 10px;
+}
+
+.img-share-details-place {
+    width: 75%;
+}
+
+.p-share-details-created {
+    margin-bottom: 10px;
+    color: #bdc3c7;
+}
+
+/* Comments */
+
+#div-share-details-comments {
+    padding-bottom: 30px;
+    background-color: #ffffff;
+}
+
+#div-share-details-comments-list {
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-top: 15px;
+    /*padding-bottom: 15px;*/
+}
+
+.comment-user-img {
+    max-width: none;
+}
+
+#div-share-details-comments .alert {
+    margin-bottom: 0px;
+}
+
+#textarea-comment-add {
+    width: 100%;
+}
+
+#btn-comment-add {
+    width: 100%;
+}
+
+#div-share-details-comments-list p {
+
+}
+
+#div-share-details-comments-list .blockquote-normal {
+    border-left: 5px solid #4aa3df;
+}
+
+#div-share-details-comments-list .blockquote-reverse {
+    border-right: 5px solid #2ecc71;
+}
+
+.div-share-details-comments-editor {
+    margin-top: 20px;
+}

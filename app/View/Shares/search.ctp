@@ -27,15 +27,7 @@
 
 <script>
     //
-    initializeSearch('<?php echo $shareTypeCategory; ?>', '<?php echo $shareType; ?>', '<?php echo $date; ?>');
-
-    //
-    google.maps.event.addDomListener(window, 'load', initialize(
-        <?php echo $viewPort['northeast']['lat']; ?>,
-        <?php echo $viewPort['northeast']['lng']; ?>,
-        <?php echo $viewPort['southwest']['lat']; ?>,
-        <?php echo $viewPort['southwest']['lng']; ?>
-    ));
+    initializeSearch('<?php echo $shareTypeCategory; ?>', '<?php echo $shareType; ?>', '<?php echo $date; ?>', <?php echo $viewPort['northeast']['lat']; ?>, <?php echo $viewPort['northeast']['lng']; ?>,  <?php echo $viewPort['southwest']['lat']; ?>, <?php echo $viewPort['southwest']['lng']; ?>);
 
     //
     $(document).on("click", ".div-share-card" , function() {

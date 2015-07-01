@@ -1,0 +1,35 @@
+/* USER */
+
+.user-card-picture-div {
+    padding-top: 15px;
+    padding-right: 0px;
+}
+
+.user-card-picture-img {
+
+}
+
+.user-card-summary-div {
+    padding-top: 15px;
+    padding-left: 0px;
+}
+
+.user-card-summary-blockquote {
+    padding-top: 0px;
+    padding-bottom: 0px;
+    margin-top: 15px;
+    margin-bottom: 0px;
+}
+
+.user-card-summary-table {
+    margin-bottom: 0px;
+    margin-bottom: 15px;
+}
+
+.user-card-summary-table td {
+    padding: 15px!important;
+}
+
+.user-card-summary-p {
+    margin-bottom: 0px;
+}

@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-function initializeSearch(shareTypeCategory, shareType, date) {
+function initializeSearch(shareTypeCategory, shareType, date, neLatitude, neLongitude, swLatitude, swLongitude) {
     //Create SearchController
     app.controller('SearchController', ['$scope', '$http', function($scope, $http) {
         $scope.page = 1;
@@ -24,6 +24,9 @@ function initializeSearch(shareTypeCategory, shareType, date) {
         $scope.shareType = shareType;
 
         $scope.shares = [];
+        
+        $scope.map = null;
+        $scope.markers = {};
 
         /**
          *
@@ -108,7 +111,7 @@ function initializeSearch(shareTypeCategory, shareType, date) {
             console.log(jsonData);
 
             return JSON.stringify(jsonData);
-        }
+        };
 
         /**
          *
@@ -176,7 +179,7 @@ function initializeSearch(shareTypeCategory, shareType, date) {
             $scope.results_count = response.results.length;
 
             //Clear markers on map
-            clearMarkers();
+            $scope.clearMarkers();
 
             //Handle shares
             var shares = response.results;
@@ -186,7 +189,7 @@ function initializeSearch(shareTypeCategory, shareType, date) {
                 var share = shares[i];
 
                 //Add to map
-                addMarker(share);
+                $scope.addMarker(share);
 
                 //Share type category label
                 var shareTypeCategoryLabel = getShareTypeCategoryLabel(share.share_type_category.label);
@@ -276,22 +279,132 @@ function initializeSearch(shareTypeCategory, shareType, date) {
 
         $scope.bounceMarker = function(shareId) {
             console.log('bounce');
-            var marker = markers[shareId];
+            var marker = $scope.markers[shareId];
             marker.setZIndex(1000);
             marker.setAnimation(google.maps.Animation.BOUNCE);
         };
 
         $scope.cancelBounceMarker = function(shareId) {
             console.log('cancel bounce');
-            var marker = markers[shareId];
+            var marker = $scope.markers[shareId];
             marker.setZIndex(null);
             marker.setAnimation(null);
         };
 
-        /**
-         *
-         */
-        $scope.initialize = function() {
+        //Google maps
+        $scope.addMarker = function(share) {
+            var myLatlng = new google.maps.LatLng(share.latitude, share.longitude);
+            var icon = getShareMarkerImage(share['share_type_category']['label'], share['share_type']['label']);
+
+            var marker = new google.maps.Marker({
+                position: myLatlng,
+                map: $scope.map,
+                share: share,
+                title: share.title,
+                /*labelContent: '<div class="img-circle text-center" style="border: 4px solid white; background-color: ' + iconColor + '; display: table; min-width: 40px; width: 40px; min-height: 40px; height: 40px;"><i class="' + iconClass + '" style="display: table-cell; vertical-align: middle; color: #ffffff; font-size: 18px;"></i></div>',*/
+                /*labelContent: '<i class="' + iconClass + '" style="display: table-cell; vertical-align: middle; color: #ffffff; font-size: 18px;"></i>',*/
+                /*labelAnchor: new google.maps.Point(16, 16),*/
+                icon: '../img/' + icon
+                /*icon: ' '*/
+                /*icon: {
+                 path: fontawesome.markers.FOLDER,
+                 scale: 0.5,
+                 strokeWeight: 0.0,
+                 strokeColor: '#ffffff',
+                 strokeOpacity: 1,
+                 fillColor: '#2ecc71',
+                 fillOpacity: 1.0,
+                 },*/
+            });
+            //marker.setAnimation(google.maps.Animation.BOUNCE);
+            $scope.markers[share.share_id] = marker;
+
+            google.maps.event.addListener(marker, 'click', function() {
+                var share = marker.share;
+
+                var contentHtml =
+                    '<div class="row" style="margin: 0px;">' +
+                    '   <div class="col-md-2 text-center" style="padding-right: 0px;">' +
+                    '       <span style="font-size: 24px; color: ' + share.share_color + ';"><i class="' + share.share_icon + '"></i></span>' +
+                    '   </div>' +
+                    '   <div class="col-md-10">' +
+                    '       <span class="text-capitalize">' +
+                                share.moment_day +
+                    '       </span>' +
+                    '       <p>' +
+                                share.title +
+                    '       </p>'
+                    '   </div>' +
+                    '</div>'
+
+                    ;
+
+                var infowindow = new google.maps.InfoWindow({
+                    content: contentHtml
+                });
+                infowindow.open($scope.map, marker);
+            });
+        };
+
+        $scope.clearMarkers = function() {
+            for (var shareId in $scope.markers) {
+                var marker = $scope.markers[shareId];
+                marker.setMap(null);
+            }
+            $scope.markers = {};
+        };
+
+        $scope.createGoogleMap = function(neLatitude, neLongitude, swLatitude, swLongitude) {
+            //Create map
+            var mapOptions = {
+                panControl: false,
+                zoomControl: false,
+                scaleControl: true,
+                streetViewControl: false
+            };
+            $scope.map = new google.maps.Map(document.getElementById('div-share-search-google-map'), mapOptions);
+
+            //Add search box
+            var input = document.getElementById('input-search-address');
+            //map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+
+            //Configure autocomplete control
+            var autocomplete = new google.maps.places.Autocomplete(input);
+            google.maps.event.addListener(autocomplete, 'place_changed', function() {
+                var place = autocomplete.getPlace();
+
+                //If the place has a geometry, then present it on a map.
+                if (place.geometry.viewport) {
+                    console.log(place.geometry.viewport);
+                    $scope.map.fitBounds(place.geometry.viewport);
+                } else {
+                    $scope.map.setCenter(place.geometry.location);
+                    $scope.map.setZoom(17);  // Why 17? Because it looks good.
+                }
+            });
+
+            //Center on wanted bounds
+            var sw = new google.maps.LatLng(swLatitude, swLongitude);
+            var ne = new google.maps.LatLng(neLatitude, neLongitude);
+            var mapBounds = new google.maps.LatLngBounds(sw, ne);
+            console.log(mapBounds);
+            $scope.map.fitBounds(mapBounds);
+
+            //Add idle listener
+            google.maps.event.addListener($scope.map, 'idle', function() {
+                //Get search controller scope
+                var searchResultsDiv = $('#div-search-results');
+                var searchScope = angular.element(searchResultsDiv).scope();
+
+                //
+                searchScope.$apply(function() {
+                    //Restart search from page 1
+                    searchScope.search(searchScope.shareTypeCategory, searchScope.shareType, 1, searchScope.date, $scope.map.getBounds());
+                });
+            });
+        };
+        
+        $scope.getShareTypeCategories = function() {
             //
             $http.get(webroot + 'api/share_type_categories/get')
             .success(function(data, status, headers, config) {
@@ -303,123 +416,18 @@ function initializeSearch(shareTypeCategory, shareType, date) {
             });
         };
 
+        /**
+         *
+         */
+        $scope.initialize = function() {
+            //
+            google.maps.event.addDomListener(window, 'load', $scope.createGoogleMap(neLatitude, neLongitude, swLatitude, swLongitude));
+            
+            //
+            $scope.getShareTypeCategories();
+        };
+
         //
-        $scope.initialize();
+        $scope.initialize(neLatitude, neLongitude, swLatitude, swLongitude);
     }]);
-}
-
-//Google maps
-var map;
-var markers = {};
-
-function addMarker(share) {
-    var myLatlng = new google.maps.LatLng(share.latitude, share.longitude);
-    var icon = getShareMarkerImage(share['share_type_category']['label'], share['share_type']['label']);
-
-    var marker = new google.maps.Marker({
-        position: myLatlng,
-        map: map,
-        share: share,
-        title: share.title,
-        /*labelContent: '<div class="img-circle text-center" style="border: 4px solid white; background-color: ' + iconColor + '; display: table; min-width: 40px; width: 40px; min-height: 40px; height: 40px;"><i class="' + iconClass + '" style="display: table-cell; vertical-align: middle; color: #ffffff; font-size: 18px;"></i></div>',*/
-        /*labelContent: '<i class="' + iconClass + '" style="display: table-cell; vertical-align: middle; color: #ffffff; font-size: 18px;"></i>',*/
-        /*labelAnchor: new google.maps.Point(16, 16),*/
-        icon: '../img/' + icon
-        /*icon: ' '*/
-        /*icon: {
-         path: fontawesome.markers.FOLDER,
-         scale: 0.5,
-         strokeWeight: 0.0,
-         strokeColor: '#ffffff',
-         strokeOpacity: 1,
-         fillColor: '#2ecc71',
-         fillOpacity: 1.0,
-         },*/
-    });
-    //marker.setAnimation(google.maps.Animation.BOUNCE);
-    markers[share.share_id] = marker;
-
-    google.maps.event.addListener(marker, 'click', function() {
-        var share = marker.share;
-
-        var contentHtml =
-            '<div class="row" style="margin: 0px;">' +
-            '   <div class="col-md-2 text-center" style="padding-right: 0px;">' +
-            '       <span style="font-size: 24px; color: ' + share.share_color + ';"><i class="' + share.share_icon + '"></i></span>' +
-            '   </div>' +
-            '   <div class="col-md-10">' +
-            '       <span class="text-capitalize">' +
-                        share.moment_day +
-            '       </span>' +
-            '       <p>' +
-                        share.title +
-            '       </p>'
-            '   </div>' +
-            '</div>'
-
-            ;
-
-        var infowindow = new google.maps.InfoWindow({
-            content: contentHtml
-        });
-        infowindow.open(map, marker);
-    });
-}
-
-function clearMarkers() {
-    for (var shareId in markers) {
-        var marker = markers[shareId];
-        marker.setMap(null);
-    }
-    markers = {};
-}
-
-function initialize(neLatitude, neLongitude, swLatitude, swLongitude) {
-    //Create map
-    var mapOptions = {
-        panControl: false,
-        zoomControl: false,
-        scaleControl: true,
-        streetViewControl: false
-    }
-    map = new google.maps.Map(document.getElementById('div-share-search-google-map'), mapOptions);
-
-    //Add search box
-    var input = document.getElementById('input-search-address');
-    //map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
-
-    //Configure autocomplete control
-    var autocomplete = new google.maps.places.Autocomplete(input);
-    google.maps.event.addListener(autocomplete, 'place_changed', function() {
-        var place = autocomplete.getPlace();
-
-        //If the place has a geometry, then present it on a map.
-        if (place.geometry.viewport) {
-            console.log(place.geometry.viewport);
-            map.fitBounds(place.geometry.viewport);
-        } else {
-            map.setCenter(place.geometry.location);
-            map.setZoom(17);  // Why 17? Because it looks good.
-        }
-    });
-
-    //Center on wanted bounds
-    var sw = new google.maps.LatLng(swLatitude, swLongitude);
-    var ne = new google.maps.LatLng(neLatitude, neLongitude);
-    var mapBounds = new google.maps.LatLngBounds(sw, ne);
-    console.log(mapBounds);
-    map.fitBounds(mapBounds);
-
-    //Add idle listener
-    google.maps.event.addListener(map, 'idle', function() {
-        //Get search controller scope
-        var searchResultsDiv = $('#div-search-results');
-        var searchScope = angular.element(searchResultsDiv).scope();
-
-        //
-        searchScope.$apply(function() {
-            //Restart search from page 1
-            searchScope.search(searchScope.shareTypeCategory, searchScope.shareType, 1, searchScope.date, map.getBounds());
-        });
-    });
 }

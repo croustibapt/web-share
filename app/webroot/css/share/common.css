@@ -1,0 +1,78 @@
+body {
+    padding-top: 50px;
+    background-color: #ffffff;
+}
+
+/* Common */
+
+.pac-container {
+    z-index: 9999;
+}
+
+/* Action bar */
+
+#div-action-bar {
+    background-color: #ffffff;
+    border-bottom: 1px solid #e0e0e0;
+    width: 100%;
+    padding: 15px;
+    padding-left: 30px;
+    padding-right: 30px;
+}
+
+/*#div-action-bar .form-group {
+    margin-bottom: 0px;
+}*/
+
+.select-action-bar {
+    border-color: #3498db;
+    color: #3498db;
+}
+
+.select-action-bar-date {
+    border-color: #9b59b6;
+    color: #9b59b6;
+}
+
+/* Navigation bar */
+
+.nav-bar-user-img {
+    height: 18px;
+    width: 18px;
+    /*border: 2px solid #ffffff;*/
+}
+
+/* USER/HOME */
+
+.div-user-home-tabs {
+    /*padding: 15px;*/
+    margin-bottom: 20px;
+}
+
+.div-user-home-panes {
+    margin-top: 15px;
+}
+
+/* Footer */
+
+#footer {
+    background-color: #333333;
+    color: #FFFFFF;
+    text-align: left;
+    width: 100%;
+    height: 180px;
+    padding-top: 30px;
+    padding-bottom: 30px;
+    margin-top: 30px;
+}
+
+#footer a {
+    color: #FFFFFF;
+    padding: 0px;
+}
+
+#footer a:hover {
+    color: #3498db;
+    cursor: pointer;
+    text-decoration: none;
+}
