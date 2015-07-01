@@ -274,11 +274,17 @@ function initializeSearch(shareTypeCategory, shareType, date) {
             return getShareTypeLabel(shareTypeCategory, shareType);
         };
 
-        $scope.bouncerMarker = function(shareId) {
-            console.log(shareId);
+        $scope.bounceMarker = function(shareId) {
+            console.log('bounce');
+            var marker = markers[shareId];
+            marker.setAnimation(google.maps.Animation.BOUNCE);
+        };
+
+        $scope.cancelBounceMarker = function(shareId) {
+            console.log('cancel bounce');
             var marker = markers[shareId];
             console.log(marker);
-            marker.setAnimation(google.maps.Animation.BOUNCE);
+            marker.setAnimation(null);
         };
 
         /**
@@ -313,10 +319,10 @@ function addMarker(share) {
     var marker = new MarkerWithLabel({
         position: myLatlng,
         map: map,
-        title: share.title
+        title: share.title,
         /*labelContent: '<div class="img-circle text-center" style="border: 4px solid white; background-color: ' + iconColor + '; display: table; min-width: 40px; width: 40px; min-height: 40px; height: 40px;"><i class="' + iconClass + '" style="display: table-cell; vertical-align: middle; color: #ffffff; font-size: 18px;"></i></div>',*/
-        /*labelAnchor: new google.maps.Point(16, 16),*/
-        /*icon: ' '*/
+        /*labelAnchor: new google.maps.Point(16, 16)*/
+        icon: '../img/marker-purple.png'
         /*icon: {
          path: fontawesome.markers.FOLDER,
          scale: 0.5,

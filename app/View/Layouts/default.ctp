@@ -26,7 +26,17 @@
             echo $this->Html->css('jquery-gmaps-latlon-picker');
             echo $this->Html->css('clamp');
             echo $this->Html->css('jquery.timepicker');
+        ?>
 
+        <?php
+            if (($this->action == 'home') && ($this->name == 'Shares')) {
+                echo $this->Html->css('home');
+            } else {
+                echo $this->Html->css('search');
+            }
+        ?>
+
+        <?php
             echo $this->Html->script('jquery-2.1.3.min');
         ?>
         <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>

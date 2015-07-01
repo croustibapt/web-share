@@ -1,16 +1,8 @@
 /* Common */
 
-html {
-    height: 100%;
+.pac-container {
+    z-index: 9999;
 }
-
-body {
-    height: 100%;
-    padding-top: 50px;
-    background-color: #ffffff;
-}
-
-.pac-container { z-index: 9999;}
 
 /* Home */
 

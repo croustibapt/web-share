@@ -1,4 +1,13 @@
+<?php if (($this->action == 'home') && ($this->name == 'Shares')) : ?>
+
+<nav class="navbar navbar-default navbar-home" style="background: transparent; border: none; position: absolute; top: 0px; width: 100%; z-index: 1000;">
+
+<?php else : ?>
+
 <nav class="navbar navbar-default navbar-fixed-top">
+
+<?php endif; ?>
+
     <!-- Brand and toggle get grouped for better mobile display -->
     <div class="navbar-header">
         <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
@@ -39,8 +48,10 @@
                     ));
                 ?>
             </li>
-            <li class="dropdown" style="margin-right: 15px;">
-                <?php if ($this->LocalUser->isAuthenticated($this)) : ?>
+
+            <?php if ($this->LocalUser->isAuthenticated($this)) : ?>
+
+                <li class="li-navbar-right dropdown">
 
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
                        aria-expanded="false">
@@ -57,13 +68,17 @@
                             <a id="a-nav-bar-logout" href="#">Logout</a>
                         </li>
                     </ul>
+                </li>
 
-                <?php else : ?>
+            <?php else : ?>
+
+                <li class="li-navbar-right">
 
                     <a class="btn btn-outline btn-navbar authenticate-button" href="#">Authenticate</a>
 
-                <?php endif; ?>
-            </li>
+                </li>
+
+            <?php endif; ?>
 
         </ul>
 
