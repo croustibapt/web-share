@@ -277,6 +277,7 @@ function initializeSearch(shareTypeCategory, shareType, date) {
         $scope.bounceMarker = function(shareId) {
             console.log('bounce');
             var marker = markers[shareId];
+            marker.setZIndex(1000);
             marker.setAnimation(google.maps.Animation.BOUNCE);
         };
 
@@ -284,6 +285,7 @@ function initializeSearch(shareTypeCategory, shareType, date) {
             console.log('cancel bounce');
             var marker = markers[shareId];
             console.log(marker);
+            marker.setZIndex(1);
             marker.setAnimation(null);
         };
 
