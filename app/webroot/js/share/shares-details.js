@@ -1,9 +1,14 @@
 /**
- * Created by bleguelvouit on 10/06/15.
+ * Method used to initialize the Details controller
+ * @param shareId Corresponding share identifier
+ * @param shareUserExternalId Corresponding user external identifier
+ * @param textAreaId Comment text area identifier
+ * @param divGoogleMapId GoogleMap div identifier
  */
-
 function initializeDetails(shareId, shareUserExternalId, textAreaId, divGoogleMapId) {
-    //Create DetailsController
+    /**
+     * DetailsController
+     */
     app.controller('DetailsController', ['$scope', '$http', function($scope, $http) {
         //Pagination
         $scope.page = 1;
@@ -37,16 +42,17 @@ function initializeDetails(shareId, shareUserExternalId, textAreaId, divGoogleMa
         };
 
         /**
-         *
-         * @param page
+         * Method used to show a specifi comments page
+         * @param page Page to show
          */
         $scope.showPage = function(page) {
+            //Save wanted page
             $scope.page = page;
 
             //Get call
             $http.get(webroot + 'api/comment/get?shareId=' + $scope.shareId + '&page=' + $scope.page)
             .success(function (data, status, headers, config) {
-                //Results
+                //Parse JSON response
                 $scope.handleCommentsResponse(data);
             })
             .error(function (data, status, headers, config) {
@@ -56,11 +62,9 @@ function initializeDetails(shareId, shareUserExternalId, textAreaId, divGoogleMa
 
         /**
          * Method used to handle the comments Ajax response
-         * @param response
+         * @param response The JSON response to parse
          */
         $scope.handleCommentsResponse = function(response) {
-            console.log(response);
-
             //Handle pagination
             $scope.page = parseInt(response.page);
             $scope.total_pages = parseInt(response.total_pages);
@@ -86,23 +90,28 @@ function initializeDetails(shareId, shareUserExternalId, textAreaId, divGoogleMa
             }
         };
 
-        //
-        $scope.getUser = function(userExternalId) {
+        /**
+         * Method used to get the user details
+         * @param userExternalId Wanted user external identifier
+         */
+        $scope.getUserDetails = function(userExternalId) {
             //Get call
             $http.get(webroot + 'api/user/details/' + userExternalId)
             .success(function (data, status, headers, config) {
-                //Results
-                $scope.handleUserResponse(data);
+                //Parse JSON response
+                $scope.handleUserDetailsResponse(data);
             })
             .error(function (data, status, headers, config) {
                 console.log(data);
             });
         };
 
-        //
-        $scope.handleUserResponse = function(response) {
-            console.log(response);
-
+        /**
+         * Method used to parse the user details JSON response
+         * @param response JSON repsonse to parse
+         */
+        $scope.handleUserDetailsResponse = function(response) {
+            //Save user
             $scope.user = response;
 
             //Created
@@ -112,45 +121,27 @@ function initializeDetails(shareId, shareUserExternalId, textAreaId, divGoogleMa
             $scope.user.moment_created = momentCreated;
         };
 
-        //
-        $scope.getShare = function(shareId) {
+        /**
+         * Method used to get the sare details
+         * @param shareId Wanted share identifier
+         */
+        $scope.getShareDetails = function(shareId) {
             //Get call
             $http.get(webroot + 'api/share/details/' + shareId)
             .success(function (data, status, headers, config) {
-                //Results
-                $scope.handleShareResponse(data);
+                //Parse JSON response
+                $scope.handleDetailsResponse(data);
             })
             .error(function (data, status, headers, config) {
                 console.log(data);
             });
         };
 
-        $scope.createMap = function() {
-            //Create map
-            var myLatlng = new google.maps.LatLng($scope.share.latitude, $scope.share.longitude);
-            var mapOptions = {
-                panControl: false,
-                zoomControl: true,
-                scaleControl: false,
-                streetViewControl: false,
-                scrollwheel: false,
-                zoom: 17,
-                center: myLatlng
-            };
-            map = new google.maps.Map(document.getElementById($scope.divGoogleMapId), mapOptions);
-
-            var marker = new MarkerWithLabel({
-                position: myLatlng,
-                map: map,
-                title: $scope.share.title,
-                labelContent: '<div class="img-circle text-center" style="border: 4px solid white; background-color: ' + $scope.share.share_color + '; display: table; min-width: 40px; width: 40px; min-height: 40px; height: 40px;"><i class="' + $scope.share.share_icon + '" style="display: table-cell; vertical-align: middle; color: #ffffff; font-size: 18px;"></i></div>',
-                labelAnchor: new google.maps.Point(16, 16),
-                icon: ' '
-            });
-        };
-
-        //
-        $scope.handleShareResponse = function(response) {
+        /**
+         * Method used to parse the share details JSON response
+         * @param response The JSON response to parse
+         */
+        $scope.handleDetailsResponse = function(response) {
             console.log(response);
 
             var share = response;
@@ -201,12 +192,17 @@ function initializeDetails(shareId, shareUserExternalId, textAreaId, divGoogleMa
             var price = parseFloat(share.price);
             share.formatted_price = numeral(price).format('0.0a');
 
+            //Store the share
             $scope.share = share;
 
             //Create map
-            $scope.createMap();
+            $scope.createGoogleMap();
         };
 
+        /**
+         * Method called when the send button was clicked (ui)
+         * @param $event Touch event
+         */
         $scope.onSendButtonClicked = function($event) {
             var button = angular.element($event.currentTarget);
             button.button('loading');
@@ -215,10 +211,17 @@ function initializeDetails(shareId, shareUserExternalId, textAreaId, divGoogleMa
             var editor = nicEditors.findEditor($scope.textAreaId);
             var message = editor.getContent();
 
+            //Send the message
             $scope.sendComment(message, button);
         };
 
+        /**
+         * Method called to send a comment
+         * @param message Message to send
+         * @param button Button used to send the message (ui)
+         */
         $scope.sendComment = function(message, button) {
+            //JSON data to send
             var jsonData = {
                 share_id: $scope.shareId,
                 message: encodeURI(message)
@@ -251,19 +254,49 @@ function initializeDetails(shareId, shareUserExternalId, textAreaId, divGoogleMa
         };
 
         /**
-         *
+         * Method called to create the google map
+         */
+        $scope.createGoogleMap = function() {
+            //Create map
+            var sharePosition = new google.maps.LatLng($scope.share.latitude, $scope.share.longitude);
+            var mapOptions = {
+                panControl: false,
+                zoomControl: true,
+                scaleControl: false,
+                streetViewControl: false,
+                scrollwheel: false,
+                zoom: 17,
+                center: sharePosition
+            };
+            map = new google.maps.Map(document.getElementById($scope.divGoogleMapId), mapOptions);
+
+            //Get marker icon
+            var icon = getShareMarkerImage($scope.share['share_type_category']['label'], $scope.share['share_type']['label']);
+
+            //Create the share marker
+            var marker = new google.maps.Marker({
+                position: sharePosition,
+                map: map,
+                title: $scope.share.title,
+                icon: '../../img/' + icon
+            });
+        };
+
+        /**
+         * Method used to initialize the DetailsController
          */
         $scope.initialize = function() {
-            //Get share
-            $scope.getShare($scope.shareId);
+            //Get share details
+            $scope.getShareDetails($scope.shareId);
 
             //Show comments page 1
             $scope.showPage(1);
 
             //Get user information
-            $scope.getUser($scope.shareUserExternalId);
+            $scope.getUserDetails($scope.shareUserExternalId);
         }
 
+        //Initialize the controller
         $scope.initialize();
     }]);
 }

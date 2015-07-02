@@ -1,79 +1,96 @@
-<?php
-    //$shareTypeColor = $this->ShareType->shareTypeColor($share['share_type_category']['label']);
-?>
-
 <script src="http://js.nicedit.com/nicEdit-latest.js"></script>
 
-<div ng-controller="DetailsController" style="background-color: #ffffff;">
+<div ng-controller="DetailsController" id="shares-details-div">
 
-    <div class="container div-share">
-        <div class="row" style="margin-top: 20px;">
+    <div class="container">
+
+        <!-- Main -->
+        <div class="row shares-details-main-row">
+
+            <!-- Left -->
             <div class="col-md-2 text-left">
                 <div class="text-center">
 
                     <!-- Share type icon -->
-                    <h1 class="h1-share-details-type" ng-style="{'color': share.share_color}">
+                    <h1 class="shares-details-icon-h1" ng-style="{'color': share.share_color}">
                         <i ng-class="share.share_icon"></i>
                     </h1>
 
                     <!-- Date -->
-                    <h2 class="h2-share-details-date text-capitalize" ng-style="{'color': share.share_color}" style="margin-top: 10px;">
+                    <h2 class="shares-details-date-h2 text-capitalize" ng-style="{'color': share.share_color}" style="">
                         {{ share.moment_day }}
                     </h2>
 
                     <!-- Hour -->
-                    <h3 ng-if="(share.event_time != null)" class="h2-share-details-hour">{{ share.moment_hour }}</h3>
+                    <h3 ng-if="(share.event_time != null)" class="shares-details-time-h2">
+                        {{ share.moment_hour }}
+                    </h3>
 
                     <!-- City -->
-                    <a ng-if="(share.city != null)" href="#div-share-details-place-header" class="btn btn-lg btn-link scroll-a">{{ share.city }}</a>
-                    <a ng-if="(share.city == null)" href="#div-share-details-place-header" class="btn btn-lg btn-link scroll-a">Lieu inconnu</a>
+                    <a ng-if="(share.city != null)" href="#shares-details-place-header" class="btn btn-lg btn-link scroll-a">
+                        {{ share.city }}
+                    </a>
+                    <a ng-if="(share.city == null)" href="#shares-details-place-header" class="btn btn-lg btn-link scroll-a">
+                        Lieu inconnu
+                    </a>
 
                 </div>
             </div>
 
             <!-- Description -->
-            <div class="col-md-8 div-share-details-description">
+            <div class="col-md-8">
 
                 <!-- Share type -->
                 <h2 class="text-capitalize" ng-style="{'color': share.share_color}">
-                    {{ share.share_type_category_label }} / <span style="font-weight: 200;">{{ share.share_type_label }}</span>
+                    {{ share.share_type_category_label }} / <span class="shares-details-type-span">{{ share.share_type_label }}</span>
                 </h2>
 
                 <!-- Title -->
-                <p class="lead" style="font-size: 28px;">
+                <p class="lead shares-details-title-p">
                     {{ share.title }}
                 </p>
 
                 <hr />
 
                 <!-- Message and limitations -->
-                <blockquote style="margin-bottom: ">
-                    <p ng-if="(share.message)" class="lead text-muted">{{ share.message }}</p>
-                    <p ng-if="(!share.message)" class="lead text-muted">Pas de message</p>
+                <blockquote>
 
-                    <footer ng-if="(share.limitations)" class="footer-share-details-limitations text-danger">
+                    <!-- Message -->
+                    <p ng-if="(share.message)" class="lead text-muted">
+                        {{ share.message }}
+                    </p>
+                    <p ng-if="(!share.message)" class="lead text-muted">
+                        Pas de message
+                    </p>
+
+                    <!-- Limitations -->
+                    <footer ng-if="(share.limitations)" class="text-danger shares-details-limitations-footer">
                         <i class="fa fa-asterisk"></i> {{ share.limitations }}
                     </footer>
 
                 </blockquote>
 
                 <!-- Comments count -->
-                <a ng-if="(share.comment_count > 1)" href="#div-share-details-comments-header" class="scroll-a btn btn-link">{{ share.comment_count }} commentaires</a>
-                <a ng-if="(share.comment_count == 1)" href="#div-share-details-comments-header" class="scroll-a btn btn-link">1 commentaire</a>
+                <a ng-if="(share.comment_count > 1)" href="#shares-details-comments-header-div" class="scroll-a btn btn-link">
+                    {{ share.comment_count }} commentaires
+                </a>
+                <a ng-if="(share.comment_count == 1)" href="#shares-details-comments-header-div" class="scroll-a btn btn-link">
+                    1 commentaire
+                </a>
 
             </div>
 
             <!-- Place -->
             <div class="col-md-2 text-center">
 
-                <div class="panel panel-default" style="margin-top: 20px; background-color: #fbfcfc; margin-bottom: 0px;">
+                <div class="panel panel-default shares-details-place-div">
                     <div class="panel-body">
 
                         <!-- Price -->
-                        <h2 class="h2-share-details-price" style="margin-top: 0px; margin-bottom: 0px; color: #3498db;">
-                            <span class="span-share-details-price">{{ share.formatted_price }} €</span>
+                        <h2 class="shares-details-price-h2">
+                            <span class="shares-details-price-span">{{ share.formatted_price }} €</span>
                         </h2>
-                        <h3 style="margin-top: 0px; color: #95a5a6; margin-bottom: 20px;">
+                        <h3 class="shares-details-price-unit-h3">
                             / pers.
                         </h3>
 
@@ -83,49 +100,64 @@
 
                                 <!-- Participate button -->
                                 <?php
-                                echo $this->Form->create('Request', array(
-                                    'action' => 'add',
-                                    'class' => 'form-share-card-request form-inline',
-                                ));
+                                    echo $this->Form->create('Request', array(
+                                        'action' => 'add',
+                                        'class' => 'form-inline',
+                                    ));
 
-                                echo $this->Form->hidden('shareId', array(
-                                    'value' => $shareId
-                                ));
+                                    echo $this->Form->hidden('shareId', array(
+                                        'value' => $shareId
+                                    ));
 
-                                echo $this->Form->submit('Participer', array(
-                                    'class' => 'btn btn-success button-share-details-participate'
-                                ));
+                                    echo $this->Form->submit('Participer', array(
+                                        'class' => 'btn btn-success shares-details-participate-button'
+                                    ));
 
-                                echo $this->Form->end();
+                                    echo $this->Form->end();
                                 ?>
 
                             <?php elseif (!$doesUserOwnShare) : ?>
 
-                                <button class="btn btn-<?php echo $this->Share->getShareDetailsRequestStatusClass($requestStatus); ?> disabled button-share-details-participate-status"><?php echo $this->Share->getShareDetailsRequestStatusLabel($requestStatus); ?></button>
+                                <button class="btn btn-<?php echo $this->Share->getShareDetailsRequestStatusClass($requestStatus); ?> disabled shares-details-participate-status"><?php echo $this->Share->getShareDetailsRequestStatusLabel($requestStatus); ?></button>
 
                             <?php else : ?>
 
-                                <div data-toggle="tooltip" data-placement="bottom" title="Vous êtes le créateur" style="margin-top: 10px; margin-bottom: 10px;">
-                                    <button class="btn btn-success disabled button-share-details-participate" style="margin: 0px;">Participer</button>
+                                <!-- Own share -->
+                                <div data-toggle="tooltip" data-placement="bottom" title="Vous êtes le créateur" class="shares-details-participate-div">
+                                    <button class="btn btn-success disabled shares-details-participate-button" style="margin: 0px;">
+                                        Participer
+                                    </button>
                                 </div>
 
                             <?php endif; ?>
 
                         <?php else : ?>
-                            <div data-toggle="tooltip" data-placement="bottom" title="Vous devez être authentifié pour pouvoir participer" style="margin-top: 10px; margin-bottom: 10px;">
-                                <button class="btn btn-success disabled button-share-details-participate" style="margin: 0px;">Participer</button>
+
+                            <!-- Need to be authenticated -->
+                            <div data-toggle="tooltip" data-placement="bottom" title="Vous devez être authentifié pour pouvoir participer" class="shares-details-participate-div">
+                                <button class="btn btn-success disabled shares-details-participate-button" style="margin: 0px;">
+                                    Participer
+                                </button>
                             </div>
+
                         <?php endif; ?>
 
                         <!-- Places -->
-                        <p ng-if="(share.places_left > 1)" class="text-success"><strong>{{ share.places_left }}</strong> places restantes</p>
-                        <p ng-if="(share.places_left == 1)" class="text-warning"><strong>1</strong> place restante</p>
-                        <p ng-if="(share.places_left == 0)" class="text-danger">Complet</p>
+                        <p ng-if="(share.places_left > 1)" class="text-success">
+                            <strong>{{ share.places_left }}</strong> places restantes
+                        </p>
+                        <p ng-if="(share.places_left == 1)" class="text-warning">
+                            <strong>1</strong> place restante
+                        </p>
+                        <p ng-if="(share.places_left == 0)" class="text-danger">
+                            Complet
+                        </p>
+
                     </div>
                 </div>
 
                 <!-- Created by -->
-                <p class="p-share-details-created text-muted" style="margin-top: 10px;">
+                <p class="shares-details-created-p">
                     Créé par <a href="#div-share-details-user-header" class="scroll-a">{{ share.user.username }}</a>
                     <br />
                     {{ share.moment_created_time_ago }}
@@ -135,21 +167,11 @@
         </div>
     </div>
 
-    <div id="div-share-details-place-header">
+    <div id="shares-details-place-header">
         <!-- Google maps -->
         <div id="div-share-details-google-map" style="width: 100%; height: 500px; border-top: 1px solid #bdc3c7; border-bottom: 1px solid #bdc3c7;">
 
         </div>
-
-        <!-- Header shadow -->
-        <!--<div style="position: absolute; top: -10px; left: 0px; width: 100%; height: 10px; -webkit-box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175); box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);">
-
-        </div>-->
-
-        <!-- Footer shadow -->
-        <!--<div style="position: absolute; bottom: -10px; left: 0px; width: 100%; height: 10px; -webkit-box-shadow: 0 -6px 12px rgba(0, 0, 0, 0.175); box-shadow: 0 -6px 12px rgba(0, 0, 0, 0.175);">
-
-        </div>-->
     </div>
 
     <!-- Comments -->

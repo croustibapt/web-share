@@ -1,73 +1,114 @@
-/* SHARE */
+/* Structure */
 
-.div-share {
+#shares-details-div {
     background-color: #ffffff;
-    padding-bottom: 30px;
 }
 
-.h1-share-details-type {
+.shares-details-main-row {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+/* Icon */
+
+.shares-details-icon-h1 {
     font-size: 100px;
     margin-bottom: 0px;
 }
 
-.div-share-details-date {
-    margin-top: 15px;
-}
+/* Event date */
 
-.h2-share-details-date {
+.shares-details-date-h2 {
     margin-bottom: 5px;
+    margin-top: 10px;
 }
 
-.h2-share-details-hour {
+/* Event time */
+
+.shares-details-time-h2 {
     margin-top: 0px;
     font-weight: 200;
 }
 
-.button-share-details-participate, .button-share-details-participate-status {
+/* Type */
+
+.shares-details-type-span {
+    font-weight: 200;
+}
+
+/* Title */
+
+.shares-details-title-p {
+    font-size: 28px;
+}
+
+/* Limitations */
+
+.shares-details-limitations-footer:before {
+    content: normal;
+}
+
+/* Place */
+
+.shares-details-place-div {
+    margin-top: 20px;
+    background-color: #fbfcfc;
+    margin-bottom: 0px;
+}
+
+/* Price */
+
+.shares-details-price-h2 {
+    font-weight: 200;
+    margin-top: 0px;
+    margin-bottom: 0px;
+    color: #3498db;
+}
+
+.shares-details-price-span {
+    font-size: 35px;
+    font-weight: 600;
+}
+
+.shares-details-price-unit-h3 {
+    margin-top: 0px;
+    color: #95a5a6;
+    margin-bottom: 20px;
+}
+
+/* Participate button */
+
+.shares-details-participate-button, .shares-details-participate-status {
     width: 100%;
     margin-top: 10px;
     margin-bottom: 10px;
 }
 
-.button-share-details-participate-status.disabled {
+.shares-details-participate-status.disabled {
     opacity: 1.0;
 }
 
-.div-share-details-description {
-    background-color: #ffffff;
-}
-
-.h1-share-details-title {
-    margin-top: 15px;
-}
-
-.h2-share-details-price {
-    color: #95a5a6;
-    font-weight: 200;
-}
-
-.span-share-details-price {
-    font-size: 35px;
-    font-weight: 600;
-}
-
-.footer-share-details-limitations:before {
-    content: normal;
-}
-
-.div-share-details-place {
-    margin-top: 15px;
+.shares-details-participate-div {
+    margin-top: 10px;
     margin-bottom: 10px;
 }
 
-.img-share-details-place {
-    width: 75%;
+.shares-details-participate-div .shares-details-participate-button {
+    margin-top: 0px;
 }
 
-.p-share-details-created {
-    margin-bottom: 10px;
+/* Created */
+
+.shares-details-created-p {
+    margin-top: 10px;
     color: #bdc3c7;
 }
+
+
+
+
+
+
 
 /* Comments */
 

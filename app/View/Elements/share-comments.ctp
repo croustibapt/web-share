@@ -1,5 +1,5 @@
 <!-- Title -->
-<div id="div-share-details-comments-header" class="container">
+<div id="shares-details-comments-header-div" class="container">
     <h3 ng-if="(share.comment_count == 0)">Aucun commentaire</h3>
     <h3 ng-if="(share.comment_count == 1)">1 commentaire</h3>
     <h3 ng-if="(share.comment_count > 1)">{{ share.comment_count }} commentaires</h3>
@@ -8,10 +8,9 @@
 <!-- Comments -->
 <div id="div-share-details-comments" class="container">
     <div class="row">
-        <!--<div class="col-md-2">
 
-        </div>-->
         <div class="col-md-12">
+
             <div id="div-share-details-comments-list" ng-if="(comments.length > 0)">
                 <!-- All comments -->
                 <div ng-repeat="comment in comments" style="margin-bottom: 30px;">
@@ -101,7 +100,7 @@
     $(document).ready(function() {
         //Create editor
         new nicEditor({
-            buttonList : ['bold','italic','underline', 'link', 'unlink']
+            buttonList : ['bold', 'italic', 'underline', 'link', 'unlink']
         })
         .panelInstance('textarea-comment-add');
 
