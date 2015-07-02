@@ -1,27 +1,32 @@
-<div style="height: 600px; background-image: url(app/webroot/img/home-background.jpg); background-position: center;">
-    <div style="height: 100%; display: table; width: 100%; position: relative;">
-        <div class="text-center" style="display: table-cell; vertical-align: middle; padding-bottom: 106px;">
-            <h1 class="text-uppercase" style="color: white; font-size: 50px; font-weight: 700;">Partageons nos économies</h1>
-            <h4 style="color: white; font-size: 30px; margin-top: 0px;">Trouvez des coupons à partager autour de vous.</h4>
+<!-- Header -->
+<div id="shares-home-header-div">
+
+    <div id="shares-home-header-text-div">
+
+        <!-- Header text -->
+        <div id="shares-home-header-text-container-div" class="text-center">
+            <h1 id="shares-home-header-text-h1" class="text-uppercase">Partageons nos économies</h1>
+            <h4 id="shares-home-header-text-h4">Trouvez des coupons à partager autour de vous.</h4>
             <button class="btn btn-outline">Mode d'emploi</button>
         </div>
 
-        <div ng-controller="HomeController" style="background: rgba(0, 0, 0, 0.5); padding: 30px; color:#ffffff; position: absolute; bottom: 0px; left: 0px; width: 100%;">
+        <!-- Search form -->
+        <div ng-controller="HomeController" id="shares-home-form-div">
             <div class="container">
                 <?php
-                echo $this->Form->create('Share', array(
-                    'action' => 'search',
-                    'type' => 'GET'
-                ));
+                    echo $this->Form->create('Share', array(
+                        'action' => 'search',
+                        'type' => 'GET'
+                    ));
                 ?>
 
                 <div class="row">
-                    <div class="col-md-4 col-select-home">
+                    <div class="col-md-4 shares-home-form-col-select-home">
                         <?php
                             echo $this->Form->input('address', array(
                                 'id' => 'input-home-address',
                                 'type' => 'text',
-                                'class' => 'form-control input-lg input-home',
+                                'class' => 'form-control input-lg shares-home-form-address-input',
                                 'placeholder' => 'Où recherchez-vous ?',
                                 'label' => false,
                                 'div' => false,
@@ -36,10 +41,10 @@
                     </div>
 
 
-                    <div class="col-md-2 div-select-home col-select-home">
+                    <div class="col-md-2 shares-home-form-div-select-home shares-home-form-col-select-home">
                         <?php
                             echo $this->Form->input('date', array(
-                                'class' => 'form-control input-lg select-home',
+                                'class' => 'form-control input-lg shares-home-form-div-home',
                                 'label' => false,
                                 'div' => false,
                                 'options' => array('all' => 'Période', 'day' => 'Aujourd\'hui', 'week' => 'Cette semaine', 'month' => 'Ce mois-ci')
@@ -47,12 +52,12 @@
                         ?>
                     </div>
 
-                    <div class="col-md-2 div-select-home col-select-home">
+                    <div class="col-md-2 shares-home-form-div-select-home shares-home-form-col-select-home">
                         <?php
                             echo $this->Form->input('share_type_category', array(
                                 'type' => 'select',
                                 'id' => 'select-home-share-type-category',
-                                'class' => 'form-control input-lg select-home',
+                                'class' => 'form-control input-lg shares-home-form-div-home',
                                 'label' => false,
                                 'div' => false,
                                 'ng-change' => 'onShareTypeCategoryChanged();',
@@ -62,12 +67,12 @@
                         ?>
                     </div>
 
-                    <div class="col-md-2 div-select-home col-select-home">
+                    <div class="col-md-2 shares-home-form-div-select-home shares-home-form-col-select-home">
                         <?php
                             echo $this->Form->input('share_type', array(
                                 'type' => 'select',
                                 'id' => 'select-home-share-type',
-                                'class' => 'form-control input-lg select-home',
+                                'class' => 'form-control input-lg shares-home-form-div-home',
                                 'label' => false,
                                 'div' => false,
                                 'ng-disabled' => '(shareTypeCategory == -1)',
@@ -77,10 +82,10 @@
                         ?>
                     </div>
 
-                    <div class="col-md-2 col-select-home">
+                    <div class="col-md-2 shares-home-form-col-select-home">
                         <?php
                             echo $this->Form->submit('Rechercher', array(
-                                'class' => 'btn btn-primary btn-lg submit-home',
+                                'class' => 'btn btn-primary btn-lg shares-home-form-submit',
                                 'div' => false,
                             ));
                         ?>
@@ -88,46 +93,66 @@
 
                 </div>
                 <?php
-                echo $this->Form->end();
+                    echo $this->Form->end();
                 ?>
             </div>
         </div>
     </div>
 
 </div>
-<div id="information-div" class="container">
-    <div class="title-div">
-        <h2><span>OUR RULES</span></h2>
+
+<!-- Information -->
+<div id="shares-home-information-div" class="container">
+
+    <!-- Title -->
+    <div class="shares-home-information-title-div">
+
+        <h2>
+            <span>OUR RULES</span>
+        </h2>
+
     </div>
     <div class="row">
         <div class="col-md-3 text-center">
-            <img src="img/device.png" alt="">            <h1>Platform first</h1>
+
+            <img src="img/device.png" alt="">
+            <h1>Platform first</h1>
             <p class="lead">
-                We follow the OS design guidelines to ensure a <span class="information-strong">quality</span> level.
+                We follow the OS design guidelines to ensure a <span class="shares-home-information-strong">quality</span> level.
             </p>
+
         </div>
         <div class="col-md-3 text-center">
-            <img src="img/device.png" alt="">            <h1>Performance</h1>
+
+            <img src="img/device.png" alt="">
+            <h1>Performance</h1>
             <p class="lead">
-                We pay special attention to the <span class="information-strong">performance</span> of our applications.
+                We pay special attention to the <span class="shares-home-information-strong">performance</span> of our applications.
             </p>
+
         </div>
         <div class="col-md-3 text-center">
-            <img src="img/device.png" alt="">            <h1>User friendly</h1>
+
+            <img src="img/device.png" alt="">
+            <h1>User friendly</h1>
             <p class="lead">
-                We <span class="information-strong">adapt</span> to a final user's needs for a better experience.
+                We <span class="shares-home-information-strong">adapt</span> to a final user's needs for a better experience.
             </p>
+
         </div>
         <div class="col-md-3 text-center">
-            <img src="img/device.png" alt="">            <h1>Feedback</h1>
+
+            <img src="img/device.png" alt="">
+            <h1>Feedback</h1>
             <p class="lead">
-                We stay <span class="information-strong">in tune</span> with the client feedback to improve our applications.
+                We stay <span class="shares-home-information-strong">in tune</span> with the client feedback to improve our applications.
             </p>
+
         </div>
     </div>
 </div>
 
 <script>
     //
-    initializeHome('input-home-address', 'hidden-home-viewport');
+    initializeHome('input-home-address');
 </script>

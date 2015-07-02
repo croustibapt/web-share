@@ -1,6 +1,6 @@
 <?php if (($this->action == 'home') && ($this->name == 'Shares')) : ?>
 
-<nav class="navbar navbar-default navbar-home" style="background: transparent; border: none; position: absolute; top: 0px; width: 100%; z-index: 1000;">
+<nav class="navbar navbar-default navbar-home">
 
 <?php else : ?>
 
@@ -30,7 +30,7 @@
         
         <form class="navbar-form navbar-left" role="search">
             <div class="input-group">
-            <span class="input-group-addon input-group-addon-navbar" style="padding-left: 12px; padding-right: 0px;">
+            <span class="input-group-addon input-group-addon-navbar shares-search-input-group-addon-navbar">
                 <i class="fa fa-search"></i>
             </span>
             <input id="input-search-address" type="text" class="form-control input-navbar" placeholder="Où recherchez-vous ?" value="<?php echo isset($address) ? $address : ""; ?>">

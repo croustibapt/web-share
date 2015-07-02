@@ -1,13 +1,45 @@
-html {
+html, body {
     height: 100%;
 }
 
-body {
-    height: 100%;
+/* Navbar */
+
+.pac-container {
+    z-index: 9999;
+}
+
+.shares-search-input-group-addon-navbar {
+    padding-left: 12px;
+    padding-right: 0px;
 }
 
 .li-navbar-right {
     margin-right: 15px;
+}
+
+/* Action bar */
+
+#div-action-bar {
+    background-color: #ffffff;
+    border-bottom: 1px solid #e0e0e0;
+    width: 100%;
+    padding: 15px;
+    padding-left: 30px;
+    padding-right: 30px;
+}
+
+/*#div-action-bar .form-group {
+    margin-bottom: 0px;
+}*/
+
+.select-action-bar {
+    border-color: #3498db;
+    color: #3498db;
+}
+
+.select-action-bar-date {
+    border-color: #9b59b6;
+    color: #9b59b6;
 }
 
 /* Card */

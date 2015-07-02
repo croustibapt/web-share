@@ -44,12 +44,14 @@
             echo $this->Html->script('angular.min');
             echo $this->Html->script('jquery.timepicker.min');
 
-            echo $this->Html->script('share/share');
-            echo $this->Html->script('share/home');
-            echo $this->Html->script('share/search');
-            echo $this->Html->script('share/add');
-            echo $this->Html->script('share/details');
+        ?>
 
+        <?php
+            echo $this->Html->script('share/common');
+            echo $this->Html->script('share/'.strtolower($this->name).'-'.$this->action);
+        ?>
+
+        <?php
             //Moment
             echo $this->Html->script('moment/moment');
             echo $this->Html->script('moment/moment-timezone-with-data');

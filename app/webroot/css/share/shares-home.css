@@ -2,73 +2,127 @@ body {
     padding-top: 0px;
 }
 
-/* Home */
+/* Navbar */
+
+.navbar-home {
+    background: transparent;
+    border: none;
+    position: absolute;
+    top: 0px;
+    width: 100%;
+    z-index: 1000;
+}
 
 .navbar-home .btn-navbar:hover {
     background-color: white!important;
     color: #000000!important;
 }
 
-.col-select-home {
+/* Header */
+
+#shares-home-header-div {
+    height: 600px;
+    background-image: url(../../img/home-background.jpg);
+    background-position: center;
+}
+
+#shares-home-header-text-div {
+    height: 100%;
+    display: table;
+    width: 100%;
+    position: relative;
+}
+
+#shares-home-header-text-container-div {
+    display: table-cell;
+    vertical-align: middle;
+    padding-bottom: 106px;
+}
+
+#shares-home-header-text-h1 {
+    color: white;
+    font-size: 50px;
+    font-weight: 700;
+}
+
+#shares-home-header-text-h4 {
+    color: white;
+    font-size: 30px;
+    margin-top: 0px;
+}
+
+/* Form */
+
+#shares-home-form-div {
+    background: rgba(0, 0, 0, 0.5);
+    padding: 30px;
+    color:#ffffff;
+    position: absolute;
+    bottom: 0px;
+    left: 0px;
+    width: 100%;
+}
+
+.shares-home-form-col-select-home {
     padding: 0px;
 }
 
-.div-select-home {
+.shares-home-form-div-select-home {
     position: relative;
     background-color: white;
     border: 1px solid #ccc;
     border-left: none;
 }
 
-.input-home {
+.shares-home-form-address-input {
     border-top-right-radius: 0px;
     border-bottom-right-radius: 0px;
 }
 
-.select-home {
+.shares-home-form-div-home {
     border-radius: 0px;
     border: none;
     height: 44px!important;
 }
 
-.submit-home {
+.shares-home-form-submit {
     width: 100%;
     border-top-left-radius: 0px;
     border-bottom-left-radius: 0px;
 }
 
-/* Title */
+/* Information */
 
-.title-div {
-    text-align: center;
-    margin-top: 50px;
-    margin-bottom: 50px;
-}
-
-.title-div h2 {
-    color: #fdba33;
-    font-weight: 100;
-    font-size: 36px;
-    background: url(../img/heading.png) no-repeat center center;
-}
-
-.title-div span {
-    padding-left: 20px;
-    padding-right: 20px;
-    background: url(../img/content-light.png) repeat 0 0;
-}
-
-.information-strong {
-    color: #009688;
-}
-
-#information-div h1 {
+#shares-home-information-div h1 {
     margin-bottom: 15px;
     color: #009688;
     font-weight: 100;
 }
 
-#information-div img {
+#shares-home-information-div img {
     margin-top: 20px;
     margin-bottom: 10px;
+}
+
+.shares-home-information-title-div {
+    text-align: center;
+    margin-top: 50px;
+    margin-bottom: 50px;
+}
+
+.shares-home-information-title-div h2 {
+    color: #fdba33;
+    font-weight: 100;
+    font-size: 36px;
+    background: url(../../img/heading.png) no-repeat center center;
+}
+
+.shares-home-information-title-div span {
+    padding-left: 20px;
+    padding-right: 20px;
+    background: url(../../img/content-light.png) repeat 0 0;
+}
+
+.shares-home-information-strong {
+    color: #009688;
 }
