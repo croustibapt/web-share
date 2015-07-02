@@ -93,6 +93,10 @@ body {
 
 /* Information */
 
+#shares-home-information-div {
+    margin-bottom: 30px;
+}
+
 #shares-home-information-div h1 {
     margin-bottom: 15px;
     color: #009688;
