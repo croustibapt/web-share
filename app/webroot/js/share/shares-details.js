@@ -28,12 +28,12 @@ function initializeDetails(shareId, shareUserExternalId, textAreaId, divGoogleMa
         $scope.user = null;
 
         /**
-         *
-         * @param num
-         * @returns {Array}
+         * Method used to get an array from a number (used in pagination)
+         * @param number Number to transform
+         * @returns An array of <number> elements
          */
-        $scope.getNumber = function(num) {
-            return new Array(num);
+        $scope.getNumberArray = function(number) {
+            return new Array(number);
         };
 
         /**

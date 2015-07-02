@@ -1,9 +1,12 @@
-<div id="div-search-results" ng-controller="SearchController" class="content" style="height: 100%; position: relative;">
-    <div style="float: left; width: 50%; height: 100%; overflow-y: scroll; overflow-x: hidden; background-color: #eeeeee;">
+<div ng-controller="SearchController" id="shares-search-div" class="content">
+
+    <!-- Left -->
+    <div id="shares-search-left-div">
+
         <!-- Search bar -->
         <?php echo $this->element('search-bar'); ?>
 
-        <div class="row" style="padding: 30px; padding-bottom: 0px;">
+        <div id="shares-search-results-div" class="row">
 
             <div ng-repeat="share in shares" class="col-md-6">
                 <?php echo $this->element('share-card'); ?>
@@ -13,25 +16,21 @@
 
         <!-- Pagination -->
         <?php echo $this->element('pagination'); ?>
+
     </div>
-    <div style="margin-left: 50%; width: 50%; height: 100%;">
-        <!-- Search box -->
-        <!--<input type="text" value="<?php echo $address; ?>" class="form-control" placeholder="Où recherchez vous ?" style="margin-top: 10px; margin-left: 10px; width: 50%;">-->
+
+    <!-- Right -->
+    <div id="shares-search-right-div">
 
         <!-- Google maps -->
-        <div id="div-share-search-google-map" style="width: 100%; height: 100%;">
+        <div id="shares-search-google-map-div">
 
         </div>
+
     </div>
 </div>
 
 <script>
-    //
-    initializeSearch('<?php echo $shareTypeCategory; ?>', '<?php echo $shareType; ?>', '<?php echo $date; ?>', <?php echo $viewPort['northeast']['lat']; ?>, <?php echo $viewPort['northeast']['lng']; ?>,  <?php echo $viewPort['southwest']['lat']; ?>, <?php echo $viewPort['southwest']['lng']; ?>);
-
-    //
-    $(document).on("click", ".div-share-card" , function() {
-        var shareId = $(this).attr('share-id');
-        window.location.href = webroot + "share/details/" + shareId;
-    });
+    //Initialize SearchController
+    initializeSearch('shares-search-address-input', 'shares-search-google-map-div', 'shares-search-div', <?php echo $viewPort['northeast']['lat']; ?>, <?php echo $viewPort['northeast']['lng']; ?>,  <?php echo $viewPort['southwest']['lat']; ?>, <?php echo $viewPort['southwest']['lng']; ?>, '<?php echo $shareTypeCategory; ?>', '<?php echo $shareType; ?>', '<?php echo $period; ?>');
 </script>

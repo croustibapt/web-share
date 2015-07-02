@@ -33,3 +33,56 @@
 .user-card-summary-p {
     margin-bottom: 0px;
 }
+
+.table-share-request-card-requests {
+    margin-bottom: 0px;
+}
+
+.tr-share-card-request td {
+    padding-left: 15px!important;
+    padding-right: 15px!important;
+}
+
+.p-share-card-request {
+    margin-bottom: 0px;
+}
+
+.p-share-card-request-user {
+    font-weight: 400;
+}
+
+.footer-request-card {
+    margin-bottom: 10px;
+}
+
+.a-share-card-title {
+    color: #2c3e50;
+}
+
+.a-share-card-title:hover {
+    color: #34495e;
+    text-decoration: underline;
+}
+
+.div-share-card-title footer:before  {
+    content: normal;
+}
+
+.footer-share-card-summary {
+    margin-bottom: 10px;
+    color: #34495e;
+}
+
+.div-share-card-limitations {
+    padding-left: 15px;
+    padding-right: 15px;
+    margin-top: 10px;
+}
+
+.form-share-card-request {
+    display: inline;
+}
+
+.form-share-card-request-input {
+    width: 70px;
+}

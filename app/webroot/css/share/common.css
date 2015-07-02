@@ -13,6 +13,12 @@ body {
     /*border: 2px solid #ffffff;*/
 }
 
+/* Pagination */
+
+.pagination-ul {
+    margin-top: 0px;
+}
+
 /* USER/HOME */
 
 .div-user-home-tabs {

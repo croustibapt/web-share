@@ -9,7 +9,7 @@ class SharesController extends ApiSharesController {
     
     //
     public function search() {
-        $date = 'all';
+        $period = 'all';
 
         $shareTypeCategory = -1;
         $shareType = -1;
@@ -22,7 +22,7 @@ class SharesController extends ApiSharesController {
             //pr($data);
 
             //Get start and end date
-            $date = $data['date'];
+            $period = $data['period'];
 
             //Share type category
             $shareTypeCategory = $data['share_type_category'];
@@ -78,7 +78,7 @@ class SharesController extends ApiSharesController {
             }
         }
 
-        $this->set('date', $date);
+        $this->set('period', $period);
 
         $this->set('shareTypeCategory', $shareTypeCategory);
         $this->set('shareType', $shareType);

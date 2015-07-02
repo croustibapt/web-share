@@ -17,9 +17,36 @@ html, body {
     margin-right: 15px;
 }
 
-/* Action bar */
+/* Structure */
 
-#div-action-bar {
+#shares-search-div {
+    height: 100%;
+    position: relative;
+}
+
+#shares-search-results-div {
+    padding: 30px;
+    padding-bottom: 0px;
+}
+
+#shares-search-left-div {
+    float: left;
+    width: 50%;
+    height: 100%;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    background-color: #eeeeee;
+}
+
+#shares-search-right-div {
+    margin-left: 50%;
+    width: 50%;
+    height: 100%;
+}
+
+/* Search bar */
+
+#search-bar-div {
     background-color: #ffffff;
     border-bottom: 1px solid #e0e0e0;
     width: 100%;
@@ -28,23 +55,26 @@ html, body {
     padding-right: 30px;
 }
 
-/*#div-action-bar .form-group {
-    margin-bottom: 0px;
-}*/
-
-.select-action-bar {
+.search-bar-select {
     border-color: #3498db;
     color: #3498db;
 }
 
-.select-action-bar-date {
+.search-bar-select-period {
     border-color: #9b59b6;
     color: #9b59b6;
 }
 
+/* Google map */
+
+#shares-search-google-map-div {
+    width: 100%;
+    height: 100%;
+}
+
 /* Card */
 
-.card {
+.card-div {
     border-radius: 2px;
     -webkit-box-shadow: 0px 2px 2px rgba(0, 2, 5, 0.15);
     box-shadow: 0px 2px 2px rgba(0, 2, 5, 0.15);
@@ -52,12 +82,12 @@ html, body {
     margin-bottom: 30px;
 }
 
-.card:hover {
+.card-div:hover {
     -webkit-box-shadow: 0px 2px 10px rgba(0, 2, 5, 0.25);
     box-shadow: 0px 2px 10px rgba(0, 2, 5, 0.25);
 }
 
-.card-header {
+.card-header-div {
     background-color: #35cf76;
     color: #ffffff;
     border-top-left-radius: 2px;
@@ -68,166 +98,108 @@ html, body {
     padding-bottom: 5px;
 }
 
-/* SHARE CARD */
+/* Share card */
 
-.div-share-card {
+.share-card-div {
     cursor: pointer;
+    min-height: 262px;
 }
 
-.span-share-card-date {
+/* Event date */
+
+.share-card-date-span {
     font-weight: 200;
 }
 
-.span-share-card-date-hour {
+/* Event time */
+
+.share-card-time-span {
     font-weight: 400;
 }
 
-.div-share-card-subtitle {
-    padding-top: 5px;
-    padding-left: 15px;
-    padding-right: 15px;
-    color: #333333;
+.share-card-main-div {
+    padding: 15px;
+    padding-bottom: 0px;
+    min-height: 153px;
 }
 
-.span-share-card-user {
-    color: #2980b9;
-}
+/* Icon */
 
-.span-share-card-modified {
-    color: #95a5a6;
-    font-weight: 200;
-}
-
-.span-share-card-city {
-    color: #34495e;
-}
-
-.span-share-card-zip-code {
-    color: #95a5a6;
-    font-weight: 200;
-}
-
-.div-share-card-main {
-    margin-top: 10px;
-}
-
-.div-share-card-icon {
-    display: table-cell;
-    vertical-align: top;
-    padding-left:15px;
-    padding-right: 15px;
+.share-card-icon {
     margin-top: 10px;
     font-size: 40px;
-    width: 80px;
-    height: 80px;
-    max-width: 80px;
-    max-height: 80px;
+    width: 60px;
+    height: 60px;
+    max-width: 60px;
+    max-height: 60px;
 }
 
-.div-share-card-title {
+.share-card-icon-h1 {
+    margin: 0px;
+}
+
+/* Information */
+
+.share-card-title-col {
     padding-left: 0px;
-    display: table-cell;
-    vertical-align: top;
-    /*text-align: justify;*/
 }
 
-.blockquote-share-card-title {
+.share-card-title-blockquote {
     border-left: none;
     margin-bottom: 0px;
-    padding-left: 0px;
+    padding: 0px;
 }
 
-.a-share-card-title {
-    color: #2c3e50;
+/* Type */
+
+.share-card-type-p {
+    font-size: 20px;
+    margin-bottom: 5px;
 }
 
-.a-share-card-title:hover {
-    color: #34495e;
-    text-decoration: underline;
+.share-card-type-span {
+    font-weight: 200;
 }
 
-.div-share-card-title footer:before  {
-    content: normal;
-}
+/* Title */
 
-.footer-share-card-summary {
+.share-card-title-p {
     margin-bottom: 10px;
-    color: #34495e;
 }
 
-.div-share-card-limitations {
-    padding-left: 15px;
-    padding-right: 15px;
-    margin-top: 10px;
+/* Comment count */
+
+.share-card-comment-count-p {
+    font-size: 14px;
 }
 
-.form-share-card-request {
-    display: inline;
+/* Places and price */
+
+.share-card-places-price-div {
+    padding: 15px;
 }
 
-.form-share-card-request-input {
-    width: 70px;
-}
-
-.p-share-card-left-places {
+.share-card-left-places-p {
     margin-bottom: 0px;
 }
 
-.div-share-card-places-price {
-    padding-left: 15px;
-    padding-right: 15px;
-    padding-bottom: 10px;
+.share-card-progress {
     margin-top: 10px;
-}
-
-.div-share-card-progress {
-    display: table;
-    width: 100%;
-}
-
-.div-share-card-progress .progress {
     margin-bottom: 0px;
     height: 10px;
 }
 
-.div-share-card-progress .progress-bar {
+.share-card-progress-bar {
     line-height: 10px;
 }
 
-.div-share-card-progress-cell {
-    display: table-cell;
-    width: 50%;
-    vertical-align: middle;
-}
-
-.p-share-card-price {
+.share-card-price-p {
     color: #2980b9;
     font-weight: bold;
     margin-bottom: 0px;
 }
 
-.p-share-card-price-label {
+.share-card-price-small {
     color: #95a5a6;
     font-weight: 200;
-}
-
-.table-share-request-card-requests {
-    margin-bottom: 0px;
-}
-
-.tr-share-card-request td {
-    padding-left: 15px!important;
-    padding-right: 15px!important;
-}
-
-.p-share-card-request {
-    margin-bottom: 0px;
-}
-
-.p-share-card-request-user {
-    font-weight: 400;
-}
-
-.footer-request-card {
-    margin-bottom: 10px;
 }

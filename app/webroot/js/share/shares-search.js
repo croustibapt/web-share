@@ -1,21 +1,27 @@
-/* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/**
+ * Method used to initialize the SearchController
+ * @param autocompleteInputId GoogleMap address autocomplete identifier
+ * @param googleMapDivId GoogleMap div identifier
+ * @param searchDivId Share search div identifier
+ * @param neLatitude Start north east latitude
+ * @param neLongitude Start north east longitude
+ * @param swLatitude Start south west latitude
+ * @param swLongitude Start south west longitude
+ * @param shareTypeCategory Start share type category
+ * @param shareType Start share type
+ * @param period Start period
  */
-function initializeSearch(shareTypeCategory, shareType, date, neLatitude, neLongitude, swLatitude, swLongitude) {
-    //Create SearchController
+function initializeSearch(autocompleteInputId, googleMapDivId, searchDivId, neLatitude, neLongitude, swLatitude, swLongitude, shareTypeCategory, shareType, period) {
+    /**
+     * SearchController
+     */
     app.controller('SearchController', ['$scope', '$http', function($scope, $http) {
         $scope.page = 1;
         $scope.total_pages = 1;
         $scope.total_results = 0;
         $scope.results_count = 0;
 
-        $scope.date = date;
-        $scope.startDate = null;
-        $scope.endDate = null;
-
-        $scope.types = null;
+        $scope.period = period;
 
         $scope.bounds = null;
 
@@ -29,21 +35,19 @@ function initializeSearch(shareTypeCategory, shareType, date, neLatitude, neLong
         $scope.markers = {};
 
         /**
-         *
-         * @param num
-         * @returns {Array}
+         * Method used to get an array from a number (used in pagination)
+         * @param number Number to transform
+         * @returns An array of <number> elements
          */
-        $scope.getNumber = function(num) {
-            return new Array(num);
+        $scope.getNumberArray = function(number) {
+            return new Array(number);
         };
 
         /**
          *
-         * @param page
          * @param startDate
          * @param endDate
          * @param types
-         * @param bounds
          * @returns {*}
          */
         $scope.createSearchJson = function(startDate, endDate, types) {
@@ -64,11 +68,8 @@ function initializeSearch(shareTypeCategory, shareType, date, neLatitude, neLong
 
             //Types
             if (types) {
-                console.log(types.length);
-
                 //Create types array
                 var realTypes = [];
-
 
                 //Loop on types
                 for (var i = 0; i < types.length; i++) {
@@ -114,53 +115,55 @@ function initializeSearch(shareTypeCategory, shareType, date, neLatitude, neLong
         };
 
         /**
-         *
-         * @param page
+         * Method used to show a specific search page
+         * @param page Wanted page
          */
         $scope.showPage = function(page) {
-            $scope.search($scope.shareTypeCategory, $scope.shareType, page, $scope.date, $scope.bounds);
+            //Simply call the search method
+            $scope.search($scope.shareTypeCategory, $scope.shareType, page, $scope.period, $scope.bounds);
         };
 
         /**
-         *
-         * @param shareTypeCategory
-         * @param shareType
-         * @param page
-         * @param date
-         * @param bounds
+         * Method used to search for shares
+         * @param shareTypeCategory Wanted share type category
+         * @param shareType Wanted share type
+         * @param page Wanted page
+         * @param date Wanted period
+         * @param bounds Wanted lat/long bounds
          */
-        $scope.search = function(shareTypeCategory, shareType, page, date, bounds) {
+        $scope.search = function(shareTypeCategory, shareType, page, period, bounds) {
             //Store values
             $scope.shareTypeCategory = shareTypeCategory;
             $scope.shareType = shareType;
             $scope.page = page;
-            $scope.date = date;
+            $scope.period = period;
             $scope.bounds = bounds;
 
+            //Handle types
             var types = getTypesWithShareType($scope.shareType, $scope.shareTypeCategory, $scope.shareTypeCategories);
-            console.log(types);
 
+            //Handle period
             var startDate = moment().unix();
             var endDate = null;
 
-            if (date == 'day') {
+            if ($scope.period == 'day') {
                 endDate = moment().endOf('day').unix();
-            } else if (date == 'week') {
+            } else if ($scope.period == 'week') {
                 endDate = moment().endOf('week').unix();
-            } else if (date == 'month') {
+            } else if ($scope.period == 'month') {
                 endDate = moment().endOf('month').unix();
             }
 
             //Create JSON data
             var jsonData = $scope.createSearchJson(startDate, endDate, types);
 
-            //
+            //Search for shares
             $http.post(webroot + 'api/share/search', jsonData)
             .success(function(data, status, headers, config) {
                 console.log(data);
 
-                //Results
-                $scope.handleResponse(data);
+                //Handle the JSON response
+                $scope.handleSearchResponse(data);
             })
             .error(function(data, status, headers, config) {
                 console.log(data);
@@ -168,10 +171,10 @@ function initializeSearch(shareTypeCategory, shareType, date, neLatitude, neLong
         };
 
         /**
-         * Method used to handle the Ajax response
-         * @param response
+         * Method used to handle the search Ajax response
+         * @param response The JSON response
          */
-        $scope.handleResponse = function(response) {
+        $scope.handleSearchResponse = function(response) {
             //Handle pagination
             $scope.page = parseInt(response.page);
             $scope.total_pages = parseInt(response.total_pages);
@@ -214,7 +217,6 @@ function initializeSearch(shareTypeCategory, shareType, date, neLatitude, neLong
                 share.moment_day = momentDay;
 
                 //Event time
-                console.log(share.event_time);
                 if (share.event_time != null) {
                     var eventTime = new Date(share.event_date + ' ' + share.event_time);
                     var isoEventTime = eventTime.toISOString();
@@ -249,79 +251,106 @@ function initializeSearch(shareTypeCategory, shareType, date, neLatitude, neLong
             }
         };
 
-        $scope.onDateChanged = function() {
-            $scope.search($scope.shareTypeCategory, $scope.shareType, 1, $scope.date, $scope.bounds);
+        /**
+         * Method called when the current selected period changed.
+         */
+        $scope.onPeriodChanged = function() {
+            $scope.search($scope.shareTypeCategory, $scope.shareType, 1, $scope.period, $scope.bounds);
         };
 
-        //
+        /**
+         * Method called when the current selected share type category changed.
+         */
         $scope.onShareTypeCategoryChanged = function() {
-            console.log('onShareTypeCategoryChanged');
+            //Reset current share type category
             $scope.shareType = '-1';
-            //
-            $scope.search($scope.shareTypeCategory, $scope.shareType, 1, $scope.date, $scope.bounds);
+
+            //Re-search
+            $scope.search($scope.shareTypeCategory, $scope.shareType, 1, $scope.period, $scope.bounds);
         };
 
-        //
+        /**
+         * Method called when the current selected share type changed.
+         */
         $scope.onShareTypeChanged = function() {
-            console.log('onShareTypeChanged');
-            $scope.search($scope.shareTypeCategory, $scope.shareType, 1, $scope.date, $scope.bounds);
+            //Re-search
+            $scope.search($scope.shareTypeCategory, $scope.shareType, 1, $scope.period, $scope.bounds);
         };
 
-        //
+        /**
+         * Method used to format a passed share type cateogory
+         * @param shareTypeCategory Share type category to format
+         * @returns The corresponding formatted share type category
+         */
         $scope.formatShareTypeCategory = function(shareTypeCategory) {
             return getShareTypeCategoryLabel(shareTypeCategory);
         };
 
-        //
+        /**
+         * Method used to format a passed share type
+         * @param shareTypeCategory Corresponding share type category
+         * @param shareType Share type to format
+         * @returns The corresponding formatted share type
+         */
         $scope.formatShareType = function(shareTypeCategory, shareType) {
             return getShareTypeLabel(shareTypeCategory, shareType);
         };
 
+        /**
+         * Method called to show a specific share details page
+         * @param shareId Corresponding share identifier
+         */
+        $scope.showShareDetails = function(shareId) {
+            //Simply change window location
+            window.location.href = webroot + "share/details/" + shareId;
+        };
+
+        /**
+         * Method used to make a marker bounce
+         * @param shareId Corresponding share identifier
+         */
         $scope.bounceMarker = function(shareId) {
-            console.log('bounce');
             var marker = $scope.markers[shareId];
             marker.setZIndex(1000);
             marker.setAnimation(google.maps.Animation.BOUNCE);
         };
 
+        /**
+         * Method used to stop the marker animation
+         * @param shareId Corresponding share identifier
+         */
         $scope.cancelBounceMarker = function(shareId) {
-            console.log('cancel bounce');
             var marker = $scope.markers[shareId];
             marker.setZIndex(null);
             marker.setAnimation(null);
         };
 
-        //Google maps
+        /**
+         * Method called to add a marker on the map
+         * @param share Corresponding share
+         */
         $scope.addMarker = function(share) {
-            var myLatlng = new google.maps.LatLng(share.latitude, share.longitude);
+            //Get marker icon
             var icon = getShareMarkerImage(share['share_type_category']['label'], share['share_type']['label']);
 
+            //Create the marker
             var marker = new google.maps.Marker({
-                position: myLatlng,
+                position: new google.maps.LatLng(share.latitude, share.longitude),
                 map: $scope.map,
                 share: share,
                 title: share.title,
-                /*labelContent: '<div class="img-circle text-center" style="border: 4px solid white; background-color: ' + iconColor + '; display: table; min-width: 40px; width: 40px; min-height: 40px; height: 40px;"><i class="' + iconClass + '" style="display: table-cell; vertical-align: middle; color: #ffffff; font-size: 18px;"></i></div>',*/
-                /*labelContent: '<i class="' + iconClass + '" style="display: table-cell; vertical-align: middle; color: #ffffff; font-size: 18px;"></i>',*/
-                /*labelAnchor: new google.maps.Point(16, 16),*/
                 icon: '../img/' + icon
-                /*icon: ' '*/
-                /*icon: {
-                 path: fontawesome.markers.FOLDER,
-                 scale: 0.5,
-                 strokeWeight: 0.0,
-                 strokeColor: '#ffffff',
-                 strokeOpacity: 1,
-                 fillColor: '#2ecc71',
-                 fillOpacity: 1.0,
-                 },*/
             });
-            //marker.setAnimation(google.maps.Animation.BOUNCE);
+
+            //Add marker to array
             $scope.markers[share.share_id] = marker;
 
+            //Add a click listener on the marker
             google.maps.event.addListener(marker, 'click', function() {
+                //Get the corresponding share
                 var share = marker.share;
 
+                //Create the window html content
                 var contentHtml =
                     '<div class="row" style="margin: 0px;">' +
                     '   <div class="col-md-2 text-center" style="padding-right: 0px;">' +
@@ -339,13 +368,19 @@ function initializeSearch(shareTypeCategory, shareType, date, neLatitude, neLong
 
                     ;
 
+                //Create the window
                 var infowindow = new google.maps.InfoWindow({
                     content: contentHtml
                 });
+
+                //And open it
                 infowindow.open($scope.map, marker);
             });
         };
 
+        /**
+         * Method called to clear all the map markers
+         */
         $scope.clearMarkers = function() {
             for (var shareId in $scope.markers) {
                 var marker = $scope.markers[shareId];
@@ -354,7 +389,17 @@ function initializeSearch(shareTypeCategory, shareType, date, neLatitude, neLong
             $scope.markers = {};
         };
 
-        $scope.createGoogleMap = function(neLatitude, neLongitude, swLatitude, swLongitude) {
+        /**
+         * Method used to create the search google map
+         * @param autocompleteInputId GoogleMap address autocomplete identifier
+         * @param googleMapDivId GoogleMap div identifier
+         * @param searchDivId Share search div identifier
+         * @param neLatitude Start north east latitude
+         * @param neLongitude Start north east longitude
+         * @param swLatitude Start south west latitude
+         * @param swLongitude Start south west longitude
+         */
+        $scope.createGoogleMap = function(autocompleteInputId, googleMapDivId, searchDivId, neLatitude, neLongitude, swLatitude, swLongitude) {
             //Create map
             var mapOptions = {
                 panControl: false,
@@ -362,14 +407,13 @@ function initializeSearch(shareTypeCategory, shareType, date, neLatitude, neLong
                 scaleControl: true,
                 streetViewControl: false
             };
-            $scope.map = new google.maps.Map(document.getElementById('div-share-search-google-map'), mapOptions);
+            $scope.map = new google.maps.Map(document.getElementById(googleMapDivId), mapOptions);
 
             //Add search box
-            var input = document.getElementById('input-search-address');
-            //map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+            var autocompleteInput = document.getElementById(autocompleteInputId);
 
             //Configure autocomplete control
-            var autocomplete = new google.maps.places.Autocomplete(input);
+            var autocomplete = new google.maps.places.Autocomplete(autocompleteInput);
             google.maps.event.addListener(autocomplete, 'place_changed', function() {
                 var place = autocomplete.getPlace();
 
@@ -387,23 +431,25 @@ function initializeSearch(shareTypeCategory, shareType, date, neLatitude, neLong
             var sw = new google.maps.LatLng(swLatitude, swLongitude);
             var ne = new google.maps.LatLng(neLatitude, neLongitude);
             var mapBounds = new google.maps.LatLngBounds(sw, ne);
-            console.log(mapBounds);
             $scope.map.fitBounds(mapBounds);
 
             //Add idle listener
             google.maps.event.addListener($scope.map, 'idle', function() {
                 //Get search controller scope
-                var searchResultsDiv = $('#div-search-results');
-                var searchScope = angular.element(searchResultsDiv).scope();
+                var searchDiv = $('#' + searchDivId);
+                var searchScope = angular.element(searchDiv).scope();
 
                 //
                 searchScope.$apply(function() {
                     //Restart search from page 1
-                    searchScope.search(searchScope.shareTypeCategory, searchScope.shareType, 1, searchScope.date, $scope.map.getBounds());
+                    searchScope.search(searchScope.shareTypeCategory, searchScope.shareType, 1, searchScope.period, $scope.map.getBounds());
                 });
             });
         };
-        
+
+        /**
+         * Method used to get all the share type categories
+         */
         $scope.getShareTypeCategories = function() {
             //
             $http.get(webroot + 'api/share_type_categories/get')
@@ -417,17 +463,24 @@ function initializeSearch(shareTypeCategory, shareType, date, neLatitude, neLong
         };
 
         /**
-         *
+         * Method used to initialize the SearchController
+         * @param autocompleteInputId GoogleMap address autocomplete identifier
+         * @param googleMapDivId GoogleMap div identifier
+         * @param searchDivId Share search div identifier
+         * @param neLatitude Start north east latitude
+         * @param neLongitude Start north east longitude
+         * @param swLatitude Start south west latitude
+         * @param swLongitude Start south west longitude
          */
-        $scope.initialize = function() {
-            //
-            google.maps.event.addDomListener(window, 'load', $scope.createGoogleMap(neLatitude, neLongitude, swLatitude, swLongitude));
+        $scope.initialize = function(autocompleteInputId, googleMapDivId, searchDivId, neLatitude, neLongitude, swLatitude, swLongitude) {
+            //Create the GoogleMap
+            google.maps.event.addDomListener(window, 'load', $scope.createGoogleMap(autocompleteInputId, googleMapDivId, searchDivId, neLatitude, neLongitude, swLatitude, swLongitude));
             
-            //
+            //And get all the share type categories
             $scope.getShareTypeCategories();
         };
 
-        //
-        $scope.initialize(neLatitude, neLongitude, swLatitude, swLongitude);
+        //Initialize the controller
+        $scope.initialize(autocompleteInputId, googleMapDivId, searchDivId, neLatitude, neLongitude, swLatitude, swLongitude);
     }]);
 }

@@ -1,10 +1,8 @@
-<div id="div-action-bar">
+<div id="search-bar-div">
     <div class="row">
         <div class="col-md-3">
 
-            <select id="select-action-bar-date" class="form-control select-action-bar select-action-bar-date"
-                    ng-change="onDateChanged();"
-                    ng-model="date">
+            <select class="form-control search-bar-select search-bar-select-period" ng-model="period" ng-change="onPeriodChanged();">
 
                 <option value="all">
                     Période
@@ -32,21 +30,14 @@
 
         <div class="col-md-3">
 
-            <select id="select-action-bar-share-type-category" class="form-control select-action-bar"
-                    ng-change="onShareTypeCategoryChanged();"
-                    ng-model="shareTypeCategory"
-                    ng-options="shareTypeCategoryId as formatShareTypeCategory(category.label) for (shareTypeCategoryId, category) in shareTypeCategories">
+            <select class="form-control search-bar-select" ng-model="shareTypeCategory" ng-change="onShareTypeCategoryChanged();" ng-options="shareTypeCategoryId as formatShareTypeCategory(category.label) for (shareTypeCategoryId, category) in shareTypeCategories">
             </select>
 
         </div>
 
         <div class="col-md-3">
 
-            <select id="select-action-bar-share-type" class="form-control select-action-bar"
-                    ng-change="onShareTypeChanged();"
-                    ng-model="shareType"
-                    ng-disabled="(shareTypeCategory == -1)"
-                    ng-options="shareTypeId as formatShareType(shareTypeCategories[shareTypeCategory].label, type.label) for (shareTypeId, type) in shareTypeCategories[shareTypeCategory].share_types">
+            <select class="form-control search-bar-select" ng-model="shareType" ng-change="onShareTypeChanged();" ng-disabled="(shareTypeCategory == -1)" ng-options="shareTypeId as formatShareType(shareTypeCategories[shareTypeCategory].label, type.label) for (shareTypeId, type) in shareTypeCategories[shareTypeCategory].share_types">
             </select>
 
         </div>
