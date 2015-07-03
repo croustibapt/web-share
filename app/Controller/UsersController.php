@@ -11,7 +11,15 @@ class UsersController extends ApiUsersController {
     }
 
 	public function add($userExternalId = NULL, $authToken = NULL, $username = NULL, $mail = NULL) {
-        if ($this->request->is('POST')) {
+        $user = $this->User->find('first', array(
+            'conditions' => array(
+                'User.external_id' => $userExternalId
+        )));
+
+        //If no user was found and it's a POST request
+        if (($user == NULL) && $this->request->is('POST')) {
+            //pr($this->request->data);
+
             try {
                 //Try to save the user
                 $response = $this->internAdd($userExternalId, $this->request->data['User']['username'], $mail);
@@ -25,8 +33,11 @@ class UsersController extends ApiUsersController {
                     $this->redirect('/');
                 }
             } catch (ShareException $e) {
-                $this->sendErrorResponse($e->getStatusCode(), $e->getCode(), $e->getMessage(), $e->getValidationErrors());
+                $this->User->validationErrors = $e->getValidationErrors();
             }
+        } else {
+            //Redirect to home
+            $this->redirect('/');
         }
 
         $this->set('userExternalId', $userExternalId);

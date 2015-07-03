@@ -95,7 +95,7 @@ use Facebook\FacebookSession;
  * @link		http://book.cakephp.org/2.0/en/controllers.html#the-app-controller
  */
 class AppController extends Controller {
-    public $components = array('Session', 'DebugKit.Toolbar');
+    public $components = array('Session'/*, 'DebugKit.Toolbar'*/);
     
 	public $uses = array('User', 'Share', 'Comment', 'Request');
     

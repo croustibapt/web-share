@@ -18,10 +18,12 @@
 
                 <!-- Title -->
                 <?php
-                    echo $this->element('share-add-input', array(
+                    echo $this->element('add-input', array(
+                        'modelName' => 'Share',
                         'name' => 'title',
                         'placeholder' => 'Titre',
-                        'icon' => 'fa-file-text'
+                        'icon' => 'fa-file-text',
+                        'required' => true
                     ));
                 ?>
 
@@ -30,11 +32,13 @@
 
                         <!-- Type -->
                         <?php
-                            echo $this->element('share-add-select', array(
+                            echo $this->element('add-select', array(
+                                'modelName' => 'Share',
                                 'name' => 'share_type_id',
                                 'ngModel' => 'shareType',
                                 'ngOptions' => 'shareTypeId as formatShareType(shareType.share_type_category_label, shareType.label) group by formatShareTypeCategory(shareType.share_type_category_label) for (shareTypeId, shareType) in shareTypes',
-                                'icon' => 'fa-tag'
+                                'icon' => 'fa-tag',
+                                'required' => true
                             ));
                         ?>
 
@@ -42,11 +46,13 @@
                     <div class="col-md-6">
                         <!-- Date -->
                         <?php
-                            echo $this->element('share-add-input', array(
+                            echo $this->element('add-input', array(
+                                'modelName' => 'Share',
                                 'name' => 'event_date',
                                 'placeholder' => 'Date',
                                 'class' => 'datepicker',
-                                'icon' => 'fa-calendar-o'
+                                'icon' => 'fa-calendar-o',
+                                'required' => true
                             ));
                         ?>
                     </div>
@@ -57,20 +63,24 @@
                     <div class="col-md-6">
                         <!-- Price -->
                         <?php
-                            echo $this->element('share-add-input', array(
+                            echo $this->element('add-input', array(
+                                'modelName' => 'Share',
                                 'name' => 'price',
                                 'placeholder' => 'Prix (en euros)',
-                                'icon' => 'fa-dollar'
+                                'icon' => 'fa-dollar',
+                                'required' => true
                             ));
                         ?>
                     </div>
                     <div class="col-md-6">
                         <!-- Places -->
                         <?php
-                            echo $this->element('share-add-input', array(
+                            echo $this->element('add-input', array(
+                                'modelName' => 'Share',
                                 'name' => 'places',
                                 'placeholder' => 'Nombre de places',
-                                'icon' => 'fa-ellipsis-h'
+                                'icon' => 'fa-ellipsis-h',
+                                'required' => true
                             ));
                         ?>
                     </div>
@@ -80,7 +90,8 @@
             <div id="shares-add-section-more-div" class="col-md-6 shares-add-section-div">
                 <!-- Message -->
                 <?php
-                    echo $this->element('share-add-input', array(
+                    echo $this->element('add-input', array(
+                        'modelName' => 'Share',
                         'name' => 'message',
                         'placeholder' => 'Message',
                         'icon' => 'fa-pencil-square-o'
@@ -93,7 +104,8 @@
 
                         <!-- Event time -->
                         <?php
-                            echo $this->element('share-add-select', array(
+                            echo $this->element('add-select', array(
+                                'modelName' => 'Share',
                                 'name' => 'event_time',
                                 'ngModel' => 'eventTime',
                                 'ngOptions' => 'eventTime as eventTimeDisplay for (eventTime, eventTimeDisplay) in eventTimes',
@@ -105,7 +117,8 @@
                     <div class="col-md-6">
                         <!-- Limitations -->
                         <?php
-                            echo $this->element('share-add-input', array(
+                            echo $this->element('add-input', array(
+                                'modelName' => 'Share',
                                 'name' => 'limitations',
                                 'placeholder' => 'Limitations',
                                 'icon' => 'fa-asterisk'
@@ -120,7 +133,8 @@
                     <div class="col-md-6">
                         <!-- Meeting place -->
                         <?php
-                        echo $this->element('share-add-input', array(
+                        echo $this->element('add-input', array(
+                            'modelName' => 'Share',
                             'name' => 'meet_place',
                             'placeholder' => 'Meeting place',
                             'icon' => 'fa-location-arrow'
@@ -131,7 +145,8 @@
                     <div class="col-md-6">
                         <!-- Waiting time -->
                         <?php
-                        echo $this->element('share-add-input', array(
+                        echo $this->element('add-input', array(
+                            'modelName' => 'Share',
                             'name' => 'waiting_time',
                             'placeholder' => 'Waiting time (in minutes)',
                             'icon' => 'fa-clock-o'

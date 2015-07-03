@@ -6,84 +6,92 @@
 
 <nav class="navbar navbar-default navbar-fixed-top">
 
+    <div class="container-fluid">
+
 <?php endif; ?>
 
-    <!-- Brand and toggle get grouped for better mobile display -->
-    <div class="navbar-header">
-        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-        </button>
-        <?php
-            echo $this->Html->link('Share', '/', array(
-                'class' => 'navbar-brand'
-            ));
-        ?>
-    </div>
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <?php
+                echo $this->Html->link('Share', '/', array(
+                    'class' => 'navbar-brand'
+                ));
+            ?>
+        </div>
 
-    <!-- Collect the nav links, forms, and other content for toggling -->
-    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-        
-        <?php if (($this->action == 'search') && ($this->name == 'Shares')) : ?>
-        
-        <form class="navbar-form navbar-left" role="search">
-            <div class="input-group">
-            <span class="input-group-addon input-group-addon-navbar shares-search-input-group-addon-navbar">
-                <i class="fa fa-search"></i>
-            </span>
-            <input id="shares-search-address-input" type="text" class="form-control input-navbar" placeholder="Où recherchez-vous ?" value="<?php echo isset($address) ? $address : ""; ?>">
-            </div>
-        </form>
-        
-        <?php endif; ?>
-        
-        <ul class="nav navbar-nav navbar-right">
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 
-            <li>
-                <?php
-                    echo $this->Html->link('Proposer un partage', '/share/add', array(
-                        'class' => 'btn btn-outline btn-navbar'
-                    ));
-                ?>
-            </li>
+            <?php if (($this->action == 'search') && ($this->name == 'Shares')) : ?>
 
-            <?php if ($this->LocalUser->isAuthenticated($this)) : ?>
-
-                <li class="li-navbar-right dropdown">
-
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
-                       aria-expanded="false">
-                        <img class="nav-bar-user-img img-circle" src="https://graph.facebook.com/v2.3/<?php echo $this->LocalUser->getExternalId($this); ?>/picture" /> Hi <?php echo $this->LocalUser->getUsername($this); ?> <span class="caret"></span>
-                    </a>
-                    <ul class="dropdown-menu" role="menu">
-                        <li>
-                            <?php
-                                echo $this->Html->link('My account', '/user/home');
-                            ?>
-                        </li>
-                        <li class="divider"></li>
-                        <li>
-                            <a id="a-nav-bar-logout" href="#">Logout</a>
-                        </li>
-                    </ul>
-                </li>
-
-            <?php else : ?>
-
-                <li class="li-navbar-right">
-
-                    <a class="btn btn-outline btn-navbar authenticate-button" href="#">Authenticate</a>
-
-                </li>
+            <form class="navbar-form navbar-left" role="search">
+                <div class="input-group">
+                <span class="input-group-addon input-group-addon-navbar shares-search-input-group-addon-navbar">
+                    <i class="fa fa-search"></i>
+                </span>
+                <input id="shares-search-address-input" type="text" class="form-control input-navbar" placeholder="Où recherchez-vous ?" value="<?php echo isset($address) ? $address : ""; ?>">
+                </div>
+            </form>
 
             <?php endif; ?>
 
-        </ul>
+            <ul class="nav navbar-nav navbar-right">
 
+                <li>
+                    <?php
+                        echo $this->Html->link('Proposer un partage', '/share/add', array(
+                            'class' => 'btn btn-outline btn-navbar'
+                        ));
+                    ?>
+                </li>
 
-    </div><!-- /.navbar-collapse -->
+                <?php if ($this->LocalUser->isAuthenticated($this)) : ?>
+
+                    <li class="li-navbar-right dropdown">
+
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
+                           aria-expanded="false">
+                            <img class="nav-bar-user-img img-circle" src="https://graph.facebook.com/v2.3/<?php echo $this->LocalUser->getExternalId($this); ?>/picture" /> Hi <?php echo $this->LocalUser->getUsername($this); ?> <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu" role="menu">
+                            <li>
+                                <?php
+                                    echo $this->Html->link('My account', '/user/home');
+                                ?>
+                            </li>
+                            <li class="divider"></li>
+                            <li>
+                                <a id="a-nav-bar-logout" href="#">Logout</a>
+                            </li>
+                        </ul>
+                    </li>
+
+                <?php else : ?>
+
+                    <li class="li-navbar-right">
+
+                        <a class="btn btn-outline btn-outline-last btn-navbar authenticate-button" href="#">Authenticate</a>
+
+                    </li>
+
+                <?php endif; ?>
+
+            </ul>
+
+        </div><!-- /.navbar-collapse -->
+
+<?php if (!(($this->action == 'home') && ($this->name == 'Shares'))) : ?>
+
+    </div>
+
+<?php endif; ?>
+
 </nav>
 
 <script>

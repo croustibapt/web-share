@@ -244,10 +244,13 @@ function initializeDetails(shareId, shareUserExternalId, textAreaId, divGoogleMa
                     button.button('reset');
                 })
                 .error(function(data, status, headers, config) {
-                    console.log(data);
+                    //Reset button state
                     button.button('reset');
                 });
             } else {
+                //Reset button state
+                button.button('reset');
+
                 //Empty message
                 toastr.warning('Veuillez saisir un message d\'au moins <?php echo SHARE_COMMENT_MESSAGE_MIN_LENGTH; ?> caractères.', 'Attention');
             }

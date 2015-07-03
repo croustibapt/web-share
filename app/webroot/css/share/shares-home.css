@@ -13,6 +13,12 @@ body {
     z-index: 1000;
 }
 
+.navbar-home .navbar-nav>.open>a,
+.navbar-home .navbar-nav>.open>a:hover,
+.navbar-home .navbar-nav>.open>a:focus {
+    background: rgba(0, 0, 0, 0.25);
+}
+
 .navbar-home .btn-navbar:hover {
     background-color: white!important;
     color: #000000!important;

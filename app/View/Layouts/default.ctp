@@ -6,59 +6,55 @@
             Share
         </title>
         
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
-        <!--<script src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>-->
         <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?libraries=places"></script>
-
         <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
-        <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
 
         <?php
             echo $this->Html->meta('icon');
 
-            echo $this->Html->css('bootstrap.min');
-            echo $this->Html->css('bootstrap-modified');
-            echo $this->Html->css('bootstrap-select.min');
-            echo $this->Html->css('ionicons.min');
-            echo $this->Html->css('jquery.datetimepicker');
-            echo $this->Html->css('jquery-gmaps-latlon-picker');
-            echo $this->Html->css('clamp');
-            echo $this->Html->css('jquery.timepicker');
-        ?>
+            //JQuery
+            echo $this->Html->css('jquery/jquery-ui.min');
+            echo $this->Html->css('jquery/jquery.datetimepicker');
 
-        <?php
+            //Bootstrap
+            echo $this->Html->css('bootstrap/bootstrap.min');
+            echo $this->Html->css('bootstrap/bootstrap-modified');
+
+            //Icons
+            echo $this->Html->css('icons/ionicons.min');
+
+            //Utils
+            echo $this->Html->css('utils/clamp');
+            echo $this->Html->css('utils/toastr.min');
+
+            //Page specific
             echo $this->Html->css('share/common');
             echo $this->Html->css('share/'.strtolower($this->name).'-'.$this->action);
         ?>
 
         <?php
-            echo $this->Html->script('jquery-2.1.3.min');
-        ?>
-        <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
-        <?php
-            echo $this->Html->script('bootstrap.min');
-            echo $this->Html->script('bootstrap-select.min');
-            echo $this->Html->script('jquery-gmaps-latlon-picker');
-            echo $this->Html->script('markerwithlabel');
-            echo $this->Html->script('angular.min');
-            echo $this->Html->script('jquery.timepicker.min');
+            //JQuery
+            echo $this->Html->script('jquery/jquery-2.1.3.min');
+            echo $this->Html->script('jquery/jquery-ui.min');
 
-        ?>
+            //Boostrap
+            echo $this->Html->script('bootstrap/bootstrap.min');
 
-        <?php
+            //Angular
+            echo $this->Html->script('angular/angular.min');
+
+            //Page specific
             echo $this->Html->script('share/common');
             echo $this->Html->script('share/'.strtolower($this->name).'-'.$this->action);
-        ?>
 
-        <?php
             //Moment
             echo $this->Html->script('moment/moment');
             echo $this->Html->script('moment/moment-timezone-with-data');
             echo $this->Html->script('moment/locale/fr');
 
-            //Numeral
-            echo $this->Html->script('numeral/numeral.min');
+            //Utils
+            echo $this->Html->script('utils/numeral.min');
+            echo $this->Html->script('utils/toastr.min');
 
             echo $this->fetch('meta');
             echo $this->fetch('css');

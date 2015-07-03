@@ -1,4 +1,13 @@
-/* USER */
+/* USER/HOME */
+
+.div-user-home-tabs {
+    /*padding: 15px;*/
+    margin-bottom: 20px;
+}
+
+.div-user-home-panes {
+    margin-top: 15px;
+}
 
 .user-card-picture-div {
     padding-top: 15px;

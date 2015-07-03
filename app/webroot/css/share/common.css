@@ -3,31 +3,65 @@ body {
     background-color: #ffffff;
 }
 
-/* Common */
-
 /* Navigation bar */
 
 .nav-bar-user-img {
     height: 18px;
     width: 18px;
-    /*border: 2px solid #ffffff;*/
+}
+
+/* Add inputs */
+
+.add-input-group {
+    margin-bottom: 15px;
+}
+
+.add-select-div {
+    border: 1px solid #3498db;
+    height: 46px;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+
+#shares-add-section-description-div .input-group.has-error .input-group-addon,
+#shares-add-section-description-div .input-group.has-error input,
+#shares-add-section-description-div .input-group.has-error .add-select-div {
+    border-color: #e74c3c;
+}
+
+.input-group-addon-required,
+.input-required,
+.add-select-div-required {
+    border-color: #3498db;
+}
+
+.input-group-addon-required {
+    background-color: #3498db;
+    color: #ffffff;
+    min-width: 40px;
+}
+
+.input-group.has-error .input-group-addon {
+    background-color: #e74c3c;
+    color: #ffffff;
+}
+
+.input-group-addon-optional,
+.input-optional,
+.add-select-div-optional {
+    border-color: #8c9899;
+}
+
+.input-group-addon-optional {
+    background-color: #8c9899;
+    color: #ffffff;
+    min-width: 40px;
 }
 
 /* Pagination */
 
 .pagination-ul {
     margin-top: 0px;
-}
-
-/* USER/HOME */
-
-.div-user-home-tabs {
-    /*padding: 15px;*/
-    margin-bottom: 20px;
-}
-
-.div-user-home-panes {
-    margin-top: 15px;
 }
 
 /* Footer */

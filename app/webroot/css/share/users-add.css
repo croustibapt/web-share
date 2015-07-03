@@ -1,0 +1,16 @@
+/* Title */
+
+.users-add-title-h3 {
+    margin-bottom: 20px;
+}
+
+.users-add-picture-div {
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+
+.users-add-form-div {
+    width: 50%;
+    margin: auto;
+    margin-bottom: 30px;
+}

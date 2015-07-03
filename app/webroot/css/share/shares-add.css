@@ -14,44 +14,6 @@
     background-color: #ffffff;
 }
 
-.shares-add-section-div .input-group {
-    margin-bottom: 15px;
-}
-
-#shares-add-section-description-div .input-group.has-error .input-group-addon,
-#shares-add-section-description-div .input-group.has-error input,
-#shares-add-section-description-div .input-group.has-error .div-select-add {
-    border-color: #e74c3c;
-}
-
-#shares-add-section-description-div .input-group-addon,
-#shares-add-section-description-div .input-group input,
-#shares-add-section-description-div .div-select-add {
-    border-color: #3498db;
-}
-
-#shares-add-section-description-div .input-group-addon {
-    background-color: #3498db;
-    color: #ffffff;
-    min-width: 40px;
-}
-
-#shares-add-section-description-div .input-group.has-error .input-group-addon {
-    background-color: #e74c3c;
-}
-
-#shares-add-section-more-div .input-group-addon,
-#shares-add-section-more-div .input-group input,
-#shares-add-section-more-div .div-select-add {
-    border-color: #8c9899;
-}
-
-#shares-add-section-more-div .input-group-addon {
-    background-color: #8c9899;
-    color: #ffffff;
-    min-width: 40px;
-}
-
 /* GoogleMap */
 
 #shares-add-google-map-div {
@@ -70,11 +32,4 @@
 .shares-add-submit-div {
     margin-top: 30px;
     margin-bottom: 30px;
-}
-
-.div-select-add {
-    border: 1px solid #3498db;
-    height: 46px;
-    border-top-right-radius: 5px;
-    border-bottom-right-radius: 5px;
 }

@@ -16,6 +16,18 @@ class User extends AppModel {
                 'rule' => 'isUnique',
                 'message' => 'FieldNotUnique'
             )
+        ),
+        'external_id' => array(
+            'required' => array(
+                'rule' => 'notEmpty',
+                'required' => 'create',
+                'allowEmpty' => false,
+                'message' => 'FieldRequired'
+            ),
+            'unique' => array(
+                'rule' => 'isUnique',
+                'message' => 'FieldNotUnique'
+            )
         )
     );
 

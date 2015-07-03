@@ -7,13 +7,13 @@ class ShareHelper extends AppHelper {
         $label = 'Unknown';
 
         if ($status == SHARE_REQUEST_STATUS_PENDING) {
-            $label = 'Demande en attente';
+            $label = 'En attente';
         } else if ($status == SHARE_REQUEST_STATUS_ACCEPTED) {
-            $label = 'Demande acceptée';
+            $label = 'Acceptée';
         } else if ($status == SHARE_REQUEST_STATUS_DECLINED) {
-            $label = 'Demande refusée';
+            $label = 'Refusée';
         } else if ($status == SHARE_REQUEST_STATUS_CANCELLED) {
-            $label = 'Demande annulée';
+            $label = 'Annulée';
         }
 
         return $label;
