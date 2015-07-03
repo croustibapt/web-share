@@ -1,6 +1,6 @@
 <script src="http://js.nicedit.com/nicEdit-latest.js"></script>
 
-<div ng-controller="DetailsController" id="shares-details-div">
+<div id="shares-details-div">
 
     <div class="container">
 

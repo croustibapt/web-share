@@ -2,15 +2,12 @@
  * Method used to initialize the SearchController
  * @param autocompleteInputId GoogleMap address autocomplete identifier
  * @param googleMapDivId GoogleMap div identifier
- * @param neLatitude Start north east latitude
- * @param neLongitude Start north east longitude
- * @param swLatitude Start south west latitude
- * @param swLongitude Start south west longitude
+ * @param placeId GoogleMap place identifier
  * @param shareTypeCategory Start share type category
  * @param shareType Start share type
  * @param period Start period
  */
-function initializeSearch(autocompleteInputId, googleMapDivId, neLatitude, neLongitude, swLatitude, swLongitude, shareTypeCategory, shareType, period) {
+function initializeSearch(autocompleteInputId, googleMapDivId, placeId, shareTypeCategory, shareType, period) {
     /**
      * SearchController
      */
@@ -22,6 +19,7 @@ function initializeSearch(autocompleteInputId, googleMapDivId, neLatitude, neLon
 
         $scope.period = period;
 
+        $scope.address = '';
         $scope.bounds = null;
 
         $scope.shareTypeCategories = {};
@@ -389,15 +387,26 @@ function initializeSearch(autocompleteInputId, googleMapDivId, neLatitude, neLon
         };
 
         /**
+         * Method used to center the map on a specific place
+         * @param place Place to center on
+         */
+        $scope.centerMapOnPlace = function(place) {
+            //If the place has a geometry, then present it on a map.
+            if (place.geometry.viewport) {
+                $scope.map.fitBounds(place.geometry.viewport);
+            } else {
+                $scope.map.setCenter(place.geometry.location);
+                $scope.map.setZoom(17);  // Why 17? Because it looks good.
+            }
+        };
+
+        /**
          * Method used to create the search google map
          * @param autocompleteInputId GoogleMap address autocomplete identifier
          * @param googleMapDivId GoogleMap div identifier
-         * @param neLatitude Start north east latitude
-         * @param neLongitude Start north east longitude
-         * @param swLatitude Start south west latitude
-         * @param swLongitude Start south west longitude
+         * @param placeId GoogleMap place identifier
          */
-        $scope.createGoogleMap = function(autocompleteInputId, googleMapDivId, neLatitude, neLongitude, swLatitude, swLongitude) {
+        $scope.createGoogleMap = function(autocompleteInputId, googleMapDivId, placeId) {
             //Create map
             var mapOptions = {
                 panControl: false,
@@ -413,23 +422,14 @@ function initializeSearch(autocompleteInputId, googleMapDivId, neLatitude, neLon
             //Configure autocomplete control
             var autocomplete = new google.maps.places.Autocomplete(autocompleteInput);
             google.maps.event.addListener(autocomplete, 'place_changed', function() {
+                //Get the place
                 var place = autocomplete.getPlace();
 
-                //If the place has a geometry, then present it on a map.
-                if (place.geometry.viewport) {
-                    console.log(place.geometry.viewport);
-                    $scope.map.fitBounds(place.geometry.viewport);
-                } else {
-                    $scope.map.setCenter(place.geometry.location);
-                    $scope.map.setZoom(17);  // Why 17? Because it looks good.
-                }
-            });
+                //Center on it
+                $scope.centerMapOnPlace(place);
 
-            //Center on wanted bounds
-            var sw = new google.maps.LatLng(swLatitude, swLongitude);
-            var ne = new google.maps.LatLng(neLatitude, neLongitude);
-            var mapBounds = new google.maps.LatLngBounds(sw, ne);
-            $scope.map.fitBounds(mapBounds);
+                //window.history.pushState("object or string", "Title", "/new-url");
+            });
 
             //Add idle listener
             google.maps.event.addListener($scope.map, 'idle', function() {
@@ -439,6 +439,29 @@ function initializeSearch(autocompleteInputId, googleMapDivId, neLatitude, neLon
                     $scope.search($scope.shareTypeCategory, $scope.shareType, 1, $scope.period, $scope.map.getBounds());
                 });
             });
+
+            //Center map
+            if (placeId) {
+                var request = {
+                    placeId: placeId
+                };
+                var service = new google.maps.places.PlacesService($scope.map);
+
+                service.getDetails(request, function(place, status) {
+                    //"Force" update
+                    $scope.$apply(function() {
+                        //Save address
+                        $scope.address = place.formatted_address;
+
+                        //And center on it
+                        $scope.centerMapOnPlace(place);
+                    });
+                });
+            } else {
+                //Arbitraty center
+                $scope.map.setCenter(new google.maps.LatLng(43.5958736, 1.4672682));
+                $scope.map.setZoom(13);
+            }
         };
 
         /**
@@ -460,20 +483,17 @@ function initializeSearch(autocompleteInputId, googleMapDivId, neLatitude, neLon
          * Method used to initialize the SearchController
          * @param autocompleteInputId GoogleMap address autocomplete identifier
          * @param googleMapDivId GoogleMap div identifier
-         * @param neLatitude Start north east latitude
-         * @param neLongitude Start north east longitude
-         * @param swLatitude Start south west latitude
-         * @param swLongitude Start south west longitude
+         * @param placeId GoogleMap place identifier
          */
-        $scope.initialize = function(autocompleteInputId, googleMapDivId, neLatitude, neLongitude, swLatitude, swLongitude) {
+        $scope.initialize = function(autocompleteInputId, googleMapDivId, placeId) {
             //Create the GoogleMap
-            google.maps.event.addDomListener(window, 'load', $scope.createGoogleMap(autocompleteInputId, googleMapDivId, neLatitude, neLongitude, swLatitude, swLongitude));
+            google.maps.event.addDomListener(window, 'load', $scope.createGoogleMap(autocompleteInputId, googleMapDivId, placeId));
             
             //And get all the share type categories
             $scope.getShareTypeCategories();
         };
 
         //Initialize the controller
-        $scope.initialize(autocompleteInputId, googleMapDivId, neLatitude, neLongitude, swLatitude, swLongitude);
+        $scope.initialize(autocompleteInputId, googleMapDivId, placeId);
     }]);
 }

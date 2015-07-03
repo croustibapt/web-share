@@ -1,4 +1,4 @@
-<div ng-controller="AddController" id="shares-add-div">
+<div id="shares-add-div">
     <div class="container">
         <?php if ($this->LocalUser->isAuthenticated($this)) : ?>
 

@@ -35,7 +35,7 @@
                 <span class="input-group-addon input-group-addon-navbar shares-search-input-group-addon-navbar">
                     <i class="fa fa-search"></i>
                 </span>
-                <input id="shares-search-address-input" type="text" class="form-control input-navbar" placeholder="Où recherchez-vous ?" value="<?php echo isset($address) ? $address : ""; ?>">
+                <input id="shares-search-address-input" type="text" class="form-control input-navbar" placeholder="Où recherchez-vous ?" ng-value="address">
                 </div>
             </form>
 

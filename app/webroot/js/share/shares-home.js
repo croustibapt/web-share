@@ -14,8 +14,8 @@ function initializeHome(autocompleteInputId) {
         //Current selected share type
         $scope.shareType = "-1";
 
-        //Viewport model
-        $scope.viewPort = '';
+        //Place id
+        $scope.placeId = null;
 
         //GoogleMaps address autocomplete input
         $scope.autocomplete = null;
@@ -43,11 +43,10 @@ function initializeHome(autocompleteInputId) {
 
                 //If the place has a geometry
                 if (place.geometry.viewport) {
-                    //Convert the viewport to JSON format
-                    var jsonViewport = JSON.stringify(place.geometry.viewport);
-
                     //And update the model
-                    $scope.viewport = encodeURI(jsonViewport);
+                    $scope.$apply(function() {
+                        $scope.placeId = place.place_id;
+                    });
                 }
             });
         };

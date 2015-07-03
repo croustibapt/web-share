@@ -67,23 +67,31 @@
             var webroot = "<?php echo $this->webroot; ?>";
         </script>
 
-        <!-- Navigation bar -->
-        <?php echo $this->element('nav-bar'); ?>
-
+        <!-- Controller -->
         <?php
-            $error = $this->Session->flash('nok');
-            if ($error != '') :
+            $ngControllerName = ucfirst($this->action).'Controller';
         ?>
+        <div ng-controller="<?php echo $ngControllerName; ?>" class="controller-div">
 
-        <div class="alert alert-red">
-            <h1>Error</h1>
-            <?php echo $error; ?>
+            <!-- Navigation bar -->
+            <?php echo $this->element('nav-bar'); ?>
+
+            <?php
+                $error = $this->Session->flash('nok');
+                if ($error != '') :
+            ?>
+
+            <div class="alert alert-red">
+                <h1>Error</h1>
+                <?php echo $error; ?>
+            </div>
+
+            <?php endif; ?>
+
+            <!-- CONTENT -->
+            <?php echo $this->fetch('content'); ?>
+
         </div>
-
-        <?php endif; ?>
-
-        <!-- CONTENT -->
-        <?php echo $this->fetch('content'); ?>
 
         <!-- Footer -->
         <?php

@@ -1,4 +1,4 @@
-<div ng-controller="HomeController" id="shares-home-div">
+<div id="shares-home-div">
     <!-- Header -->
     <div id="shares-home-header-div">
 
@@ -34,9 +34,9 @@
                                     'ng-focus' => 'geolocate();'
                                 ));
 
-                                echo $this->Form->hidden('viewport', array(
-                                    'id' => 'hidden-home-viewport',
-                                    'ng-value' => 'viewport'
+                                echo $this->Form->hidden('place_id', array(
+                                    'id' => 'hidden-home-place-id',
+                                    'ng-value' => 'placeId'
                                 ));
                             ?>
                         </div>
@@ -44,57 +44,57 @@
 
                         <div class="col-md-2 shares-home-form-div-select-home shares-home-form-col-select-home">
                             <?php
-                            echo $this->Form->input('period', array(
-                                'class' => 'form-control input-lg shares-home-form-div-home',
-                                'label' => false,
-                                'div' => false,
-                                'options' => array('all' => 'Période', 'day' => 'Aujourd\'hui', 'week' => 'Cette semaine', 'month' => 'Ce mois-ci')
-                            ));
+                                echo $this->Form->input('period', array(
+                                    'class' => 'form-control input-lg shares-home-form-div-home',
+                                    'label' => false,
+                                    'div' => false,
+                                    'options' => array('all' => 'Période', 'day' => 'Aujourd\'hui', 'week' => 'Cette semaine', 'month' => 'Ce mois-ci')
+                                ));
                             ?>
                         </div>
 
                         <div class="col-md-2 shares-home-form-div-select-home shares-home-form-col-select-home">
                             <?php
-                            echo $this->Form->input('share_type_category', array(
-                                'type' => 'select',
-                                'id' => 'select-home-share-type-category',
-                                'class' => 'form-control input-lg shares-home-form-div-home',
-                                'label' => false,
-                                'div' => false,
-                                'ng-change' => 'onShareTypeCategoryChanged();',
-                                'ng-model' => 'shareTypeCategory',
-                                'ng-options' => 'shareTypeCategoryId as formatShareTypeCategory(category.label) for (shareTypeCategoryId, category) in shareTypeCategories'
-                            ));
+                                echo $this->Form->input('share_type_category', array(
+                                    'type' => 'select',
+                                    'id' => 'select-home-share-type-category',
+                                    'class' => 'form-control input-lg shares-home-form-div-home',
+                                    'label' => false,
+                                    'div' => false,
+                                    'ng-change' => 'onShareTypeCategoryChanged();',
+                                    'ng-model' => 'shareTypeCategory',
+                                    'ng-options' => 'shareTypeCategoryId as formatShareTypeCategory(category.label) for (shareTypeCategoryId, category) in shareTypeCategories'
+                                ));
                             ?>
                         </div>
 
                         <div class="col-md-2 shares-home-form-div-select-home shares-home-form-col-select-home">
                             <?php
-                            echo $this->Form->input('share_type', array(
-                                'type' => 'select',
-                                'id' => 'select-home-share-type',
-                                'class' => 'form-control input-lg shares-home-form-div-home',
-                                'label' => false,
-                                'div' => false,
-                                'ng-disabled' => '(shareTypeCategory == -1)',
-                                'ng-model' => 'shareType',
-                                'ng-options' => 'shareTypeId as formatShareType(shareTypeCategories[shareTypeCategory].label, type.label) for (shareTypeId, type) in shareTypeCategories[shareTypeCategory].share_types'
-                            ));
+                                echo $this->Form->input('share_type', array(
+                                    'type' => 'select',
+                                    'id' => 'select-home-share-type',
+                                    'class' => 'form-control input-lg shares-home-form-div-home',
+                                    'label' => false,
+                                    'div' => false,
+                                    'ng-disabled' => '(shareTypeCategory == -1)',
+                                    'ng-model' => 'shareType',
+                                    'ng-options' => 'shareTypeId as formatShareType(shareTypeCategories[shareTypeCategory].label, type.label) for (shareTypeId, type) in shareTypeCategories[shareTypeCategory].share_types'
+                                ));
                             ?>
                         </div>
 
                         <div class="col-md-2 shares-home-form-col-select-home">
                             <?php
-                            echo $this->Form->submit('Rechercher', array(
-                                'class' => 'btn btn-primary btn-lg shares-home-form-submit',
-                                'div' => false,
-                            ));
+                                echo $this->Form->submit('Rechercher', array(
+                                    'class' => 'btn btn-primary btn-lg shares-home-form-submit',
+                                    'div' => false,
+                                ));
                             ?>
                         </div>
 
                     </div>
                     <?php
-                    echo $this->Form->end();
+                        echo $this->Form->end();
                     ?>
                 </div>
             </div>

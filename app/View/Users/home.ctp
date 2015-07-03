@@ -30,11 +30,11 @@
                         <?php foreach ($user['shares'] as $share) : ?>
 
                             <?php
-                            //
-                            echo $this->element('share-request-card', array(
-                                'share' => $share,
-                                'request' => true
-                            ));
+                                //
+                                echo $this->element('share-request-card', array(
+                                    'share' => $share,
+                                    'request' => true
+                                ));
                             ?>
 
                         <?php endforeach; ?>
