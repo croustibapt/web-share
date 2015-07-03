@@ -1,12 +1,8 @@
 /**
- * Created by bleguelvouit on 11/06/15.
- */
-
-/**
  *
  * @param inputId
  */
-function initializeAdd() {
+function initializeAdd(googleMapDivId, autocompleteDivId, autocompleteInputId) {
     //Create HomeController
     app.controller('AddController', ['$scope', '$http', function($scope, $http) {
         $scope.shareTypes = {};
@@ -41,7 +37,7 @@ function initializeAdd() {
             return getShareTypeLabel(shareTypeCategory, shareType);
         };
 
-        $scope.createGoogleMaps = function() {
+        $scope.createGoogleMaps = function(googleMapDivId, autocompleteDivId, autocompleteInputId) {
             //Create map
             var mapOptions = {
                 panControl: false,
@@ -52,16 +48,16 @@ function initializeAdd() {
                 zoom: 8,
                 center: new google.maps.LatLng(-34.397, 150.644)
             }
-            var addMap = new google.maps.Map(document.getElementById('div-share-add-google-map'), mapOptions);
+            var addMap = new google.maps.Map(document.getElementById(googleMapDivId), mapOptions);
 
             //Add search box
-            var divSearch = document.getElementById('div-search-address');
+            var divSearch = document.getElementById(autocompleteDivId);
             addMap.controls[google.maps.ControlPosition.TOP_CENTER].push(divSearch);
 
             var marker = null;
 
             //Configure autocomplete control
-            var inputSearch = document.getElementById('input-search-address');
+            var inputSearch = document.getElementById(autocompleteInputId);
             var autocomplete = new google.maps.places.Autocomplete(inputSearch);
 
             google.maps.event.addListener(autocomplete, 'place_changed', function() {
@@ -79,13 +75,6 @@ function initializeAdd() {
                 marker.setPosition(place.geometry.location);
                 updateLatitudeLongitude();
             });
-
-            //Center on wanted bounds
-            /*var sw = new google.maps.LatLng(swLatitude, swLongitude);
-             var ne = new google.maps.LatLng(neLatitude, neLongitude);
-             var mapBounds = new google.maps.LatLngBounds(sw, ne);
-             console.log(mapBounds);
-             map.fitBounds(mapBounds);*/
 
             function updateLatitudeLongitude() {
                 $('#hidden-share-add-latitude').val(marker.getPosition().lat());
@@ -116,7 +105,7 @@ function initializeAdd() {
         };
 
         //
-        $scope.initialize = function() {
+        $scope.initialize = function(googleMapDivId, autocompleteDivId, autocompleteInputId) {
             //
             $http.get(webroot + 'api/share_type_categories/get')
             .success(function(data, status, headers, config) {
@@ -130,9 +119,9 @@ function initializeAdd() {
             });
 
             //
-            $scope.createGoogleMaps();
+            $scope.createGoogleMaps(googleMapDivId, autocompleteDivId, autocompleteInputId);
         };
 
-        $scope.initialize();
+        $scope.initialize(googleMapDivId, autocompleteDivId, autocompleteInputId);
     }]);
 }
