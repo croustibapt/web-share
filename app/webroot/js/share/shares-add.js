@@ -1,14 +1,20 @@
 /**
- *
- * @param inputId
+ * Method used to initialize the AddController
+ * @param googleMapDivId GoogleMap div identifier
+ * @param autocompleteDivId Autocomplete address input identifier
+ * @param autocompleteInputId Autocomplete address div identifier
+ * @param latitude Start map latitude
+ * @param longitude Start map longitude
  */
-function initializeAdd(googleMapDivId, autocompleteDivId, autocompleteInputId) {
-    //Create HomeController
+function initializeAdd(googleMapDivId, autocompleteDivId, autocompleteInputId, latitude, longitude) {
+    /**
+     * AddController
+     */
     app.controller('AddController', ['$scope', '$http', function($scope, $http) {
         $scope.shareTypes = {};
         $scope.shareTypes[""] = {
                 "label": "Type",
-                "share_type_category_id": "-1",
+                "share_type_category_id": "",
                 "share_type_id": ""
             };
         $scope.shareType = "";
@@ -27,17 +33,47 @@ function initializeAdd(googleMapDivId, autocompleteDivId, autocompleteInputId) {
             $scope.eventTimes['' + hour + ':45:00'] = '' + hour + ':45';
         }
 
-        //
+        //Share position
+        $scope.latitude = latitude;
+        $scope.longitude = longitude;
+
+        /**
+         * Method used to format a passed share type cateogory
+         * @param shareTypeCategory Share type category to format
+         * @returns The corresponding formatted share type category
+         */
         $scope.formatShareTypeCategory = function(shareTypeCategory) {
             return getShareTypeCategoryLabel(shareTypeCategory);
         };
 
-        //
+        /**
+         * Method used to format a passed share type
+         * @param shareTypeCategory Corresponding share type category
+         * @param shareType Share type to format
+         * @returns The corresponding formatted share type
+         */
         $scope.formatShareType = function(shareTypeCategory, shareType) {
             return getShareTypeLabel(shareTypeCategory, shareType);
         };
 
-        $scope.createGoogleMaps = function(googleMapDivId, autocompleteDivId, autocompleteInputId) {
+        /**
+         * Method used to update the share location
+         */
+        $scope.updateLatitudeLongitude = function(marker) {
+            //"Force" update
+            $scope.$apply(function() {
+                $scope.latitude = marker.getPosition().lat();
+                $scope.longitude = marker.getPosition().lng();
+            });
+        }
+
+        /**
+         * Method called to create the GoogleMap
+         * @param googleMapDivId GoogleMap div identifier
+         * @param autocompleteDivId Autocomplete address input identifier
+         * @param autocompleteInputId Autocomplete address div identifier
+         */
+        $scope.createGoogleMap = function(googleMapDivId, autocompleteDivId, autocompleteInputId) {
             //Create map
             var mapOptions = {
                 panControl: false,
@@ -46,7 +82,7 @@ function initializeAdd(googleMapDivId, autocompleteDivId, autocompleteInputId) {
                 streetViewControl: false,
                 scrollwheel: false,
                 zoom: 8,
-                center: new google.maps.LatLng(-34.397, 150.644)
+                center: new google.maps.LatLng($scope.latitude, $scope.longitude)
             }
             var addMap = new google.maps.Map(document.getElementById(googleMapDivId), mapOptions);
 
@@ -60,6 +96,7 @@ function initializeAdd(googleMapDivId, autocompleteDivId, autocompleteInputId) {
             var inputSearch = document.getElementById(autocompleteInputId);
             var autocomplete = new google.maps.places.Autocomplete(inputSearch);
 
+            //Add autocomplete listener
             google.maps.event.addListener(autocomplete, 'place_changed', function() {
                 var place = autocomplete.getPlace();
 
@@ -72,56 +109,58 @@ function initializeAdd(googleMapDivId, autocompleteDivId, autocompleteInputId) {
                     addMap.setZoom(17);  // Why 17? Because it looks good.
                 }
 
+                //Update marker position
                 marker.setPosition(place.geometry.location);
-                updateLatitudeLongitude();
-            });
 
-            function updateLatitudeLongitude() {
-                $('#hidden-share-add-latitude').val(marker.getPosition().lat());
-                $('#hidden-share-add-longitude').val(marker.getPosition().lng());
-            }
+                //Update share position
+                $scope.updateLatitudeLongitude(marker);
+            });
 
             //Add idle listener
             google.maps.event.addListener(addMap, 'idle', function() {
                 if (marker == null) {
+                    //Create the initial marker
                     marker = new google.maps.Marker({
                         position: addMap.getCenter(),
                         map: addMap,
                         title: 'Hello World!',
                         draggable: true
                     });
-                    updateLatitudeLongitude();
 
+                    //Update share position
+                    $scope.updateLatitudeLongitude(marker);
+
+                    //Update share position when the marker is released
                     google.maps.event.addListener(marker, 'dragend', function() {
-                        updateLatitudeLongitude();
+                        //Update share position
+                        $scope.updateLatitudeLongitude(marker);
                     });
                 }
             });
         };
 
-        //
-        $scope.onShareTypeChanged = function() {
-            console.log($scope.shareType);
-        };
-
-        //
+        /**
+         * Method used to initialize the AddController
+         * @param googleMapDivId GoogleMap div identifier
+         * @param autocompleteDivId Autocomplete address input identifier
+         * @param autocompleteInputId Autocomplete address div identifier
+         */
         $scope.initialize = function(googleMapDivId, autocompleteDivId, autocompleteInputId) {
-            //
+            //Get all share types
             $http.get(webroot + 'api/share_type_categories/get')
             .success(function(data, status, headers, config) {
-                //
+                //Handle JSON response
                 getShareTypes($scope, data);
-
-                console.log($scope.shareTypes);
             })
             .error(function(data, status, headers, config) {
                 console.log(data);
             });
 
-            //
-            $scope.createGoogleMaps(googleMapDivId, autocompleteDivId, autocompleteInputId);
+            //Create the GoogleMap
+            $scope.createGoogleMap(googleMapDivId, autocompleteDivId, autocompleteInputId);
         };
 
+        //Initialize the AddController
         $scope.initialize(googleMapDivId, autocompleteDivId, autocompleteInputId);
     }]);
 }

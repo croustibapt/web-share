@@ -32,5 +32,5 @@
 
 <script>
     //Initialize SearchController
-    initializeSearch('shares-search-address-input', 'shares-search-google-map-div', 'shares-search-div', <?php echo $viewPort['northeast']['lat']; ?>, <?php echo $viewPort['northeast']['lng']; ?>,  <?php echo $viewPort['southwest']['lat']; ?>, <?php echo $viewPort['southwest']['lng']; ?>, '<?php echo $shareTypeCategory; ?>', '<?php echo $shareType; ?>', '<?php echo $period; ?>');
+    initializeSearch('shares-search-address-input', 'shares-search-google-map-div', <?php echo $viewPort['northeast']['lat']; ?>, <?php echo $viewPort['northeast']['lng']; ?>,  <?php echo $viewPort['southwest']['lat']; ?>, <?php echo $viewPort['southwest']['lng']; ?>, '<?php echo $shareTypeCategory; ?>', '<?php echo $shareType; ?>', '<?php echo $period; ?>');
 </script>

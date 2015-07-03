@@ -2,7 +2,6 @@
  * Method used to initialize the SearchController
  * @param autocompleteInputId GoogleMap address autocomplete identifier
  * @param googleMapDivId GoogleMap div identifier
- * @param searchDivId Share search div identifier
  * @param neLatitude Start north east latitude
  * @param neLongitude Start north east longitude
  * @param swLatitude Start south west latitude
@@ -11,7 +10,7 @@
  * @param shareType Start share type
  * @param period Start period
  */
-function initializeSearch(autocompleteInputId, googleMapDivId, searchDivId, neLatitude, neLongitude, swLatitude, swLongitude, shareTypeCategory, shareType, period) {
+function initializeSearch(autocompleteInputId, googleMapDivId, neLatitude, neLongitude, swLatitude, swLongitude, shareTypeCategory, shareType, period) {
     /**
      * SearchController
      */
@@ -393,13 +392,12 @@ function initializeSearch(autocompleteInputId, googleMapDivId, searchDivId, neLa
          * Method used to create the search google map
          * @param autocompleteInputId GoogleMap address autocomplete identifier
          * @param googleMapDivId GoogleMap div identifier
-         * @param searchDivId Share search div identifier
          * @param neLatitude Start north east latitude
          * @param neLongitude Start north east longitude
          * @param swLatitude Start south west latitude
          * @param swLongitude Start south west longitude
          */
-        $scope.createGoogleMap = function(autocompleteInputId, googleMapDivId, searchDivId, neLatitude, neLongitude, swLatitude, swLongitude) {
+        $scope.createGoogleMap = function(autocompleteInputId, googleMapDivId, neLatitude, neLongitude, swLatitude, swLongitude) {
             //Create map
             var mapOptions = {
                 panControl: false,
@@ -435,14 +433,10 @@ function initializeSearch(autocompleteInputId, googleMapDivId, searchDivId, neLa
 
             //Add idle listener
             google.maps.event.addListener($scope.map, 'idle', function() {
-                //Get search controller scope
-                var searchDiv = $('#' + searchDivId);
-                var searchScope = angular.element(searchDiv).scope();
-
-                //
-                searchScope.$apply(function() {
+                //"Force" update
+                $scope.$apply(function() {
                     //Restart search from page 1
-                    searchScope.search(searchScope.shareTypeCategory, searchScope.shareType, 1, searchScope.period, $scope.map.getBounds());
+                    $scope.search($scope.shareTypeCategory, $scope.shareType, 1, $scope.period, $scope.map.getBounds());
                 });
             });
         };
@@ -466,21 +460,20 @@ function initializeSearch(autocompleteInputId, googleMapDivId, searchDivId, neLa
          * Method used to initialize the SearchController
          * @param autocompleteInputId GoogleMap address autocomplete identifier
          * @param googleMapDivId GoogleMap div identifier
-         * @param searchDivId Share search div identifier
          * @param neLatitude Start north east latitude
          * @param neLongitude Start north east longitude
          * @param swLatitude Start south west latitude
          * @param swLongitude Start south west longitude
          */
-        $scope.initialize = function(autocompleteInputId, googleMapDivId, searchDivId, neLatitude, neLongitude, swLatitude, swLongitude) {
+        $scope.initialize = function(autocompleteInputId, googleMapDivId, neLatitude, neLongitude, swLatitude, swLongitude) {
             //Create the GoogleMap
-            google.maps.event.addDomListener(window, 'load', $scope.createGoogleMap(autocompleteInputId, googleMapDivId, searchDivId, neLatitude, neLongitude, swLatitude, swLongitude));
+            google.maps.event.addDomListener(window, 'load', $scope.createGoogleMap(autocompleteInputId, googleMapDivId, neLatitude, neLongitude, swLatitude, swLongitude));
             
             //And get all the share type categories
             $scope.getShareTypeCategories();
         };
 
         //Initialize the controller
-        $scope.initialize(autocompleteInputId, googleMapDivId, searchDivId, neLatitude, neLongitude, swLatitude, swLongitude);
+        $scope.initialize(autocompleteInputId, googleMapDivId, neLatitude, neLongitude, swLatitude, swLongitude);
     }]);
 }
