@@ -6,17 +6,17 @@
 </div>
 
 <!-- Comments -->
-<div id="div-share-details-comments" class="container">
+<div id="shares-details-comments-div" class="container">
     <div class="row">
 
         <div class="col-md-12">
 
-            <div id="div-share-details-comments-list" ng-if="(comments.length > 0)">
+            <div id="shares-details-comments-list-div" ng-if="(comments.length > 0)">
                 <!-- All comments -->
-                <div ng-repeat="comment in comments" style="margin-bottom: 30px;">
+                <div ng-repeat="comment in comments" class="shares-details-comment-div">
 
                     <!-- Creator comment -->
-                    <div ng-if="(shareUserExternalId == comment.user.external_id)" class="media" style="width: 75%; margin-left: 25%;">
+                    <div ng-if="(shareUserExternalId == comment.user.external_id)" class="media shares-details-comment-creator-div">
                         <div class="media-body">
                             <blockquote class="blockquote-reverse">
 
@@ -29,15 +29,15 @@
                             </blockquote>
                         </div>
                         <div class="media-right text-center">
-                            <img class="comment-user-img img-circle img-thumbnail" ng-src="https://graph.facebook.com/v2.3/{{ comment.user.external_id }}/picture" style="margin-bottom: 4px;" />
+                            <img class="shares-details-comment-user-img img-circle img-thumbnail" ng-src="https://graph.facebook.com/v2.3/{{ comment.user.external_id }}/picture" />
                             {{ comment.user.username }}
                         </div>
                     </div>
 
                     <!-- Other user comment -->
-                    <div ng-if="(shareUserExternalId != comment.user.external_id)" class="media" style="width: 75%;">
+                    <div ng-if="(shareUserExternalId != comment.user.external_id)" class="media shares-details-comment-other-user-div">
                         <div class="media-left text-center">
-                            <img class="comment-user-img img-circle img-thumbnail" ng-src="https://graph.facebook.com/v2.3/{{ comment.user.external_id }}/picture" style="margin-bottom: 4px;" />
+                            <img class="comment-user-img img-circle img-thumbnail" ng-src="https://graph.facebook.com/v2.3/{{ comment.user.external_id }}/picture" />
                             {{ comment.user.username }}
                         </div>
                         <div class="media-body">
@@ -61,14 +61,14 @@
             <?php if ($this->LocalUser->isAuthenticated($this)) : ?>
 
             <!-- No comments -->
-            <h3 ng-if="(comments.length == 0)" style="margin-top: 0px; margin-bottom: 0px;">
+            <h3 ng-if="(comments.length == 0)" class="shares-details-comments-message-h3">
                 <small>Soyez le premier à commenter ce partage</small>
             </h3>
 
             <?php else : ?>
 
             <!-- Not authenticated -->
-            <h3 ng-if="(comments.length == 0)" style="margin-top: 0px; margin-bottom: 0px;">
+            <h3 ng-if="(comments.length == 0)" class="shares-details-comments-message-h3">
                 <small><a class="authenticate-button" href="#">Authentifiez-vous</a> pour être le premier à commenter ce partage</small>
             </h3>
 
@@ -77,15 +77,13 @@
 
         <?php if ($this->LocalUser->isAuthenticated($this)) : ?>
 
-            <div class="col-md-10 div-share-details-comments-editor">
-                <textarea id="textarea-comment-add" class="form-control" rows="3" ng-model="message"></textarea>
+            <div class="col-md-10 shares-details-comments-editor-div">
+                <textarea id="shares-details-comments-add-textarea" class="form-control" rows="3" ng-model="message"></textarea>
             </div>
-            <div class="col-md-2 div-share-details-comments-editor">
-                <div style="padding-right: 15px;">
-                    <button id="btn-comment-add" type="submit" class="btn btn-primary" data-loading-text="Sending..." ng-click="onSendButtonClicked($event);">
-                        Envoyer
-                    </button>
-                </div>
+            <div class="col-md-2 shares-details-comments-editor-div">
+                <button id="shares-details-comments-add-btn" ng-click="onSendButtonClicked($event);" type="submit" class="btn btn-primary" data-loading-text="Sending...">
+                    Envoyer
+                </button>
             </div>
 
         <?php endif; ?>
@@ -102,10 +100,10 @@
         new nicEditor({
             buttonList : ['bold', 'italic', 'underline', 'link', 'unlink']
         })
-        .panelInstance('textarea-comment-add');
+        .panelInstance('shares-details-comments-add-textarea');
 
         //Initial empty content
-        var editor = nicEditors.findEditor('textarea-comment-add');
+        var editor = nicEditors.findEditor('shares-details-comments-add-textarea');
         editor.setContent('');
     });
 </script>

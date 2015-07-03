@@ -80,7 +80,7 @@
 
 .shares-details-participate-button, .shares-details-participate-status {
     width: 100%;
-    margin-top: 10px;
+    margin-top: 0px;
     margin-bottom: 10px;
 }
 
@@ -104,54 +104,80 @@
     color: #bdc3c7;
 }
 
+/* GoogleMap */
 
-
-
-
-
+#shares-details-google-map-div {
+    width: 100%;
+    height: 500px;
+    border-top: 1px solid #bdc3c7;
+    border-bottom: 1px solid #bdc3c7;
+}
 
 /* Comments */
 
-#div-share-details-comments {
-    padding-bottom: 30px;
+#shares-details-comments-div {
     background-color: #ffffff;
 }
 
-#div-share-details-comments-list {
+#shares-details-comments-list-div {
     padding-left: 15px;
     padding-right: 15px;
     padding-top: 15px;
-    /*padding-bottom: 15px;*/
 }
 
-.comment-user-img {
-    max-width: none;
+/* Comment */
+
+.shares-details-comment-div {
+    margin-bottom: 30px;
 }
 
-#div-share-details-comments .alert {
-    margin-bottom: 0px;
+.shares-details-comment-creator-div {
+    width: 75%;
+    margin-left: 25%;
 }
 
-#textarea-comment-add {
-    width: 100%;
+.shares-details-comment-other-user-div {
+    width: 75%;
 }
 
-#btn-comment-add {
-    width: 100%;
-}
-
-#div-share-details-comments-list p {
-
-}
-
-#div-share-details-comments-list .blockquote-normal {
+#shares-details-comments-list-div .blockquote-normal {
     border-left: 5px solid #4aa3df;
 }
 
-#div-share-details-comments-list .blockquote-reverse {
+#shares-details-comments-list-div .blockquote-reverse {
     border-right: 5px solid #2ecc71;
 }
 
-.div-share-details-comments-editor {
-    margin-top: 20px;
+.shares-details-comment-user-img {
+    max-width: none;
+    margin-bottom: 4px;
+}
+
+.shares-details-comments-message-h3 {
+    margin-top: 0px;
+    margin-bottom: 20px;
+}
+
+.shares-details-comments-editor-div {
+    margin-bottom: 20px;
+}
+
+#shares-details-comments-add-textarea {
+    width: 100%;
+}
+
+#shares-details-comments-add-btn {
+    width: 100%;
+}
+
+/* User profile */
+
+.shares-details-user-profile-div {
+    border-top: 1px solid #bdc3c7;
+    background-color: #ecf0f1;
+    padding-bottom: 20px;
+}
+
+.shares-details-user-profile-created-h3 {
+    margin-top: 0px;
 }

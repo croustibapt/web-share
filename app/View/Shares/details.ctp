@@ -17,7 +17,7 @@
                     </h1>
 
                     <!-- Date -->
-                    <h2 class="shares-details-date-h2 text-capitalize" ng-style="{'color': share.share_color}" style="">
+                    <h2 class="shares-details-date-h2 text-capitalize" ng-style="{'color': share.share_color}">
                         {{ share.moment_day }}
                     </h2>
 
@@ -124,7 +124,7 @@
 
                                 <!-- Own share -->
                                 <div data-toggle="tooltip" data-placement="bottom" title="Vous êtes le créateur" class="shares-details-participate-div">
-                                    <button class="btn btn-success disabled shares-details-participate-button" style="margin: 0px;">
+                                    <button class="btn btn-success disabled shares-details-participate-button">
                                         Participer
                                     </button>
                                 </div>
@@ -135,7 +135,7 @@
 
                             <!-- Need to be authenticated -->
                             <div data-toggle="tooltip" data-placement="bottom" title="Vous devez être authentifié pour pouvoir participer" class="shares-details-participate-div">
-                                <button class="btn btn-success disabled shares-details-participate-button" style="margin: 0px;">
+                                <button class="btn btn-success disabled shares-details-participate-button">
                                     Participer
                                 </button>
                             </div>
@@ -158,7 +158,7 @@
 
                 <!-- Created by -->
                 <p class="shares-details-created-p">
-                    Créé par <a href="#div-share-details-user-header" class="scroll-a">{{ share.user.username }}</a>
+                    Créé par <a href="#shares-details-user-profile-header-div" class="scroll-a">{{ share.user.username }}</a>
                     <br />
                     {{ share.moment_created_time_ago }}
                 </p>
@@ -169,7 +169,7 @@
 
     <div id="shares-details-place-header">
         <!-- Google maps -->
-        <div id="div-share-details-google-map" style="width: 100%; height: 500px; border-top: 1px solid #bdc3c7; border-bottom: 1px solid #bdc3c7;">
+        <div id="shares-details-google-map-div">
 
         </div>
     </div>
@@ -180,9 +180,9 @@
     ?>
 
     <!-- User profile -->
-    <div style="border-top: 1px solid #bdc3c7; background-color: #ecf0f1; padding-bottom: 20px;">
+    <div class="shares-details-user-profile-div">
 
-        <div id="div-share-details-user-header" class="container">
+        <div id="shares-details-user-profile-header-div" class="container">
             <h3>A propos de {{ share.user.username }}</h3>
         </div>
         <div class="container">
@@ -194,7 +194,7 @@
                 </div>
                 <div class="user-card-summary-div col-md-10">
 
-                    <h3 style="margin-top: 0px;">
+                    <h3 class="shares-details-user-profile-created-h3">
                         <small>Membre depuis le <strong>{{ user.moment_created }}</strong></small>
                     </h3>
 
@@ -225,6 +225,6 @@
 </div>
 
 <script>
-    //Get comments
-    initializeDetails(<?php echo $shareId; ?>, '<?php echo $shareUserExternalId; ?>', 'textarea-comment-add', 'div-share-details-google-map');
+    //Initialize the DetailsController
+    initializeDetails(<?php echo $shareId; ?>, '<?php echo $shareUserExternalId; ?>', 'shares-details-comments-add-textarea', 'shares-details-google-map-div');
 </script>
