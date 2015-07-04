@@ -187,17 +187,33 @@
         </div>
         <div class="container">
             <div class="row">
-                <div class="user-card-picture-div col-md-2 text-center">
+                <div class="col-md-2 text-center">
 
-                    <img class="user-card-picture-img img-thumbnail img-circle" ng-src="http://graph.facebook.com/v2.3/{{ share.user.external_id }}/picture?type=large&width=90&height=90" />
+                    <img class="shares-details-user-picture-img img-thumbnail img-circle" ng-src="http://graph.facebook.com/v2.3/{{ share.user.external_id }}/picture?type=large&width=90&height=90" />
 
                 </div>
-                <div class="user-card-summary-div col-md-10">
+                
+                <div class="user-card-summary-div col-md-7">
 
-                    <h3 class="shares-details-user-profile-created-h3">
-                        <small>Membre depuis le <strong>{{ user.moment_created }}</strong></small>
-                    </h3>
+                    <h5>
+                        Membre depuis le <strong>{{ user.moment_created }}</strong>
+                    </h5>
+                    
+                    <p ng-if="user.description" class="lead">
+                        {{ user.description }}
+                    </p>
+                    <p ng-if="!user.description" class="lead">
+                        Ce membre n'a pas encore renseigné de description
+                    </p>
 
+                </div>
+                
+                <div class="col-md-3">
+                    
+                    <h5>
+                        Statistiques
+                    </h5>
+                    
                     <ul class="list-unstyled">
                         <li>
                             <p class="user-card-summary-p text-success">
@@ -215,7 +231,7 @@
                             </p>
                         </li>
                     </ul>
-
+                    
                 </div>
             </div>
         </div>
