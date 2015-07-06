@@ -37,6 +37,8 @@ function initializeAdd(googleMapDivId, autocompleteDivId, autocompleteInputId, l
         $scope.latitude = latitude;
         $scope.longitude = longitude;
 
+        $scope.map = null;
+
         /**
          * Method used to format a passed share type cateogory
          * @param shareTypeCategory Share type category to format
@@ -84,11 +86,11 @@ function initializeAdd(googleMapDivId, autocompleteDivId, autocompleteInputId, l
                 zoom: 8,
                 center: new google.maps.LatLng($scope.latitude, $scope.longitude)
             }
-            var addMap = new google.maps.Map(document.getElementById(googleMapDivId), mapOptions);
+            $scope.map = new google.maps.Map(document.getElementById(googleMapDivId), mapOptions);
 
             //Add search box
             var divSearch = document.getElementById(autocompleteDivId);
-            addMap.controls[google.maps.ControlPosition.TOP_CENTER].push(divSearch);
+            $scope.map.controls[google.maps.ControlPosition.TOP_CENTER].push(divSearch);
 
             var marker = null;
 
@@ -103,10 +105,10 @@ function initializeAdd(googleMapDivId, autocompleteDivId, autocompleteInputId, l
                 //If the place has a geometry, then present it on a map.
                 if (place.geometry.viewport) {
                     console.log(place.geometry.viewport);
-                    addMap.fitBounds(place.geometry.viewport);
+                    $scope.map.fitBounds(place.geometry.viewport);
                 } else {
-                    addMap.setCenter(place.geometry.location);
-                    addMap.setZoom(17);  // Why 17? Because it looks good.
+                    $scope.map.setCenter(place.geometry.location);
+                    $scope.map.setZoom(17);  // Why 17? Because it looks good.
                 }
 
                 //Update marker position
@@ -116,13 +118,19 @@ function initializeAdd(googleMapDivId, autocompleteDivId, autocompleteInputId, l
                 $scope.updateLatitudeLongitude(marker);
             });
 
+            //Center map
+            if (!geolocate($scope)) {
+                //Arbitraty fit
+                $scope.map.fitBounds(getStartBounds());
+            }
+
             //Add idle listener
-            google.maps.event.addListener(addMap, 'idle', function() {
+            google.maps.event.addListener($scope.map, 'idle', function() {
                 if (marker == null) {
                     //Create the initial marker
                     marker = new google.maps.Marker({
-                        position: addMap.getCenter(),
-                        map: addMap,
+                        position: $scope.map.getCenter(),
+                        map: $scope.map,
                         title: 'Hello World!',
                         draggable: true
                     });

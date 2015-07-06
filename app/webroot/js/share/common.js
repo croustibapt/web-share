@@ -499,3 +499,34 @@ function pad(num, size) {
     while (s.length < size) s = "0" + s;
     return s;
 }
+
+function geolocate(scope) {
+//
+    if (navigator.geolocation) {
+        //Ask the user position
+        navigator.geolocation.getCurrentPosition(function(position) {
+            var geolocation = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+
+            var circle = new google.maps.Circle({
+                center: geolocation,
+                radius: position.coords.accuracy
+            });
+
+            //$scope.autocomplete.setBounds(circle.getBounds());
+
+            //Center map
+            scope.map.fitBounds(circle.getBounds());
+        });
+
+        return true;
+    } else {
+        return false;
+    }
+}
+
+function getStartBounds() {
+    return new google.maps.LatLngBounds(
+        new google.maps.LatLng(48.815573, 2.2241989999999987),
+        new google.maps.LatLng(48.9021449, 2.4699207999999544)
+    );
+}

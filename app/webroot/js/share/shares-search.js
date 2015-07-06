@@ -7,7 +7,7 @@
  * @param shareType Start share type
  * @param period Start period
  */
-function initializeSearch(autocompleteInputId, googleMapDivId, placeId, shareTypeCategory, shareType, period) {
+function initializeSearch(autocompleteInputId, googleMapDivId, shareTypeCategory, shareType, period, placeId, lat, lng, zoom) {
     /**
      * SearchController
      */
@@ -20,7 +20,13 @@ function initializeSearch(autocompleteInputId, googleMapDivId, placeId, shareTyp
         $scope.period = period;
 
         $scope.address = '';
+        $scope.placeId = placeId;
         $scope.bounds = null;
+        $scope.lat = lat;
+        $scope.lng = lng;
+        $scope.zoom = zoom;
+
+        $scope.autocomplete = null;
 
         $scope.shareTypeCategories = {};
         $scope.shareTypeCategory = shareTypeCategory;
@@ -116,8 +122,26 @@ function initializeSearch(autocompleteInputId, googleMapDivId, placeId, shareTyp
          * @param page Wanted page
          */
         $scope.showPage = function(page) {
+            //Update page
+            $scope.page = page;
+
             //Simply call the search method
-            $scope.search($scope.shareTypeCategory, $scope.shareType, page, $scope.period, $scope.bounds);
+            $scope.search();
+        };
+
+        $scope.refreshUrl = function() {
+            var url = webroot + 'shares/search?period=' + $scope.period +
+                '&share_type_category=' + $scope.shareTypeCategory +
+                '&share_type=' + $scope.shareType +
+                '&place_id=' + $scope.placeId +
+                '&lat=' + $scope.lat +
+                '&lng=' + $scope.lng +
+                '&zoom=' + $scope.zoom;
+
+            url = encodeURI(url);
+            console.log(url);
+
+            window.history.pushState(null, null, url);
         };
 
         /**
@@ -128,13 +152,9 @@ function initializeSearch(autocompleteInputId, googleMapDivId, placeId, shareTyp
          * @param date Wanted period
          * @param bounds Wanted lat/long bounds
          */
-        $scope.search = function(shareTypeCategory, shareType, page, period, bounds) {
-            //Store values
-            $scope.shareTypeCategory = shareTypeCategory;
-            $scope.shareType = shareType;
-            $scope.page = page;
-            $scope.period = period;
-            $scope.bounds = bounds;
+        $scope.search = function() {
+            //Refresh URL (for History)
+            $scope.refreshUrl();
 
             //Handle types
             var types = getTypesWithShareType($scope.shareType, $scope.shareTypeCategory, $scope.shareTypeCategories);
@@ -252,7 +272,11 @@ function initializeSearch(autocompleteInputId, googleMapDivId, placeId, shareTyp
          * Method called when the current selected period changed.
          */
         $scope.onPeriodChanged = function() {
-            $scope.search($scope.shareTypeCategory, $scope.shareType, 1, $scope.period, $scope.bounds);
+            //Reset page
+            $scope.page = 1;
+
+            //And update results
+            $scope.search();
         };
 
         /**
@@ -262,16 +286,22 @@ function initializeSearch(autocompleteInputId, googleMapDivId, placeId, shareTyp
             //Reset current share type category
             $scope.shareType = '-1';
 
-            //Re-search
-            $scope.search($scope.shareTypeCategory, $scope.shareType, 1, $scope.period, $scope.bounds);
+            //Reset page
+            $scope.page = 1;
+
+            //And update results
+            $scope.search();
         };
 
         /**
          * Method called when the current selected share type changed.
          */
         $scope.onShareTypeChanged = function() {
-            //Re-search
-            $scope.search($scope.shareTypeCategory, $scope.shareType, 1, $scope.period, $scope.bounds);
+            //Reset page
+            $scope.page = 1;
+
+            //And update results
+            $scope.search();
         };
 
         /**
@@ -401,12 +431,23 @@ function initializeSearch(autocompleteInputId, googleMapDivId, placeId, shareTyp
         };
 
         /**
-         * Method used to create the search google map
-         * @param autocompleteInputId GoogleMap address autocomplete identifier
-         * @param googleMapDivId GoogleMap div identifier
-         * @param placeId GoogleMap place identifier
+         * Method used to get all the share type categories
          */
-        $scope.createGoogleMap = function(autocompleteInputId, googleMapDivId, placeId) {
+        $scope.getShareTypeCategories = function() {
+            //
+            $http.get(webroot + 'api/share_type_categories/get')
+                .success(function(data, status, headers, config) {
+                    //
+                    getShareTypeCategories($scope, data);
+                })
+                .error(function(data, status, headers, config) {
+                    console.log(data);
+                });
+        };
+
+        $scope.createGoogleMap = function(autocompleteInputId, googleMapDivId) {
+            console.log(googleMapDivId);
+
             //Create map
             var mapOptions = {
                 panControl: false,
@@ -420,62 +461,73 @@ function initializeSearch(autocompleteInputId, googleMapDivId, placeId, shareTyp
             var autocompleteInput = document.getElementById(autocompleteInputId);
 
             //Configure autocomplete control
-            var autocomplete = new google.maps.places.Autocomplete(autocompleteInput);
-            google.maps.event.addListener(autocomplete, 'place_changed', function() {
+            $scope.autocomplete = new google.maps.places.Autocomplete(autocompleteInput);
+            google.maps.event.addListener($scope.autocomplete, 'place_changed', function() {
                 //Get the place
-                var place = autocomplete.getPlace();
+                var place = $scope.autocomplete.getPlace();
+
+                //Save new values
+                $scope.placeId = place.place_id;
+                $scope.address = place.formatted_address;
 
                 //Center on it
                 $scope.centerMapOnPlace(place);
-
-                //window.history.pushState("object or string", "Title", "/new-url");
             });
 
-            //Add idle listener
-            google.maps.event.addListener($scope.map, 'idle', function() {
-                //"Force" update
-                $scope.$apply(function() {
-                    //Restart search from page 1
-                    $scope.search($scope.shareTypeCategory, $scope.shareType, 1, $scope.period, $scope.map.getBounds());
-                });
-            });
-
-            //Center map
-            if (placeId) {
+            //Get place if exists
+            var place = null;
+            if ($scope.placeId !== '') {
                 var request = {
-                    placeId: placeId
+                    placeId: $scope.placeId
                 };
-                var service = new google.maps.places.PlacesService($scope.map);
 
+                var service = new google.maps.places.PlacesService($scope.map);
                 service.getDetails(request, function(place, status) {
                     //"Force" update
                     $scope.$apply(function() {
                         //Save address
                         $scope.address = place.formatted_address;
-
-                        //And center on it
-                        $scope.centerMapOnPlace(place);
                     });
                 });
-            } else {
-                //Arbitraty center
-                $scope.map.setCenter(new google.maps.LatLng(43.5958736, 1.4672682));
-                $scope.map.setZoom(13);
             }
-        };
 
-        /**
-         * Method used to get all the share type categories
-         */
-        $scope.getShareTypeCategories = function() {
-            //
-            $http.get(webroot + 'api/share_type_categories/get')
-            .success(function(data, status, headers, config) {
-                //
-                getShareTypeCategories($scope, data);
-            })
-            .error(function(data, status, headers, config) {
-                console.log(data);
+            //Center map
+            if (($scope.lat != null) && ($scope.lng != null) && ($scope.zoom != null)) {
+                //Center on position
+                $scope.map.setCenter(new google.maps.LatLng($scope.lat, $scope.lng));
+
+                //And zoom
+                $scope.map.setZoom($scope.zoom);
+            } else if (place != null) {
+                //And center on it
+                $scope.centerMapOnPlace(place);
+            } else {
+                //Try to locate the user
+                if (!geolocate($scope)) {
+                    //Arbitraty fit
+                    $scope.map.fitBounds(getStartBounds());
+                }
+            }
+
+            //Add idle listener
+            google.maps.event.addListener($scope.map, 'idle', function() {
+                //"Force" update
+                $scope.$apply(function() {
+                    console.log('idle');
+                    //Store bounds
+                    $scope.bounds = $scope.map.getBounds();
+
+                    //And position
+                    $scope.lat = $scope.map.getCenter().lat();
+                    $scope.lng = $scope.map.getCenter().lng();
+                    $scope.zoom = $scope.map.getZoom();
+
+                    //Reset page
+                    $scope.page = 1;
+
+                    //And update results
+                    $scope.search();
+                });
             });
         };
 
@@ -485,15 +537,17 @@ function initializeSearch(autocompleteInputId, googleMapDivId, placeId, shareTyp
          * @param googleMapDivId GoogleMap div identifier
          * @param placeId GoogleMap place identifier
          */
-        $scope.initialize = function(autocompleteInputId, googleMapDivId, placeId) {
+        $scope.initialize = function(autocompleteInputId, googleMapDivId) {
+            console.log('initializeWithPlaceId');
+
             //Create the GoogleMap
-            google.maps.event.addDomListener(window, 'load', $scope.createGoogleMap(autocompleteInputId, googleMapDivId, placeId));
+            google.maps.event.addDomListener(window, 'load', $scope.createGoogleMap(autocompleteInputId, googleMapDivId));
             
             //And get all the share type categories
             $scope.getShareTypeCategories();
         };
 
         //Initialize the controller
-        $scope.initialize(autocompleteInputId, googleMapDivId, placeId);
+        $scope.initialize(autocompleteInputId, googleMapDivId);
     }]);
 }

@@ -1,12 +1,3 @@
-html, body {
-    height: 100%;
-}
-
-.controller-div {
-    width: 100%;
-    height: 100%;
-}
-
 /* Navbar */
 
 .pac-container {
@@ -23,6 +14,16 @@ html, body {
 }
 
 /* Structure */
+
+.main-div {
+    height: 100%;
+}
+
+.content-div {
+    padding-bottom: 0px;
+    height: 100%;
+    width: 100%;
+}
 
 #shares-search-div {
     height: 100%;

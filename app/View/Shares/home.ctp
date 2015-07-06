@@ -14,16 +14,11 @@
             <!-- Search form -->
             <div id="shares-home-form-div">
                 <div class="container">
-                    <?php
-                    echo $this->Form->create('Share', array(
-                        'action' => 'search',
-                        'type' => 'GET'
-                    ));
-                    ?>
 
                     <div class="row">
                         <div class="col-md-4 shares-home-form-col-select-home">
                             <?php
+                                //Non form input
                                 echo $this->Form->input('address', array(
                                     'id' => 'shares-home-address-input',
                                     'type' => 'text',
@@ -34,13 +29,17 @@
                                     'ng-focus' => 'geolocate();'
                                 ));
 
+                                echo $this->Form->create('Share', array(
+                                    'action' => 'search',
+                                    'type' => 'GET'
+                                ));
+
                                 echo $this->Form->hidden('place_id', array(
                                     'id' => 'hidden-home-place-id',
                                     'ng-value' => 'placeId'
                                 ));
                             ?>
                         </div>
-
 
                         <div class="col-md-2 shares-home-form-div-select-home shares-home-form-col-select-home">
                             <?php

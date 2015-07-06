@@ -16,7 +16,6 @@ function initializeHome(autocompleteInputId) {
 
         //Place id
         $scope.placeId = null;
-
         //GoogleMaps address autocomplete input
         $scope.autocomplete = null;
 
@@ -40,33 +39,18 @@ function initializeHome(autocompleteInputId) {
             google.maps.event.addListener($scope.autocomplete, 'place_changed', function() {
                 //Get current place
                 var place = $scope.autocomplete.getPlace();
+                console.log(place);
 
                 //If the place has a geometry
                 if (place.geometry.viewport) {
+                    console.log(place.geometry.viewport);
+
                     //And update the model
                     $scope.$apply(function() {
                         $scope.placeId = place.place_id;
                     });
                 }
             });
-        };
-
-        /**
-         * Method called to use the browser location
-         */
-        $scope.geolocate = function() {
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(function(position) {
-                    var geolocation = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-
-                    var circle = new google.maps.Circle({
-                        center: geolocation,
-                        radius: position.coords.accuracy
-                    });
-
-                    $scope.autocomplete.setBounds(circle.getBounds());
-                });
-            }
         };
 
         /**

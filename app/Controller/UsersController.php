@@ -17,23 +17,25 @@ class UsersController extends ApiUsersController {
         )));
 
         //If no user was found and it's a POST request
-        if (($user == NULL) && $this->request->is('POST')) {
-            //pr($this->request->data);
+        if ($user == NULL) {
+            if ($this->request->is('POST')) {
+                //pr($this->request->data);
 
-            try {
-                //Try to save the user
-                $response = $this->internAdd($userExternalId, $this->request->data['User']['username'], $mail);
+                try {
+                    //Try to save the user
+                    $response = $this->internAdd($userExternalId, $this->request->data['User']['username'], $mail);
 
-                //If it succeeded
-                if ($response != NULL) {
-                    //Save auth session
-                    $this->saveAuthSession($userExternalId, $mail, $authToken, $username);
+                    //If it succeeded
+                    if ($response != NULL) {
+                        //Save auth session
+                        $this->saveAuthSession($userExternalId, $mail, $authToken, $username);
 
-                    //Redirect to home
-                    $this->redirect('/');
+                        //Redirect to home
+                        $this->redirect('/');
+                    }
+                } catch (ShareException $e) {
+                    $this->User->validationErrors = $e->getValidationErrors();
                 }
-            } catch (ShareException $e) {
-                $this->User->validationErrors = $e->getValidationErrors();
             }
         } else {
             //Redirect to home

@@ -9,38 +9,41 @@ class SharesController extends ApiSharesController {
     
     //
     public function search() {
-        $period = 'all';
-
-        $shareTypeCategory = -1;
-        $shareType = -1;
-
-        $placeId = NULL;
-
         if ($this->request->is('GET')) {
             $data = $this->request->query;
             //pr($data);
 
-            //Get start and end date
-            $period = $data['period'];
+            //Place id
+            if (isset($data['place_id']) && (strlen($data['place_id']) > 0)) {
+                $placeId = $data['place_id'];
+                $this->set('placeId', $placeId);
+            }
+
+            //Map position
+            if (isset($data['lat']) && isset($data['lng']) && isset($data['zoom'])) {
+                $this->set('lat', $data['lat']);
+                $this->set('lng', $data['lng']);
+                $this->set('zoom', $data['zoom']);
+            }
+
+            //Get period
+            if (isset($data['period'])) {
+                $period = $data['period'];
+                $this->set('period', $period);
+            }
 
             //Share type category
-            $shareTypeCategory = $data['share_type_category'];
+            if (isset($data['share_type_category'])) {
+                $shareTypeCategory = $data['share_type_category'];
+                $this->set('shareTypeCategory', $shareTypeCategory);
+            }
 
             //Share type
             if (isset($data['share_type'])) {
                 $shareType = $data['share_type'];
+                $this->set('shareType', $shareType);
             }
-
-            //Place id
-            $placeId = $data['place_id'];
         }
-
-        $this->set('period', $period);
-
-        $this->set('shareTypeCategory', $shareTypeCategory);
-        $this->set('shareType', $shareType);
-
-        $this->set('placeId', $placeId);
     }
         
 	public function add() {

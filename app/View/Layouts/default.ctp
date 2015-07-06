@@ -61,44 +61,50 @@
             echo $this->fetch('script');
         ?>
     </head>
-    <body>
+
+    <!-- Controller -->
+    <?php
+        $ngControllerName = ucfirst($this->action).'Controller';
+    ?>
+
+    <body ng-controller="<?php echo $ngControllerName; ?>">
         <script>
             //Webroot global variable
             var webroot = "<?php echo $this->webroot; ?>";
         </script>
 
-        <!-- Controller -->
-        <?php
-            $ngControllerName = ucfirst($this->action).'Controller';
-        ?>
-        <div ng-controller="<?php echo $ngControllerName; ?>" class="controller-div">
+        <!-- Navigation bar -->
+        <?php echo $this->element('nav-bar'); ?>
 
-            <!-- Navigation bar -->
-            <?php echo $this->element('nav-bar'); ?>
+        <div class="main-div">
 
             <?php
                 $error = $this->Session->flash('nok');
                 if ($error != '') :
             ?>
 
-            <div class="alert alert-red">
-                <h1>Error</h1>
-                <?php echo $error; ?>
-            </div>
+                <div class="alert alert-red">
+                    <h1>Error</h1>
+                    <?php echo $error; ?>
+                </div>
 
             <?php endif; ?>
 
-            <!-- CONTENT -->
-            <?php echo $this->fetch('content'); ?>
+            <div class="content-div">
+
+                <!-- CONTENT -->
+                <?php echo $this->fetch('content'); ?>
+
+            </div>
+
+            <!-- Footer -->
+            <?php
+                if (!(($this->action == 'search') && ($this->name == 'Shares'))) {
+                    echo $this->element('footer');
+                }
+            ?>
 
         </div>
-
-        <!-- Footer -->
-        <?php
-            if (!(($this->action == 'search') && ($this->name == 'Shares'))) {
-                echo $this->element('footer');
-            }
-        ?>
 
         <script>
             //Function used to handle AJAX error and display a toast
