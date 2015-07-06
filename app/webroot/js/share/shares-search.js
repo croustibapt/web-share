@@ -445,6 +445,64 @@ function initializeSearch(autocompleteInputId, googleMapDivId, shareTypeCategory
                 });
         };
 
+        $scope.onMapReady = function(place) {
+            if (place == null) {
+                if (($scope.lat != null) && ($scope.lng != null) && ($scope.zoom != null)) {
+                    console.log('place null => lat lng');
+
+                    //Center on position
+                    $scope.map.setCenter(new google.maps.LatLng($scope.lat, $scope.lng));
+
+                    //And zoom
+                    $scope.map.setZoom($scope.zoom);
+                } else {
+                    //Try to locate the user
+                    if (!geolocate($scope)) {
+                        console.log('place null => paris');
+                        //Arbitraty fit
+                        $scope.map.fitBounds(getStartBounds());
+                    } else {
+                        console.log('place null => geolocate');
+                    }
+                }
+            } else {
+                if (($scope.lat != null) && ($scope.lng != null) && ($scope.zoom != null)) {
+                    console.log('place not null => lat lng');
+
+                    //Center on position
+                    $scope.map.setCenter(new google.maps.LatLng($scope.lat, $scope.lng));
+
+                    //And zoom
+                    $scope.map.setZoom($scope.zoom);
+                } else {
+                    console.log('place not null => place');
+
+                    $scope.centerMapOnPlace(place);
+                }
+            }
+
+            //Add idle listener
+            google.maps.event.addListener($scope.map, 'idle', function() {
+                //"Force" update
+                $scope.$apply(function() {
+                    console.log('idle');
+                    //Store bounds
+                    $scope.bounds = $scope.map.getBounds();
+
+                    //And position
+                    $scope.lat = $scope.map.getCenter().lat();
+                    $scope.lng = $scope.map.getCenter().lng();
+                    $scope.zoom = $scope.map.getZoom();
+
+                    //Reset page
+                    $scope.page = 1;
+
+                    //And update results
+                    $scope.search();
+                });
+            });
+        };
+
         $scope.createGoogleMap = function(autocompleteInputId, googleMapDivId) {
             console.log(googleMapDivId);
 
@@ -475,7 +533,6 @@ function initializeSearch(autocompleteInputId, googleMapDivId, shareTypeCategory
             });
 
             //Get place if exists
-            var place = null;
             if ($scope.placeId !== '') {
                 var request = {
                     placeId: $scope.placeId
@@ -488,47 +545,12 @@ function initializeSearch(autocompleteInputId, googleMapDivId, shareTypeCategory
                         //Save address
                         $scope.address = place.formatted_address;
                     });
+
+                    $scope.onMapReady(place);
                 });
-            }
-
-            //Center map
-            if (($scope.lat != null) && ($scope.lng != null) && ($scope.zoom != null)) {
-                //Center on position
-                $scope.map.setCenter(new google.maps.LatLng($scope.lat, $scope.lng));
-
-                //And zoom
-                $scope.map.setZoom($scope.zoom);
-            } else if (place != null) {
-                //And center on it
-                $scope.centerMapOnPlace(place);
             } else {
-                //Try to locate the user
-                if (!geolocate($scope)) {
-                    //Arbitraty fit
-                    $scope.map.fitBounds(getStartBounds());
-                }
+                $scope.onMapReady(null);
             }
-
-            //Add idle listener
-            google.maps.event.addListener($scope.map, 'idle', function() {
-                //"Force" update
-                $scope.$apply(function() {
-                    console.log('idle');
-                    //Store bounds
-                    $scope.bounds = $scope.map.getBounds();
-
-                    //And position
-                    $scope.lat = $scope.map.getCenter().lat();
-                    $scope.lng = $scope.map.getCenter().lng();
-                    $scope.zoom = $scope.map.getZoom();
-
-                    //Reset page
-                    $scope.page = 1;
-
-                    //And update results
-                    $scope.search();
-                });
-            });
         };
 
         /**

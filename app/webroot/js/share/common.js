@@ -501,10 +501,10 @@ function pad(num, size) {
 }
 
 function geolocate(scope) {
-//
+    //
     if (navigator.geolocation) {
         //Ask the user position
-        navigator.geolocation.getCurrentPosition(function(position) {
+        navigator.geolocation.getCurrentPosition(function (position) {
             var geolocation = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
 
             var circle = new google.maps.Circle({
@@ -516,12 +516,12 @@ function geolocate(scope) {
 
             //Center map
             scope.map.fitBounds(circle.getBounds());
-        });
 
-        return true;
-    } else {
-        return false;
+            return true;
+        });
     }
+
+    return false;
 }
 
 function getStartBounds() {
