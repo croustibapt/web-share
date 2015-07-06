@@ -21,7 +21,7 @@
             echo $this->Html->css('bootstrap/bootstrap-modified');
 
             //Icons
-            echo $this->Html->css('icons/ionicons.min');
+            echo $this->Html->css('icons/ionicons');
 
             //Utils
             echo $this->Html->css('utils/clamp');

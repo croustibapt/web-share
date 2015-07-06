@@ -16,12 +16,12 @@ class ApiShareTypeCategoriesController extends AppController {
             $shareTypeCategoryIndex = 0;
             foreach($shareTypeCategories as $shareTypeCategory) {
                 $response['results'][$shareTypeCategoryIndex]['share_type_category_id'] = $shareTypeCategory['ShareTypeCategory']['id'];
-                $response['results'][$shareTypeCategoryIndex]['label'] = $shareTypeCategory['ShareTypeCategory']['label'];
+                $response['results'][$shareTypeCategoryIndex]['label'] = $this->checkEmptyString($shareTypeCategory['ShareTypeCategory']['label']);
                 
                 $shareTypeIndex = 0;
                 foreach ($shareTypeCategory['ShareType'] as $shareType) {
                     $response['results'][$shareTypeCategoryIndex]['share_types'][$shareTypeIndex]['share_type_id'] = $shareType['id'];
-                    $response['results'][$shareTypeCategoryIndex]['share_types'][$shareTypeIndex]['label'] = $shareType['label'];
+                    $response['results'][$shareTypeCategoryIndex]['share_types'][$shareTypeIndex]['label'] = $this->checkEmptyString($shareType['label']);
                     $response['results'][$shareTypeCategoryIndex]['share_types'][$shareTypeIndex]['share_type_category_id'] = $shareType['share_type_category_id'];
                     $shareTypeIndex++;
                 }

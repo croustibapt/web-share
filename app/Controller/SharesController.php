@@ -58,9 +58,7 @@ class SharesController extends ApiSharesController {
                 $response = $this->internAdd($userId, $data['Share']['latitude'], $data['Share']['longitude'], NULL, NULL,
                     $data['Share']['share_type_id'], $data['Share']['event_date'], $data['Share']['event_time'], $data['Share']['title'],
                     $data['Share']['price'], $data['Share']['places'], $data['Share']['waiting_time'],
-                    $data['Share']['meet_place'], $data['Share']['limitations'],
-                    $data['Share']['message'],
-                    NULL, NULL);
+                    $data['Share']['meet_place'], $data['Share']['limitations'], NULL, NULL, $data['Share']['message'], NULL, NULL);
 
                 $shareId = $response['share_id'];
                 $this->redirect('/share/details/'.$shareId);

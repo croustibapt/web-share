@@ -288,14 +288,14 @@ class AppController extends Controller {
         
         foreach ($comments as $comment) {
             $response[$commentIndex]['comment_id'] = $comment['Comment']['id'];
-            $response[$commentIndex]['message'] = $comment['Comment']['message'];
+            $response[$commentIndex]['message'] = $this->checkEmptyString($comment['Comment']['message']);
 
             //Created
             $this->formatISODate($response[$commentIndex]['created'], $comment['Comment']['created']);
 
             $response[$commentIndex]['share_id'] = $comment['Comment']['share_id'];
             $response[$commentIndex]['user']['external_id'] = $comment['User']['external_id'];
-            $response[$commentIndex]['user']['username'] = $comment['User']['username'];
+            $response[$commentIndex]['user']['username'] = $this->checkEmptyString($comment['User']['username']);
 
             $commentIndex++;
         }
@@ -321,11 +321,11 @@ class AppController extends Controller {
 
             //User
             $response[$requestIndex]['user']['external_id'] = $request['User']['external_id'];
-            $response[$requestIndex]['user']['username'] = $request['User']['username'];
+            $response[$requestIndex]['user']['username'] = $this->checkEmptyString($request['User']['username']);
             
             //Return mail only if the request has been accepted
             if ($status == SHARE_REQUEST_STATUS_ACCEPTED) {
-                $response[$requestIndex]['user']['mail'] = $request['User']['mail'];
+                $response[$requestIndex]['user']['mail'] = $this->checkEmptyString($request['User']['mail']);
             }
 
             $requestIndex++;
@@ -333,8 +333,8 @@ class AppController extends Controller {
     }
     
     protected function checkField(& $data, $fieldName) {
-        if (isset($data[$fieldName]) && ($data[$fieldName] === '')) {
-            $data[$fieldName] = null;
+        if (isset($data[$fieldName])) {
+            $data[$fieldName] = $this->checkEmptyString($data[$fieldName]);
         }
     }
 
@@ -345,6 +345,14 @@ class AppController extends Controller {
 
             $field = $isoDate;
         }
+    }
+
+    protected function checkEmptyString($stringToCheck) {
+        if (($stringToCheck !== NULL) && is_string($stringToCheck) && (strlen($stringToCheck) == 0)) {
+            $stringToCheck = NULL;
+        }
+
+        return $stringToCheck;
     }
     
     protected function formatShare($share = NULL, $returnComments = false, $returnRequests = false) {
@@ -360,36 +368,37 @@ class AppController extends Controller {
             //Format data
             $response['share_id'] = $share['Share']['id'];
             $response['user']['external_id'] = $share['User']['external_id'];
-            $response['user']['username'] = $share['User']['username'];
+            $response['user']['username'] = $this->checkEmptyString($share['User']['username']);
 
-            $response['title'] = $share['Share']['title'];
+            $response['title'] = $this->checkEmptyString($share['Share']['title']);
 
             //Event date and time
             $response['event_date'] = $share['Share']['event_date'];
             $response['event_time'] = $share['Share']['event_time'];
 
             $response['share_type']['share_type_id'] = $share['ShareType']['id'];
-            $response['share_type']['label'] = $share['ShareType']['label'];
+            $response['share_type']['label'] = $this->checkEmptyString($share['ShareType']['label']);
             $response['share_type']['share_type_category_id'] = $share['ShareType']['share_type_category_id'];
             $response['share_type_category']['share_type_category_id'] = $share['ShareTypeCategory']['id'];
-            $response['share_type_category']['label'] = $share['ShareTypeCategory']['label'];
+            $response['share_type_category']['label'] = $this->checkEmptyString($share['ShareTypeCategory']['label']);
             $response['price'] = $share['Share']['price'];
             $response['places'] = $share['Share']['places'];
             
             $response['participation_count'] = $share['0']['participation_count'];
             
             $response['waiting_time'] = $share['Share']['waiting_time'];
-            $response['meet_place'] = $share['Share']['meet_place'];
-            $response['limitations'] = $share['Share']['limitations'];
+            $response['meet_place'] = $this->checkEmptyString($share['Share']['meet_place']);
+            $response['limitations'] = $this->checkEmptyString($share['Share']['limitations']);
             $response['status'] = $share['Share']['status'];
-            $response['image_url'] = $share['Share']['image_url'];
-            $response['message'] = $share['Share']['message'];
+            $response['image_url'] = $this->checkEmptyString($share['Share']['image_url']);
+            $response['link'] = $this->checkEmptyString($share['Share']['link']);
+            $response['message'] = $this->checkEmptyString($share['Share']['message']);
 
             //Position
             $response['latitude'] = $share['0']['latitude'];
             $response['longitude'] = $share['0']['longitude'];
             $response['accuracy'] = $share['Share']['accuracy'];
-            $response['city'] = $share['Share']['city'];
+            $response['city'] = $this->checkEmptyString($share['Share']['city']);
             $response['zip_code'] = $share['Share']['zip_code'];
 
             $response['radius'] = $share['Share']['radius'];

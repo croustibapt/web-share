@@ -25,8 +25,9 @@ class ApiUsersController extends AppController {
 
                 //Create JSON response
                 $response['external_id'] = $user['User']['external_id'];
-                $response['username'] = $user['User']['username'];
-                $response['mail'] = $user['User']['mail'];
+                $response['username'] = $this->checkEmptyString($user['User']['username']);
+                $response['mail'] = $this->checkEmptyString($user['User']['mail']);
+                $response['description'] = $this->checkEmptyString($user['User']['description']);
 
                 //Created, modified
                 $this->formatISODate($response['created'], $user['User']['created']);
@@ -84,9 +85,9 @@ class ApiUsersController extends AppController {
             //If found
             if ($user != NULL) {
                 //Format data
-                $response['username'] = $user['User']['username'];
+                $response['username'] = $this->checkEmptyString($user['User']['username']);
                 $response['external_id'] = $user['User']['external_id'];
-                $response['description'] = $user['User']['description'];
+                $response['description'] = $this->checkEmptyString($user['User']['description']);
 
                 //Created
                 $this->formatISODate($response['created'], $user['User']['created']);

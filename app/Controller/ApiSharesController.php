@@ -171,7 +171,7 @@ class ApiSharesController extends AppController {
         }
     }
     
-    protected function internAdd($userId = NULL, $latitude = NULL, $longitude = NULL, $city = NULL, $zipCode = NULL, $shareTypeId = NULL, $eventDate = NULL, $eventTime = NULL, $title = NULL, $price = NULL, $places = NULL, $waitingTime = NULL, $meetPlace = NULL, $limitations = NULL, $message = NULL, $accuracy = NULL, $radius = NULL) {
+    protected function internAdd($userId = NULL, $latitude = NULL, $longitude = NULL, $city = NULL, $zipCode = NULL, $shareTypeId = NULL, $eventDate = NULL, $eventTime = NULL, $title = NULL, $price = NULL, $places = NULL, $waitingTime = NULL, $meetPlace = NULL, $limitations = NULL, $imageUrl = NULL, $link = NULL, $message = NULL, $accuracy = NULL, $radius = NULL) {
         $response = NULL;
         
         //Check credentials
@@ -220,6 +220,8 @@ class ApiSharesController extends AppController {
             $dataShare['Share']['waiting_time'] = $waitingTime;
             $dataShare['Share']['meet_place'] = $meetPlace;
             $dataShare['Share']['limitations'] = $limitations;
+            $dataShare['Share']['image_url'] = $imageUrl;
+            $dataShare['Share']['link'] = $link;
             $dataShare['Share']['message'] = $message;
             $dataShare['Share']['latitude'] = $latitude;
             $dataShare['Share']['longitude'] = $longitude;
@@ -248,7 +250,7 @@ class ApiSharesController extends AppController {
                 $this->formatISODate($response['created'], $share['Share']['created']);
                 $this->formatISODate($response['modified'], $share['Share']['modified']);
 
-                $response['city'] = $share['Share']['city'];
+                $response['city'] = $this->checkEmptyString($share['Share']['city']);
                 $response['zip_code'] = $share['Share']['zip_code'];
             } else {
                 $validationErrors = $this->Share->validationErrors;
@@ -280,16 +282,17 @@ class ApiSharesController extends AppController {
             $data = $this->request->input('json_decode', true);
             
             //Check empty fields
-            $this->checkField($data, 'message');
             $this->checkField($data, 'city');
             $this->checkField($data, 'zip_code');
             $this->checkField($data, 'limitations');
-            $this->checkField($data, 'meet_place');
             $this->checkField($data, 'image_url');
+            $this->checkField($data, 'link');
+            $this->checkField($data, 'meet_place');
+            $this->checkField($data, 'message');
             
             try {
                 //Intern add
-                $response = $this->internAdd($userId, $data['latitude'], $data['longitude'], NULL, NULL, $data['share_type_id'], $data['event_date'], $data['event_time'], $data['title'], $data['price'], $data['places'], $data['waiting_time'], $data['meet_place'], $data['limitations'], $data['message'], $data['accuracy'], $data['radius']);
+                $response = $this->internAdd($userId, $data['latitude'], $data['longitude'], NULL, NULL, $data['share_type_id'], $data['event_date'], $data['event_time'], $data['title'], $data['price'], $data['places'], $data['waiting_time'], $data['meet_place'], $data['limitations'], $data['image_url'], $data['link'], $data['message'], $data['accuracy'], $data['radius']);
 
                 //Send JSON respsonse
                 $this->sendResponse(SHARE_STATUS_CODE_CREATED, $response);
