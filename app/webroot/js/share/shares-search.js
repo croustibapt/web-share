@@ -377,23 +377,44 @@ function initializeSearch(autocompleteInputId, googleMapDivId, shareTypeCategory
                 //Get the corresponding share
                 var share = marker.share;
 
+                //Places label
+                var placesLabel = null;
+                if (share.places_left > 1) {
+                    placesLabel = '<span class="text-info">' + share.places_left + ' places</span>';
+                } else if (share.places_left > 0) {
+                    placesLabel = '<span class="text-warning">' + '1 places</span>';
+                } else {
+                    placesLabel = '<span class="text-danger">Complet</span>';
+                }
+
                 //Create the window html content
                 var contentHtml =
-                    '<div class="row" style="margin: 0px;">' +
+                    '<div class="row info-window-row">' +
+                    '   <div class="col-md-12 text-capitalize">' +
+                            share.moment_day +
+                    '   </div>' +
+                    '</div>' +
+                    '<div class="row info-window-row">' +
                     '   <div class="col-md-2 text-center" style="padding-right: 0px;">' +
                     '       <span style="font-size: 24px; color: ' + share.share_color + ';"><i class="' + share.share_icon + '"></i></span>' +
                     '   </div>' +
                     '   <div class="col-md-10">' +
-                    '       <span class="text-capitalize">' +
-                                share.moment_day +
-                    '       </span>' +
-                    '       <p>' +
+                    '       <p class="text-capitalize line-clamp line-clamp-1" style="color: ' + share.share_color + ';">' +
+                                share.share_type_category_label + '/' + '<span class="share-card-type-span">' + share.share_type_label + '</span>' +
+                    '       </p>' +
+                    '       <p class="line-clamp line-clamp-3">' +
                                 share.title +
-                    '       </p>'
+                    '       </p>' +
                     '   </div>' +
-                    '</div>'
-
-                    ;
+                    '</div>' +
+                    '<div class="row info-window-row">' +
+                    '   <div class="col-md-6">' +
+                            placesLabel +
+                    '   </div>' +
+                    '   <div class="col-md-6 text-right">' +
+                            '<strong class="text-info">' +share.formatted_price + '€</strong>' +
+                    '   </div>' +
+                    '</div>';
 
                 //Create the window
                 var infowindow = new google.maps.InfoWindow({

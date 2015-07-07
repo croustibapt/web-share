@@ -78,6 +78,11 @@
     height: 100%;
 }
 
+.info-window-row {
+    margin-left: 0px;
+    margin-right: 0px;
+}
+
 /* Card */
 
 .card-div {
