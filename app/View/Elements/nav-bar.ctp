@@ -45,7 +45,7 @@
 
                 <li>
                     <?php
-                        echo $this->Html->link('Proposer un partage', '/share/add', array(
+                        echo $this->Html->link('Proposer un partage', '/shares/add', array(
                             'class' => 'btn btn-outline btn-navbar'
                         ));
                     ?>

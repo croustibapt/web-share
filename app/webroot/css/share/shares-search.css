@@ -78,9 +78,8 @@
     height: 100%;
 }
 
-.info-window-row {
-    margin-left: 0px;
-    margin-right: 0px;
+.info-window-div {
+    cursor: pointer;
 }
 
 .info-window-date-p {
@@ -92,12 +91,17 @@
     font-size: 16px;
 }
 
+.info-window-type-category-span {
+    font-weight: 400;
+}
+
 .info-window-title-p {
+    margin-bottom: 5px;
     font-size: 16px;
 }
 
-.info-window-type-category-span {
-    font-weight: 400;
+.info-window-places-price-p {
+    margin-bottom: 0px;
 }
 
 /* Card */

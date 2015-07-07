@@ -6,7 +6,7 @@
  * @param latitude Start map latitude
  * @param longitude Start map longitude
  */
-function initializeAdd(googleMapDivId, autocompleteDivId, autocompleteInputId, latitude, longitude) {
+function initializeAdd(googleMapDivId, autocompleteDivId, autocompleteInputId) {
     /**
      * AddController
      */
@@ -34,10 +34,11 @@ function initializeAdd(googleMapDivId, autocompleteDivId, autocompleteInputId, l
         }
 
         //Share position
-        $scope.latitude = latitude;
-        $scope.longitude = longitude;
+        $scope.latitude = null;
+        $scope.longitude = null;
 
         $scope.map = null;
+        $scope.marker = null;
 
         /**
          * Method used to format a passed share type cateogory
@@ -69,6 +70,37 @@ function initializeAdd(googleMapDivId, autocompleteDivId, autocompleteInputId, l
             });
         }
 
+        $scope.onMapReady = function() {
+            //Arbitraty fit
+            $scope.map.fitBounds(getStartBounds());
+
+            //And then, try to locate the user
+            geolocate($scope);
+
+            //Add idle listener
+            google.maps.event.addListener($scope.map, 'idle', function() {
+                //First marker?
+                if ($scope.marker == null) {
+                    //Create the initial marker
+                    $scope.marker = new google.maps.Marker({
+                        position: $scope.map.getCenter(),
+                        map: $scope.map,
+                        title: 'Hello World!',
+                        draggable: true
+                    });
+
+                    //Update share position
+                    $scope.updateLatitudeLongitude($scope.marker);
+
+                    //Update share position when the marker is released
+                    google.maps.event.addListener($scope.marker, 'dragend', function() {
+                        //Update share position
+                        $scope.updateLatitudeLongitude($scope.marker);
+                    });
+                }
+            });
+        };
+
         /**
          * Method called to create the GoogleMap
          * @param googleMapDivId GoogleMap div identifier
@@ -92,8 +124,6 @@ function initializeAdd(googleMapDivId, autocompleteDivId, autocompleteInputId, l
             var divSearch = document.getElementById(autocompleteDivId);
             $scope.map.controls[google.maps.ControlPosition.TOP_CENTER].push(divSearch);
 
-            var marker = null;
-
             //Configure autocomplete control
             var inputSearch = document.getElementById(autocompleteInputId);
             var autocomplete = new google.maps.places.Autocomplete(inputSearch);
@@ -112,39 +142,13 @@ function initializeAdd(googleMapDivId, autocompleteDivId, autocompleteInputId, l
                 }
 
                 //Update marker position
-                marker.setPosition(place.geometry.location);
+                $scope.marker.setPosition(place.geometry.location);
 
                 //Update share position
-                $scope.updateLatitudeLongitude(marker);
+                $scope.updateLatitudeLongitude($scope.marker);
             });
 
-            //Center map
-            if (!geolocate($scope)) {
-                //Arbitraty fit
-                $scope.map.fitBounds(getStartBounds());
-            }
-
-            //Add idle listener
-            google.maps.event.addListener($scope.map, 'idle', function() {
-                if (marker == null) {
-                    //Create the initial marker
-                    marker = new google.maps.Marker({
-                        position: $scope.map.getCenter(),
-                        map: $scope.map,
-                        title: 'Hello World!',
-                        draggable: true
-                    });
-
-                    //Update share position
-                    $scope.updateLatitudeLongitude(marker);
-
-                    //Update share position when the marker is released
-                    google.maps.event.addListener(marker, 'dragend', function() {
-                        //Update share position
-                        $scope.updateLatitudeLongitude(marker);
-                    });
-                }
-            });
+            $scope.onMapReady();
         };
 
         /**

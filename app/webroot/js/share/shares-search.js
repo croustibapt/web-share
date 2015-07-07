@@ -7,7 +7,7 @@
  * @param shareType Start share type
  * @param period Start period
  */
-function initializeSearch(autocompleteInputId, googleMapDivId, shareTypeCategory, shareType, period, placeId, lat, lng, zoom) {
+function initializeSearch(autocompleteInputId, googleMapDivId, shareTypeCategory, shareType, period, placeId, latitude, longitude, zoom) {
     /**
      * SearchController
      */
@@ -22,8 +22,8 @@ function initializeSearch(autocompleteInputId, googleMapDivId, shareTypeCategory
         $scope.address = '';
         $scope.placeId = placeId;
         $scope.bounds = null;
-        $scope.lat = lat;
-        $scope.lng = lng;
+        $scope.latitude = latitude;
+        $scope.longitude = longitude;
         $scope.zoom = zoom;
 
         $scope.autocomplete = null;
@@ -32,12 +32,12 @@ function initializeSearch(autocompleteInputId, googleMapDivId, shareTypeCategory
         $scope.shareTypeCategory = shareTypeCategory;
         $scope.shareType = shareType;
 
-        $scope.shares = [];
+        $scope.shares = {};
         
         $scope.map = null;
         $scope.markers = {};
         $scope.infoWindow = new google.maps.InfoWindow({
-            disableAutoPan: true,
+            /*disableAutoPan: true,*/
             maxWidth: 250
         });
 
@@ -138,8 +138,8 @@ function initializeSearch(autocompleteInputId, googleMapDivId, shareTypeCategory
                 '&share_type_category=' + $scope.shareTypeCategory +
                 '&share_type=' + $scope.shareType +
                 '&place_id=' + $scope.placeId +
-                '&lat=' + $scope.lat +
-                '&lng=' + $scope.lng +
+                '&lat=' + $scope.latitude +
+                '&lng=' + $scope.longitude +
                 '&zoom=' + $scope.zoom;
 
             url = encodeURI(url);
@@ -192,6 +192,27 @@ function initializeSearch(autocompleteInputId, googleMapDivId, shareTypeCategory
         };
 
         /**
+         * Method called to clear all the current shares
+         */
+        $scope.clearShares = function(newShares) {
+            var shareIds = [];
+            for (var newShareId in newShares) {
+                var newShare = newShares[newShareId];
+                shareIds.push(newShare.share_id);
+            }
+
+            for (var shareId in $scope.shares) {
+                if (shareIds.indexOf(shareId) == -1) {
+                    var marker = $scope.markers[shareId];
+                    marker.setMap(null);
+
+                    delete $scope.shares[shareId];
+                    delete $scope.markers[shareId];
+                }
+            }
+        };
+
+        /**
          * Method used to handle the search Ajax response
          * @param response The JSON response
          */
@@ -202,73 +223,74 @@ function initializeSearch(autocompleteInputId, googleMapDivId, shareTypeCategory
             $scope.total_results = parseInt(response.total_results);
             $scope.results_count = response.results.length;
 
-            //Clear markers on map
-            $scope.clearMarkers();
-
             //Handle shares
             var shares = response.results;
-            $scope.shares = [];
+
+            //Clear markers on map
+            $scope.clearShares(shares);
 
             for (var i = 0; i < shares.length; i++) {
                 var share = shares[i];
 
-                //Add to map
-                $scope.addMarker(share);
+                if (!$scope.shares[share.share_id]) {
+                    //Add to map
+                    $scope.addMarker(share);
 
-                //Share type category label
-                var shareTypeCategoryLabel = getShareTypeCategoryLabel(share.share_type_category.label);
-                share.share_type_category_label = shareTypeCategoryLabel;
+                    //Share type category label
+                    var shareTypeCategoryLabel = getShareTypeCategoryLabel(share.share_type_category.label);
+                    share.share_type_category_label = shareTypeCategoryLabel;
 
-                //Share type label
-                var shareTypeLabel = getShareTypeLabel(share.share_type_category.label, share.share_type.label);
-                share.share_type_label = shareTypeLabel;
+                    //Share type label
+                    var shareTypeLabel = getShareTypeLabel(share.share_type_category.label, share.share_type.label);
+                    share.share_type_label = shareTypeLabel;
 
-                //Share color
-                var shareColor = getIconColor(share.share_type_category.label);
-                share.share_color = shareColor;
+                    //Share color
+                    var shareColor = getIconColor(share.share_type_category.label);
+                    share.share_color = shareColor;
 
-                //Share icon
-                var shareIcon = getMarkerIcon(share.share_type_category.label, share.share_type.label);
-                share.share_icon = shareIcon;
+                    //Share icon
+                    var shareIcon = getMarkerIcon(share.share_type_category.label, share.share_type.label);
+                    share.share_icon = shareIcon;
 
-                //Event date
-                var eventDate = new Date(share.event_date);
-                var isoEventDate = eventDate.toISOString();
-                var momentDay = moment(isoEventDate).format('dddd D MMMM', 'fr');
-                share.moment_day = momentDay;
+                    //Event date
+                    var eventDate = new Date(share.event_date);
+                    var isoEventDate = eventDate.toISOString();
+                    var momentDay = moment(isoEventDate).format('dddd D MMMM', 'fr');
+                    share.moment_day = momentDay;
 
-                //Event time
-                if (share.event_time != null) {
-                    var eventTime = new Date(share.event_date + ' ' + share.event_time);
-                    var isoEventTime = eventTime.toISOString();
-                    var momentHour = moment(isoEventTime).format('LT', 'fr');
-                    share.moment_hour = momentHour;
+                    //Event time
+                    if (share.event_time != null) {
+                        var eventTime = new Date(share.event_date + ' ' + share.event_time);
+                        var isoEventTime = eventTime.toISOString();
+                        var momentHour = moment(isoEventTime).format('LT', 'fr');
+                        share.moment_hour = momentHour;
+                    }
+
+                    //Modified
+                    var modifiedDate = new Date(share.modified);
+                    var isoModifiedDate = modifiedDate.toISOString();
+                    var momentModifiedTimeAgo = moment(isoModifiedDate).fromNow();
+                    share.moment_modified_time_ago = momentModifiedTimeAgo;
+
+                    //Places left
+                    var totalPlaces = parseInt(share.places) + 1;
+                    var participationCount = parseInt(share.participation_count) + 1;
+                    var placesLeft = totalPlaces - participationCount;
+                    share.places_left = placesLeft;
+
+                    var percentage = (participationCount * 100) / totalPlaces;
+                    share.percentage = percentage;
+
+                    //Formatted price
+                    var price = parseFloat(share.price);
+                    share.formatted_price = numeral(price).format('0.0a');
+
+                    //Details link
+                    var detailsLink = webroot + 'users/details/' + share.user.external_id;
+                    share.details_link = detailsLink;
+
+                    $scope.shares[share.share_id] = share;
                 }
-
-                //Modified
-                var modifiedDate = new Date(share.modified);
-                var isoModifiedDate = modifiedDate.toISOString();
-                var momentModifiedTimeAgo = moment(isoModifiedDate).fromNow();
-                share.moment_modified_time_ago = momentModifiedTimeAgo;
-
-                //Places left
-                var totalPlaces = parseInt(share.places) + 1;
-                var participationCount = parseInt(share.participation_count) + 1;
-                var placesLeft = totalPlaces - participationCount;
-                share.places_left = placesLeft;
-
-                var percentage = (participationCount * 100) / totalPlaces;
-                share.percentage = percentage;
-
-                //Formatted price
-                var price = parseFloat(share.price);
-                share.formatted_price = numeral(price).format('0.0a');
-
-                //Details link
-                var detailsLink = webroot + 'users/details/' + share.user.external_id;
-                share.details_link = detailsLink;
-
-                $scope.shares.push(share);
             }
         };
 
@@ -332,8 +354,7 @@ function initializeSearch(autocompleteInputId, googleMapDivId, shareTypeCategory
          * @param shareId Corresponding share identifier
          */
         $scope.showShareDetails = function(shareId) {
-            //Simply change window location
-            window.location.href = webroot + "share/details/" + shareId;
+            showShareDetails(shareId);
         };
 
         /**
@@ -384,33 +405,27 @@ function initializeSearch(autocompleteInputId, googleMapDivId, shareTypeCategory
                 //Places label
                 var placesLabel = null;
                 if (share.places_left > 1) {
-                    placesLabel = '<span class="text-info">' + share.places_left + ' places</span>';
+                    placesLabel = '<span class="text-info">' + share.places_left + ' places restantes</span>';
                 } else if (share.places_left > 0) {
-                    placesLabel = '<span class="text-warning">' + '1 place</span>';
+                    placesLabel = '<span class="text-warning">' + '1 place restante</span>';
                 } else {
                     placesLabel = '<span class="text-danger">Complet</span>';
                 }
 
                 //Create the window html content
                 var contentHtml =
-                    '<div class="row info-window-row">' +
-                    '   <div class="col-md-12 text-capitalize">' +
-                    '       <p class="text-muted info-window-date-p">' + share.moment_day + '</p>' +
-                    '       <p class="text-capitalize line-clamp line-clamp-1 info-window-type-p" style="color: ' + share.share_color + ';">' +
-                    '           <span class="info-window-type-category-span">' + share.share_type_category_label + '</span> / ' + '<span class="share-card-type-span">' + share.share_type_label + '</span>' +
-                    '       </p>' +
-                    '       <p class="info-window-title-p line-clamp line-clamp-3">' +
-                    share.title +
-                    '       </p>' +
-                    '   </div>' +
-                    '</div>' +
-                    '<div class="row info-window-row">' +
-                    '   <div class="col-md-6">' +
+                    '<div class="info-window-div" share-id="' + share.share_id + '">' +
+                    '   <p class="text-capitalize text-muted info-window-date-p">' + share.moment_day + '</p>' +
+                    '   <p class="text-capitalize line-clamp line-clamp-1 info-window-type-p" style="color: ' + share.share_color + ';">' +
+                    '       <span class="info-window-type-category-span">' + share.share_type_category_label + '</span> / ' + '<span class="share-card-type-span">' + share.share_type_label + '</span>' +
+                    '   </p>' +
+                    '   <p class="info-window-title-p line-clamp line-clamp-3">' +
+                            share.title +
+                    '   </p>' +
+                    '   <p class="info-window-places-price-p">' +
                             placesLabel +
-                    '   </div>' +
-                    '   <div class="col-md-6 text-right">' +
-                            '<strong class="text-info">' +share.formatted_price + '€</strong> / pers.' +
-                    '   </div>' +
+                            '<span class="pull-right text-muted"><strong class="text-info">' +share.formatted_price + '€</strong> / pers.</span>' +
+                    '   </p>' +
                     '</div>';
 
                 //Create the window
@@ -419,17 +434,6 @@ function initializeSearch(autocompleteInputId, googleMapDivId, shareTypeCategory
                 //And open it
                 $scope.infoWindow.open($scope.map, marker);
             });
-        };
-
-        /**
-         * Method called to clear all the map markers
-         */
-        $scope.clearMarkers = function() {
-            for (var shareId in $scope.markers) {
-                var marker = $scope.markers[shareId];
-                marker.setMap(null);
-            }
-            $scope.markers = {};
         };
 
         /**
@@ -463,30 +467,27 @@ function initializeSearch(autocompleteInputId, googleMapDivId, shareTypeCategory
 
         $scope.onMapReady = function(place) {
             if (place == null) {
-                if (($scope.lat != null) && ($scope.lng != null) && ($scope.zoom != null)) {
+                if (($scope.latitude != null) && ($scope.longitude != null) && ($scope.zoom != null)) {
                     console.log('place null => lat lng');
 
                     //Center on position
-                    $scope.map.setCenter(new google.maps.LatLng($scope.lat, $scope.lng));
+                    $scope.map.setCenter(new google.maps.LatLng($scope.latitude, $scope.longitude));
 
                     //And zoom
                     $scope.map.setZoom($scope.zoom);
                 } else {
-                    //Try to locate the user
-                    if (!geolocate($scope)) {
-                        console.log('place null => paris');
-                        //Arbitraty fit
-                        $scope.map.fitBounds(getStartBounds());
-                    } else {
-                        console.log('place null => geolocate');
-                    }
+                    //Arbitraty fit
+                    $scope.map.fitBounds(getStartBounds());
+
+                    //And then, try to locate the user
+                    geolocate($scope);
                 }
             } else {
-                if (($scope.lat != null) && ($scope.lng != null) && ($scope.zoom != null)) {
+                if (($scope.latitude != null) && ($scope.longitude != null) && ($scope.zoom != null)) {
                     console.log('place not null => lat lng');
 
                     //Center on position
-                    $scope.map.setCenter(new google.maps.LatLng($scope.lat, $scope.lng));
+                    $scope.map.setCenter(new google.maps.LatLng($scope.latitude, $scope.longitude));
 
                     //And zoom
                     $scope.map.setZoom($scope.zoom);
@@ -506,8 +507,8 @@ function initializeSearch(autocompleteInputId, googleMapDivId, shareTypeCategory
                     $scope.bounds = $scope.map.getBounds();
 
                     //And position
-                    $scope.lat = $scope.map.getCenter().lat();
-                    $scope.lng = $scope.map.getCenter().lng();
+                    $scope.latitude = $scope.map.getCenter().lat();
+                    $scope.longitude = $scope.map.getCenter().lng();
                     $scope.zoom = $scope.map.getZoom();
 
                     //Reset page
@@ -519,6 +520,7 @@ function initializeSearch(autocompleteInputId, googleMapDivId, shareTypeCategory
             });
 
             google.maps.event.addListener($scope.map, 'click', function() {
+                console.log('map clicked');
                 $scope.infoWindow.close();
             });
         };
@@ -549,7 +551,7 @@ function initializeSearch(autocompleteInputId, googleMapDivId, shareTypeCategory
                 $scope.address = place.formatted_address;
 
                 //Center on it
-                $scope.centerMapOnPlace(place);
+                centerMapOnPlace(scope, place);
             });
 
             //Get place if exists

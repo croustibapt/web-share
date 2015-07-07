@@ -516,12 +516,8 @@ function geolocate(scope) {
 
             //Center map
             scope.map.fitBounds(circle.getBounds());
-
-            return true;
         });
     }
-
-    return false;
 }
 
 function getStartBounds() {
@@ -529,4 +525,19 @@ function getStartBounds() {
         new google.maps.LatLng(48.815573, 2.2241989999999987),
         new google.maps.LatLng(48.9021449, 2.4699207999999544)
     );
+}
+
+function centerMapOnPlace(scope, place) {
+    //If the place has a geometry, then present it on a map.
+    if (place.geometry.viewport) {
+        scope.map.fitBounds(place.geometry.viewport);
+    } else {
+        scope.map.setCenter(place.geometry.location);
+        scope.map.setZoom(17);  // Why 17? Because it looks good.
+    }
+}
+
+function showShareDetails(shareId) {
+    //Simply change window location
+    window.location.href = webroot + "share/details/" + shareId;
 }

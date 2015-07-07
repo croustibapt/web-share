@@ -57,4 +57,9 @@
 
     //Initialize SearchController
     initializeSearch('shares-search-address-input', 'shares-search-google-map-div', '<?php echo $shareTypeCategory; ?>', '<?php echo $shareType; ?>', '<?php echo $period; ?>', '<?php echo $placeId; ?>', <?php echo $lat; ?>, <?php echo $lng; ?>, <?php echo $zoom; ?>);
+
+    $(document).on('click', '.info-window-div', function() {
+        var shareId = $(this).attr('share-id');
+        showShareDetails(shareId);
+    });
 </script>
