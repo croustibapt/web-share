@@ -36,6 +36,10 @@ function initializeSearch(autocompleteInputId, googleMapDivId, shareTypeCategory
         
         $scope.map = null;
         $scope.markers = {};
+        $scope.infoWindow = new google.maps.InfoWindow({
+            disableAutoPan: true,
+            maxWidth: 250
+        });
 
         /**
          * Method used to get an array from a number (used in pagination)
@@ -382,7 +386,7 @@ function initializeSearch(autocompleteInputId, googleMapDivId, shareTypeCategory
                 if (share.places_left > 1) {
                     placesLabel = '<span class="text-info">' + share.places_left + ' places</span>';
                 } else if (share.places_left > 0) {
-                    placesLabel = '<span class="text-warning">' + '1 places</span>';
+                    placesLabel = '<span class="text-warning">' + '1 place</span>';
                 } else {
                     placesLabel = '<span class="text-danger">Complet</span>';
                 }
@@ -391,19 +395,12 @@ function initializeSearch(autocompleteInputId, googleMapDivId, shareTypeCategory
                 var contentHtml =
                     '<div class="row info-window-row">' +
                     '   <div class="col-md-12 text-capitalize">' +
-                            share.moment_day +
-                    '   </div>' +
-                    '</div>' +
-                    '<div class="row info-window-row">' +
-                    '   <div class="col-md-2 text-center" style="padding-right: 0px;">' +
-                    '       <span style="font-size: 24px; color: ' + share.share_color + ';"><i class="' + share.share_icon + '"></i></span>' +
-                    '   </div>' +
-                    '   <div class="col-md-10">' +
-                    '       <p class="text-capitalize line-clamp line-clamp-1" style="color: ' + share.share_color + ';">' +
-                                share.share_type_category_label + '/' + '<span class="share-card-type-span">' + share.share_type_label + '</span>' +
+                    '       <p class="text-muted info-window-date-p">' + share.moment_day + '</p>' +
+                    '       <p class="text-capitalize line-clamp line-clamp-1 info-window-type-p" style="color: ' + share.share_color + ';">' +
+                    '           <span class="info-window-type-category-span">' + share.share_type_category_label + '</span> / ' + '<span class="share-card-type-span">' + share.share_type_label + '</span>' +
                     '       </p>' +
-                    '       <p class="line-clamp line-clamp-3">' +
-                                share.title +
+                    '       <p class="info-window-title-p line-clamp line-clamp-3">' +
+                    share.title +
                     '       </p>' +
                     '   </div>' +
                     '</div>' +
@@ -412,17 +409,15 @@ function initializeSearch(autocompleteInputId, googleMapDivId, shareTypeCategory
                             placesLabel +
                     '   </div>' +
                     '   <div class="col-md-6 text-right">' +
-                            '<strong class="text-info">' +share.formatted_price + '€</strong>' +
+                            '<strong class="text-info">' +share.formatted_price + '€</strong> / pers.' +
                     '   </div>' +
                     '</div>';
 
                 //Create the window
-                var infowindow = new google.maps.InfoWindow({
-                    content: contentHtml
-                });
+                $scope.infoWindow.setContent(contentHtml);
 
                 //And open it
-                infowindow.open($scope.map, marker);
+                $scope.infoWindow.open($scope.map, marker);
             });
         };
 
@@ -521,6 +516,10 @@ function initializeSearch(autocompleteInputId, googleMapDivId, shareTypeCategory
                     //And update results
                     $scope.search();
                 });
+            });
+
+            google.maps.event.addListener($scope.map, 'click', function() {
+                $scope.infoWindow.close();
             });
         };
 
