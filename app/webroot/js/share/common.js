@@ -32,7 +32,7 @@ function getMarkerIcon(shareTypeCategory, shareType) {
         } else if (shareType == "sushi") {
             return 'fa fa-cutlery';
         } else if (shareType == "restaurant") {
-            return 'fa fa-cutlery';
+            return 'fa fa-glass';
         } else {
             return 'fa fa-cutlery';
         }
@@ -94,13 +94,13 @@ function getMarkerIcon(shareTypeCategory, shareType) {
         } else if (shareType == "woman") {
             return 'fa fa-female';
         } else if (shareType == "mixte") {
-            return 'icon ion-ios-body';
+            return 'fa fa-transgender';
         } else if (shareType == "child") {
             return 'fa fa-child';
         } else if (shareType == "jewelry") {
             return 'fa fa-diamond';
         } else {
-            return 'icon ion-tshirt';
+            return 'fa shopping-cart';
         }
     } else if (shareTypeCategory == "house") {
         if (shareType == "furniture") {
@@ -132,7 +132,7 @@ function getMarkerIcon(shareTypeCategory, shareType) {
 function getShareMarkerImage(shareTypeCategory, shareType) {
     if (shareTypeCategory == "food") {
         if (shareType == "pizza") {
-            return 'marker-cultery.png';
+            return 'marker-pizza.png';
         } else if (shareType == "snack") {
             return 'marker-coffee.png';
         } else if (shareType == "burger") {
@@ -140,7 +140,7 @@ function getShareMarkerImage(shareTypeCategory, shareType) {
         } else if (shareType == "sushi") {
             return 'marker-cultery.png';
         } else if (shareType == "restaurant") {
-            return 'marker-cultery.png';
+            return 'marker-glass.png';
         } else {
             return 'marker-cultery.png';
         }
@@ -202,13 +202,13 @@ function getShareMarkerImage(shareTypeCategory, shareType) {
         } else if (shareType == "woman") {
             return 'marker-female.png';
         } else if (shareType == "mixte") {
-            return 'marker-male.png';
+            return 'marker-transgender.png';
         } else if (shareType == "child") {
             return 'marker-child.png';
         } else if (shareType == "jewelry") {
             return 'marker-diamond.png';
         } else {
-            return 'marker-male.png';
+            return 'marker-shopping-cart.png';
         }
     } else if (shareTypeCategory == "house") {
         if (shareType == "furniture") {
