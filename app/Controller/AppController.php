@@ -554,7 +554,7 @@ class AppController extends Controller {
             //Check if user does not already participate
             if ($this->canParticipate($share, $userExternalId)) {
                 $requestStatus = $this->getRequestStatus($share, $userExternalId);
-                $canRequest = ($requestStatus == NULL);
+                $canRequest = ($requestStatus == -1);
             }
         }
 
