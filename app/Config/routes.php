@@ -45,7 +45,7 @@
     Router::connect('/user/add', array('controller' => 'Users', 'action' => 'add'));
     Router::connect('/user/details/:externalId', array('controller' => 'Users', 'action' => 'get'), array(
         'pass' => array('externalId'),
-            'externalId' => '[A-Za-z0-9]+'
+        'externalId' => '[A-Za-z0-9]+'
     ));
     Router::connect('/user/home', array('controller' => 'Users', 'action' => 'home'));
     Router::connect('/user/authenticate', array('controller' => 'Users', 'action' => 'authenticate'));
@@ -74,7 +74,11 @@
     Router::connect('/api/share/add', array('controller' => 'ApiShares', 'action' => 'apiAdd'));
     Router::connect('/api/share/details/:shareId', array('controller' => 'ApiShares', 'action' => 'apiDetails'), array(
         'pass' => array('shareId'),
-            'shareId' => '[0-9]+'
+        'shareId' => '[0-9]+'
+    ));
+    Router::connect('/api/share/cancel/:shareId', array('controller' => 'ApiShares', 'action' => 'apiCancel'), array(
+        'pass' => array('shareId'),
+        'shareId' => '[0-9]+'
     ));
 
     //General
@@ -95,6 +99,10 @@
         'pass' => array('shareId'),
         'shareId' => '[0-9]+'
     ));
+    Router::connect('/share/cancel/:shareId', array('controller' => 'Shares', 'action' => 'cancel'), array(
+        'pass' => array('shareId'),
+        'shareId' => '[0-9]+'
+    ));
 
 #pragma mark - COMMENTS
     
@@ -112,30 +120,30 @@
     Router::connect('/api/request/add', array('controller' => 'ApiRequests', 'action' => 'apiAdd'));
     Router::connect('/api/request/accept/:requestId', array('controller' => 'ApiRequests', 'action' => 'apiAccept'), array(
         'pass' => array('requestId'),
-            'requestId' => '[0-9]+'
+        'requestId' => '[0-9]+'
     ));
     Router::connect('/api/request/decline/:requestId', array('controller' => 'ApiRequests', 'action' => 'apiDecline'), array(
         'pass' => array('requestId'),
-            'requestId' => '[0-9]+'
+        'requestId' => '[0-9]+'
     ));
     Router::connect('/api/request/cancel/:requestId', array('controller' => 'ApiRequests', 'action' => 'apiCancel'), array(
         'pass' => array('requestId'),
-            'requestId' => '[0-9]+'
+        'requestId' => '[0-9]+'
     ));
 
     //General
     Router::connect('/request/add', array('controller' => 'Requests', 'action' => 'add'));
     Router::connect('/request/accept/:requestId', array('controller' => 'Requests', 'action' => 'accept'), array(
         'pass' => array('requestId'),
-            'requestId' => '[0-9]+'
+        'requestId' => '[0-9]+'
     ));
     Router::connect('/request/decline/:requestId', array('controller' => 'Requests', 'action' => 'decline'), array(
         'pass' => array('requestId'),
-            'requestId' => '[0-9]+'
+        'requestId' => '[0-9]+'
     ));
     Router::connect('/request/cancel/:requestId', array('controller' => 'Requests', 'action' => 'cancel'), array(
         'pass' => array('requestId'),
-            'requestId' => '[0-9]+'
+        'requestId' => '[0-9]+'
     ));
 
 /**

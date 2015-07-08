@@ -75,6 +75,7 @@ class SharesController extends ApiSharesController {
         $response = $this->internDetails($shareId);
         //$this->set('share', $response);
         $this->set('shareId', $response['share_id']);
+        $this->set('shareStatus', $response['status']);
         $this->set('shareUserExternalId', $response['user']['external_id']);
 
         //Get user identifier
@@ -99,6 +100,22 @@ class SharesController extends ApiSharesController {
         //Request status
         $requestStatus = $this->getRequestStatus($share, $userExternalId);
         $this->set('requestStatus', $requestStatus);
+    }
+
+    public function cancel($shareId = NULL) {
+        if ($this->request->is('POST')) {
+            $data = $this->request->data;
+
+            try {
+                //Intern add
+                $this->internCancel($shareId, $data['Share']['reason'], $data['Share']['message']);
+
+                //Redirect
+                $this->redirect($this->referer());
+            } catch (ShareException $e) {
+                $this->Share->validationErrors = $e->getValidationErrors();
+            }
+        }
     }
 
     /*public function delete() {

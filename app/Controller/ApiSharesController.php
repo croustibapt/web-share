@@ -24,7 +24,7 @@ class ApiSharesController extends AppController {
     protected function internSearch($types = NULL, $startDate = NULL, $endDate = NULL, $region = NULL, $page = 1) {
         //Main query
         $sqlPrefix = "SELECT *, X(Share.location) as latitude, Y(Share.location) as longitude, ShareTypeCategory.label, (SELECT COUNT(Request.id) FROM requests Request WHERE Request.share_id = Share.id AND Request.status = 1) AS participation_count";
-        $sql = " FROM shares Share, users User, share_types ShareType, share_type_categories ShareTypeCategory WHERE Share.user_id = User.id AND Share.share_type_id = ShareType.id AND ShareType.share_type_category_id = ShareTypeCategory.id";
+        $sql = " FROM shares Share, users User, share_types ShareType, share_type_categories ShareTypeCategory WHERE Share.user_id = User.id AND Share.status = ".SHARE_STATUS_OPENED." AND Share.share_type_id = ShareType.id AND ShareType.share_type_category_id = ShareTypeCategory.id";
 
         //Types
         if (($types != NULL) && (count($types) > 0)) {
@@ -343,6 +343,69 @@ class ApiSharesController extends AppController {
 
                 //Send JSON respsonse
                 $this->sendResponse(SHARE_STATUS_CODE_OK, $response);
+            } catch (ShareException $e) {
+                $this->sendErrorResponse($e->getStatusCode(), $e->getCode(), $e->getMessage(), $e->getValidationErrors());
+            }
+        }
+    }
+
+    protected function internCancel($shareId = NULL, $reason = NULL, $message = NULL) {
+        //Check share id parameter
+        if ($shareId != NULL) {
+            //Check reason parameter
+            if ($reason != NULL) {
+                //Find share
+                $share = $this->Share->find('first', array(
+                    'conditions' => array(
+                        'Share.id' => $shareId
+                    )
+                ));
+
+                //If it's well formatted
+                if ($share != NULL) {
+                    //Check if the Share is opened
+                    if ($share['Share']['status'] == SHARE_STATUS_OPENED) {
+                        //Check credentials
+                        if ($this->checkCredentials($this->request)) {
+                            //TODO
+                            //Save changes
+                            $this->Share->id = $shareId;
+
+                            //If it succeeded
+                            if ($this->Share->saveField('status', SHARE_STATUS_CLOSED)) {
+                                //Send push notif: TODO
+                                //$this->sendPushNotif($request['Request']['user_id'], 'Votre demande a été acceptée.');
+                            } else {
+                                throw new ShareException(SHARE_STATUS_CODE_INTERNAL_SERVER_ERROR, SHARE_ERROR_CODE_SAVE_FAILED, "Share cancel failed");
+                            }
+                        } else {
+                            throw new ShareException(SHARE_STATUS_CODE_UNAUTHORIZED, SHARE_ERROR_CODE_BAD_CREDENTIALS, "Bad credentials");
+                        }
+                    } else {
+                        throw new ShareException(SHARE_STATUS_CODE_METHOD_NOT_ALLOWED, SHARE_ERROR_CODE_RESOURCE_DISABLED, "You cannot cancel this Share");
+                    }
+                } else {
+                    throw new ShareException(SHARE_STATUS_CODE_NOT_FOUND, SHARE_ERROR_CODE_RESOURCE_NOT_FOUND, "Share not found");
+                }
+            } else {
+                throw new ShareException(SHARE_STATUS_CODE_BAD_REQUEST, SHARE_ERROR_CODE_BAD_PARAMETERS, "Bad reason");
+            }
+        } else {
+            throw new ShareException(SHARE_STATUS_CODE_BAD_REQUEST, SHARE_ERROR_CODE_BAD_PARAMETERS, "Bad Share identifier");
+        }
+    }
+
+    public function apiCancel($shareId = NULL) {
+        if ($this->request->is('POST')) {
+            try {
+                //Get data
+                $data = $this->request->input('json_decode', true);
+
+                //Intern Details
+                $this->internCancel($shareId, $data['reason'], $data['message']);
+
+                //Send JSON respsonse
+                $this->sendResponse(SHARE_STATUS_CODE_OK);
             } catch (ShareException $e) {
                 $this->sendErrorResponse($e->getStatusCode(), $e->getCode(), $e->getMessage(), $e->getValidationErrors());
             }

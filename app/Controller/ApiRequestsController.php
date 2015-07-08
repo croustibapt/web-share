@@ -35,7 +35,7 @@ class ApiRequestsController extends AppController {
                 )
             ));
                         
-            if ($this->doesUserOwnShare($share, $userExternalId) && $this->canParticipate($share, $request['User']['external_id'])) {
+            if (($share['Share']['status'] == SHARE_STATUS_OPENED) && $this->doesUserOwnShare($share, $userExternalId) && $this->canParticipate($share, $request['User']['external_id'])) {
                 $canAcceptRequest = true;
             }
         }
@@ -44,7 +44,7 @@ class ApiRequestsController extends AppController {
     }
     
     private function canDeclineRequest($request = NULL, $userExternalId = NULL) {
-        $canAcceptRequest = false;
+        $canDeclineRequest = false;
         
         //Check parameters
         if (($request != NULL) && ($userExternalId != NULL) && $this->canChangeStatus($request, SHARE_REQUEST_STATUS_DECLINED)) {
@@ -57,11 +57,13 @@ class ApiRequestsController extends AppController {
                     'Share.id' => $shareId
                 )
             ));
-            
-            $canAcceptRequest = $this->doesUserOwnShare($share, $userExternalId);
+
+            if (($share['Share']['status'] == SHARE_STATUS_OPENED) && $this->doesUserOwnShare($share, $userExternalId)) {
+                $canDeclineRequest = true;
+            }
         }
         
-        return $canAcceptRequest;
+        return $canDeclineRequest;
     }
     
     private function canCancelRequest($request = NULL, $userExternalId = NULL) {
@@ -79,7 +81,9 @@ class ApiRequestsController extends AppController {
                 )
             ));
             
-            $canCancelRequest = ($this->doesUserOwnShare($share, $userExternalId) || ($request['User']['external_id'] == $userExternalId));
+            if (($share['Share']['status'] == SHARE_STATUS_OPENED) && ($this->doesUserOwnShare($share, $userExternalId) || ($request['User']['external_id'] == $userExternalId))) {
+                $canCancelRequest = true;
+            }
         }
         
         return $canCancelRequest;
@@ -181,8 +185,6 @@ class ApiRequestsController extends AppController {
     }
     
     protected function internAccept($requestId = NULL, $userExternalId = NULL) {
-        $success = false;
-        
         if (($requestId != NULL) && ($userExternalId != NULL)) {
             //Get related Request
             $request = $this->Request->find('first', array(
@@ -198,9 +200,6 @@ class ApiRequestsController extends AppController {
                     if ($this->canAcceptRequest($request, $userExternalId)) {
                         //Update status
                         if ($this->changeStatus($request, SHARE_REQUEST_STATUS_ACCEPTED)) {
-                            //Success!
-                            $success = true;
-                            
                             //Send push notif
                             $this->sendPushNotif($request['Request']['user_id'], 'Votre demande a été acceptée.');
                         } else {
@@ -216,8 +215,6 @@ class ApiRequestsController extends AppController {
                 throw new ShareException(SHARE_STATUS_CODE_NOT_FOUND, SHARE_ERROR_CODE_RESOURCE_NOT_FOUND, "Request not found");
             } 
         }
-        
-        return $success;
     }
     
     public function apiAccept($requestId = NULL) {

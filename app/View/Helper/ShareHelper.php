@@ -4,7 +4,7 @@ App::uses('AppHelper', 'View/Helper');
 
 class ShareHelper extends AppHelper {
     public function getShareDetailsRequestStatusLabel($status = NULL) {
-        $label = 'Unknown';
+        $label = 'Invalide';
 
         if ($status == SHARE_REQUEST_STATUS_PENDING) {
             $label = 'En attente';

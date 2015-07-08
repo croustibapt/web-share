@@ -1,5 +1,79 @@
 <script src="http://js.nicedit.com/nicEdit-latest.js"></script>
 
+<?php if ($doesUserOwnShare) : ?>
+
+<!-- Own share : delete modal -->
+<div id="shares-details-delete-modal-div" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Modal title</h4>
+            </div>
+
+            <div class="modal-body">
+
+                <?php
+                echo $this->Form->create('Share', array(
+                    'action' => 'cancel/'.$shareId
+                ));
+                ?>
+
+                <!-- Reason -->
+                <div class="form-group">
+
+                    <label for="shares-details-delete-modal-reason-input">Reason:</label>
+
+                    <?php
+                        $reasons = array('0' => 'Reason1', '1' => 'Reason2', '2' => 'Reason3');
+                        echo $this->Form->input('reason', array(
+                            'id' => 'shares-details-delete-modal-reason-input',
+                            'type' => 'select',
+                            'options' => $reasons,
+                            'class' => 'form-control',
+                            'label' => false
+                        ));
+                    ?>
+
+                </div>
+
+                <!-- Message -->
+                <div class="form-group">
+
+                    <label for="shares-details-delete-modal-message-input">Message:</label>
+
+                    <?php
+                        echo $this->Form->input('message', array(
+                            'id' => 'shares-details-delete-modal-message-input',
+                            'placeholder' => 'Type your message here...',
+                            'class' => 'form-control',
+                            'label' => false
+                        ));
+                    ?>
+
+                </div>
+
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+
+                <?php
+                    echo $this->Form->submit('Supprimer', array(
+                        'class' => 'btn btn-danger',
+                        'div' => false
+                    ));
+
+                    echo $this->Form->end();
+                ?>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<?php endif; ?>
+
 <div id="shares-details-div">
 
     <div class="container">
@@ -122,12 +196,19 @@
 
                             <?php else : ?>
 
-                                <!-- Own share -->
-                                <div data-toggle="tooltip" data-placement="bottom" title="Vous êtes le créateur" class="shares-details-participate-div">
-                                    <button class="btn btn-success disabled shares-details-participate-button">
-                                        Participer
-                                    </button>
-                                </div>
+                                <?php if ($shareStatus == SHARE_STATUS_OPENED) : ?>
+
+                                <button type="button" class="btn btn-danger shares-details-participate-button" data-toggle="modal" data-target="#shares-details-delete-modal-div">
+                                    Supprimer
+                                </button>
+
+                                <?php else : ?>
+
+                                <button type="button" class="btn btn-default shares-details-participate-button disabled">
+                                    Annulé
+                                </button>
+
+                                <?php endif; ?>
 
                             <?php endif; ?>
 
@@ -158,8 +239,17 @@
 
                 <!-- Created by -->
                 <p class="shares-details-created-p">
+
+                    <?php if (!$doesUserOwnShare) : ?>
+
                     Créé par <a href="#shares-details-user-profile-header-div" class="scroll-a">{{ share.user.username }}</a>
-                    <br />
+
+                    <?php else : ?>
+
+                    Vous avez créé ce partage
+
+                    <?php endif; ?>
+
                     {{ share.moment_created_time_ago }}
                 </p>
 

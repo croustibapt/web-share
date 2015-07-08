@@ -420,7 +420,7 @@ function initializeSearch(autocompleteInputId, googleMapDivId, shareTypeCategory
                 } else if (share.places_left > 0) {
                     placesLabel = '<span class="text-warning">' + '1 place restante</span>';
                 } else {
-                    placesLabel = '<span class="text-danger">Complet</span>';
+                    placesLabel = '<span class="text-success">Complet</span>';
                 }
 
                 //Create the window html content

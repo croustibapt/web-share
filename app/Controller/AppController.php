@@ -528,7 +528,7 @@ class AppController extends Controller {
     }
 
     protected function getRequestStatus($share = NULL, $userExternalId = NULL) {
-        $requestStatus = NULL;
+        $requestStatus = -1;
 
         if (($share != NULL) && ($userExternalId != NULL)) {
             //Find first Request
@@ -550,7 +550,7 @@ class AppController extends Controller {
     protected function canRequest($share = NULL, $userExternalId = NULL) {
         $canRequest = false;
 
-        if (($share != NULL) && ($userExternalId != NULL)) {
+        if (($share != NULL) && ($share['Share']['status'] == SHARE_STATUS_OPENED) && ($userExternalId != NULL)) {
             //Check if user does not already participate
             if ($this->canParticipate($share, $userExternalId)) {
                 $requestStatus = $this->getRequestStatus($share, $userExternalId);
