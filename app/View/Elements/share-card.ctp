@@ -3,10 +3,10 @@
     <!-- Header -->
     <div class="card-header-div" ng-style="{'background-color': share.share_color}">
         <div class="row">
-            <div class="col-md-6">
+            <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 text-center-xs">
 
                 <!-- Event date -->
-                <span class="share-card-date-span text-capitalize moment-day">
+                <span class="share-card-date-span text-capitalize">
                     {{ share.moment_day }}
                 </span>
 
@@ -16,7 +16,7 @@
                 </span>
 
             </div>
-            <div class="col-md-6 text-right">
+            <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 text-right text-center-xs">
 
                 <!-- City -->
                 <span ng-if="(share.city != null)">{{ share.city }}</span>
@@ -29,16 +29,13 @@
     <!-- Main -->
     <div class="share-card-main-div">
 
-        <div class="row">
-            <div class="col-md-2 text-center">
-
-                <!-- Icon -->
-                <h1 ng-style="{'color': share.share_color}" class="share-card-icon-h1"><i ng-class="share.share_icon"></i></h1>
-
+        <div class="media">
+            <div class="media-left">
+                <a href="#">
+                    <img ng-src="../img/{{ getShareMarkerImage(share.share_type_category.label, share.share_type.label) }}" style="max-width: 80px;" />
+                </a>
             </div>
-
-            <div class="col-md-10 share-card-title-col">
-
+            <div class="media-body">
                 <blockquote class="share-card-title-blockquote">
                     <!-- Share type -->
                     <p class="text-capitalize line-clamp line-clamp-1 share-card-type-p" style="color: {{ share.share_color }};">
@@ -61,7 +58,6 @@
                         Aucun commentaire
                     </p>
                 </blockquote>
-
             </div>
         </div>
 
@@ -72,7 +68,7 @@
 
         <!-- Places left -->
         <div class="row">
-            <div class="col-md-12">
+            <div class="col-md-12 text-center-xs">
 
                 <p ng-if="(share.places_left > 1)" class="text-info share-card-left-places-p">
                     {{ share.places_left }} places restantes
@@ -90,7 +86,7 @@
         <!-- Progress and price -->
         <div class="row">
             <!-- Progress -->
-            <div class="col-md-6">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6 text-center-xs">
                 <div class="progress share-card-progress">
                     <div ng-if="(share.places_left === 0)" class="progress-bar progress-bar-success share-card-progress-bar" role="progressbar" aria-valuenow="' + percentage + '" aria-valuemin="0" aria-valuemax="100" style="width: 100%;">
                     </div>
@@ -100,8 +96,8 @@
             </div>
 
             <!-- Price -->
-            <div class="col-md-6 text-right">
-                <p class="share-card-price-p lead">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6 text-right text-center-xs">
+                <p class="share-card-price-p lead line-clamp line-clamp-1">
                     {{ share.formatted_price }} € <small class="share-card-price-small">/ pers.</small>
                 </p>
             </div>

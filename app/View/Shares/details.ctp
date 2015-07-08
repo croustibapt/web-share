@@ -179,6 +179,8 @@
         echo $this->element('share-comments');
     ?>
 
+    <?php if (!$doesUserOwnShare) : ?>
+
     <!-- User profile -->
     <div class="shares-details-user-profile-div">
 
@@ -237,6 +239,8 @@
         </div>
 
     </div>
+
+    <?php endif; ?>
 
 </div>
 

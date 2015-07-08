@@ -62,12 +62,37 @@ function initializeAdd(googleMapDivId, autocompleteDivId, autocompleteInputId) {
         /**
          * Method used to update the share location
          */
-        $scope.updateLatitudeLongitude = function(marker) {
+        $scope.updateLatitudeLongitude = function() {
             //"Force" update
             $scope.$apply(function() {
-                $scope.latitude = marker.getPosition().lat();
-                $scope.longitude = marker.getPosition().lng();
+                $scope.latitude = $scope.marker.getPosition().lat();
+                $scope.longitude = $scope.marker.getPosition().lng();
             });
+        }
+
+        $scope.moveMarker = function(position, move) {
+            //Check if we need to create it
+            if ($scope.marker == null) {
+                //Create the initial marker
+                $scope.marker = new google.maps.Marker({
+                    position: position,
+                    map: $scope.map,
+                    title: 'Hello World!',
+                    draggable: true
+                });
+
+                //Update share position when the marker is released
+                google.maps.event.addListener($scope.marker, 'dragend', function() {
+                    //Update share position
+                    $scope.updateLatitudeLongitude();
+                });
+            } else if (move) {
+                //Update marker position
+                $scope.marker.setPosition(position);
+
+                //Update share position
+                $scope.updateLatitudeLongitude();
+            }
         }
 
         $scope.onMapReady = function() {
@@ -75,29 +100,16 @@ function initializeAdd(googleMapDivId, autocompleteDivId, autocompleteInputId) {
             $scope.map.fitBounds(getStartBounds());
 
             //And then, try to locate the user
-            geolocate($scope);
+            geolocate($scope, function(position) {
+                //Move marker
+                var position = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+                $scope.moveMarker(position, true);
+            });
 
             //Add idle listener
             google.maps.event.addListener($scope.map, 'idle', function() {
-                //First marker?
-                if ($scope.marker == null) {
-                    //Create the initial marker
-                    $scope.marker = new google.maps.Marker({
-                        position: $scope.map.getCenter(),
-                        map: $scope.map,
-                        title: 'Hello World!',
-                        draggable: true
-                    });
-
-                    //Update share position
-                    $scope.updateLatitudeLongitude($scope.marker);
-
-                    //Update share position when the marker is released
-                    google.maps.event.addListener($scope.marker, 'dragend', function() {
-                        //Update share position
-                        $scope.updateLatitudeLongitude($scope.marker);
-                    });
-                }
+                var position = $scope.map.getCenter();
+                $scope.moveMarker(position, false);
             });
         };
 
@@ -134,18 +146,14 @@ function initializeAdd(googleMapDivId, autocompleteDivId, autocompleteInputId) {
 
                 //If the place has a geometry, then present it on a map.
                 if (place.geometry.viewport) {
-                    console.log(place.geometry.viewport);
                     $scope.map.fitBounds(place.geometry.viewport);
                 } else {
                     $scope.map.setCenter(place.geometry.location);
                     $scope.map.setZoom(17);  // Why 17? Because it looks good.
                 }
 
-                //Update marker position
-                $scope.marker.setPosition(place.geometry.location);
-
-                //Update share position
-                $scope.updateLatitudeLongitude($scope.marker);
+                //Move marker
+                $scope.moveMarker(place.geometry.location, true);
             });
 
             $scope.onMapReady();

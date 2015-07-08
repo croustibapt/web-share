@@ -188,3 +188,12 @@
     color: #ecf0f1;
     font-weight: 200;
 }
+
+@media(max-width: 768px) {
+    .text-center-xs {
+        text-align: center;
+    }
+    .text-center-xs {
+        text-align: center;
+    }
+}

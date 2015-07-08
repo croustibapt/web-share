@@ -5,9 +5,10 @@
         <title>
             Share
         </title>
+
+        <meta name="viewport" content="width=device-width, initial-scale=1">
         
         <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?libraries=places"></script>
-        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
 
         <?php
             echo $this->Html->meta('icon');
@@ -21,7 +22,7 @@
             echo $this->Html->css('bootstrap/bootstrap-modified');
 
             //Icons
-            echo $this->Html->css('icons/ionicons');
+            echo $this->Html->css('icons/fontello/fontello');
 
             //Utils
             echo $this->Html->css('utils/clamp');

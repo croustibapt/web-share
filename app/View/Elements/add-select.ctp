@@ -41,7 +41,7 @@
 
 <?php endif; ?>
 
-    <span class="<?php echo $inputGroupAddonClass; ?>"><i class="fa <?php echo $icon; ?>"></i></span>
+    <span class="<?php echo $inputGroupAddonClass; ?>"><i class="<?php echo $icon; ?>"></i></span>
 
     <!-- Container div -->
     <div class="<?php echo $divSelectClass; ?>">

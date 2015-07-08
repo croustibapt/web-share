@@ -22,7 +22,7 @@
                         'modelName' => 'Share',
                         'name' => 'title',
                         'placeholder' => 'Titre',
-                        'icon' => 'fa-file-text',
+                        'icon' => 'icon-doc-text',
                         'required' => true
                     ));
                 ?>
@@ -37,7 +37,7 @@
                                 'name' => 'share_type_id',
                                 'ngModel' => 'shareType',
                                 'ngOptions' => 'shareTypeId as formatShareType(shareType.share_type_category_label, shareType.label) group by formatShareTypeCategory(shareType.share_type_category_label) for (shareTypeId, shareType) in shareTypes',
-                                'icon' => 'fa-tag',
+                                'icon' => 'icon-tag',
                                 'required' => true
                             ));
                         ?>
@@ -51,7 +51,7 @@
                                 'name' => 'event_date',
                                 'placeholder' => 'Date',
                                 'class' => 'datepicker',
-                                'icon' => 'fa-calendar-o',
+                                'icon' => 'icon-calendar',
                                 'required' => true
                             ));
                         ?>
@@ -67,7 +67,7 @@
                                 'modelName' => 'Share',
                                 'name' => 'price',
                                 'placeholder' => 'Prix (en euros)',
-                                'icon' => 'fa-dollar',
+                                'icon' => 'icon-dollar',
                                 'required' => true
                             ));
                         ?>
@@ -79,7 +79,7 @@
                                 'modelName' => 'Share',
                                 'name' => 'places',
                                 'placeholder' => 'Nombre de places',
-                                'icon' => 'fa-ellipsis-h',
+                                'icon' => 'icon-ellipsis',
                                 'required' => true
                             ));
                         ?>
@@ -94,7 +94,7 @@
                         'modelName' => 'Share',
                         'name' => 'message',
                         'placeholder' => 'Message',
-                        'icon' => 'fa-pencil-square-o'
+                        'icon' => 'icon-pencil'
                     ));
                 ?>
 
@@ -109,7 +109,7 @@
                                 'name' => 'event_time',
                                 'ngModel' => 'eventTime',
                                 'ngOptions' => 'eventTime as eventTimeDisplay for (eventTime, eventTimeDisplay) in eventTimes',
-                                'icon' => 'fa-clock-o'
+                                'icon' => 'icon-clock'
                             ));
                         ?>
                     </div>
@@ -121,7 +121,7 @@
                                 'modelName' => 'Share',
                                 'name' => 'limitations',
                                 'placeholder' => 'Limitations',
-                                'icon' => 'fa-asterisk'
+                                'icon' => 'icon-asterisk'
                             ));
                         ?>
                     </div>
@@ -133,24 +133,24 @@
                     <div class="col-md-6">
                         <!-- Meeting place -->
                         <?php
-                        echo $this->element('add-input', array(
-                            'modelName' => 'Share',
-                            'name' => 'meet_place',
-                            'placeholder' => 'Meeting place',
-                            'icon' => 'fa-location-arrow'
-                        ));
+                            echo $this->element('add-input', array(
+                                'modelName' => 'Share',
+                                'name' => 'meet_place',
+                                'placeholder' => 'Meeting place',
+                                'icon' => 'icon-location'
+                            ));
                         ?>
                     </div>
 
                     <div class="col-md-6">
                         <!-- Waiting time -->
                         <?php
-                        echo $this->element('add-input', array(
-                            'modelName' => 'Share',
-                            'name' => 'waiting_time',
-                            'placeholder' => 'Waiting time (in minutes)',
-                            'icon' => 'fa-clock-o'
-                        ));
+                            echo $this->element('add-input', array(
+                                'modelName' => 'Share',
+                                'name' => 'waiting_time',
+                                'placeholder' => 'Waiting time (in minutes)',
+                                'icon' => 'icon-clock'
+                            ));
                         ?>
                     </div>
 

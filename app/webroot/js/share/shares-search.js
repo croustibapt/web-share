@@ -35,6 +35,7 @@ function initializeSearch(autocompleteInputId, googleMapDivId, shareTypeCategory
         $scope.shares = {};
         
         $scope.map = null;
+        $scope.firstIdle = true;
         $scope.markers = {};
         $scope.infoWindow = new google.maps.InfoWindow({
             /*disableAutoPan: true,*/
@@ -157,9 +158,6 @@ function initializeSearch(autocompleteInputId, googleMapDivId, shareTypeCategory
          * @param bounds Wanted lat/long bounds
          */
         $scope.search = function() {
-            //Refresh URL (for History)
-            $scope.refreshUrl();
-
             //Handle types
             var types = getTypesWithShareType($scope.shareType, $scope.shareTypeCategory, $scope.shareTypeCategories);
 
@@ -303,6 +301,9 @@ function initializeSearch(autocompleteInputId, googleMapDivId, shareTypeCategory
 
             //And update results
             $scope.search();
+
+            //Refresh URL (for History)
+            $scope.refreshUrl();
         };
 
         /**
@@ -317,6 +318,9 @@ function initializeSearch(autocompleteInputId, googleMapDivId, shareTypeCategory
 
             //And update results
             $scope.search();
+
+            //Refresh URL (for History)
+            $scope.refreshUrl();
         };
 
         /**
@@ -328,6 +332,9 @@ function initializeSearch(autocompleteInputId, googleMapDivId, shareTypeCategory
 
             //And update results
             $scope.search();
+
+            //Refresh URL (for History)
+            $scope.refreshUrl();
         };
 
         /**
@@ -377,13 +384,17 @@ function initializeSearch(autocompleteInputId, googleMapDivId, shareTypeCategory
             marker.setAnimation(null);
         };
 
+        $scope.getShareMarkerImage = function(shareTypeCategoryLabel, shareTypeLabel) {
+            return getShareMarkerImage(shareTypeCategoryLabel, shareTypeLabel);
+        };
+
         /**
          * Method called to add a marker on the map
          * @param share Corresponding share
          */
         $scope.addMarker = function(share) {
             //Get marker icon
-            var icon = getShareMarkerImage(share['share_type_category']['label'], share['share_type']['label']);
+            var icon = $scope.getShareMarkerImage(share['share_type_category']['label'], share['share_type']['label']);
 
             //Create the marker
             var marker = new google.maps.Marker({
@@ -480,7 +491,10 @@ function initializeSearch(autocompleteInputId, googleMapDivId, shareTypeCategory
                     $scope.map.fitBounds(getStartBounds());
 
                     //And then, try to locate the user
-                    geolocate($scope);
+                    geolocate($scope, function(position) {
+                        //Center on position
+                        $scope.map.setCenter(new google.maps.LatLng(position.coords.latitude, position.coords.longitude));
+                    });
                 }
             } else {
                 if (($scope.latitude != null) && ($scope.longitude != null) && ($scope.zoom != null)) {
@@ -516,6 +530,13 @@ function initializeSearch(autocompleteInputId, googleMapDivId, shareTypeCategory
 
                     //And update results
                     $scope.search();
+
+                    if ($scope.firstIdle) {
+                        $scope.firstIdle = false;
+                    } else {
+                        //Refresh URL (for History)
+                        $scope.refreshUrl();
+                    }
                 });
             });
 
@@ -551,7 +572,7 @@ function initializeSearch(autocompleteInputId, googleMapDivId, shareTypeCategory
                 $scope.address = place.formatted_address;
 
                 //Center on it
-                centerMapOnPlace(scope, place);
+                $scope.centerMapOnPlace(place);
             });
 
             //Get place if exists

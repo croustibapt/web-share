@@ -134,7 +134,7 @@
 
 .share-card-div {
     cursor: pointer;
-    min-height: 262px;
+    min-height: 258px;
 }
 
 /* Event date */
@@ -152,19 +152,10 @@
 .share-card-main-div {
     padding: 15px;
     padding-bottom: 0px;
-    min-height: 153px;
+    min-height: 148px;
 }
 
 /* Icon */
-
-.share-card-icon {
-    margin-top: 10px;
-    font-size: 40px;
-    width: 60px;
-    height: 60px;
-    max-width: 60px;
-    max-height: 60px;
-}
 
 .share-card-icon-h1 {
     margin: 0px;
@@ -173,7 +164,7 @@
 /* Information */
 
 .share-card-title-col {
-    padding-left: 0px;
+    /*padding-left: 0px;*/
 }
 
 .share-card-title-blockquote {
@@ -217,7 +208,7 @@
 
 .share-card-progress {
     margin-top: 10px;
-    margin-bottom: 0px;
+    margin-bottom: 10px;
     height: 10px;
 }
 

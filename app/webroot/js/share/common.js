@@ -24,108 +24,108 @@ var CONCRETE_COLOR = '#95a5a6';
 function getMarkerIcon(shareTypeCategory, shareType) {
     if (shareTypeCategory == "food") {
         if (shareType == "pizza") {
-            return 'icon ion-pizza';
+            return 'icon-ion-pizza';
         } else if (shareType == "snack") {
-            return 'fa fa-coffee';
+            return 'icon-coffee';
         } else if (shareType == "burger") {
-            return 'fa fa-cutlery';
+            return 'icon-fast-food';
         } else if (shareType == "sushi") {
-            return 'fa fa-cutlery';
+            return 'icon-food-1';
         } else if (shareType == "restaurant") {
-            return 'fa fa-glass';
+            return 'icon-glass';
         } else {
-            return 'fa fa-cutlery';
+            return 'icon-food';
         }
     } else if (shareTypeCategory == "hightech") {
         if (shareType == "component") {
-            return 'fa fa-keyboard-o';
+            return 'icon-keyboard';
         } else if (shareType == "computer") {
-            return 'fa fa-desktop';
+            return 'icon-desktop';
         } else if (shareType == "phone") {
-            return 'fa fa-mobile';
+            return 'icon-mobile';
         } else if (shareType == "storage") {
-            return 'fa fa-hdd-o';
+            return 'icon-hdd';
         } else if (shareType == "application") {
-            return 'fa fa-tablet';
+            return 'icon-tablet';
         } else {
-            return 'fa fa-laptop';
+            return 'icon-laptop';
         }
     } else if (shareTypeCategory == "audiovisual") {
         if (shareType == "picture") {
-            return 'fa fa-picture-o';
+            return 'icon-picture';
         } else if (shareType == "sound") {
-            return 'fa fa-volume-up';
+            return 'icon-volume-up';
         } else if (shareType == "photo") {
-            return 'fa fa-camera-retro';
+            return 'icon-camera-alt';
         } else if (shareType == "disc") {
-            return 'fa fa-microphone';
+            return 'icon-cd';
         } else if (shareType == "game") {
-            return 'fa fa-gamepad';
+            return 'icon-gamepad';
         } else {
-            return 'fa fa-headphones';
+            return 'icon-headphones';
         }
     } else if (shareTypeCategory == "recreation") {
         if (shareType == "cinema") {
-            return 'fa fa-film';
+            return 'icon-video';
         } else if (shareType == "show") {
-            return 'fa fa-ticket';
-        } else if (shareType == "game") {
-            return 'fa fa-puzzle-piece';
+            return 'icon-theatre';
         } else if (shareType == "book") {
-            return 'fa fa-book';
+            return 'icon-book';
         } else if (shareType == "outdoor") {
-            return 'fa fa-sun-o';
+            return 'icon-sun';
         } else if (shareType == "sport") {
-            return 'fa fa-futbol-o';
+            return 'icon-soccer-ball';
         } else if (shareType == "auto") {
-            return 'fa fa-car';
+            return 'icon-cab';
         } else if (shareType == "moto") {
-            return 'fa fa-motorcycle';
+            return 'icon-motorcycle';
         } else if (shareType == "music") {
-            return 'fa fa-music';
+            return 'icon-music';
         } else if (shareType == "pet") {
-            return 'fa fa-paw';
+            return 'icon-paw';
+        } else if (shareType == "game") {
+            return 'icon-puzzle';
         } else {
-            return 'fa fa-paint-brush';
+            return 'icon-brush';
         }
     } else if (shareTypeCategory == "mode") {
         if (shareType == "man") {
-            return 'fa fa-male';
+            return 'icon-male';
         } else if (shareType == "woman") {
-            return 'fa fa-female';
+            return 'icon-female';
         } else if (shareType == "mixte") {
-            return 'fa fa-transgender';
+            return 'icon-transgender';
         } else if (shareType == "child") {
-            return 'fa fa-child';
+            return 'icon-child';
         } else if (shareType == "jewelry") {
-            return 'fa fa-diamond';
+            return 'icon-diamond';
         } else {
-            return 'fa shopping-cart';
+            return 'icon-basket';
         }
     } else if (shareTypeCategory == "house") {
         if (shareType == "furniture") {
-            return 'fa fa-archive';
+            return 'icon-box';
         } else if (shareType == "kitchen") {
-            return 'icon ion-knife';
+            return 'icon-ion-knife';
         } else if (shareType == "diy") {
-            return 'fa fa-wrench';
+            return 'icon-wrench';
         } else {
-            return 'fa fa-home';
+            return 'icon-home';
         }
     } else if (shareTypeCategory == "service") {
         if (shareType == "travel") {
-            return 'fa fa-suitcase';
+            return 'icon-suitcase';
         } else if (shareType == "hotel") {
-            return 'fa fa-bed';
+            return 'icon-bed';
         } else if (shareType == "wellness") {
-            return 'fa fa-smile-o';
+            return 'icon-smile';
         } else {
-            return 'fa fa-briefcase';
+            return 'icon-briefcase';
         }
     } else if (shareTypeCategory == "other") {
-        return 'fa fa-ellipsis-h';
+        return 'icon-ellipsis';
     } else {
-        return 'fa fa-question-circle';
+        return 'icon-question-circle';
     }
 }
 
@@ -500,11 +500,11 @@ function pad(num, size) {
     return s;
 }
 
-function geolocate(scope) {
+function geolocate(scope, onLocationReceived) {
     //
     if (navigator.geolocation) {
         //Ask the user position
-        navigator.geolocation.getCurrentPosition(function (position) {
+        navigator.geolocation.getCurrentPosition(function(position) {
             var geolocation = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
 
             var circle = new google.maps.Circle({
@@ -516,6 +516,11 @@ function geolocate(scope) {
 
             //Center map
             scope.map.fitBounds(circle.getBounds());
+
+            //Call delegate
+            if (typeof onLocationReceived === 'function') {
+                onLocationReceived(position);
+            }
         });
     }
 }

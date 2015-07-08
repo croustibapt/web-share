@@ -27,7 +27,7 @@
             echo $this->element('add-input', array(
                 'modelName' => 'User',
                 'name' => 'username',
-                'icon' => 'fa-user',
+                'icon' => 'icon-user',
                 'value' => $username,
                 'required' => true,
                 'label' => 'Username:'
@@ -40,7 +40,7 @@
                 'modelName' => 'User',
                 'name' => 'description',
                 'placeholder' => 'Je suis un mec super cool...',
-                'icon' => 'fa-pencil-square-o',
+                'icon' => 'icon-pencil',
                 'label' => 'Description:'
             ));
         ?>
