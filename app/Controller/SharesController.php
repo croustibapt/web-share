@@ -47,6 +47,8 @@ class SharesController extends ApiSharesController {
     }
         
 	public function add() {
+        $shareTypeId = '';
+
         if ($this->request->is('POST')) {
             //Get user identifier
             $userExternalId = $this->getUserExternalId($this->request);
@@ -54,12 +56,13 @@ class SharesController extends ApiSharesController {
 
             //Get POST data
             $data = $this->request->data;
+            $shareTypeId = $data['Share']['share_type_id'];
             //pr($data);
 
             try {
                 //Intern add
                 $response = $this->internAdd($userId, $data['Share']['latitude'], $data['Share']['longitude'], NULL, NULL,
-                    $data['Share']['share_type_id'], $data['Share']['event_date'], $data['Share']['event_time'], $data['Share']['title'],
+                    $shareTypeId, $data['Share']['event_date'], $data['Share']['event_time'], $data['Share']['title'],
                     $data['Share']['price'], $data['Share']['places'], $data['Share']['waiting_time'],
                     $data['Share']['meet_place'], $data['Share']['limitations'], NULL, NULL, $data['Share']['message'], NULL, NULL);
 
@@ -69,6 +72,8 @@ class SharesController extends ApiSharesController {
                 $this->Share->validationErrors = $e->getValidationErrors();
             }
         }
+
+        $this->set('shareTypeId', $shareTypeId);
 	}
     
     public function details($shareId = NULL) {

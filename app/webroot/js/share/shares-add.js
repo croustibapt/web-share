@@ -6,7 +6,7 @@
  * @param latitude Start map latitude
  * @param longitude Start map longitude
  */
-function initializeAdd(googleMapDivId, autocompleteDivId, autocompleteInputId) {
+function initializeAdd(googleMapDivId, autocompleteDivId, autocompleteInputId, shareTypeId) {
     /**
      * AddController
      */
@@ -17,7 +17,7 @@ function initializeAdd(googleMapDivId, autocompleteDivId, autocompleteInputId) {
                 "share_type_category_id": "",
                 "share_type_id": ""
             };
-        $scope.shareType = "";
+        $scope.shareType = shareTypeId;
 
         //Event time
         $scope.eventTime = "";

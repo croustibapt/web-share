@@ -209,7 +209,7 @@
 
 <script>
     //Initialize the AddController
-    initializeAdd('shares-add-google-map-div', 'shares-add-address-div', 'shares-add-address-input');
+    initializeAdd('shares-add-google-map-div', 'shares-add-address-div', 'shares-add-address-input', '<?php echo $shareTypeId; ?>');
 
     //On load
     $(function() {
