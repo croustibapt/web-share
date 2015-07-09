@@ -104,32 +104,6 @@
     margin-bottom: 0px;
 }
 
-/* Card */
-
-.card-div {
-    border-radius: 2px;
-    -webkit-box-shadow: 0px 2px 2px rgba(0, 2, 5, 0.15);
-    box-shadow: 0px 2px 2px rgba(0, 2, 5, 0.15);
-    background-color: #ffffff;
-    margin-bottom: 30px;
-}
-
-.card-div:hover {
-    -webkit-box-shadow: 0px 2px 10px rgba(0, 2, 5, 0.25);
-    box-shadow: 0px 2px 10px rgba(0, 2, 5, 0.25);
-}
-
-.card-header-div {
-    background-color: #35cf76;
-    color: #ffffff;
-    border-top-left-radius: 2px;
-    border-top-right-radius: 2px;
-    padding-left: 15px;
-    padding-right: 15px;
-    padding-top: 5px;
-    padding-bottom: 5px;
-}
-
 /* Share card */
 
 .share-card-div {
@@ -137,57 +111,9 @@
     min-height: 258px;
 }
 
-/* Event date */
-
-.share-card-date-span {
-    font-weight: 200;
-}
-
-/* Event time */
-
-.share-card-time-span {
-    font-weight: 400;
-}
-
 .share-card-main-div {
-    padding: 15px;
     padding-bottom: 0px;
     min-height: 148px;
-}
-
-/* Icon */
-
-.share-card-icon-h1 {
-    margin: 0px;
-}
-
-/* Information */
-
-.share-card-title-col {
-    /*padding-left: 0px;*/
-}
-
-.share-card-title-blockquote {
-    border-left: none;
-    margin-bottom: 0px;
-    padding: 0px;
-}
-
-/* Type */
-
-.share-card-type-p {
-    font-size: 20px;
-    margin-bottom: 5px;
-}
-
-.share-card-type-span {
-    font-weight: 200;
-}
-
-/* Title */
-
-.share-card-title-p {
-    margin-bottom: 10px;
 }
 
 /* Comment count */

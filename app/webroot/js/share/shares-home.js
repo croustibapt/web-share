@@ -2,11 +2,11 @@
  * Method used to initialize the HomeController
  * @param autocompleteInputId Identifier used to link the GoogleMap autocomplete input
  */
-function initializeHome(autocompleteInputId) {
+function initializeSharesHome(autocompleteInputId) {
     /**
-     * Home controller
+     * SharesHomeController
      */
-    app.controller('HomeController', ['$scope', '$http', function($scope, $http) {
+    app.controller('SharesHomeController', ['$scope', '$http', function($scope, $http) {
         //All available share type categories
         $scope.shareTypeCategories = {};
         //Current selected share type category

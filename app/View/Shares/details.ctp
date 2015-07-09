@@ -333,6 +333,6 @@
 </div>
 
 <script>
-    //Initialize the DetailsController
-    initializeDetails(<?php echo $shareId; ?>, '<?php echo $shareUserExternalId; ?>', 'shares-details-comments-add-textarea', 'shares-details-google-map-div');
+    //Initialize the SharesDetailsController
+    initializeSharesDetails(<?php echo $shareId; ?>, '<?php echo $shareUserExternalId; ?>', 'shares-details-comments-add-textarea', 'shares-details-google-map-div');
 </script>

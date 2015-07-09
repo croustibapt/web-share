@@ -65,7 +65,7 @@
 
     <!-- Controller -->
     <?php
-        $ngControllerName = ucfirst($this->action).'Controller';
+        $ngControllerName = ucfirst($this->name).ucfirst($this->action).'Controller';
     ?>
 
     <body ng-controller="<?php echo $ngControllerName; ?>">

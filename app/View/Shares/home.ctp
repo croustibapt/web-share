@@ -155,5 +155,5 @@
 
 <script>
     //
-    initializeHome('shares-home-address-input');
+    initializeSharesHome('shares-home-address-input');
 </script>

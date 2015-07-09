@@ -1,30 +1,9 @@
 <div ng-mouseenter="bounceMarker(share.share_id);" ng-mouseleave="cancelBounceMarker(share.share_id);" ng-click="showShareDetails(share.share_id);" class="share-card-div card-div">
 
-    <!-- Header -->
-    <div class="card-header-div" ng-style="{'background-color': share.share_color}">
-        <div class="row">
-            <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 text-center-xs">
-
-                <!-- Event date -->
-                <span class="share-card-date-span text-capitalize">
-                    {{ share.moment_day }}
-                </span>
-
-                <!-- Event time -->
-                <span ng-if="(share.moment_hour != null)" class="share-card-time-span">
-                    <i class="fa fa-long-arrow-right"></i> {{ share.moment_hour }}
-                </span>
-
-            </div>
-            <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 text-right text-center-xs">
-
-                <!-- City -->
-                <span ng-if="(share.city != null)">{{ share.city }}</span>
-                <span ng-if="(share.city == null)">Lieu inconnu</span>
-
-            </div>
-        </div>
-    </div>
+    <!-- Date and place -->
+    <?php
+        echo $this->element('share-card-header');
+    ?>
 
     <!-- Main -->
     <div class="share-card-main-div">
@@ -36,7 +15,7 @@
                 </a>
             </div>
             <div class="media-body">
-                <blockquote class="share-card-title-blockquote">
+                <blockquote class="share-card-description-blockquote">
                     <!-- Share type -->
                     <p class="text-capitalize line-clamp line-clamp-1 share-card-type-p" style="color: {{ share.share_color }};">
                         {{ share.share_type_category_label }} / <span class="share-card-type-span">{{ share.share_type_label }}</span>

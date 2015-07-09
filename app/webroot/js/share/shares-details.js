@@ -5,11 +5,11 @@
  * @param textAreaId Comment text area identifier
  * @param divGoogleMapId GoogleMap div identifier
  */
-function initializeDetails(shareId, shareUserExternalId, textAreaId, divGoogleMapId) {
+function initializeSharesDetails(shareId, shareUserExternalId, textAreaId, divGoogleMapId) {
     /**
-     * DetailsController
+     * SharesDetailsController
      */
-    app.controller('DetailsController', ['$scope', '$http', function($scope, $http) {
+    app.controller('SharesDetailsController', ['$scope', '$http', function($scope, $http) {
         //Pagination
         $scope.page = 1;
         $scope.total_pages = 1;
@@ -114,11 +114,7 @@ function initializeDetails(shareId, shareUserExternalId, textAreaId, divGoogleMa
             //Save user
             $scope.user = response;
 
-            //Created
-            var createdDate = new Date($scope.user.created);
-            var isoCreatedDate = createdDate.toISOString();
-            var momentCreated = moment(isoCreatedDate).format('D MMMM YYYY', 'fr');
-            $scope.user.moment_created = momentCreated;
+            formatUser($scope.user);
         };
 
         /**
@@ -143,54 +139,9 @@ function initializeDetails(shareId, shareUserExternalId, textAreaId, divGoogleMa
          */
         $scope.handleDetailsResponse = function(response) {
             console.log(response);
-
             var share = response;
 
-            //Share type category label
-            var shareTypeCategoryLabel = getShareTypeCategoryLabel(share.share_type_category.label);
-            share.share_type_category_label = shareTypeCategoryLabel;
-
-            //Share type label
-            var shareTypeLabel = getShareTypeLabel(share.share_type_category.label, share.share_type.label);
-            share.share_type_label = shareTypeLabel;
-
-            //Event date
-            var eventDate = new Date(share.event_date);
-            var isoEventDate = eventDate.toISOString();
-            var momentDay = moment(isoEventDate).format('D MMMM', 'fr');
-            share.moment_day = momentDay;
-
-            //Event time
-            if (share.event_time != null) {
-                var eventTime = new Date(share.event_date + ' ' + share.event_time);
-                var isoEventTime = eventTime.toISOString();
-                var momentHour = moment(isoEventTime).format('LT', 'fr');
-                share.moment_hour = momentHour;
-            }
-
-            //Share color
-            var shareColor = getIconColor(share.share_type_category.label);
-            share.share_color = shareColor;
-
-            //Share icon
-            var shareIcon = getMarkerIcon(share.share_type_category.label, share.share_type.label);
-            share.share_icon = shareIcon;
-
-            //Created
-            var createdDate = new Date(share.created);
-            var isoCreatedDate = createdDate.toISOString();
-            var momentCreatedTimeAgo = moment(isoCreatedDate).fromNow();
-            share.moment_created_time_ago = momentCreatedTimeAgo;
-
-            //Places left
-            var totalPlaces = parseInt(share.places) + 1;
-            var participationCount = parseInt(share.participation_count) + 1;
-            var placesLeft = totalPlaces - participationCount;
-            share.places_left = placesLeft;
-
-            //Formatted price
-            var price = parseFloat(share.price);
-            share.formatted_price = numeral(price).format('0.0a');
+            formatShare(share);
 
             //Store the share
             $scope.share = share;

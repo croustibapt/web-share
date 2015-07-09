@@ -1,12 +1,37 @@
+body {
+    background-color: #eeeeee;
+}
+
 /* USER/HOME */
 
-.div-user-home-tabs {
-    /*padding: 15px;*/
+#users-home-div {
+    margin-top: 20px;
+}
+
+.users-home-title-h3 {
     margin-bottom: 20px;
 }
 
+.users-home-description-p {
+    margin-top: 10px;
+}
+
+.div-user-home-tabs {
+    margin-bottom: 20px;
+}
+
+.div-user-home-tabs .list-group-item.active a {
+    color: white;
+}
+
+
+
+
+
+
+
 .div-user-home-panes {
-    margin-top: 15px;
+
 }
 
 .user-card-picture-div {
@@ -92,6 +117,6 @@
     display: inline;
 }
 
-.form-share-card-request-input {
+.share-card-request-btn {
     width: 70px;
 }

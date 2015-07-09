@@ -1,90 +1,86 @@
+<!-- Date and place -->
 <?php
-    $shareColor = $this->ShareType->shareTypeColor($share['share_type_category']['label']);
-
-    //Request?
-    if (!isset($request)) {
-        $request = false;
-    }
+    echo $this->element('share-card-header');
 ?>
 
-<div class="card">
-    
-    <!-- Date -->
-    <?php
-        echo $this->element('share-card-date-header', array(
-            'color' => $shareColor,
-            'date' => $share['event_date'],
-            'time' => $share['event_time']
-        ));
-    ?>
+<div class="share-card-main-div">
 
-    <div class="div-share-card-main row">
-        <div class="col-md-12">
-            <div class="div-share-card-icon text-center">
-                <!-- Icon -->
-                <div style="color: <?php echo $shareColor; ?>;">
-                    <?php echo $this->ShareType->shareTypeIcon($share['share_type_category']['label'], $share['share_type']['label']); ?>
-                </div>
-            </div>
-            <div class="div-share-card-title">
+    <div class="media">
+        <div class="media-left">
+            <a href="#">
+                <img ng-src="../img/markers/128/marker-{{ share.share_type_category.label }}-{{ share.share_type.label }}.png" style="max-width: 80px;" />
+            </a>
+        </div>
+        <div class="media-body">
+            <blockquote class="share-card-description-blockquote">
+                <!-- Share type -->
+                <p class="text-capitalize share-card-type-p" style="color: {{ share.share_color }};">
+                    {{ share.share_type_category_label }} / <span class="share-card-type-span">{{ share.share_type_label }}</span>
+                </p>
 
-                <blockquote class="blockquote-share-card-title">
-                    <!-- Title -->
-                    <?php
-                        echo $this->Html->link('<h3 class="media-heading">'.$share['title'].'</h3>', '/share/details/'.$share['share_id'], array(
-                            'escape' => false,
-                            'class' => 'a-share-card-title'
-                        ));
-                    ?>
+                <!-- Title -->
+                <p class="media-heading lead share-card-title-p">
+                    <a href="javascript:void(0);" ng-href="{{ share.details_link }}">{{ share.title }}</a>
+                </p>
 
-                    <!-- Summary -->
-                    <?php
-                        echo $this->element('share-card-summary', array(
-                            'share' => $share
-                        ));
-                    ?>
-                </blockquote>
-            </div>
+                <footer class="footer-share-card-summary lead">
+
+                    <span ng-if="(share.places_left > 1)"><strong>{{ share.places_left }}</strong> places</span>
+                    <span ng-if="(share.places_left == 1)"><strong>1</strong> place</span>
+                    <span ng-if="(share.places_left == 0)">Complet</span>
+
+                    <span ng-if="(share.places_left > 0)">à <strong>{{ share.formatted_price }}</strong> <span ng-if="(share.price >= 2.0)">euros</span><span ng-if="(share.price < 2.0)">euro</span></span>
+
+                </footer>
+            </blockquote>
         </div>
     </div>
 
-    <table class="table-share-request-card-requests table table-hover">
-
-        <?php
-            $nbRequests = 0;
-        ?>
-
-        <?php if ($share['request_count'] > 0) : ?>
-
-            <?php foreach ($share['requests'] as $request) : ?>
-
-            <?php
-                //Only pending or accepted requests
-                if (($request['status'] == SHARE_REQUEST_STATUS_PENDING) || ($request['status'] == SHARE_REQUEST_STATUS_PENDING)) {
-                    //Request
-                    echo $this->element('share-card-request', array(
-                        'request' => $request
-                    ));
-
-                    $nbRequests++;
-                }
-            ?>
-
-            <?php endforeach; ?>
-
-        <?php endif; ?>
-
-        <?php if ($nbRequests == 0) : ?>
-
-        <tr class="active">
-            <td>
-                <p class="p-share-card-request lead text-muted text-center p-user-home-share-requests">
-                    Vous n'avez aucune demande
-                </p>
-            </td>
-        </tr>
-
-        <?php endif; ?>
-
-    </table>
 </div>
+
+<table class="table-share-request-card-requests table">
+
+    <tr ng-repeat="request in share.requests" ng-class="{ 'warning': (request.status == <?php echo SHARE_REQUEST_STATUS_PENDING; ?>), 'success': (request.status == <?php echo SHARE_REQUEST_STATUS_ACCEPTED; ?>), 'danger': (request.status == <?php echo SHARE_REQUEST_STATUS_DECLINED; ?>) }" class="tr-share-card-request">
+
+        <td>
+            <p class="p-share-card-request-user p-share-card-request lead">
+                {{ request.user.username }}
+            </p>
+        </td>
+
+        <td ng-if="(request.status == <?php echo SHARE_REQUEST_STATUS_PENDING; ?>)" class="text-right" style="vertical-align: middle;">
+
+            <button ng-click="acceptRequest(share.share_id, request.request_id, $event);" class="btn btn-success btn-xs share-card-request-btn">Accepter</button>
+            <button ng-click="declineRequest(share.share_id, request.request_id, $event);" class="btn btn-danger btn-xs share-card-request-btn">Refuser</button>
+
+        </td>
+
+        <td ng-if="(request.status == <?php echo SHARE_REQUEST_STATUS_ACCEPTED; ?>)" class="text-right" style="vertical-align: middle;">
+
+            <button ng-click="cancelRequest(share.share_id, request.request_id, $event);" class="btn btn-default btn-xs share-card-request-btn">Annuler</button>
+
+        </td>
+
+        <td ng-if="(request.status == <?php echo SHARE_REQUEST_STATUS_DECLINED; ?>)" class="text-right" style="vertical-align: middle;">
+
+            <button class="btn btn-default btn-xs disabled share-card-request-btn">Declinée</button>
+
+        </td>
+
+        <td ng-if="(request.status == <?php echo SHARE_REQUEST_STATUS_CANCELLED; ?>)" class="text-right" style="vertical-align: middle;">
+
+            <button class="btn btn-default btn-xs disabled share-card-request-btn">Annulé</button>
+
+        </td>
+
+    </tr>
+
+    <tr ng-if="(share.request_count == 0)" class="active">
+        <td>
+            <p class="p-share-card-request lead text-muted text-center p-user-home-share-requests">
+                Vous n'avez aucune demande
+            </p>
+        </td>
+    </tr>
+
+</table>

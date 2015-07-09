@@ -63,14 +63,14 @@ class UsersController extends ApiUsersController {
     public function home() {
         if ($this->isLocalUserSessionAuthenticated()) {
             if ($this->request->is('GET')) {
-                try {
+                /*try {
                     //Intern home
                     $user = $this->interHome(true);
 
                     $this->set('user', $user);
                 } catch (ShareException $e) {
                     $this->set('error', $e);
-                }
+                }*/
             }
         } else {
             $this->redirect('/');

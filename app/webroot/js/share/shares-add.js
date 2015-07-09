@@ -6,11 +6,11 @@
  * @param latitude Start map latitude
  * @param longitude Start map longitude
  */
-function initializeAdd(googleMapDivId, autocompleteDivId, autocompleteInputId, shareTypeId) {
+function initializeSharesAdd(googleMapDivId, autocompleteDivId, autocompleteInputId, shareTypeId) {
     /**
      * AddController
      */
-    app.controller('AddController', ['$scope', '$http', function($scope, $http) {
+    app.controller('SharesAddController', ['$scope', '$http', function($scope, $http) {
         $scope.shareTypes = {};
         $scope.shareTypes[""] = {
                 "label": "Type",

@@ -7,11 +7,11 @@
  * @param shareType Start share type
  * @param period Start period
  */
-function initializeSearch(autocompleteInputId, googleMapDivId, shareTypeCategory, shareType, period, placeId, latitude, longitude, zoom) {
+function initializeSharesSearch(autocompleteInputId, googleMapDivId, shareTypeCategory, shareType, period, placeId, latitude, longitude, zoom) {
     /**
      * SearchController
      */
-    app.controller('SearchController', ['$scope', '$http', function($scope, $http) {
+    app.controller('SharesSearchController', ['$scope', '$http', function($scope, $http) {
         $scope.page = 1;
         $scope.total_pages = 1;
         $scope.total_results = 0;
@@ -247,58 +247,7 @@ function initializeSearch(autocompleteInputId, googleMapDivId, shareTypeCategory
             for (var i = 0; i < shares.length; i++) {
                 var share = shares[i];
 
-                //Share type category label
-                var shareTypeCategoryLabel = getShareTypeCategoryLabel(share.share_type_category.label);
-                share.share_type_category_label = shareTypeCategoryLabel;
-
-                //Share type label
-                var shareTypeLabel = getShareTypeLabel(share.share_type_category.label, share.share_type.label);
-                share.share_type_label = shareTypeLabel;
-
-                //Share color
-                var shareColor = getIconColor(share.share_type_category.label);
-                share.share_color = shareColor;
-
-                //Share icon
-                var shareIcon = getMarkerIcon(share.share_type_category.label, share.share_type.label);
-                share.share_icon = shareIcon;
-
-                //Event date
-                var eventDate = new Date(share.event_date);
-                var isoEventDate = eventDate.toISOString();
-                var momentDay = moment(isoEventDate).format('dddd D MMMM', 'fr');
-                share.moment_day = momentDay;
-
-                //Event time
-                if (share.event_time != null) {
-                    var eventTime = new Date(share.event_date + ' ' + share.event_time);
-                    var isoEventTime = eventTime.toISOString();
-                    var momentHour = moment(isoEventTime).format('LT', 'fr');
-                    share.moment_hour = momentHour;
-                }
-
-                //Modified
-                var modifiedDate = new Date(share.modified);
-                var isoModifiedDate = modifiedDate.toISOString();
-                var momentModifiedTimeAgo = moment(isoModifiedDate).fromNow();
-                share.moment_modified_time_ago = momentModifiedTimeAgo;
-
-                //Places left
-                var totalPlaces = parseInt(share.places) + 1;
-                var participationCount = parseInt(share.participation_count) + 1;
-                var placesLeft = totalPlaces - participationCount;
-                share.places_left = placesLeft;
-
-                var percentage = (participationCount * 100) / totalPlaces;
-                share.percentage = percentage;
-
-                //Formatted price
-                var price = parseFloat(share.price);
-                share.formatted_price = numeral(price).format('0.0a');
-
-                //Details link
-                var detailsLink = webroot + 'users/details/' + share.user.external_id;
-                share.details_link = detailsLink;
+                formatShare(share);
 
                 if (!$scope.shares[share.share_id]) {
                     //Add to map

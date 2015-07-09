@@ -208,8 +208,8 @@
 </div>
 
 <script>
-    //Initialize the AddController
-    initializeAdd('shares-add-google-map-div', 'shares-add-address-div', 'shares-add-address-input', '<?php echo $shareTypeId; ?>');
+    //Initialize the SharesAddController
+    initializeSharesAdd('shares-add-google-map-div', 'shares-add-address-div', 'shares-add-address-input', '<?php echo $shareTypeId; ?>');
 
     //On load
     $(function() {
