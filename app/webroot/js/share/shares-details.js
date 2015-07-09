@@ -273,15 +273,12 @@ function initializeDetails(shareId, shareUserExternalId, textAreaId, divGoogleMa
             };
             map = new google.maps.Map(document.getElementById($scope.divGoogleMapId), mapOptions);
 
-            //Get marker icon
-            var icon = getShareMarkerImage($scope.share['share_type_category']['label'], $scope.share['share_type']['label']);
-
             //Create the share marker
             var marker = new google.maps.Marker({
                 position: sharePosition,
                 map: map,
                 title: $scope.share.title,
-                icon: '../../img/' + icon
+                icon: '../../img/markers/40/marker-' + $scope.share.share_type_category.label + '-' + $scope.share.share_type.label + '.png'
             });
         };
 

@@ -86,9 +86,7 @@
                 <div class="text-center">
 
                     <!-- Share type icon -->
-                    <h1 class="shares-details-icon-h1" ng-style="{'color': share.share_color}">
-                        <i ng-class="share.share_icon"></i>
-                    </h1>
+                    <img class="shares-details-icon-img" ng-src="../../img/markers/128/marker-{{ share.share_type_category.label }}-{{ share.share_type.label }}.png" />
 
                     <!-- Date -->
                     <h2 class="shares-details-date-h2 text-capitalize" ng-style="{'color': share.share_color}">

@@ -390,7 +390,7 @@ function initializeSearch(autocompleteInputId, googleMapDivId, shareTypeCategory
         $scope.bounceMarker = function(shareId) {
             var marker = $scope.markers[shareId];
             marker.setZIndex(1000);
-            marker.setIcon('../img/marker-purple.png');
+            marker.setIcon('../img/markers/40/marker-selected.png');
         };
 
         /**
@@ -401,10 +401,9 @@ function initializeSearch(autocompleteInputId, googleMapDivId, shareTypeCategory
             var marker = $scope.markers[shareId];
 
             var share = $scope.shares[shareId];
-            var icon = $scope.getShareMarkerImage(share['share_type_category']['label'], share['share_type']['label']);
 
             marker.setZIndex(null);
-            marker.setIcon('../img/' + icon);
+            marker.setIcon('../img/markers/40/marker-' + share.share_type_category.label + '-' + share.share_type.label + '.png');
         };
 
         $scope.getShareMarkerImage = function(shareTypeCategoryLabel, shareTypeLabel) {
@@ -446,16 +445,13 @@ function initializeSearch(autocompleteInputId, googleMapDivId, shareTypeCategory
          * @param share Corresponding share
          */
         $scope.addMarker = function(share) {
-            //Get marker icon
-            var icon = $scope.getShareMarkerImage(share['share_type_category']['label'], share['share_type']['label']);
-
             //Create the marker
             var marker = new google.maps.Marker({
                 position: new google.maps.LatLng(share.latitude, share.longitude),
                 map: $scope.map,
                 share: share,
                 title: share.title,
-                icon: '../img/' + icon
+                icon: '../img/markers/40/marker-' + share.share_type_category.label + '-' + share.share_type.label + '.png'
             });
 
             //Add marker to array
@@ -465,6 +461,7 @@ function initializeSearch(autocompleteInputId, googleMapDivId, shareTypeCategory
             google.maps.event.addListener(marker, 'click', function() {
                 //Get the corresponding share
                 var share = marker.share;
+                marker.setZIndex(1000);
 
                 //Create the window
                 $scope.infoWindow.setContent($scope.createMarkerHtmlContent(share));
