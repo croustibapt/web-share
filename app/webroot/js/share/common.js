@@ -401,7 +401,7 @@ function geolocate(scope, onLocationReceived) {
 
             var circle = new google.maps.Circle({
                 center: geolocation,
-                radius: position.coords.accuracy
+                radius: position.coords.accuracy * 4
             });
 
             //$scope.autocomplete.setBounds(circle.getBounds());
