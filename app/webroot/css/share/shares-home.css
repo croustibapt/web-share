@@ -19,15 +19,25 @@ body {
     background: rgba(0, 0, 0, 0.25);
 }
 
+.navbar-home .navbar-collapse {
+    border-color: #ffffff;
+}
+
 .navbar-home .btn-navbar:hover {
     background-color: white!important;
     color: #000000!important;
 }
 
+@media(max-width: 768px) {
+    .navbar-home-xs {
+        background: rgba(0, 0, 0, 0.75);
+    }
+}
+
 /* Header */
 
 #shares-home-header-div {
-    height: 500px;
+    min-height: 500px;
     background-image: url(../../img/home-background.jpg);
     background-position: center;
 }
@@ -40,15 +50,22 @@ body {
 }
 
 #shares-home-header-text-container-div {
+    min-height: 394px;
+    display: table;
+    width: 100%;
+    padding-top: 50px;
+}
+
+#shares-home-header-text-content-div {
     display: table-cell;
     vertical-align: middle;
-    padding-bottom: 106px;
 }
 
 #shares-home-header-text-h1 {
     color: white;
     font-size: 50px;
     font-weight: 700;
+    margin-top: 0px;
 }
 
 #shares-home-header-text-h4 {
@@ -63,9 +80,6 @@ body {
     background: rgba(0, 0, 0, 0.5);
     padding: 30px;
     color:#ffffff;
-    position: absolute;
-    bottom: 0px;
-    left: 0px;
     width: 100%;
 }
 

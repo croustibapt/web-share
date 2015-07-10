@@ -11,10 +11,11 @@ function initializeSharesDetails(shareId, shareUserExternalId, textAreaId, divGo
      */
     app.controller('SharesDetailsController', ['$scope', '$http', function($scope, $http) {
         //Pagination
-        $scope.page = 1;
+        $scope.page = null;
         $scope.total_pages = 1;
         $scope.total_results = 0;
         $scope.results_count = 0;
+        $scope.results_by_page = 5;
 
         //Share
         $scope.shareId = shareId;
@@ -45,18 +46,27 @@ function initializeSharesDetails(shareId, shareUserExternalId, textAreaId, divGo
          * Method used to show a specifi comments page
          * @param page Page to show
          */
-        $scope.showPage = function(page) {
-            //Save wanted page
-            $scope.page = page;
+        $scope.showPage = function(page, onPageLoaded) {
+            $scope.page = null;
 
             //Get call
-            $http.get(webroot + 'api/comment/get?shareId=' + $scope.shareId + '&page=' + $scope.page)
+            $http.get(webroot + 'api/comment/get?shareId=' + $scope.shareId + '&page=' + page)
             .success(function (data, status, headers, config) {
                 //Parse JSON response
                 $scope.handleCommentsResponse(data);
+
+                //Call delegate
+                if (typeof onPageLoaded === 'function') {
+                    onPageLoaded(true);
+                }
             })
             .error(function (data, status, headers, config) {
                 console.log(data);
+
+                //Call delegate
+                if (typeof onPageLoaded === 'function') {
+                    onPageLoaded(true);
+                }
             });
         };
 
@@ -66,10 +76,10 @@ function initializeSharesDetails(shareId, shareUserExternalId, textAreaId, divGo
          */
         $scope.handleCommentsResponse = function(response) {
             //Handle pagination
-            $scope.page = parseInt(response.page);
             $scope.total_pages = parseInt(response.total_pages);
             $scope.total_results = parseInt(response.total_results);
             $scope.results_count = response.results.length;
+            $scope.page = parseInt(response.page);
 
             //Handle comments
             var comments = response.results;
@@ -190,9 +200,9 @@ function initializeSharesDetails(shareId, shareUserExternalId, textAreaId, divGo
                     var editor = nicEditors.findEditor($scope.textAreaId);
                     editor.setContent('');
 
-                    $scope.showPage(1);
-
-                    button.button('reset');
+                    $scope.showPage(1, function(success) {
+                        button.button('reset');
+                    });
                 })
                 .error(function(data, status, headers, config) {
                     //Reset button state

@@ -12,10 +12,11 @@ function initializeSharesSearch(autocompleteInputId, googleMapDivId, shareTypeCa
      * SearchController
      */
     app.controller('SharesSearchController', ['$scope', '$http', function($scope, $http) {
-        $scope.page = 1;
+        $scope.page = null;
         $scope.total_pages = 1;
         $scope.total_results = 0;
         $scope.results_count = 0;
+        $scope.results_by_page = 10;
 
         $scope.period = period;
 
@@ -58,11 +59,11 @@ function initializeSharesSearch(autocompleteInputId, googleMapDivId, shareTypeCa
          * @param types
          * @returns {*}
          */
-        $scope.createSearchJson = function(startDate, endDate, types) {
+        $scope.createSearchJson = function(startDate, endDate, types, page) {
             var jsonData = {};
 
             //Page
-            jsonData['page'] = $scope.page;
+            jsonData['page'] = page;
 
             //Start date
             if (startDate) {
@@ -128,10 +129,10 @@ function initializeSharesSearch(autocompleteInputId, googleMapDivId, shareTypeCa
          */
         $scope.showPage = function(page) {
             //Update page
-            $scope.page = page;
+            $scope.page = null;
 
             //Simply call the search method
-            $scope.search();
+            $scope.search(page);
         };
 
         $scope.refreshUrl = function() {
@@ -157,7 +158,7 @@ function initializeSharesSearch(autocompleteInputId, googleMapDivId, shareTypeCa
          * @param date Wanted period
          * @param bounds Wanted lat/long bounds
          */
-        $scope.search = function() {
+        $scope.search = function(page) {
             //Handle types
             var types = getTypesWithShareType($scope.shareType, $scope.shareTypeCategory, $scope.shareTypeCategories);
 
@@ -174,7 +175,7 @@ function initializeSharesSearch(autocompleteInputId, googleMapDivId, shareTypeCa
             }
 
             //Create JSON data
-            var jsonData = $scope.createSearchJson(startDate, endDate, types);
+            var jsonData = $scope.createSearchJson(startDate, endDate, types, page);
 
             //Search for shares
             $http.post(webroot + 'api/share/search', jsonData)
@@ -233,10 +234,10 @@ function initializeSharesSearch(autocompleteInputId, googleMapDivId, shareTypeCa
          */
         $scope.handleSearchResponse = function(response) {
             //Handle pagination
-            $scope.page = parseInt(response.page);
             $scope.total_pages = parseInt(response.total_pages);
             $scope.total_results = parseInt(response.total_results);
             $scope.results_count = response.results.length;
+            $scope.page = parseInt(response.page);
 
             //Handle shares
             var shares = response.results;

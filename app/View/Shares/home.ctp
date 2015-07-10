@@ -6,9 +6,15 @@
 
             <!-- Header text -->
             <div id="shares-home-header-text-container-div" class="text-center">
-                <h1 id="shares-home-header-text-h1" class="text-uppercase">Partageons nos économies</h1>
-                <h4 id="shares-home-header-text-h4">Trouvez des coupons à partager autour de vous.</h4>
-                <button class="btn btn-outline">Mode d'emploi</button>
+
+                <div id="shares-home-header-text-content-div">
+
+                    <h1 id="shares-home-header-text-h1" class="text-uppercase">Partageons nos économies</h1>
+                    <h4 id="shares-home-header-text-h4">Trouvez des coupons à partager autour de vous.</h4>
+                    <button class="btn btn-outline">Mode d'emploi</button>
+
+                </div>
+
             </div>
 
             <!-- Search form -->

@@ -104,12 +104,12 @@
 
 .share-card-div {
     cursor: pointer;
-    min-height: 258px;
+    min-height: 260px;
 }
 
 .share-card-main-div {
     padding-bottom: 0px;
-    min-height: 148px;
+    min-height: 150px;
 }
 
 /* Comment count */

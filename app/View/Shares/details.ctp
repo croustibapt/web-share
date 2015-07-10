@@ -74,7 +74,7 @@
 
 <?php endif; ?>
 
-<div id="shares-details-div">
+<div id="shares-details-div" class="text-center-xs">
 
     <div class="container">
 
@@ -279,14 +279,18 @@
     </div>
 
     <!-- Comments -->
-    <?php
-        echo $this->element('share-comments');
-    ?>
+    <div class="text-center-xs">
+
+        <?php
+            echo $this->element('share-comments');
+        ?>
+
+    </div>
 
     <?php if (!$doesUserOwnShare) : ?>
 
     <!-- User profile -->
-    <div class="shares-details-user-profile-div">
+    <div class="shares-details-user-profile-div text-center-xs">
 
         <div id="shares-details-user-profile-header-div" class="container">
             <h3>A propos de {{ share.user.username }}</h3>
@@ -315,10 +319,6 @@
                 </div>
                 
                 <div class="col-md-3">
-
-                    <h5>
-                        Statistiques
-                    </h5>
 
                     <?php
                         echo $this->element('user-stats');

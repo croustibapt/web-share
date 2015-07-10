@@ -33,6 +33,15 @@ function initializeSharesAdd(googleMapDivId, autocompleteDivId, autocompleteInpu
             $scope.eventTimes['' + hour + ':45:00'] = '' + hour + ':45';
         }
 
+        //Waiting time
+        $scope.waitingTime = "";
+        $scope.waitingTimes = {};
+
+        $scope.waitingTimes[""] = "Waiting time";
+        $scope.waitingTimes["15"] = "15 min";
+        $scope.waitingTimes["30"] = "30 min";
+        $scope.waitingTimes["45"] = "45 min";
+
         //Share position
         $scope.latitude = null;
         $scope.longitude = null;

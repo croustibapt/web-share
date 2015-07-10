@@ -1,6 +1,6 @@
 <?php if (($this->action == 'home') && ($this->name == 'Shares')) : ?>
 
-<nav class="navbar navbar-default navbar-home">
+<nav class="navbar navbar-default navbar-home navbar-home-xs">
 
 <?php else : ?>
 

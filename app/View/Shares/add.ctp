@@ -145,10 +145,11 @@
                     <div class="col-md-6">
                         <!-- Waiting time -->
                         <?php
-                            echo $this->element('add-input', array(
+                            echo $this->element('add-select', array(
                                 'modelName' => 'Share',
                                 'name' => 'waiting_time',
-                                'placeholder' => 'Waiting time (in minutes)',
+                                'ngModel' => 'waitingTime',
+                                'ngOptions' => 'waitingTime as waitingTimeDisplay for (waitingTime, waitingTimeDisplay) in waitingTimes',
                                 'icon' => 'glyphicon-hourglass'
                             ));
                         ?>
