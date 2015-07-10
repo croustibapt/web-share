@@ -166,64 +166,71 @@
                             / pers.
                         </h3>
 
-                        <?php if ($this->LocalUser->isAuthenticated($this)) : ?>
+                        <?php if (!$isExpired) : ?>
 
-                            <?php if ($canRequest) : ?>
+                            <?php if ($shareStatus == SHARE_STATUS_OPENED) : ?>
 
-                                <!-- Participate button -->
-                                <?php
-                                    echo $this->Form->create('Request', array(
-                                        'action' => 'add',
-                                        'class' => 'form-inline',
-                                    ));
+                                <?php if ($this->LocalUser->isAuthenticated($this)) : ?>
 
-                                    echo $this->Form->hidden('shareId', array(
-                                        'value' => $shareId
-                                    ));
+                                    <?php if ($canCancel) : ?>
 
-                                    echo $this->Form->submit('Participer', array(
-                                        'class' => 'btn btn-success shares-details-participate-button'
-                                    ));
+                                        <button type="button" class="btn btn-danger shares-details-participate-button" data-toggle="modal" data-target="#shares-details-delete-modal-div">
+                                            Supprimer
+                                        </button>
 
-                                    echo $this->Form->end();
-                                ?>
+                                    <?php elseif ($canRequest) : ?>
 
-                            <?php elseif (!$doesUserOwnShare) : ?>
+                                        <!-- Participate button -->
+                                        <?php
+                                            echo $this->Form->create('Request', array(
+                                                'action' => 'add',
+                                                'class' => 'form-inline',
+                                            ));
 
-                                <button class="btn btn-<?php echo $this->Share->getShareDetailsRequestStatusClass($requestStatus); ?> disabled shares-details-participate-status"><?php echo $this->Share->getShareDetailsRequestStatusLabel($requestStatus); ?></button>
+                                            echo $this->Form->hidden('shareId', array(
+                                                'value' => $shareId
+                                            ));
+
+                                            echo $this->Form->submit('Participer', array(
+                                                'class' => 'btn btn-success shares-details-participate-button'
+                                            ));
+
+                                            echo $this->Form->end();
+                                        ?>
+
+                                    <?php else : ?>
+
+                                        <!-- Error? -->
+                                        <button type="button" class="btn btn-default shares-details-participate-button disabled">
+                                            Invalide
+                                        </button>
+
+                                    <?php endif; ?>
+
+                                <?php else : ?>
+
+                                    <!-- Need to be authenticated -->
+                                    <div data-toggle="tooltip" data-placement="bottom" title="Vous devez être authentifié pour pouvoir participer" class="shares-details-participate-div">
+                                        <button class="btn btn-success disabled shares-details-participate-button">
+                                            Participer
+                                        </button>
+                                    </div>
+
+                                <?php endif; ?>
 
                             <?php else : ?>
-
-                                <?php if ($canCancel) : ?>
-
-                                <button type="button" class="btn btn-danger shares-details-participate-button" data-toggle="modal" data-target="#shares-details-delete-modal-div">
-                                    Supprimer
-                                </button>
-                                
-                                <?php elseif ($shareStatus == SHARE_STATUS_OPENED) : ?>
 
                                 <button type="button" class="btn btn-default shares-details-participate-button disabled">
                                     Annulé
                                 </button>
 
-                                <?php else : ?>
-
-                                <button type="button" class="btn btn-default shares-details-participate-button disabled">
-                                    Invalide
-                                </button>
-
-                                <?php endif; ?>
-
                             <?php endif; ?>
 
-                        <?php else : ?>
+                        <?php else : ?><!-- !isExpired -->
 
-                            <!-- Need to be authenticated -->
-                            <div data-toggle="tooltip" data-placement="bottom" title="Vous devez être authentifié pour pouvoir participer" class="shares-details-participate-div">
-                                <button class="btn btn-success disabled shares-details-participate-button">
-                                    Participer
-                                </button>
-                            </div>
+                            <button type="button" class="btn btn-default shares-details-participate-button disabled">
+                                Expiré
+                            </button>
 
                         <?php endif; ?>
 

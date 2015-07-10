@@ -98,8 +98,12 @@ class SharesController extends ApiSharesController {
         $canRequest = $this->canRequest($share, $userExternalId);
         $this->set('canRequest', $canRequest);
         
-        $canCancel = $this->canRequest($share, $userExternalId);
+        $canCancel = $this->canCancel($share, $userExternalId);
         $this->set('canCancel', $canCancel);
+
+        //Is expired?
+        $isExpired = $this->isShareExpired($share);
+        $this->set('isExpired', $isExpired);
 
         //Own
         $doesUserOwnShare = $this->doesUserOwnShare($share, $userExternalId);
@@ -114,16 +118,20 @@ class SharesController extends ApiSharesController {
         if ($this->request->is('POST')) {
             $data = $this->request->data;
 
+            //Get user identifier
+            $userExternalId = $this->getUserExternalId($this->request);
+
             try {
                 //Intern add
-                $this->internCancel($shareId, $data['Share']['reason'], $data['Share']['message']);
-
-                //Redirect
-                $this->redirect($this->referer());
+                $this->internCancel($shareId, $data['Share']['reason'], $data['Share']['message'], $userExternalId);
             } catch (ShareException $e) {
+                pr($e);
                 $this->Share->validationErrors = $e->getValidationErrors();
             }
         }
+
+        //Redirect
+        $this->redirect($this->referer());
     }
 
     /*public function delete() {

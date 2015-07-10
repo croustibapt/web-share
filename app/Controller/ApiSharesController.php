@@ -349,7 +349,7 @@ class ApiSharesController extends AppController {
         }
     }
 
-    protected function internCancel($shareId = NULL, $reason = NULL, $message = NULL) {
+    protected function internCancel($shareId = NULL, $reason = NULL, $message = NULL, $userExternalId = NULL) {
         //Check share id parameter
         if ($shareId != NULL) {
             //Check reason parameter
@@ -364,10 +364,9 @@ class ApiSharesController extends AppController {
                 //If it's well formatted
                 if ($share != NULL) {
                     //Check if the Share is opened
-                    if ($this->canCancel($share)) {
+                    if ($this->canCancel($share, $userExternalId)) {
                         //Check credentials
                         if ($this->checkCredentials($this->request)) {
-                            //TODO
                             //Save changes
                             $this->Share->id = $shareId;
 
