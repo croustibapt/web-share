@@ -95,15 +95,17 @@ class SharesController extends ApiSharesController {
         $share['User'] = $share['Share']['user'];
         unset($share['Share']['user']);
 
+        //User can request?
         $canRequest = $this->canRequest($share, $userExternalId);
         $this->set('canRequest', $canRequest);
-        
-        $canCancel = $this->canCancel($share, $userExternalId);
-        $this->set('canCancel', $canCancel);
 
         //Is expired?
         $isExpired = $this->isShareExpired($share);
         $this->set('isExpired', $isExpired);
+
+        //Is places left?
+        $isPlacesLeft = $this->isPlacesLeft($share);
+        $this->set('isPlacesLeft', $isPlacesLeft);
 
         //Own
         $doesUserOwnShare = $this->doesUserOwnShare($share, $userExternalId);

@@ -550,7 +550,7 @@ class AppController extends Controller {
     protected function canRequest($share = NULL, $userExternalId = NULL) {
         $canRequest = false;
 
-        if (($share != NULL) && ($share['Share']['status'] == SHARE_STATUS_OPENED) && ($userExternalId != NULL) && !$this->isShareExpired($share)) {
+        if (($share != NULL) && $this->isShareOpened($share) && ($userExternalId != NULL) && !$this->isShareExpired($share)) {
             //Check if user does not already participate
             if ($this->canParticipate($share, $userExternalId)) {
                 $requestStatus = $this->getRequestStatus($share, $userExternalId);
@@ -606,7 +606,7 @@ class AppController extends Controller {
     protected function canCancel($share = NULL, $userExternalId = NULL) {
         $canCancel = false;
         
-        if (($share != NULL) && ($userExternalId != NULL) && ($share['User']['external_id'] == $userExternalId) && ($share['Share']['status'] == SHARE_STATUS_OPENED) && !$this->isShareExpired($share)) {
+        if (($share != NULL) && ($userExternalId != NULL) && $this->doesUserOwnShare($share, $userExternalId) && $this->isShareOpened($share) && !$this->isShareExpired($share)) {
             $canCancel = true;
         }
         

@@ -35,7 +35,7 @@ class ApiRequestsController extends AppController {
                 )
             ));
                         
-            if (($share['Share']['status'] == SHARE_STATUS_OPENED) && $this->doesUserOwnShare($share, $userExternalId) && $this->canParticipate($share, $request['User']['external_id'])) {
+            if ($this->isShareOpened($share) && $this->doesUserOwnShare($share, $userExternalId) && $this->canParticipate($share, $request['User']['external_id'])) {
                 $canAcceptRequest = true;
             }
         }
@@ -58,7 +58,7 @@ class ApiRequestsController extends AppController {
                 )
             ));
 
-            if (($share['Share']['status'] == SHARE_STATUS_OPENED) && $this->doesUserOwnShare($share, $userExternalId)) {
+            if ($this->isShareOpened($share) && $this->doesUserOwnShare($share, $userExternalId)) {
                 $canDeclineRequest = true;
             }
         }
@@ -81,7 +81,7 @@ class ApiRequestsController extends AppController {
                 )
             ));
             
-            if (($share['Share']['status'] == SHARE_STATUS_OPENED) && ($this->doesUserOwnShare($share, $userExternalId) || ($request['User']['external_id'] == $userExternalId))) {
+            if ($this->isShareOpened($share) && ($this->doesUserOwnShare($share, $userExternalId) || ($request['User']['external_id'] == $userExternalId))) {
                 $canCancelRequest = true;
             }
         }

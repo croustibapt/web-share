@@ -172,7 +172,7 @@
 
                                 <?php if ($this->LocalUser->isAuthenticated($this)) : ?>
 
-                                    <?php if ($canCancel) : ?>
+                                    <?php if ($doesUserOwnShare) : ?>
 
                                         <button type="button" class="btn btn-danger shares-details-participate-button" data-toggle="modal" data-target="#shares-details-delete-modal-div">
                                             Supprimer
@@ -208,12 +208,22 @@
 
                                 <?php else : ?>
 
+                                    <?php if ($isPlacesLeft) : ?>
+
                                     <!-- Need to be authenticated -->
                                     <div data-toggle="tooltip" data-placement="bottom" title="Vous devez être authentifié pour pouvoir participer" class="shares-details-participate-div">
                                         <button class="btn btn-success disabled shares-details-participate-button">
                                             Participer
                                         </button>
                                     </div>
+
+                                    <?php else : ?>
+
+                                        <button type="button" class="btn btn-default shares-details-participate-button disabled">
+                                            Complet
+                                        </button>
+
+                                    <?php endif; ?>
 
                                 <?php endif; ?>
 
