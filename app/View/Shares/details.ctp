@@ -200,9 +200,8 @@
 
                                     <?php else : ?>
 
-                                        <!-- Error? -->
-                                        <button type="button" class="btn btn-default shares-details-participate-button disabled">
-                                            Invalide
+                                        <button class="btn btn-<?php echo $this->Share->getShareDetailsRequestStatusClass($requestStatus); ?> disabled shares-details-participate-status">
+                                            <?php echo $this->Share->getShareDetailsRequestStatusLabel($requestStatus); ?>
                                         </button>
 
                                     <?php endif; ?>
