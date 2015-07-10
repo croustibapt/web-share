@@ -234,13 +234,13 @@
                         <?php endif; ?>
 
                         <!-- Places -->
-                        <p ng-if="(share.places_left > 1)" class="text-success">
+                        <p ng-if="(share.places_left > 1)" class="text-info">
                             <strong>{{ share.places_left }}</strong> places restantes
                         </p>
                         <p ng-if="(share.places_left == 1)" class="text-warning">
                             <strong>1</strong> place restante
                         </p>
-                        <p ng-if="(share.places_left == 0)" class="text-danger">
+                        <p ng-if="(share.places_left == 0)" class="text-success">
                             Complet
                         </p>
 
