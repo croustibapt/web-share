@@ -40,7 +40,7 @@
 
 <table class="table-share-request-card-requests table">
 
-    <tr ng-repeat="request in share.requests" ng-class="{ 'warning': (request.status == <?php echo SHARE_REQUEST_STATUS_PENDING; ?>), 'success': (request.status == <?php echo SHARE_REQUEST_STATUS_ACCEPTED; ?>), 'danger': (request.status == <?php echo SHARE_REQUEST_STATUS_DECLINED; ?>) }" class="tr-share-card-request">
+    <tr ng-repeat="request in share.requests track by request.request_id" ng-class="{ 'warning': (request.status == <?php echo SHARE_REQUEST_STATUS_PENDING; ?>), 'success': (request.status == <?php echo SHARE_REQUEST_STATUS_ACCEPTED; ?>), 'danger': (request.status == <?php echo SHARE_REQUEST_STATUS_DECLINED; ?>) }" class="tr-share-card-request">
 
         <td class="share-request-card-td">
             <p ng-class="{ 'text-warning': (request.status == <?php echo SHARE_REQUEST_STATUS_PENDING; ?>), 'text-success': (request.status == <?php echo SHARE_REQUEST_STATUS_ACCEPTED; ?>), 'text-danger': (request.status == <?php echo SHARE_REQUEST_STATUS_DECLINED; ?>) }" class="share-card-request-p share-card-request-user-p">

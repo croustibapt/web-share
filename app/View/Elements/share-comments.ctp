@@ -13,7 +13,7 @@
 
             <div id="shares-details-comments-list-div" ng-if="(comments.length > 0)">
                 <!-- All comments -->
-                <div ng-repeat="comment in comments" class="shares-details-comment-div">
+                <div ng-repeat="comment in comments track by comment.comment_id" class="shares-details-comment-div">
 
                     <!-- Creator comment -->
                     <div ng-if="(shareUserExternalId == comment.user.external_id)" class="media shares-details-comment-creator-div">

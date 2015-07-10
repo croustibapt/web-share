@@ -49,7 +49,7 @@
                 <div id="div-user-home-shares" class="tab-pane active" role="tabpanel">
 
                     <div ng-if="(user.share_count > 0)">
-                        <div ng-repeat="share in user.shares" class="card-div">
+                        <div ng-repeat="share in user.shares track by share.share_id" class="card-div">
                             <?php
                                 //
                                 echo $this->element('share-request-card', array(
@@ -66,7 +66,7 @@
                 <!-- My requests -->
                 <div role="tabpanel" class="tab-pane" id="div-user-home-requests">
 
-                    <div ng-repeat="request in user.requests" class="card-div">
+                    <div ng-repeat="request in user.requests track by request.request_id" class="card-div">
 
                         <?php
                             echo $this->element('request-card');

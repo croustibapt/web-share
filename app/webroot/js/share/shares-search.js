@@ -265,11 +265,8 @@ function initializeSharesSearch(autocompleteInputId, googleMapDivId, shareTypeCa
          * Method called when the current selected period changed.
          */
         $scope.onPeriodChanged = function() {
-            //Reset page
-            $scope.page = 1;
-
             //And update results
-            $scope.search();
+            $scope.search(1);
 
             //Refresh URL (for History)
             $scope.refreshUrl();
@@ -282,11 +279,8 @@ function initializeSharesSearch(autocompleteInputId, googleMapDivId, shareTypeCa
             //Reset current share type category
             $scope.shareType = '-1';
 
-            //Reset page
-            $scope.page = 1;
-
             //And update results
-            $scope.search();
+            $scope.search(1);
 
             //Refresh URL (for History)
             $scope.refreshUrl();
@@ -296,11 +290,8 @@ function initializeSharesSearch(autocompleteInputId, googleMapDivId, shareTypeCa
          * Method called when the current selected share type changed.
          */
         $scope.onShareTypeChanged = function() {
-            //Reset page
-            $scope.page = 1;
-
             //And update results
-            $scope.search();
+            $scope.search(1);
 
             //Refresh URL (for History)
             $scope.refreshUrl();
@@ -500,11 +491,8 @@ function initializeSharesSearch(autocompleteInputId, googleMapDivId, shareTypeCa
                     $scope.longitude = $scope.map.getCenter().lng();
                     $scope.zoom = $scope.map.getZoom();
 
-                    //Reset page
-                    $scope.page = 1;
-
                     //And update results
-                    $scope.search();
+                    $scope.search(1);
 
                     if ($scope.firstIdle) {
                         $scope.firstIdle = false;
