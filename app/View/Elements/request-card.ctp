@@ -27,7 +27,7 @@
                 <!-- Status -->
                 <footer ng-if="(request.status == <?php echo SHARE_REQUEST_STATUS_PENDING; ?>)" class="request-card-footer text-warning">
 
-                    Demande en attente
+                    Demande en attente <span class="glyphicon glyphicon-question-sign" aria-hidden="true"></span>
 
                     <button ng-click="cancelOwnRequest(request.request_id, $event);" class="btn btn-default btn-xs share-card-request-btn pull-right">Annuler</button>
 
@@ -35,7 +35,7 @@
 
                 <footer ng-if="(request.status == <?php echo SHARE_REQUEST_STATUS_ACCEPTED; ?>)" class="request-card-footer text-success">
 
-                    Demande acceptée
+                    Demande acceptée <span class="glyphicon glyphicon-ok-sign" aria-hidden="true"></span>
 
                     <button ng-click="cancelOwnRequest(request.request_id, $event);" class="btn btn-default btn-xs share-card-request-btn pull-right">Annuler</button>
 
@@ -43,13 +43,13 @@
 
                 <footer ng-if="(request.status == <?php echo SHARE_REQUEST_STATUS_DECLINED; ?>)" class="request-card-footer text-danger">
 
-                    Demande rejetée
+                    Demande rejetée <span class="glyphicon glyphicon-minus-sign" aria-hidden="true"></span>
 
                 </footer>
 
                 <footer ng-if="(request.status == <?php echo SHARE_REQUEST_STATUS_CANCELLED; ?>)" class="request-card-footer">
 
-                    Demande annulée
+                    Demande annulée <span class="glyphicon glyphicon-remove-sign" aria-hidden="true"></span>
 
                 </footer>
 

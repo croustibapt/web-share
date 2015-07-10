@@ -14,6 +14,10 @@ body {
     margin-top: 10px;
 }
 
+.users-home-hr {
+    border-color: #dddddd;
+}
+
 .div-user-home-tabs {
     margin-bottom: 20px;
 }
@@ -36,9 +40,12 @@ body {
     margin-bottom: 0px;
 }
 
-.share-request-card-footer {
-    margin-bottom: 10px;
-    color: #34495e;
+.request-card-footer:before {
+    content: normal;
+}
+
+.share-request-card-summary-p {
+     margin-bottom: 10px;
 }
 
 .share-card-request-btn {

@@ -315,28 +315,14 @@
                 </div>
                 
                 <div class="col-md-3">
-                    
+
                     <h5>
                         Statistiques
                     </h5>
-                    
-                    <ul class="list-unstyled">
-                        <li>
-                            <p class="user-card-summary-p text-success">
-                                <span class="glyphicon glyphicon-share" aria-hidden="true"></span> a proposé <strong>{{ user.share_count }}</strong> partages
-                            </p>
-                        </li>
-                        <li>
-                            <p class="user-card-summary-p text-info">
-                                <span class="glyphicon glyphicon-question-sign" aria-hidden="true"></span> a participé à <strong>{{ user.request_count }}</strong> partages
-                            </p>
-                        </li>
-                        <li>
-                            <p class="user-card-summary-p text-warning">
-                                <span class="glyphicon glyphicon-comment" aria-hidden="true"></span> a laissé <strong>{{ user.comment_count }}</strong> commentaires
-                            </p>
-                        </li>
-                    </ul>
+
+                    <?php
+                        echo $this->element('user-stats');
+                    ?>
                     
                 </div>
             </div>

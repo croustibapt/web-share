@@ -23,7 +23,7 @@
                     <a href="javascript:void(0);" ng-href="{{ share.details_link }}">{{ share.title }}</a>
                 </p>
 
-                <footer class="share-request-card-footer lead">
+                <p class="share-request-card-summary-p text-muted">
 
                     <span ng-if="(share.places_left > 1)"><strong>{{ share.places_left }}</strong> places</span>
                     <span ng-if="(share.places_left == 1)"><strong>1</strong> place</span>
@@ -31,7 +31,7 @@
 
                     <span ng-if="(share.places_left > 0)">à <strong>{{ share.formatted_price }}</strong> <span ng-if="(share.price >= 2.0)">euros</span><span ng-if="(share.price < 2.0)">euro</span></span>
 
-                </footer>
+                </p>
             </blockquote>
         </div>
     </div>
