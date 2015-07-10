@@ -364,7 +364,7 @@ class ApiSharesController extends AppController {
                 //If it's well formatted
                 if ($share != NULL) {
                     //Check if the Share is opened
-                    if ($share['Share']['status'] == SHARE_STATUS_OPENED) {
+                    if ($this->canCancel($share)) {
                         //Check credentials
                         if ($this->checkCredentials($this->request)) {
                             //TODO

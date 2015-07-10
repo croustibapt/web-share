@@ -592,4 +592,14 @@ class AppController extends Controller {
 
         return $type;
     }
+    
+    protected function canCancel($share = NULL, $userExternalId = NULL) {
+        $canCancel = false;
+        
+        if (($share != NULL) && ($userExternalId != NULL) && ($share['User']['external_id'] == $userExternalId) && ($share['Share']['status'] == SHARE_STATUS_OPENED) && ($share['Share']['event_date'] >= date('Y-m-d'))) {
+            $canCancel = true;
+        }
+        
+        return $canCancel;
+    }
 }

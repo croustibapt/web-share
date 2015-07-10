@@ -11,40 +11,46 @@ class UsersController extends ApiUsersController {
     }
 
 	public function add($userExternalId = NULL, $authToken = NULL, $username = NULL, $mail = NULL) {
-        $user = $this->User->find('first', array(
-            'conditions' => array(
-                'User.external_id' => $userExternalId
-        )));
+        //Check parameters
+        if (($userExternalId != NULL) && ($authToken != NULL) && ($username != NULL) && ($mail != NULL)) {
+            $user = $this->User->find('first', array(
+                'conditions' => array(
+                    'User.external_id' => $userExternalId
+            )));
+            
+            //If no user was found and it's a POST request
+            if ($user == NULL) {
+                if ($this->request->is('POST')) {
+                    //pr($this->request->data);
 
-        //If no user was found and it's a POST request
-        if ($user == NULL) {
-            if ($this->request->is('POST')) {
-                //pr($this->request->data);
+                    try {
+                        //Try to save the user
+                        $response = $this->internAdd($userExternalId, $this->request->data['User']['username'], $mail);
 
-                try {
-                    //Try to save the user
-                    $response = $this->internAdd($userExternalId, $this->request->data['User']['username'], $mail);
+                        //If it succeeded
+                        if ($response != NULL) {
+                            //Save auth session
+                            $this->saveAuthSession($userExternalId, $mail, $authToken, $username);
 
-                    //If it succeeded
-                    if ($response != NULL) {
-                        //Save auth session
-                        $this->saveAuthSession($userExternalId, $mail, $authToken, $username);
-
-                        //Redirect to home
-                        $this->redirect('/');
+                            //Redirect to home
+                            $this->redirect('/');
+                        }
+                    } catch (ShareException $e) {
+                        $this->User->validationErrors = $e->getValidationErrors();
                     }
-                } catch (ShareException $e) {
-                    $this->User->validationErrors = $e->getValidationErrors();
                 }
+                
+                $this->set('userExternalId', $userExternalId);
+                $this->set('username', $username);
+                $this->set('mail', $mail);
+            } else {
+                //Redirect to home
+                $this->redirect('/');
             }
         } else {
             //Redirect to home
             $this->redirect('/');
         }
-
-        $this->set('userExternalId', $userExternalId);
-        $this->set('username', $username);
-        $this->set('mail', $mail);
 	}
 
     public function details($externalId = NULL) {

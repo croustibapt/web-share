@@ -45,7 +45,7 @@
 
     <?php endif; ?>
 
-        <span class="<?php echo $inputGroupAddonClass; ?>"><i class="<?php echo $icon; ?>"></i></span>
+        <span class="<?php echo $inputGroupAddonClass; ?>"><span class="glyphicon <?php echo $icon; ?>" aria-hidden="true"></span></span>
         <?php
             $options = array(
                 'label' => false,

@@ -137,7 +137,7 @@
 
                     <!-- Limitations -->
                     <footer ng-if="(share.limitations)" class="text-danger shares-details-limitations-footer">
-                        <i class="fa fa-asterisk"></i> {{ share.limitations }}
+                        <span class="glyphicon glyphicon-asterisk" aria-hidden="true"></span> {{ share.limitations }}
                     </footer>
 
                 </blockquote>
@@ -194,16 +194,22 @@
 
                             <?php else : ?>
 
-                                <?php if ($shareStatus == SHARE_STATUS_OPENED) : ?>
+                                <?php if ($canCancel) : ?>
 
                                 <button type="button" class="btn btn-danger shares-details-participate-button" data-toggle="modal" data-target="#shares-details-delete-modal-div">
                                     Supprimer
+                                </button>
+                                
+                                <?php elseif ($shareStatus == SHARE_STATUS_OPENED) : ?>
+
+                                <button type="button" class="btn btn-default shares-details-participate-button disabled">
+                                    Annulé
                                 </button>
 
                                 <?php else : ?>
 
                                 <button type="button" class="btn btn-default shares-details-participate-button disabled">
-                                    Annulé
+                                    Invalide
                                 </button>
 
                                 <?php endif; ?>
@@ -307,17 +313,17 @@
                     <ul class="list-unstyled">
                         <li>
                             <p class="user-card-summary-p text-success">
-                                <i class="fa fa-mail-forward"></i> a proposé <strong>{{ user.share_count }}</strong> partages
+                                <span class="glyphicon glyphicon-share" aria-hidden="true"></span> a proposé <strong>{{ user.share_count }}</strong> partages
                             </p>
                         </li>
                         <li>
                             <p class="user-card-summary-p text-info">
-                                <i class="fa fa-mail-reply"></i> a participé à <strong>{{ user.request_count }}</strong> requêtes
+                                <span class="glyphicon glyphicon-question-sign" aria-hidden="true"></span> a participé à <strong>{{ user.request_count }}</strong> partages
                             </p>
                         </li>
                         <li>
                             <p class="user-card-summary-p text-warning">
-                                <i class="fa fa-comments"></i> a laissé <strong>{{ user.comment_count }}</strong> commentaires
+                                <span class="glyphicon glyphicon-comment" aria-hidden="true"></span> a laissé <strong>{{ user.comment_count }}</strong> commentaires
                             </p>
                         </li>
                     </ul>

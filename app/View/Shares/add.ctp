@@ -22,7 +22,7 @@
                         'modelName' => 'Share',
                         'name' => 'title',
                         'placeholder' => 'Titre',
-                        'icon' => 'icon-doc-text',
+                        'icon' => 'glyphicon-comment',
                         'required' => true
                     ));
                 ?>
@@ -37,7 +37,7 @@
                                 'name' => 'share_type_id',
                                 'ngModel' => 'shareType',
                                 'ngOptions' => 'shareTypeId as formatShareType(shareType.share_type_category_label, shareType.label) group by formatShareTypeCategory(shareType.share_type_category_label) for (shareTypeId, shareType) in shareTypes',
-                                'icon' => 'icon-tag',
+                                'icon' => 'glyphicon-tag',
                                 'required' => true
                             ));
                         ?>
@@ -51,7 +51,7 @@
                                 'name' => 'event_date',
                                 'placeholder' => 'Date',
                                 'class' => 'datepicker',
-                                'icon' => 'icon-calendar',
+                                'icon' => 'glyphicon-calendar',
                                 'required' => true
                             ));
                         ?>
@@ -67,7 +67,7 @@
                                 'modelName' => 'Share',
                                 'name' => 'price',
                                 'placeholder' => 'Prix (en euros)',
-                                'icon' => 'icon-dollar',
+                                'icon' => 'glyphicon-usd',
                                 'required' => true
                             ));
                         ?>
@@ -79,7 +79,7 @@
                                 'modelName' => 'Share',
                                 'name' => 'places',
                                 'placeholder' => 'Nombre de places',
-                                'icon' => 'icon-ellipsis',
+                                'icon' => 'glyphicon-option-horizontal',
                                 'required' => true
                             ));
                         ?>
@@ -94,7 +94,7 @@
                         'modelName' => 'Share',
                         'name' => 'message',
                         'placeholder' => 'Message',
-                        'icon' => 'icon-pencil'
+                        'icon' => 'glyphicon-pencil'
                     ));
                 ?>
 
@@ -109,7 +109,7 @@
                                 'name' => 'event_time',
                                 'ngModel' => 'eventTime',
                                 'ngOptions' => 'eventTime as eventTimeDisplay for (eventTime, eventTimeDisplay) in eventTimes',
-                                'icon' => 'icon-clock'
+                                'icon' => 'glyphicon-time'
                             ));
                         ?>
                     </div>
@@ -121,7 +121,7 @@
                                 'modelName' => 'Share',
                                 'name' => 'limitations',
                                 'placeholder' => 'Limitations',
-                                'icon' => 'icon-asterisk'
+                                'icon' => 'glyphicon-asterisk'
                             ));
                         ?>
                     </div>
@@ -137,7 +137,7 @@
                                 'modelName' => 'Share',
                                 'name' => 'meet_place',
                                 'placeholder' => 'Meeting place',
-                                'icon' => 'icon-location'
+                                'icon' => 'glyphicon-map-marker'
                             ));
                         ?>
                     </div>
@@ -149,7 +149,7 @@
                                 'modelName' => 'Share',
                                 'name' => 'waiting_time',
                                 'placeholder' => 'Waiting time (in minutes)',
-                                'icon' => 'icon-clock'
+                                'icon' => 'glyphicon-hourglass'
                             ));
                         ?>
                     </div>

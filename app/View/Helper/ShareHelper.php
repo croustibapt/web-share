@@ -34,20 +34,4 @@ class ShareHelper extends AppHelper {
 
         return $class;
     }
-
-    public function getRequestStatusIcon($status = NULL) {
-        $icon = '';
-
-        if ($status == SHARE_REQUEST_STATUS_PENDING) {
-            $icon = '<i class="fa fa-question-circle"></i>';
-        } else if ($status == SHARE_REQUEST_STATUS_ACCEPTED) {
-            $icon = '<i class="fa fa-check-circle"></i>';
-        } else if ($status == SHARE_REQUEST_STATUS_DECLINED) {
-            $icon = '<i class="fa fa-times-circle"></i>';
-        } else if ($status == SHARE_REQUEST_STATUS_CANCELLED) {
-            $icon = '<i class="fa fa-exclamation-circle"></i>';
-        }
-
-        return $icon;
-    }
 }

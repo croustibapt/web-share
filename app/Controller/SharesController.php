@@ -97,6 +97,9 @@ class SharesController extends ApiSharesController {
 
         $canRequest = $this->canRequest($share, $userExternalId);
         $this->set('canRequest', $canRequest);
+        
+        $canCancel = $this->canRequest($share, $userExternalId);
+        $this->set('canCancel', $canCancel);
 
         //Own
         $doesUserOwnShare = $this->doesUserOwnShare($share, $userExternalId);

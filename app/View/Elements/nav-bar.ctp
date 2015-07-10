@@ -33,7 +33,7 @@
             <form class="navbar-form navbar-left" role="search">
                 <div class="input-group">
                 <span class="input-group-addon input-group-addon-navbar shares-search-input-group-addon-navbar">
-                    <i class="fa fa-search"></i>
+                    <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
                 </span>
                 <input id="shares-search-address-input" type="text" class="form-control input-navbar" placeholder="Où recherchez-vous ?" ng-value="address">
                 </div>

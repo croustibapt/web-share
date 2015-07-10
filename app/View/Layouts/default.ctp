@@ -21,9 +21,6 @@
             echo $this->Html->css('bootstrap/bootstrap.min');
             echo $this->Html->css('bootstrap/bootstrap-modified');
 
-            //Icons
-            echo $this->Html->css('icons/fontello/fontello');
-
             //Utils
             echo $this->Html->css('utils/clamp');
             echo $this->Html->css('utils/toastr.min');

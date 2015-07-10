@@ -10,7 +10,7 @@
 
             <!-- Event time -->
             <span ng-if="(share.moment_hour != null)" class="share-card-time-span">
-                <i class="fa fa-long-arrow-right"></i> {{ request.share.moment_hour }}
+                <span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span> {{ request.share.moment_hour }}
             </span>
 
         </div>
