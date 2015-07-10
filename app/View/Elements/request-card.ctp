@@ -8,7 +8,7 @@
     <div class="media">
         <div class="media-left">
             <a href="#">
-                <img ng-src="../img/markers/128/marker-{{ request.share.share_type_category.label }}-{{ request.share.share_type.label }}.png" style="max-width: 80px;" />
+                <img ng-src="../img/markers/128/marker-{{ request.share.share_type_category.label }}-{{ request.share.share_type.label }}.png" class="share-card-icon-img" />
             </a>
         </div>
 
@@ -25,29 +25,29 @@
                 </p>
 
                 <!-- Status -->
-                <footer ng-if="(request.status == <?php echo SHARE_REQUEST_STATUS_PENDING; ?>)" class="footer-request-card lead text-warning">
+                <footer ng-if="(request.status == <?php echo SHARE_REQUEST_STATUS_PENDING; ?>)" class="request-card-footer text-warning">
 
                     Demande en attente
 
-                    <button ng-click="cancelOwnRequest(request.request_id, $event);" class="btn btn-default btn-xs share-card-request-btn">Annuler</button>
+                    <button ng-click="cancelOwnRequest(request.request_id, $event);" class="btn btn-default btn-xs share-card-request-btn pull-right">Annuler</button>
 
                 </footer>
 
-                <footer ng-if="(request.status == <?php echo SHARE_REQUEST_STATUS_ACCEPTED; ?>)" class="footer-request-card lead text-success">
+                <footer ng-if="(request.status == <?php echo SHARE_REQUEST_STATUS_ACCEPTED; ?>)" class="request-card-footer text-success">
 
                     Demande acceptée
 
-                    <button ng-click="cancelOwnRequest(request.request_id, $event);" class="btn btn-default btn-xs share-card-request-btn">Annuler</button>
+                    <button ng-click="cancelOwnRequest(request.request_id, $event);" class="btn btn-default btn-xs share-card-request-btn pull-right">Annuler</button>
 
                 </footer>
 
-                <footer ng-if="(request.status == <?php echo SHARE_REQUEST_STATUS_DECLINED; ?>)" class="footer-request-card lead text-danger">
+                <footer ng-if="(request.status == <?php echo SHARE_REQUEST_STATUS_DECLINED; ?>)" class="request-card-footer text-danger">
 
                     Demande rejetée
 
                 </footer>
 
-                <footer ng-if="(request.status == <?php echo SHARE_REQUEST_STATUS_CANCELLED; ?>)" class="footer-request-card lead">
+                <footer ng-if="(request.status == <?php echo SHARE_REQUEST_STATUS_CANCELLED; ?>)" class="request-card-footer">
 
                     Demande annulée
 

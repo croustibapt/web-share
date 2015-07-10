@@ -2,8 +2,6 @@ body {
     background-color: #eeeeee;
 }
 
-/* USER/HOME */
-
 #users-home-div {
     margin-top: 20px;
 }
@@ -20,101 +18,27 @@ body {
     margin-bottom: 20px;
 }
 
-.div-user-home-tabs .list-group-item.active a {
-    color: white;
-}
-
-
-
-
-
-
-
-.div-user-home-panes {
-
-}
-
-.user-card-picture-div {
-    padding-top: 15px;
-    padding-right: 0px;
-}
-
-.user-card-picture-img {
-
-}
-
-.user-card-summary-div {
-    padding-top: 15px;
-    padding-left: 0px;
-}
-
-.user-card-summary-blockquote {
-    padding-top: 0px;
-    padding-bottom: 0px;
-    margin-top: 15px;
-    margin-bottom: 0px;
-}
-
-.user-card-summary-table {
-    margin-bottom: 0px;
-    margin-bottom: 15px;
-}
-
-.user-card-summary-table td {
-    padding: 15px!important;
-}
-
-.user-card-summary-p {
-    margin-bottom: 0px;
-}
-
-.table-share-request-card-requests {
-    margin-bottom: 0px;
-}
-
-.tr-share-card-request td {
+.share-request-card-td {
+    vertical-align: middle!important;
     padding-left: 15px!important;
     padding-right: 15px!important;
 }
 
-.p-share-card-request {
+.share-card-request-p {
     margin-bottom: 0px;
 }
 
-.p-share-card-request-user {
-    font-weight: 400;
+.share-card-request-user-p {
+    /*font-weight: bold;*/
 }
 
-.footer-request-card {
-    margin-bottom: 10px;
+.request-card-footer {
+    margin-bottom: 0px;
 }
 
-.a-share-card-title {
-    color: #2c3e50;
-}
-
-.a-share-card-title:hover {
-    color: #34495e;
-    text-decoration: underline;
-}
-
-.div-share-card-title footer:before  {
-    content: normal;
-}
-
-.footer-share-card-summary {
+.share-request-card-footer {
     margin-bottom: 10px;
     color: #34495e;
-}
-
-.div-share-card-limitations {
-    padding-left: 15px;
-    padding-right: 15px;
-    margin-top: 10px;
-}
-
-.form-share-card-request {
-    display: inline;
 }
 
 .share-card-request-btn {

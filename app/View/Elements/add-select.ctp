@@ -19,7 +19,7 @@
         $inputGroupClass .= ' has-error';
     }
 
-    $inputClass = 'form-control input-lg';
+    $inputClass = 'form-control input-lg add-select';
     if (isset($required) && $required) {
         $inputClass .= ' input-required';
     } else {
@@ -53,7 +53,6 @@
                 'div' => false,
                 'ng-model' => $ngModel,
                 'ng-options' => $ngOptions,
-                'style' => 'border: none; height: 44px;',
                 'error' => false
             ));
         ?>

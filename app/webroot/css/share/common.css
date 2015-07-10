@@ -28,6 +28,11 @@ body {
 
 /* Add inputs */
 
+.add-select {
+    border: none;
+    height: 44px!important;
+}
+
 .add-input-group {
     margin-bottom: 15px;
 }
@@ -97,6 +102,10 @@ body {
     padding-right: 15px;
     padding-top: 5px;
     padding-bottom: 5px;
+}
+
+.share-card-icon-img {
+    max-width: 80px;
 }
 
 .share-card-main-div {

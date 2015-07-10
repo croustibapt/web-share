@@ -11,7 +11,7 @@
         <div class="media">
             <div class="media-left">
                 <a href="#">
-                    <img ng-src="../img/markers/128/marker-{{ share.share_type_category.label }}-{{ share.share_type.label }}.png" style="max-width: 80px;" />
+                    <img ng-src="../img/markers/128/marker-{{ share.share_type_category.label }}-{{ share.share_type.label }}.png" class="share-card-icon-img" />
                 </a>
             </div>
             <div class="media-body">

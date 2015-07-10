@@ -53,7 +53,7 @@
 
                 <?php if ($this->LocalUser->isAuthenticated($this)) : ?>
 
-                    <li class="li-navbar-right dropdown">
+                    <li class="dropdown">
 
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
                            aria-expanded="false">
@@ -76,7 +76,7 @@
 
                     <li class="li-navbar-right">
 
-                        <a class="btn btn-outline btn-outline-last btn-navbar authenticate-button" href="#">Authenticate</a>
+                        <a class="btn btn-outline btn-navbar authenticate-button" href="#">Authenticate</a>
 
                     </li>
 
