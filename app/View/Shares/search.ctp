@@ -8,7 +8,7 @@
 
         <div id="shares-search-results-div" class="row">
 
-            <div ng-repeat="share in shares" class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
+            <div ng-repeat="share in shares track by share.share_id" class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
                 <?php echo $this->element('share-card'); ?>
             </div>
 

@@ -13,7 +13,7 @@ function initializeSharesSearch(autocompleteInputId, googleMapDivId, shareTypeCa
      */
     app.controller('SharesSearchController', ['$scope', '$http', function($scope, $http) {
         $scope.page = null;
-        $scope.total_pages = 1;
+        $scope.total_pages = 0;
         $scope.total_results = 0;
         $scope.results_count = 0;
         $scope.results_by_page = 10;
