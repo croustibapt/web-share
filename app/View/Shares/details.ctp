@@ -217,12 +217,6 @@
                                         </button>
                                     </div>
 
-                                    <?php else : ?>
-
-                                        <button type="button" class="btn btn-default shares-details-participate-button disabled">
-                                            Complet
-                                        </button>
-
                                     <?php endif; ?>
 
                                 <?php endif; ?>

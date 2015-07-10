@@ -77,43 +77,47 @@ class SharesController extends ApiSharesController {
 	}
     
     public function details($shareId = NULL) {
-        $response = $this->internDetails($shareId);
-        //$this->set('share', $response);
-        $this->set('shareId', $response['share_id']);
-        $this->set('shareStatus', $response['status']);
-        $this->set('shareUserExternalId', $response['user']['external_id']);
+        if ($shareId != NULL) {
+            //Get related Share
+            $share = $this->Share->find('first', array(
+                'conditions' => array(
+                    'Share.id' => $shareId
+                )
+            ));
 
-        //Get user identifier
-        $userExternalId = $this->getUserExternalId($this->request);
+            if ($share != NULL) {
+                $this->set('shareId', $share['Share']['id']);
+                $this->set('shareStatus', $share['Share']['status']);
+                $this->set('shareUserExternalId', $share['User']['external_id']);
 
-        $share['Share'] = $response;
+                //Get user identifier
+                $userExternalId = $this->getUserExternalId($this->request);
 
-        //Reformat share
-        $share['Share']['id'] = $share['Share']['share_id'];
-        unset($share['Share']['share_id']);
+                //User can request?
+                $canRequest = $this->canRequest($share, $userExternalId);
+                $this->set('canRequest', $canRequest);
 
-        $share['User'] = $share['Share']['user'];
-        unset($share['Share']['user']);
+                //Is expired?
+                $isExpired = $this->isShareExpired($share);
+                $this->set('isExpired', $isExpired);
 
-        //User can request?
-        $canRequest = $this->canRequest($share, $userExternalId);
-        $this->set('canRequest', $canRequest);
+                //Is places left?
+                $isPlacesLeft = $this->isPlacesLeft($share);
+                $this->set('isPlacesLeft', $isPlacesLeft);
 
-        //Is expired?
-        $isExpired = $this->isShareExpired($share);
-        $this->set('isExpired', $isExpired);
+                //Own
+                $doesUserOwnShare = $this->doesUserOwnShare($share, $userExternalId);
+                $this->set('doesUserOwnShare', $doesUserOwnShare);
 
-        //Is places left?
-        $isPlacesLeft = $this->isPlacesLeft($share);
-        $this->set('isPlacesLeft', $isPlacesLeft);
-
-        //Own
-        $doesUserOwnShare = $this->doesUserOwnShare($share, $userExternalId);
-        $this->set('doesUserOwnShare', $doesUserOwnShare);
-
-        //Request status
-        $requestStatus = $this->getRequestStatus($share, $userExternalId);
-        $this->set('requestStatus', $requestStatus);
+                //Request status
+                $requestStatus = $this->getRequestStatus($share, $userExternalId);
+                $this->set('requestStatus', $requestStatus);
+            } else {
+                $this->redirect('/');
+            }
+        } else {
+            $this->redirect('/');
+        }
     }
 
     public function cancel($shareId = NULL) {
