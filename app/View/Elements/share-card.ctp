@@ -50,11 +50,13 @@
             <div class="col-md-12 text-center-xs">
 
                 <p ng-if="(share.places_left > 1)" class="text-info share-card-left-places-p">
-                    {{ share.places_left }} places restantes
+                    {{ share.places_left }} places restantes <small ng-if="(share.limitations)" class="glyphicon glyphicon-asterisk text-danger" title="{{ share.limitations }}"></small>
                 </p>
+
                 <p ng-if="(share.places_left === 1)" class="text-warning share-card-left-places-p">
-                    1 place restante
+                    1 place restante <small ng-if="(share.limitations)" class="glyphicon glyphicon-asterisk text-danger" title="{{ share.limitations }}"></small>
                 </p>
+
                 <p ng-if="(share.places_left === 0)" class="text-success share-card-left-places-p">
                     Complet
                 </p>

@@ -164,7 +164,15 @@
                 });
                 
                 //Tooltip
-                $('[data-toggle="tooltip"]').tooltip();
+                $('[data-toggle="tooltip"]').hover(function(){
+                    console.log('enter');
+                    // on mouseenter
+                    $(this).tooltip('show');
+                }, function(){
+                    console.log('leave');
+                    // on mouseleave
+                    $(this).tooltip('hide');
+                });
             });
         </script>
     </body>
