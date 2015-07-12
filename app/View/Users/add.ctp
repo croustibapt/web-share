@@ -5,7 +5,7 @@
         <h3 class="users-add-title-h3 text-center">Create your Share account<br /><small>We will use your Facebook account</small></h3>
 
         <div class="text-center users-add-picture-div">
-            <img class="user-card-picture-img img-thumbnail img-circle" src="http://graph.facebook.com/v2.3/<?php echo $userExternalId; ?>/picture?type=large&width=150&height=150" />
+            <img class="user-card-picture-img img-thumbnail img-circle" src="http://graph.facebook.com/v2.3/<?php echo $externalId; ?>/picture?type=large&width=150&height=150" />
         </div>
 
         <?php
@@ -15,9 +15,24 @@
             ));
         ?>
 
+        <!-- External id -->
         <?php
-            echo $this->Form->hidden('user-external-id', array(
-                'value' => $userExternalId
+            echo $this->Form->hidden('external_id', array(
+                'value' => $externalId
+            ));
+        ?>
+
+        <!-- Mail -->
+        <?php
+            echo $this->Form->hidden('mail', array(
+                'value' => $mail
+            ));
+        ?>
+
+        <!-- Auth token -->
+        <?php
+            echo $this->Form->hidden('auth_token', array(
+                'value' => $authToken
             ));
         ?>
 

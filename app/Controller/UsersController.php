@@ -10,42 +10,88 @@ class UsersController extends ApiUsersController {
         $this->set('users', $users);
     }
 
-	public function add($userExternalId = NULL, $authToken = NULL, $username = NULL, $mail = NULL) {
-        //Check parameters
-        if (($userExternalId != NULL) && ($authToken != NULL) && ($username != NULL) && ($mail != NULL)) {
-            $user = $this->User->find('first', array(
-                'conditions' => array(
-                    'User.external_id' => $userExternalId
-            )));
-            
-            //If no user was found and it's a POST request
-            if ($user == NULL) {
-                if ($this->request->is('POST')) {
-                    //pr($this->request->data);
+	public function add() {
+        if ($this->request->is('GET')) {
+            $helper = $this->facebook->getRedirectLoginHelper();
 
+            try {
+                $accessToken = $helper->getAccessToken();
+
+                //The OAuth 2.0 client handler helps us manage access tokens
+                $oAuth2Client = $this->facebook->getOAuth2Client();
+
+                if (!$accessToken->isLongLived()) {
+                    //Exchanges a short-lived access token for a long-lived one
                     try {
-                        //Try to save the user
-                        $response = $this->internAdd($userExternalId, $this->request->data['User']['username'], $mail);
-
-                        //If it succeeded
-                        if ($response != NULL) {
-                            //Save auth session
-                            $this->saveAuthSession($userExternalId, $mail, $authToken, $username);
-
-                            //Redirect to home
-                            $this->redirect('/');
-                        }
-                    } catch (ShareException $e) {
-                        $this->User->validationErrors = $e->getValidationErrors();
+                        $accessToken = $oAuth2Client->getLongLivedAccessToken($accessToken);
+                    } catch (Facebook\Exceptions\FacebookSDKException $e) {
+                        //TODO
                     }
                 }
-                
-                $this->set('userExternalId', $userExternalId);
-                $this->set('username', $username);
-                $this->set('mail', $mail);
-            } else {
+
+                //Get the access token metadata from /debug_token
+                $tokenMetadata = $oAuth2Client->debugToken($accessToken);
+                //pr($tokenMetadata);
+
+                $userExternalId = $tokenMetadata->getUserId();
+                $userAuthToken = $accessToken->getValue();
+
+                //Try to get the related user
+                $user = $this->User->find('first', array(
+                    'conditions' => array(
+                        'User.external_id' => $userExternalId
+                    )
+                ));
+
+                //If a user was found
+                if ($user != NULL) {
+                    //Save session
+                    $this->saveAuthSession($userExternalId, $user['User']['mail'], $userAuthToken, $user['User']['username']);
+
+                    //Redirect to referer
+                    $this->redirect($this->referer());
+                } else {
+                    $response = $this->facebook->get('/me', $userAuthToken);
+                    $user = $response->getGraphUser();
+                    //pr($user);
+
+                    //Redirect to user/add
+                    $firstName = $user->getFirstName();
+                    $mail = $user->getField('email');
+
+                    $this->set('externalId', $userExternalId);
+                    $this->set('username', $firstName);
+                    $this->set('mail', $mail);
+                    $this->set('authToken', $userAuthToken);
+                }
+            } catch (Facebook\Exceptions\FacebookSDKException $e) {
+                //TODO
+
                 //Redirect to home
                 $this->redirect('/');
+            }
+        } else if ($this->request->is('POST')) {
+            //pr($this->request->data);
+
+            try {
+                //Try to save the user
+                $userExternalId = $this->request->data['User']['external_id'];
+                $username = $this->request->data['User']['username'];
+                $mail = $this->request->data['User']['mail'];
+                $authToken = $this->request->data['User']['auth_token'];
+
+                $response = $this->internAdd($userExternalId, $username, $mail);
+
+                //If it succeeded
+                if ($response != NULL) {
+                    //Save auth session
+                    $this->saveAuthSession($userExternalId, $mail, $authToken, $username);
+
+                    //Redirect to home
+                    $this->redirect('/');
+                }
+            } catch (ShareException $e) {
+                $this->User->validationErrors = $e->getValidationErrors();
             }
         } else {
             //Redirect to home
@@ -67,69 +113,8 @@ class UsersController extends ApiUsersController {
     }
 
     public function home() {
-        if ($this->isLocalUserSessionAuthenticated()) {
-            if ($this->request->is('GET')) {
-                /*try {
-                    //Intern home
-                    $user = $this->interHome(true);
-
-                    $this->set('user', $user);
-                } catch (ShareException $e) {
-                    $this->set('error', $e);
-                }*/
-            }
-        } else {
+        if (!$this->isLocalUserSessionAuthenticated()) {
             $this->redirect('/');
-        }
-    }
-
-    public function authenticate() {
-        if ($this->request->is('POST')) {
-            //User external id
-            $userExternalId = NULL;
-            if (isset($this->request->data['userExternalId'])) {
-                $userExternalId = urldecode($this->request->data['userExternalId']);
-            }
-
-            //User auth token
-            $userAuthToken = NULL;
-            if (isset($this->request->data['userAuthToken'])) {
-                $userAuthToken = urldecode($this->request->data['userAuthToken']);
-            }
-
-            //User mail
-            $userMail = NULL;
-            if (isset($this->request->data['userMail'])) {
-                $userMail = urldecode($this->request->data['userMail']);
-            }
-
-            //Username
-            $username = NULL;
-            if (isset($this->request->data['username'])) {
-                $username = urldecode($this->request->data['username']);
-            }
-
-            //Check parameters
-            if (($userExternalId != NULL) && ($userAuthToken != NULL) && ($userMail != NULL)) {
-                //Try to get the related user
-                $user = $this->User->find('first', array(
-                    'conditions' => array(
-                        'User.external_id' => $userExternalId
-                    )
-                ));
-
-                //If a user was found
-                if ($user != NULL) {
-                    //Save session
-                    $this->saveAuthSession($userExternalId, $userMail, $userAuthToken, $user['User']['username']);
-
-                    //Redirect to referer
-                    $this->redirect($this->referer());
-                } else {
-                    //Redirect to user/add
-                    $this->redirect(array('controller' => 'users', 'action' => 'add', $userExternalId, $userAuthToken, $username, $userMail));
-                }
-            }
         }
     }
 
@@ -139,7 +124,7 @@ class UsersController extends ApiUsersController {
         }
 
         //Redirect to referer
-        $this->redirect($this->referer());
+        $this->redirect('/');
     }
 
     /*public function delete() {

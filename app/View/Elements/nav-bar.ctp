@@ -62,12 +62,30 @@
                         <ul class="dropdown-menu" role="menu">
                             <li>
                                 <?php
-                                    echo $this->Html->link('My account', '/user/home');
+                                    echo $this->Html->link('My account', '/users/home');
                                 ?>
                             </li>
                             <li class="divider"></li>
                             <li>
-                                <a id="a-nav-bar-logout" href="#">Logout</a>
+                                <?php
+                                    $fb = new Facebook\Facebook([
+                                        'app_id' => SHARE_FACEBOOK_APP_ID,
+                                        'app_secret' => SHARE_FACEBOOK_APP_SECRET,
+                                        'default_graph_version' => 'v2.2',
+                                    ]);
+
+                                    $helper = $fb->getRedirectLoginHelper();
+
+                                    $callbackUrl = $this->Html->url(array(
+                                        "controller" => "users",
+                                        "action" => "logout"
+                                    ), true);
+
+                                    $authToken = $this->LocalUser->getAuthToken($this);
+                                    $logoutUrl = $helper->getLogoutUrl($authToken, $callbackUrl);
+
+                                    echo '<a href="' . $logoutUrl . '">Logout</a>';
+                                ?>
                             </li>
                         </ul>
                     </li>
@@ -76,7 +94,26 @@
 
                     <li class="li-navbar-right">
 
-                        <a class="btn btn-outline btn-navbar authenticate-button" href="#">Authenticate</a>
+                        <?php
+                            $fb = new Facebook\Facebook([
+                                'app_id' => SHARE_FACEBOOK_APP_ID,
+                                'app_secret' => SHARE_FACEBOOK_APP_SECRET,
+                                'default_graph_version' => 'v2.2',
+                            ]);
+
+                            $helper = $fb->getRedirectLoginHelper();
+
+                            $permissions = ['email']; // Optional permissions
+
+                            $callbackUrl = $this->Html->url(array(
+                                "controller" => "users",
+                                "action" => "add"
+                            ), true);
+
+                            $loginUrl = $helper->getLoginUrl($callbackUrl, $permissions);
+
+                            echo '<a  class="btn btn-outline btn-navbar authenticate-button" href="' . $loginUrl . '">Authenticate</a>';
+                        ?>
 
                     </li>
 
@@ -93,130 +130,3 @@
 <?php endif; ?>
 
 </nav>
-
-<script>
-    <?php if ($this->LocalUser->isAuthenticated($this)) : ?>
-
-    //
-    window.fbAsyncInit = function() {
-        //
-        FB.init({
-            appId: '<?php echo SHARE_FACEBOOK_APP_ID; ?>',
-            xfbml: true,
-            version: 'v2.3'
-        });
-
-        //Get the user Facebook login status
-        FB.getLoginStatus(function(response) {
-            //console.log(response);
-
-            //If we are connected
-            if (response.status !== 'connected') {
-                //Invalidate the current session
-                window.location.href = webroot + "user/logout";
-            }
-        });
-    };
-
-    //Logout button
-    $('#a-nav-bar-logout').click(function() {
-        //
-        FB.logout(function(response) {
-            console.log(response);
-
-            //Call logout
-            window.location.href = webroot + "user/logout";
-        });
-    });
-
-    <?php else : ?>
-
-    //Jquery extend function
-    $.extend({
-        redirectPost: function(location, args) {
-            var form = '';
-            $.each( args, function(key, value) {
-                form += '<input type="hidden" name="' + key + '" value="' + encodeURI(value) + '">';
-            });
-
-            $('<form action="' + location + '" method="POST">' + form + '</form>').submit();
-        }
-    });
-
-    //Authenticate button
-    function authenticate(response) {
-        //Get back the auth token
-        var userAuthToken = response.authResponse.accessToken;
-
-        //And if it is not null
-        if (userAuthToken != null) {
-            //Fetch user information
-            FB.api('/me', function(response) {
-                //console.log(response);
-
-                //Get back user information
-                var userExternalId = response.id;
-                var userMail = response.email;
-                var username = response.first_name;
-
-                console.log(userExternalId + ', ' + userAuthToken + ', ' + userMail + ', ' + username);
-
-                //And try to authenticate him
-                $.redirectPost(webroot + "user/authenticate", {
-                    userExternalId: userExternalId,
-                    userAuthToken: userAuthToken,
-                    userMail: userMail,
-                    username: username
-                });
-            });
-        }
-    }
-
-    //
-    window.fbAsyncInit = function() {
-        //
-        FB.init({
-            appId: '<?php echo SHARE_FACEBOOK_APP_ID; ?>',
-            xfbml: true,
-            version: 'v2.3'
-        });
-    };
-
-    //Authenticate button clicked
-    $(document).ready(function() {
-        $('.authenticate-button').click(function () {
-            //Start Facebook login process
-            FB.login(function (response) {
-                //console.log(response);
-
-                //Check login status
-                FB.getLoginStatus(function (response) {
-                    //If we are connected
-                    if (response.status === 'connected') {
-                        //Try to authenticate the user
-                        authenticate(response);
-                    } else if (response.status === 'not_authorized') {
-                        //The person is logged into Facebook, but not your app.
-                        console.log('Please log ' + 'into this app.');
-                    } else {
-                        //The person is not logged into Facebook, so we're not sure if they are logged into this app or not.
-                        console.log('Please log ' + 'into Facebook.');
-                    }
-                });
-            }, {
-                scope: 'public_profile, email'
-            });
-        });
-    });
-
-    <?php endif; ?>
-
-    //Initialize Facebook Javascript SDK
-    (function(d, s, id) {
-        var js, fjs = d.getElementsByTagName(s)[0];
-        if (d.getElementById(id)) {return;}
-        js = d.createElement(s); js.id = id;
-        js.src = "//connect.facebook.net/en_US/sdk.js";
-        fjs.parentNode.insertBefore(js, fjs);
-    }(document, 'script', 'facebook-jssdk'));
-</script>

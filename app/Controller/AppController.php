@@ -1,4 +1,6 @@
 <?php
+session_start();
+
 /**
  * Application level Controller
  *
@@ -39,7 +41,7 @@ define('SHARE_HEADER_AUTH_TOKEN', 'auth-user-token');
 define('SHARE_HEADER_AUTH_MAIL', 'auth-user-mail');
 define('SHARE_HEADER_AUTH_USERNAME', 'auth-user-username');
 
-define('SHARE_CHECK_CREDENTIALS_MAX_INTERVAL', 15);
+define('SHARE_CHECK_CREDENTIALS_MAX_INTERVAL', 900); //15*60
 
 //
 define('SHARE_STATUS_CODE_OK', 200);
@@ -83,7 +85,6 @@ define("SHARE_REQUEST_STATUS_CANCELLED", 3);
 App::uses('Controller', 'Controller');
 
 require_once APP . 'Vendor' . DS . 'autoload.php';
-use Facebook\FacebookSession;
 
 /**
  * Application Controller
@@ -100,6 +101,8 @@ class AppController extends Controller {
 	public $uses = array('User', 'Share', 'Comment', 'Request');
     
     public $helpers = array('ShareType', 'LocalUser');
+
+    public $facebook = NULL;
 
     protected function saveAuthSession($userExternalId = NULL, $mail = NULL, $authToken = NULL, $username = NULL) {
         if (($userExternalId != NULL) && ($mail != NULL) && ($authToken != NULL) && ($userExternalId != NULL)) {
@@ -132,7 +135,12 @@ class AppController extends Controller {
         parent::beforeFilter();
 
         //Initialize Facebook
-        FacebookSession::setDefaultApplication(SHARE_FACEBOOK_APP_ID, SHARE_FACEBOOK_APP_SECRET);
+        $this->facebook = new Facebook\Facebook([
+            'app_id' => SHARE_FACEBOOK_APP_ID,
+            'app_secret' => SHARE_FACEBOOK_APP_SECRET,
+            'default_graph_version' => 'v2.2',
+        ]);
+        //FacebookSession::setDefaultApplication(SHARE_FACEBOOK_APP_ID, SHARE_FACEBOOK_APP_SECRET);
 
         /*//If user is not logged with its session but a cookie is present
         if (!$this->isLocalUserSessionAuthenticated() && $this->isLocalUserCookieAuthenticated()) {
@@ -170,51 +178,55 @@ class AppController extends Controller {
         if ($request != NULL) {
             //Get user external id
             $userExternalId = $this->extractUserAuthValue($request, SHARE_HEADER_AUTH_EXTERNAL_ID);
-            
-            //Get user
-            $user = $this->User->find('first', array(
-                'fields' => array('User.id, User.last_check_credentials_date'),
-                'conditions' => array(
-                    'User.external_id' => $userExternalId
-                )
-            ));
-            
-            if ($user != NULL) {
-                //Get interval between now and last check credentials date
-                $lastCheckCredentialsDate = date_create($user['User']['last_check_credentials_date']);
-                $nbMinutes = date_diff(new DateTime(), $lastCheckCredentialsDate)->format('%i');
+            //Get token
+            $userToken = $this->extractUserAuthValue($request, SHARE_HEADER_AUTH_TOKEN);
 
-                //Check if we need to check credentials
-                if ($nbMinutes > SHARE_CHECK_CREDENTIALS_MAX_INTERVAL) {
-                    //Get tokens
-                    $userToken = $this->extractUserAuthValue($request, SHARE_HEADER_AUTH_TOKEN);
+            if (($userExternalId != NULL) && ($userToken != NULL)) {
+                //Get user
+                $user = $this->User->find('first', array(
+                    'fields' => array('User.id, User.last_check_credentials_date'),
+                    'conditions' => array(
+                        'User.external_id' => $userExternalId
+                    )
+                ));
 
-                    /*$response['token'] = $userToken;
+                //If found
+                if ($user != NULL) {
+                    //Get interval between now and last check credentials date
+                    $lastCheckCredentialsDate = date_create($user['User']['last_check_credentials_date']);
 
-                    echo json_encode($response);
-                    exit();*/
+                    $now = new DateTime();
+                    $nbSeconds = strtotime($now->format('Y-m-d H:i:s')) - strtotime($lastCheckCredentialsDate->format('Y-m-d H:i:s'));
 
-                    if ($userToken != NULL) {
-                        //If you already have a valid access token:
-                        $session = new FacebookSession($userToken);
+                    //Check if we need to check credentials
+                    if ($nbSeconds > SHARE_CHECK_CREDENTIALS_MAX_INTERVAL) {
+                        //The OAuth 2.0 client handler helps us manage access tokens
+                        $oAuth2Client = $this->facebook->getOAuth2Client();
+                        $tokenMetadata = $oAuth2Client->debugToken($userToken);
 
-                        //To validate the session:
+                        //pr($tokenMetadata);
+
                         try {
-                            $isAuthenticated = $session->validate();
-                        } catch (FacebookRequestException $ex) {
+                            //Validation (these will throw FacebookSDKException's when they fail)
+                            $tokenMetadata->validateAppId(SHARE_FACEBOOK_APP_ID);
+                            $tokenMetadata->validateUserId($userExternalId);
+                            $tokenMetadata->validateExpiration();
+
+                            $isAuthenticated = true;
+
+                            //Update last credential date
+                            //TODO: check status
+                            $this->User->id = $user['User']['id'];
+                            $this->User->saveField('last_check_credentials_date', $now->format('Y-m-d H:i:s'));
+                        } catch (Facebook\Exceptions\FacebookSDKException $ex) {
                             //Session not valid, Graph API returned an exception with the reason.
                             $this->invalidateLocalUserSession();
-                        } catch (Exception $ex) {
-                            //Graph API returned info, but it may mismatch the current app or have expired.
-                            $this->invalidateLocalUserSession();
                         }
+                    } else {
+                        //By pass Facebook check credentials
+                        $isAuthenticated = true;
                     }
-                } else {
-                    //By pass Facebook check credentials
-                    return true;
                 }
-            } else {
-                return false;
             }
         }
         
