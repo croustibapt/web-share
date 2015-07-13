@@ -96,7 +96,7 @@ require_once APP . 'Vendor' . DS . 'autoload.php';
  * @link		http://book.cakephp.org/2.0/en/controllers.html#the-app-controller
  */
 class AppController extends Controller {
-    public $components = array('Session'/*, 'DebugKit.Toolbar'*/);
+    public $components = array('Session', 'Cookie'/*, 'DebugKit.Toolbar'*/);
     
 	public $uses = array('User', 'Share', 'Comment', 'Request');
     
@@ -106,11 +106,27 @@ class AppController extends Controller {
 
     protected function saveAuthSession($userExternalId = NULL, $mail = NULL, $authToken = NULL, $username = NULL) {
         if (($userExternalId != NULL) && ($mail != NULL) && ($authToken != NULL) && ($userExternalId != NULL)) {
+            //Session
             $this->Session->write(SHARE_LOCAL_USER_SESSION_PREFIX.'.'.SHARE_HEADER_AUTH_EXTERNAL_ID, $userExternalId);
             $this->Session->write(SHARE_LOCAL_USER_SESSION_PREFIX.'.'.SHARE_HEADER_AUTH_MAIL, $mail);
             $this->Session->write(SHARE_LOCAL_USER_SESSION_PREFIX.'.'.SHARE_HEADER_AUTH_TOKEN, $authToken);
             $this->Session->write(SHARE_LOCAL_USER_SESSION_PREFIX.'.'.SHARE_HEADER_AUTH_USERNAME, $username);
         }
+    }
+
+    protected function saveAuthCookie($userExternalId = NULL, $mail = NULL, $authToken = NULL, $username = NULL) {
+        if (($userExternalId != NULL) && ($mail != NULL) && ($authToken != NULL) && ($userExternalId != NULL)) {
+            //Cookie
+            $this->Cookie->write(SHARE_HEADER_AUTH_EXTERNAL_ID, $userExternalId);
+            $this->Cookie->write(SHARE_HEADER_AUTH_MAIL, $mail);
+            $this->Cookie->write(SHARE_HEADER_AUTH_TOKEN, $authToken);
+            $this->Cookie->write(SHARE_HEADER_AUTH_USERNAME, $username);
+        }
+    }
+
+    protected function saveAuth($userExternalId = NULL, $mail = NULL, $authToken = NULL, $username = NULL) {
+        $this->saveAuthSession($userExternalId, $mail, $authToken, $username);
+        $this->saveAuthCookie($userExternalId, $mail, $authToken, $username);
     }
 
     protected function isLocalUserSessionAuthenticated() {
@@ -123,16 +139,44 @@ class AppController extends Controller {
 
         return $isAuthenticated;
     }
+
+    protected function isLocalUserCookieAuthenticated() {
+        $userExternalId = $this->Cookie->read(SHARE_HEADER_AUTH_EXTERNAL_ID);
+        $mail = $this->Cookie->read(SHARE_HEADER_AUTH_MAIL);
+        $authToken = $this->Cookie->read(SHARE_HEADER_AUTH_TOKEN);
+        $username = $this->Cookie->read(SHARE_HEADER_AUTH_USERNAME);
+
+        $isAuthenticated = (($userExternalId != NULL) && ($mail != NULL) && ($authToken != NULL) && ($username != NULL));
+
+        return $isAuthenticated;
+    }
     
     protected function invalidateLocalUserSession() {
+        //Session
         $this->Session->delete(SHARE_LOCAL_USER_SESSION_PREFIX.'.'.SHARE_HEADER_AUTH_EXTERNAL_ID);
         $this->Session->delete(SHARE_LOCAL_USER_SESSION_PREFIX.'.'.SHARE_HEADER_AUTH_MAIL);
         $this->Session->delete(SHARE_LOCAL_USER_SESSION_PREFIX.'.'.SHARE_HEADER_AUTH_TOKEN);
         $this->Session->delete(SHARE_LOCAL_USER_SESSION_PREFIX.'.'.SHARE_HEADER_AUTH_USERNAME);
+
+        //Cookie
+        $this->Cookie->delete(SHARE_HEADER_AUTH_EXTERNAL_ID);
+        $this->Cookie->delete(SHARE_HEADER_AUTH_MAIL);
+        $this->Cookie->delete(SHARE_HEADER_AUTH_TOKEN);
+        $this->Cookie->delete(SHARE_HEADER_AUTH_USERNAME);
     }
 
     public function beforeFilter() {
         parent::beforeFilter();
+
+        //Cookie stuff
+        $this->Cookie->name = SHARE_LOCAL_USER_SESSION_PREFIX;
+        $this->Cookie->time = 3600 * 24 * 60;  //60 days
+        /*$this->Cookie->path = '/shares/';*/
+        /*$this->Cookie->domain = 'localhost';*/
+        /*$this->Cookie->secure = true;  // ex. seulement envoyé si on utilise un HTTPS sécurisé*/
+        $this->Cookie->key = 'qSI232qs*&sXOw!adre@34SAv!@*(XSL#$%)asGb$@11~_+!@#HKis~#^';
+        $this->Cookie->httpOnly = true;
+        $this->Cookie->type('aes');
 
         //Initialize Facebook
         $this->facebook = new Facebook\Facebook([
@@ -142,16 +186,11 @@ class AppController extends Controller {
         ]);
         //FacebookSession::setDefaultApplication(SHARE_FACEBOOK_APP_ID, SHARE_FACEBOOK_APP_SECRET);
 
-        /*//If user is not logged with its session but a cookie is present
+        //If user is not logged with its session but a cookie is present
         if (!$this->isLocalUserSessionAuthenticated() && $this->isLocalUserCookieAuthenticated()) {
-            $userExternalId = $this->Cookie->read(SHARE_HEADER_AUTH_EXTERNAL_ID);
-            $phoneNumber = $this->Cookie->read(SHARE_HEADER_AUTH_PHONE_NUMBER);
-            $authToken = $this->Cookie->read(SHARE_HEADER_AUTH_TOKEN);
-            $username = $this->Cookie->read(SHARE_HEADER_AUTH_USERNAME);
-
             //Save session
-            $this->saveAuthSession($userExternalId, $phoneNumber, $authToken, $username);
-        }*/
+            $this->saveAuthSession($this->Cookie->read(SHARE_HEADER_AUTH_EXTERNAL_ID), $this->Cookie->read(SHARE_HEADER_AUTH_MAIL), $this->Cookie->read(SHARE_HEADER_AUTH_TOKEN), $this->Cookie->read(SHARE_HEADER_AUTH_USERNAME));
+        }
     }
     
     private function extractUserAuthValue($request = NULL, $key = NULL) {

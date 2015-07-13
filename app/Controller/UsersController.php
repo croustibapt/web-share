@@ -46,7 +46,7 @@ class UsersController extends ApiUsersController {
                 //If a user was found
                 if ($user != NULL) {
                     //Save session
-                    $this->saveAuthSession($userExternalId, $user['User']['mail'], $userAuthToken, $user['User']['username']);
+                    $this->saveAuth($userExternalId, $user['User']['mail'], $userAuthToken, $user['User']['username']);
 
                     //Redirect to referer
                     $this->redirect($this->referer());
@@ -85,7 +85,7 @@ class UsersController extends ApiUsersController {
                 //If it succeeded
                 if ($response != NULL) {
                     //Save auth session
-                    $this->saveAuthSession($userExternalId, $mail, $authToken, $username);
+                    $this->saveAuth($userExternalId, $mail, $authToken, $username);
 
                     //Redirect to home
                     $this->redirect('/');
