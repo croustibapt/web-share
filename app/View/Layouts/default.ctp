@@ -76,6 +76,10 @@
 
         <div class="main-div">
 
+            <?php
+                echo $this->Session->flash();
+            ?>
+
             <!-- CONTENT -->
             <div class="content-div">
 
