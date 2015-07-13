@@ -43,10 +43,22 @@
     <tr ng-repeat="request in share.requests track by request.request_id" ng-class="{ 'warning': (request.status == <?php echo SHARE_REQUEST_STATUS_PENDING; ?>), 'success': (request.status == <?php echo SHARE_REQUEST_STATUS_ACCEPTED; ?>), 'danger': (request.status == <?php echo SHARE_REQUEST_STATUS_DECLINED; ?>) }" class="tr-share-card-request">
 
         <td class="share-request-card-td">
-            <p ng-class="{ 'text-warning': (request.status == <?php echo SHARE_REQUEST_STATUS_PENDING; ?>), 'text-success': (request.status == <?php echo SHARE_REQUEST_STATUS_ACCEPTED; ?>), 'text-danger': (request.status == <?php echo SHARE_REQUEST_STATUS_DECLINED; ?>) }" class="share-card-request-p share-card-request-user-p">
-                {{ request.user.username }}
-            </p>
-        </td>
+
+        <p ng-if="(request.status == <?php echo SHARE_REQUEST_STATUS_PENDING; ?>)" class="text-warning share-card-request-p share-card-request-user-p">
+            {{ request.user.username }} <span class="glyphicon glyphicon-question-sign" aria-hidden="true"></span>
+        </p>
+
+        <p ng-if="(request.status == <?php echo SHARE_REQUEST_STATUS_ACCEPTED; ?>)" class="text-success share-card-request-p share-card-request-user-p">
+            {{ request.user.username }} <span class="glyphicon glyphicon-ok-sign" aria-hidden="true"></span>
+        </p>
+
+        <p ng-if="(request.status == <?php echo SHARE_REQUEST_STATUS_DECLINED; ?>)" class="text-danger share-card-request-p share-card-request-user-p">
+            {{ request.user.username }} <span class="glyphicon glyphicon-minus-sign" aria-hidden="true"></span>
+        </p>
+
+        <p ng-if="(request.status == <?php echo SHARE_REQUEST_STATUS_CANCELLED; ?>)" class="share-card-request-p share-card-request-user-p">
+            {{ request.user.username }} <span class="glyphicon glyphicon-minus-sign" aria-hidden="true"></span>
+        </p>
 
         <td ng-if="(request.status == <?php echo SHARE_REQUEST_STATUS_PENDING; ?>)" class="text-right share-request-card-td">
 

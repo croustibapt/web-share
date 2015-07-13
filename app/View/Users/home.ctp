@@ -48,7 +48,7 @@
                 <!-- My shares -->
                 <div id="div-user-home-shares" class="tab-pane active" role="tabpanel">
 
-                    <div ng-if="(user.share_count > 0)">
+                    <div ng-if="(user.shares.length > 0)">
                         <div ng-repeat="share in user.shares track by share.share_id" class="card-div">
                             <?php
                                 //
@@ -59,19 +59,25 @@
                         </div>
                     </div>
 
-                    <div ng-if="(user.share_count == 0)" class="lead text-muted text-center">Vous n'avez aucun partage en cours</div>
+                    <div ng-if="(user.shares.length == 0)" class="text-muted">Vous n'avez aucun partage en cours</div>
 
                 </div>
 
                 <!-- My requests -->
                 <div role="tabpanel" class="tab-pane" id="div-user-home-requests">
 
-                    <div ng-repeat="request in user.requests track by request.request_id" class="card-div">
+                    <div ng-if="(user.requests.length > 0)">
 
-                        <?php
-                            echo $this->element('request-card');
-                        ?>
+                        <div ng-repeat="request in user.requests track by request.request_id" class="card-div">
+
+                            <?php
+                                echo $this->element('request-card');
+                            ?>
+                        </div>
+
                     </div>
+
+                    <div ng-if="(user.requests.length == 0)" class="text-muted">Vous n'avez aucune requêtes en attente</div>
 
                 </div>
 
