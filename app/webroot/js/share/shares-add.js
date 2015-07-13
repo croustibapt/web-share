@@ -74,6 +74,7 @@ function initializeSharesAdd(googleMapDivId, autocompleteDivId, autocompleteInpu
         $scope.updateLatitudeLongitude = function() {
             //"Force" update
             $scope.$apply(function() {
+                console.log('updateLatitudeLongitude');
                 $scope.latitude = $scope.marker.getPosition().lat();
                 $scope.longitude = $scope.marker.getPosition().lng();
             });
@@ -89,6 +90,8 @@ function initializeSharesAdd(googleMapDivId, autocompleteDivId, autocompleteInpu
                     title: 'Hello World!',
                     draggable: true
                 });
+
+                $scope.updateLatitudeLongitude();
 
                 //Update share position when the marker is released
                 google.maps.event.addListener($scope.marker, 'dragend', function() {

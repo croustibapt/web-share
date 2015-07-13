@@ -3,6 +3,15 @@ class Share extends AppModel {
 	public $name = 'Share';
     
     public $displayField = 'title';
+
+    public function checkFutureDate($check) {
+        $value = array_values($check);
+
+        $eventDate = DateTime::createFromFormat('Y-m-d', $value[0]);
+        $now = new DateTime();
+
+        return strtotime($eventDate->format('Y-m-d')) >= strtotime($now->format('Y-m-d'));
+    }
     
     public $validate = array(
         'user_id' => array(
@@ -39,6 +48,10 @@ class Share extends AppModel {
             'date' => array(
                 'rule'     => 'date',
                 'message'  => 'FieldNotValid'
+            ),
+            'future' => array(
+                'rule' => array('checkFutureDate'),
+                'message' => 'FieldNotValid'
             )
         ),
         'title' => array(

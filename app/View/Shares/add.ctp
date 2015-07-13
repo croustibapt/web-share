@@ -46,14 +46,20 @@
                     <div class="col-md-6">
                         <!-- Date -->
                         <?php
+
                             echo $this->element('add-input', array(
                                 'modelName' => 'Share',
-                                'name' => 'event_date',
+                                'name' => 'event_date_display',
                                 'placeholder' => 'Date',
                                 'class' => 'datepicker',
                                 'icon' => 'glyphicon-calendar',
                                 'required' => true
                             ));
+
+                            echo $this->Form->hidden('event_date', array(
+                                'id' => 'shares-add-event-date'
+                            ));
+
                         ?>
                     </div>
 
@@ -216,7 +222,10 @@
     $(function() {
         //
         $(".datepicker").datepicker({
-            dateFormat: 'yy-mm-dd'
+            dateFormat: 'dd/mm/yy',
+            minDate: 0,
+            altField: "#shares-add-event-date",
+            altFormat: "yy-mm-dd"
         });
     });
 </script>

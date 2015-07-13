@@ -10,7 +10,20 @@
         $inputGroupAddonClass .= ' input-group-addon-optional';
     }
 
-    $hasError = $this->Form->isFieldError($name);
+    if (strpos($name, '_display') !== FALSE) {
+        $displayName = str_replace('_display', '', $name);
+        $hasError = $this->Form->isFieldError($displayName);
+
+        if ($hasError) {
+            $toolTipTitle = implode(",", $this->validationErrors[$modelName][$displayName]);
+        }
+    } else {
+        $hasError = $this->Form->isFieldError($name);
+
+        if ($hasError) {
+            $toolTipTitle = implode(",", $this->validationErrors[$modelName][$name]);
+        }
+    }
 
     if ($hasError) {
         $inputGroupClass .= ' has-error';
@@ -37,7 +50,7 @@
 
     <?php if ($hasError) : ?>
 
-    <div class="<?php echo $inputGroupClass; ?>" data-toggle="tooltip" data-placement="bottom" title="<?php echo implode(",", $this->validationErrors[$modelName][$name]); ?>">
+    <div class="<?php echo $inputGroupClass; ?>" data-toggle="tooltip" data-placement="bottom" title="<?php echo $toolTipTitle; ?>">
 
     <?php else : ?>
 
