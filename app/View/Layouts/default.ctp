@@ -76,21 +76,9 @@
 
         <div class="main-div">
 
-            <?php
-                $error = $this->Session->flash('nok');
-                if ($error != '') :
-            ?>
-
-                <div class="alert alert-red">
-                    <h1>Error</h1>
-                    <?php echo $error; ?>
-                </div>
-
-            <?php endif; ?>
-
+            <!-- CONTENT -->
             <div class="content-div">
 
-                <!-- CONTENT -->
                 <?php echo $this->fetch('content'); ?>
 
             </div>

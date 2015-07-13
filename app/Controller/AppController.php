@@ -1,6 +1,4 @@
 <?php
-session_start();
-
 /**
  * Application level Controller
  *
@@ -85,6 +83,26 @@ define("SHARE_REQUEST_STATUS_CANCELLED", 3);
 App::uses('Controller', 'Controller');
 
 require_once APP . 'Vendor' . DS . 'autoload.php';
+
+use Facebook\PersistentData\PersistentDataInterface;
+
+class CakePersistentDataHandler implements PersistentDataInterface {
+    public $appController = NULL;
+
+    protected $sessionPrefix = 'FBRLH_';
+
+    public function CakePersistentDataHandler($appController = NULL) {
+        $this->appController = $appController;
+    }
+
+    public function get($key) {
+        return $this->appController->Session->read($this->sessionPrefix.$key);
+    }
+
+    public function set($key, $value) {
+        $this->appController->Session->write($this->sessionPrefix.$key, $value);
+    }
+}
 
 /**
  * Application Controller
@@ -183,6 +201,7 @@ class AppController extends Controller {
             'app_id' => SHARE_FACEBOOK_APP_ID,
             'app_secret' => SHARE_FACEBOOK_APP_SECRET,
             'default_graph_version' => 'v2.2',
+            'persistent_data_handler' => new CakePersistentDataHandler($this)
         ]);
         //FacebookSession::setDefaultApplication(SHARE_FACEBOOK_APP_ID, SHARE_FACEBOOK_APP_SECRET);
 
@@ -190,6 +209,33 @@ class AppController extends Controller {
         if (!$this->isLocalUserSessionAuthenticated() && $this->isLocalUserCookieAuthenticated()) {
             //Save session
             $this->saveAuthSession($this->Cookie->read(SHARE_HEADER_AUTH_EXTERNAL_ID), $this->Cookie->read(SHARE_HEADER_AUTH_MAIL), $this->Cookie->read(SHARE_HEADER_AUTH_TOKEN), $this->Cookie->read(SHARE_HEADER_AUTH_USERNAME));
+        }
+
+        if ($this->isLocalUserSessionAuthenticated()) {
+            $helper = $this->facebook->getRedirectLoginHelper();
+
+            $callbackUrl = Router::url(array(
+                "controller" => "users",
+                "action" => "logout"
+            ), true);
+
+            $authToken = $this->Session->read(SHARE_LOCAL_USER_SESSION_PREFIX.'.'.SHARE_HEADER_AUTH_TOKEN);
+            $logoutUrl = $helper->getLogoutUrl($authToken, $callbackUrl);
+
+            $this->set('logoutUrl', $logoutUrl);
+        } else {
+            $helper = $this->facebook->getRedirectLoginHelper();
+
+            $permissions = ['email']; // Optional permissions
+
+            $callbackUrl = Router::url(array(
+                "controller" => "users",
+                "action" => "add"
+            ), true);
+
+            $loginUrl = $helper->getLoginUrl($callbackUrl, $permissions);
+
+            $this->set('loginUrl', $loginUrl);
         }
     }
     

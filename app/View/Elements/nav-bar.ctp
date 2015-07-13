@@ -68,22 +68,6 @@
                             <li class="divider"></li>
                             <li>
                                 <?php
-                                    $fb = new Facebook\Facebook([
-                                        'app_id' => SHARE_FACEBOOK_APP_ID,
-                                        'app_secret' => SHARE_FACEBOOK_APP_SECRET,
-                                        'default_graph_version' => 'v2.2',
-                                    ]);
-
-                                    $helper = $fb->getRedirectLoginHelper();
-
-                                    $callbackUrl = $this->Html->url(array(
-                                        "controller" => "users",
-                                        "action" => "logout"
-                                    ), true);
-
-                                    $authToken = $this->LocalUser->getAuthToken($this);
-                                    $logoutUrl = $helper->getLogoutUrl($authToken, $callbackUrl);
-
                                     echo '<a href="' . $logoutUrl . '">Logout</a>';
                                 ?>
                             </li>
@@ -95,23 +79,6 @@
                     <li class="li-navbar-right">
 
                         <?php
-                            $fb = new Facebook\Facebook([
-                                'app_id' => SHARE_FACEBOOK_APP_ID,
-                                'app_secret' => SHARE_FACEBOOK_APP_SECRET,
-                                'default_graph_version' => 'v2.2',
-                            ]);
-
-                            $helper = $fb->getRedirectLoginHelper();
-
-                            $permissions = ['email']; // Optional permissions
-
-                            $callbackUrl = $this->Html->url(array(
-                                "controller" => "users",
-                                "action" => "add"
-                            ), true);
-
-                            $loginUrl = $helper->getLoginUrl($callbackUrl, $permissions);
-
                             echo '<a  class="btn btn-outline btn-navbar authenticate-button" href="' . $loginUrl . '">Authenticate</a>';
                         ?>
 

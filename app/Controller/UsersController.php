@@ -12,31 +12,33 @@ class UsersController extends ApiUsersController {
 
 	public function add() {
         if ($this->request->is('GET')) {
+            //Get redirect helper
             $helper = $this->facebook->getRedirectLoginHelper();
 
             try {
+                //Try to get the associated token
                 $accessToken = $helper->getAccessToken();
-
-                //The OAuth 2.0 client handler helps us manage access tokens
                 $oAuth2Client = $this->facebook->getOAuth2Client();
 
+                //If it's not a long lived token
                 if (!$accessToken->isLongLived()) {
-                    //Exchanges a short-lived access token for a long-lived one
+                    //Try to exchange it for a long-lived one
                     try {
                         $accessToken = $oAuth2Client->getLongLivedAccessToken($accessToken);
                     } catch (Facebook\Exceptions\FacebookSDKException $e) {
-                        //TODO
+                        //If it's failed we will keep it
+                        $this->Session->setFlash('Nous n\'avons pas réussi à avoir un token de longue durée.', 'flash-warning');
                     }
                 }
 
                 //Get the access token metadata from /debug_token
                 $tokenMetadata = $oAuth2Client->debugToken($accessToken);
-                //pr($tokenMetadata);
 
+                //Extract useful information
                 $userExternalId = $tokenMetadata->getUserId();
                 $userAuthToken = $accessToken->getValue();
 
-                //Try to get the related user
+                //Try to get the related user from the database
                 $user = $this->User->find('first', array(
                     'conditions' => array(
                         'User.external_id' => $userExternalId
@@ -45,34 +47,37 @@ class UsersController extends ApiUsersController {
 
                 //If a user was found
                 if ($user != NULL) {
+                    //Set flash error
+                    $this->Session->setFlash('Bienvenue '.$user['User']['username'], 'flash-success');
+
                     //Save session
                     $this->saveAuth($userExternalId, $user['User']['mail'], $userAuthToken, $user['User']['username']);
 
                     //Redirect to referer
                     $this->redirect($this->referer());
                 } else {
+                    //If no user was found we try to get the information from Facebook about its profile
                     $response = $this->facebook->get('/me', $userAuthToken);
                     $user = $response->getGraphUser();
-                    //pr($user);
 
                     //Redirect to user/add
                     $firstName = $user->getFirstName();
                     $mail = $user->getField('email');
 
+                    //Set form input values
                     $this->set('externalId', $userExternalId);
                     $this->set('username', $firstName);
                     $this->set('mail', $mail);
                     $this->set('authToken', $userAuthToken);
                 }
             } catch (Facebook\Exceptions\FacebookSDKException $e) {
-                //TODO
+                //Set flash error
+                $this->Session->setFlash($e->getMessage(), 'flash-danger');
 
                 //Redirect to home
                 $this->redirect('/');
             }
         } else if ($this->request->is('POST')) {
-            //pr($this->request->data);
-
             try {
                 //Try to save the user
                 $userExternalId = $this->request->data['User']['external_id'];
@@ -80,17 +85,21 @@ class UsersController extends ApiUsersController {
                 $mail = $this->request->data['User']['mail'];
                 $authToken = $this->request->data['User']['auth_token'];
 
-                $response = $this->internAdd($userExternalId, $username, $mail);
+                $this->internAdd($userExternalId, $username, $mail);
 
-                //If it succeeded
-                if ($response != NULL) {
-                    //Save auth session
-                    $this->saveAuth($userExternalId, $mail, $authToken, $username);
+                //Save auth session
+                $this->saveAuth($userExternalId, $mail, $authToken, $username);
 
-                    //Redirect to home
-                    $this->redirect('/');
-                }
+                //Set flash success
+                $this->Session->setFlash('Bienvenue '.$username, 'flash-success');
+
+                //Redirect to home
+                $this->redirect('/');
             } catch (ShareException $e) {
+                //Set flash error
+                $this->Session->setFlash($e->getMessage(), 'flash-danger');
+
+                //Set validation errors
                 $this->User->validationErrors = $e->getValidationErrors();
             }
         } else {
