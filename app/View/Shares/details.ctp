@@ -25,7 +25,7 @@
                     <label for="shares-details-delete-modal-reason-input">Reason:</label>
 
                     <?php
-                        $reasons = array('0' => 'Reason1', '1' => 'Reason2', '2' => 'Reason3');
+                        $reasons = array('0' => 'J\'ai un imprévu', '1' => 'Offre invalide', '2' => 'Autre');
                         echo $this->Form->input('reason', array(
                             'id' => 'shares-details-delete-modal-reason-input',
                             'type' => 'select',

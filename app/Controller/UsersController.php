@@ -47,7 +47,7 @@ class UsersController extends ApiUsersController {
 
                 //If a user was found
                 if ($user != NULL) {
-                    //Set flash error
+                    //Set flash success TEMP
                     $this->Session->setFlash('Bienvenue '.$user['User']['username'], 'flash-success');
 
                     //Save session
@@ -90,7 +90,7 @@ class UsersController extends ApiUsersController {
                 //Save auth session
                 $this->saveAuth($userExternalId, $mail, $authToken, $username);
 
-                //Set flash success
+                //Set flash success TEMP
                 $this->Session->setFlash('Bienvenue '.$username, 'flash-success');
 
                 //Redirect to home
@@ -123,16 +123,27 @@ class UsersController extends ApiUsersController {
 
     public function home() {
         if (!$this->isLocalUserSessionAuthenticated()) {
+            //Set flash error
+            $this->Session->setFlash('You need to be authenticated', 'flash-danger');
+
             $this->redirect('/');
         }
     }
 
     public function logout() {
-        if ($this->request->is('GET')) {
-            $this->invalidateLocalUserSession();
+        if ($this->isLocalUserSessionAuthenticated()) {
+            if ($this->request->is('GET')) {
+                $this->invalidateLocalUserSession();
+            }
+
+            //Redirect to home
+            $this->redirect('/');
         }
 
-        //Redirect to referer
+        //Set flash error
+        $this->Session->setFlash('You need to be authenticated', 'flash-danger');
+
+        //Redirect to home
         $this->redirect('/');
     }
 

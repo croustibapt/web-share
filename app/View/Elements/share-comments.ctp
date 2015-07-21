@@ -69,7 +69,7 @@
 
             <!-- Not authenticated -->
             <h3 ng-if="(comments.length == 0)" class="shares-details-comments-message-h3">
-                <small><a class="authenticate-button" href="#">Authentifiez-vous</a> pour être le premier à commenter ce partage</small>
+                <small>Authentifiez-vous pour être le premier à commenter ce partage</small>
             </h3>
 
             <?php endif; ?>

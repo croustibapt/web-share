@@ -6,9 +6,10 @@ class SharesController extends ApiSharesController {
     public function home() {
 
     }
-    
+
     //
-    public function search() {
+    public function search()
+    {
         if ($this->request->is('GET')) {
             $data = $this->request->query;
             //pr($data);
@@ -45,7 +46,8 @@ class SharesController extends ApiSharesController {
             }
         }
     }
-        
+
+    //
 	public function add() {
         $shareTypeId = '';
 
@@ -75,7 +77,8 @@ class SharesController extends ApiSharesController {
 
         $this->set('shareTypeId', $shareTypeId);
 	}
-    
+
+    //
     public function details($shareId = NULL) {
         if ($shareId != NULL) {
             //Get related Share
@@ -85,6 +88,7 @@ class SharesController extends ApiSharesController {
                 )
             ));
 
+            //Check if exists
             if ($share != NULL) {
                 $this->set('shareId', $share['Share']['id']);
                 $this->set('shareStatus', $share['Share']['status']);
@@ -113,9 +117,15 @@ class SharesController extends ApiSharesController {
                 $requestStatus = $this->getRequestStatus($share, $userExternalId);
                 $this->set('requestStatus', $requestStatus);
             } else {
+                //Set warning
+                $this->Session->setFlash('No share found', 'flash-warning');
+
                 $this->redirect('/');
             }
         } else {
+            //Set warning
+            $this->Session->setFlash('Bad share identifier', 'flash-warning');
+
             $this->redirect('/');
         }
     }
@@ -131,7 +141,9 @@ class SharesController extends ApiSharesController {
                 //Intern add
                 $this->internCancel($shareId, $data['Share']['reason'], $data['Share']['message'], $userExternalId);
             } catch (ShareException $e) {
-                pr($e);
+                //Set warning
+                $this->Session->setFlash($e->getMessage(), 'flash-error');
+
                 $this->Share->validationErrors = $e->getValidationErrors();
             }
         }

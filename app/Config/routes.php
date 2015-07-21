@@ -110,10 +110,6 @@
     Router::connect('/api/comment/add', array('controller' => 'ApiComments', 'action' => 'apiAdd'));
     Router::connect('/api/comment/get', array('controller' => 'ApiComments', 'action' => 'apiGet'));
 
-    //General
-    Router::connect('/comment/add', array('controller' => 'Comments', 'action' => 'add'));
-    Router::connect('/comment/get', array('controller' => 'Comments', 'action' => 'get'));
-
 #pragma mark - REQUESTS
     
     //API
