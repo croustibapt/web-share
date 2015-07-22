@@ -81,7 +81,6 @@ define("SHARE_REQUEST_STATUS_DECLINED", 2);
 define("SHARE_REQUEST_STATUS_CANCELLED", 3);
 
 App::uses('Controller', 'Controller');
-App::uses('ShareAuthenticate', 'Controller/Component/Auth'); 
 
 require_once APP . 'Vendor' . DS . 'autoload.php';
 
@@ -119,12 +118,6 @@ class AppController extends Controller {
         'Session',
         'Cookie',
         /*'DebugKit.Toolbar',*/
-        'Auth' => array(
-            'authorize' => array('Controller'),
-            'authenticate' => array(
-                'Share'
-            )
-        )
     );
     
 	public $uses = array('User', 'Share', 'Comment', 'Request');
@@ -195,11 +188,6 @@ class AppController extends Controller {
     }
 
     public function beforeFilter() {
-        CakeLog::write('debug', 'appcontroller beforeFilter');
-        
-        //Allow all index and view actions
-        $this->Auth->allow('index', 'view');
-
         //Cookie stuff
         $this->Cookie->name = SHARE_LOCAL_USER_SESSION_PREFIX;
         $this->Cookie->time = 3600 * 24 * 60;  //60 days

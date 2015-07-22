@@ -2,19 +2,13 @@
 App::uses('ApiSharesController', 'Controller');
 
 class SharesController extends ApiSharesController {
-    public function beforeFilter() {
-        parent::beforeFilter();
-        $this->Auth->allow('home', 'search', 'add');
-    }
-    
     //
     public function home() {
 
     }
 
     //
-    public function search()
-    {
+    public function search() {
         if ($this->request->is('GET')) {
             $data = $this->request->query;
             //pr($data);

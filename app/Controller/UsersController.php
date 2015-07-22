@@ -3,11 +3,6 @@ App::uses('ApiUsersController', 'Controller');
 
 class UsersController extends ApiUsersController {
 	public $uses = array('User');
-    
-    public function beforeFilter() {
-        parent::beforeFilter();
-        $this->Auth->allow('add');
-    }
 
     public function index() {
         //Get share types
