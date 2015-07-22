@@ -81,6 +81,7 @@ define("SHARE_REQUEST_STATUS_DECLINED", 2);
 define("SHARE_REQUEST_STATUS_CANCELLED", 3);
 
 App::uses('Controller', 'Controller');
+App::uses('ShareAuthenticate', 'Controller/Component/Auth'); 
 
 require_once APP . 'Vendor' . DS . 'autoload.php';
 
@@ -114,7 +115,17 @@ class CakePersistentDataHandler implements PersistentDataInterface {
  * @link		http://book.cakephp.org/2.0/en/controllers.html#the-app-controller
  */
 class AppController extends Controller {
-    public $components = array('Session', 'Cookie'/*, 'DebugKit.Toolbar'*/);
+    public $components = array(
+        'Session',
+        'Cookie',
+        /*'DebugKit.Toolbar',*/
+        'Auth' => array(
+            'authorize' => array('Controller'),
+            'authenticate' => array(
+                'Share'
+            )
+        )
+    );
     
 	public $uses = array('User', 'Share', 'Comment', 'Request');
     
@@ -184,7 +195,10 @@ class AppController extends Controller {
     }
 
     public function beforeFilter() {
-        parent::beforeFilter();
+        CakeLog::write('debug', 'appcontroller beforeFilter');
+        
+        //Allow all index and view actions
+        $this->Auth->allow('index', 'view');
 
         //Cookie stuff
         $this->Cookie->name = SHARE_LOCAL_USER_SESSION_PREFIX;

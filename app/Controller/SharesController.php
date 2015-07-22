@@ -2,6 +2,11 @@
 App::uses('ApiSharesController', 'Controller');
 
 class SharesController extends ApiSharesController {
+    public function beforeFilter() {
+        parent::beforeFilter();
+        $this->Auth->allow('home', 'search', 'add');
+    }
+    
     //
     public function home() {
 
