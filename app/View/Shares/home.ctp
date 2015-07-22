@@ -1,3 +1,5 @@
+<?php pr(AuthComponent::user()); ?>
+
 <div id="shares-home-div">
     <!-- Header -->
     <div id="shares-home-header-div">

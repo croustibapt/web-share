@@ -4,13 +4,18 @@ App::uses('ApiUsersController', 'Controller');
 class UsersController extends ApiUsersController {
 	public $uses = array('User');
 
+    public function beforeFilter() {
+        parent::beforeFilter();
+        $this->Auth->allow('fbLogin', 'login');
+    }
+
     public function index() {
         //Get share types
 		$users = $this->User->find('list');
         $this->set('users', $users);
     }
 
-	public function add() {
+    public function fbLogin() {
         if ($this->request->is('GET')) {
             //Get redirect helper
             $helper = $this->facebook->getRedirectLoginHelper();
@@ -34,6 +39,8 @@ class UsersController extends ApiUsersController {
                 //Get the access token metadata from /debug_token
                 $tokenMetadata = $oAuth2Client->debugToken($accessToken);
 
+                CakeLog::write('auth', $tokenMetadata);
+
                 //Extract useful information
                 $userExternalId = $tokenMetadata->getUserId();
                 $userAuthToken = $accessToken->getValue();
@@ -45,16 +52,30 @@ class UsersController extends ApiUsersController {
                     )
                 ));
 
+                //pr($user);
+
                 //If a user was found
                 if ($user != NULL) {
+                    CakeLog::write('debug', $user['User']['id']);
+
                     //Set flash success TEMP
                     $this->Session->setFlash('Bienvenue '.$user['User']['username'], 'flash-success');
 
                     //Save session
-                    $this->saveAuth($userExternalId, $user['User']['mail'], $userAuthToken, $user['User']['username']);
+                    //$this->saveAuth($userExternalId, $user['User']['mail'], $userAuthToken, $user['User']['username']);
+                    $this->request->addParams(array(
+                        SHARE_HEADER_AUTH_EXTERNAL_ID => $userExternalId,
+                        SHARE_HEADER_AUTH_MAIL => $user['User']['mail'],
+                        SHARE_HEADER_AUTH_TOKEN => $userAuthToken,
+                        SHARE_HEADER_AUTH_USERNAME => $user['User']['username']
+                    ));
 
-                    //Redirect to referer
-                    $this->redirect($this->referer());
+                    if ($this->Auth->login()) {
+                        CakeLog::write('debug', 'login succeeded');
+                        return $this->redirect($this->Auth->redirectUrl());
+                    } else {
+                        CakeLog::write('debug', 'login failed');
+                    }
                 } else {
                     //If no user was found we try to get the information from Facebook about its profile
                     $response = $this->facebook->get('/me', $userAuthToken);
@@ -77,7 +98,15 @@ class UsersController extends ApiUsersController {
                 //Redirect to home
                 $this->redirect('/');
             }
-        } else if ($this->request->is('POST')) {
+        }
+    }
+
+    public function login() {
+
+    }
+
+	public function add() {
+        if ($this->request->is('POST')) {
             try {
                 //Try to save the user
                 $userExternalId = $this->request->data['User']['external_id'];
@@ -88,7 +117,7 @@ class UsersController extends ApiUsersController {
                 $this->internAdd($userExternalId, $username, $mail);
 
                 //Save auth session
-                $this->saveAuth($userExternalId, $mail, $authToken, $username);
+                //$this->saveAuth($userExternalId, $mail, $authToken, $username);
 
                 //Set flash success TEMP
                 $this->Session->setFlash('Bienvenue '.$username, 'flash-success');

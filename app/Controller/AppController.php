@@ -39,7 +39,7 @@ define('SHARE_HEADER_AUTH_TOKEN', 'auth-user-token');
 define('SHARE_HEADER_AUTH_MAIL', 'auth-user-mail');
 define('SHARE_HEADER_AUTH_USERNAME', 'auth-user-username');
 
-define('SHARE_CHECK_CREDENTIALS_MAX_INTERVAL', 900); //15*60
+define('SHARE_CHECK_CREDENTIALS_MAX_INTERVAL', 0); //15*60
 
 //
 define('SHARE_STATUS_CODE_OK', 200);
@@ -81,6 +81,7 @@ define("SHARE_REQUEST_STATUS_DECLINED", 2);
 define("SHARE_REQUEST_STATUS_CANCELLED", 3);
 
 App::uses('Controller', 'Controller');
+App::uses('ShareAuthenticate', 'Controller/Component/Auth');
 
 require_once APP . 'Vendor' . DS . 'autoload.php';
 
@@ -118,6 +119,11 @@ class AppController extends Controller {
         'Session',
         'Cookie',
         /*'DebugKit.Toolbar',*/
+        'Auth' => array(
+            'authenticate' => 'Share',
+            'loginRedirect' => array('controller' => 'shares', 'action' => 'home'),
+            'logoutRedirect' => array('controller' => 'shares', 'action' => 'home')
+        )
     );
     
 	public $uses = array('User', 'Share', 'Comment', 'Request');
@@ -188,6 +194,8 @@ class AppController extends Controller {
     }
 
     public function beforeFilter() {
+        $this->Auth->allow('index', 'view');
+
         //Cookie stuff
         $this->Cookie->name = SHARE_LOCAL_USER_SESSION_PREFIX;
         $this->Cookie->time = 3600 * 24 * 60;  //60 days
@@ -208,10 +216,10 @@ class AppController extends Controller {
         //FacebookSession::setDefaultApplication(SHARE_FACEBOOK_APP_ID, SHARE_FACEBOOK_APP_SECRET);
 
         //If user is not logged with its session but a cookie is present
-        if (!$this->isLocalUserSessionAuthenticated() && $this->isLocalUserCookieAuthenticated()) {
+        /*if (!$this->isLocalUserSessionAuthenticated() && $this->isLocalUserCookieAuthenticated()) {
             //Save session
             $this->saveAuthSession($this->Cookie->read(SHARE_HEADER_AUTH_EXTERNAL_ID), $this->Cookie->read(SHARE_HEADER_AUTH_MAIL), $this->Cookie->read(SHARE_HEADER_AUTH_TOKEN), $this->Cookie->read(SHARE_HEADER_AUTH_USERNAME));
-        }
+        }*/
 
         if ($this->isLocalUserSessionAuthenticated()) {
             $helper = $this->facebook->getRedirectLoginHelper();
@@ -232,7 +240,7 @@ class AppController extends Controller {
 
             $callbackUrl = Router::url(array(
                 "controller" => "users",
-                "action" => "add"
+                "action" => "fbLogin"
             ), true);
 
             $loginUrl = $helper->getLoginUrl($callbackUrl, $permissions);
