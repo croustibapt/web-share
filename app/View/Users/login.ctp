@@ -1,1 +1,1 @@
-LOGIN
+<a href="<?php echo $loginUrl; ?>">Login</a>

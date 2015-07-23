@@ -1,4 +1,4 @@
-<?php pr(AuthComponent::user()); ?>
+<?php //pr(AuthComponent::user()); ?>
 
 <div id="shares-home-div">
     <!-- Header -->

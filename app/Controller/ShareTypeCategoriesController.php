@@ -5,7 +5,7 @@ class ShareTypeCategoriesController extends ApiShareTypeCategoriesController {
     public $name = 'ShareTypeCategories';
         
 	public function add() {
-        if ($this->request->is('POST')) {
+        if ($this->request->is('post')) {
             $dataShareTypeCategory = $this->request->data;
             
             if ($this->ShareTypeCategory->save($dataShareTypeCategory)) {
@@ -20,7 +20,7 @@ class ShareTypeCategoriesController extends ApiShareTypeCategoriesController {
 	}
     
     public function delete() {
-        if ($this->request->is('POST')) {
+        if ($this->request->is('post')) {
             $shareTypeCategoryId = $this->request->data['ShareTypeCategory']['id'];
             
             if (($shareTypeCategoryId != NULL) && $this->ShareTypeCategory->delete($shareTypeCategoryId, true)) {

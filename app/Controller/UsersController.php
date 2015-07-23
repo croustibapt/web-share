@@ -6,24 +6,45 @@ class UsersController extends ApiUsersController {
 
     public function beforeFilter() {
         parent::beforeFilter();
+        $this->Auth->deny('home', 'registerPush');
         $this->Auth->allow('fbLogin', 'login');
     }
 
-    public function index() {
-        //Get share types
-		$users = $this->User->find('list');
-        $this->set('users', $users);
-    }
-
     public function fbLogin() {
-        if ($this->request->is('GET')) {
+        CakeLog::write('debug', 'fblogin1');
+
+        if ($this->request->is('get')) {
+            CakeLog::write('debug', 'fblogin2');
+
+            //Facebook session stuff
+            /*$this->autoRender = false;
+            if (session_status() == PHP_SESSION_NONE) {
+                session_start();
+            }*/
+
+            $facebook = new Facebook\Facebook([
+                'app_id' => SHARE_FACEBOOK_APP_ID,
+                'app_secret' => SHARE_FACEBOOK_APP_SECRET,
+                'default_graph_version' => 'v2.2',
+                'persistent_data_handler' => new CakePersistentDataHandler($this)
+            ]);
+
             //Get redirect helper
-            $helper = $this->facebook->getRedirectLoginHelper();
+            $helper = $facebook->getRedirectLoginHelper();
+
+            CakeLog::write('debug', 'fblogin3');
 
             try {
                 //Try to get the associated token
                 $accessToken = $helper->getAccessToken();
-                $oAuth2Client = $this->facebook->getOAuth2Client();
+
+                CakeLog::write('debug', 'fblogin3.1');
+
+                $oAuth2Client = $facebook->getOAuth2Client();
+
+                CakeLog::write('debug', 'fblogin3.2');
+
+                CakeLog::write('debug', 'fblogin4');
 
                 //If it's not a long lived token
                 if (!$accessToken->isLongLived()) {
@@ -39,12 +60,13 @@ class UsersController extends ApiUsersController {
                 //Get the access token metadata from /debug_token
                 $tokenMetadata = $oAuth2Client->debugToken($accessToken);
 
-                CakeLog::write('auth', $tokenMetadata);
+                CakeLog::write('debug', 'fblogin5');
 
                 //Extract useful information
                 $userExternalId = $tokenMetadata->getUserId();
                 $userAuthToken = $accessToken->getValue();
 
+                CakeLog::write('debug', $userExternalId);
                 //Try to get the related user from the database
                 $user = $this->User->find('first', array(
                     'conditions' => array(
@@ -78,7 +100,7 @@ class UsersController extends ApiUsersController {
                     }
                 } else {
                     //If no user was found we try to get the information from Facebook about its profile
-                    $response = $this->facebook->get('/me', $userAuthToken);
+                    $response = $facebook->get('/me', $userAuthToken);
                     $user = $response->getGraphUser();
 
                     //Redirect to user/add
@@ -92,6 +114,8 @@ class UsersController extends ApiUsersController {
                     $this->set('authToken', $userAuthToken);
                 }
             } catch (Facebook\Exceptions\FacebookSDKException $e) {
+                CakeLog::write('debug', $e->getMessage());
+
                 //Set flash error
                 $this->Session->setFlash($e->getMessage(), 'flash-danger');
 
@@ -102,11 +126,34 @@ class UsersController extends ApiUsersController {
     }
 
     public function login() {
+        if ($this->request->is('get')) {
+            //
+            if (!$this->Auth->loggedIn()) {
+                $facebook = new Facebook\Facebook([
+                    'app_id' => SHARE_FACEBOOK_APP_ID,
+                    'app_secret' => SHARE_FACEBOOK_APP_SECRET,
+                    'default_graph_version' => 'v2.2',
+                    'persistent_data_handler' => new CakePersistentDataHandler($this)
+                ]);
 
+                $helper = $facebook->getRedirectLoginHelper();
+
+                $permissions = ['email']; // Optional permissions
+
+                $callbackUrl = Router::url(array(
+                    "controller" => "users",
+                    "action" => "fbLogin"
+                ), true);
+
+                $loginUrl = $helper->getLoginUrl($callbackUrl, $permissions);
+
+                $this->set('loginUrl', $loginUrl);
+            }
+        }
     }
 
 	public function add() {
-        if ($this->request->is('POST')) {
+        if ($this->request->is('post')) {
             try {
                 //Try to save the user
                 $userExternalId = $this->request->data['User']['external_id'];
@@ -138,25 +185,43 @@ class UsersController extends ApiUsersController {
 	}
 
     public function details($externalId = NULL) {
-        if ($this->request->is('GET')) {
+        if ($this->request->is('get', 'ajax')) {
             try {
                 //Intern home
-                $user = $this->internDetails($externalId);
+                $response = $this->internDetails($externalId);
 
-                $this->set('user', $user);
+                //Send JSON respsonse
+                $this->sendResponse(SHARE_STATUS_CODE_OK, $response);
             } catch (ShareException $e) {
-                $this->set('error', $e);
+                $this->sendErrorResponse($e->getStatusCode(), $e->getCode(), $e->getMessage(), $e->getValidationErrors());
             }
+        } else {
+            $this->sendErrorResponse(SHARE_STATUS_CODE_UNAUTHORIZED, SHARE_STATUS_CODE_METHOD_NOT_ALLOWED);
         }
     }
 
     public function home() {
-        if (!$this->isLocalUserSessionAuthenticated()) {
-            //Set flash error
-            $this->Session->setFlash('You need to be authenticated', 'flash-danger');
+        if ($this->request->is('get', 'ajax')) {
+            try {
+                //Get user identifier
+                $userExternalId = $this->Auth->user('external_id');
+                //pr($userExternalId);
 
-            $this->redirect('/');
+                //Intern home
+                $response = $this->interHome($userExternalId);
+
+                //Send JSON respsonse
+                $this->sendResponse(SHARE_STATUS_CODE_OK, $response);
+            } catch (ShareException $e) {
+                $this->sendErrorResponse($e->getStatusCode(), $e->getCode(), $e->getMessage(), $e->getValidationErrors());
+            }
+        } else {
+            $this->sendErrorResponse(SHARE_STATUS_CODE_UNAUTHORIZED, SHARE_STATUS_CODE_METHOD_NOT_ALLOWED);
         }
+    }
+
+    public function account() {
+
     }
 
     public function logout() {
@@ -175,6 +240,12 @@ class UsersController extends ApiUsersController {
         //Redirect to home
         $this->redirect('/');
     }
+
+    /*public function index() {
+        //Get share types
+		$users = $this->User->find('list');
+        $this->set('users', $users);
+    }*/
 
     /*public function delete() {
         if ($this->request->is('POST')) {

@@ -5,11 +5,11 @@
  * @param textAreaId Comment text area identifier
  * @param divGoogleMapId GoogleMap div identifier
  */
-function initializeSharesDetails(shareId, shareUserExternalId, textAreaId, divGoogleMapId) {
+function initializeSharesView(shareId, shareUserExternalId, textAreaId, divGoogleMapId) {
     /**
-     * SharesDetailsController
+     * SharesViewController
      */
-    app.controller('SharesDetailsController', ['$scope', '$http', function($scope, $http) {
+    app.controller('SharesViewController', ['$scope', '$http', function($scope, $http) {
         //Pagination
         $scope.page = null;
         $scope.total_pages = 1;
@@ -43,14 +43,19 @@ function initializeSharesDetails(shareId, shareUserExternalId, textAreaId, divGo
         };
 
         /**
-         * Method used to show a specifi comments page
+         * Method used to show a specific comments page
          * @param page Page to show
          */
         $scope.showPage = function(page, onPageLoaded) {
             $scope.page = null;
 
             //Get call
-            $http.get(webroot + 'api/comment/get?shareId=' + $scope.shareId + '&page=' + page)
+            $http.get(webroot + 'comment/get', {
+                params: {
+                    share_id: $scope.shareId,
+                    page: page
+                }
+            })
             .success(function (data, status, headers, config) {
                 //Parse JSON response
                 $scope.handleCommentsResponse(data);
@@ -75,6 +80,8 @@ function initializeSharesDetails(shareId, shareUserExternalId, textAreaId, divGo
          * @param response The JSON response to parse
          */
         $scope.handleCommentsResponse = function(response) {
+            //console.log(response);
+
             //Handle pagination
             $scope.total_pages = parseInt(response.total_pages);
             $scope.total_results = parseInt(response.total_results);
@@ -106,7 +113,7 @@ function initializeSharesDetails(shareId, shareUserExternalId, textAreaId, divGo
          */
         $scope.getUserDetails = function(userExternalId) {
             //Get call
-            $http.get(webroot + 'api/user/details/' + userExternalId)
+            $http.get(webroot + 'user/details/' + userExternalId)
             .success(function (data, status, headers, config) {
                 //Parse JSON response
                 $scope.handleUserDetailsResponse(data);
@@ -133,7 +140,7 @@ function initializeSharesDetails(shareId, shareUserExternalId, textAreaId, divGo
          */
         $scope.getShareDetails = function(shareId) {
             //Get call
-            $http.get(webroot + 'api/share/details/' + shareId)
+            $http.get(webroot + 'share/details/' + shareId)
             .success(function (data, status, headers, config) {
                 //Parse JSON response
                 $scope.handleDetailsResponse(data);
@@ -148,9 +155,9 @@ function initializeSharesDetails(shareId, shareUserExternalId, textAreaId, divGo
          * @param response The JSON response to parse
          */
         $scope.handleDetailsResponse = function(response) {
-            console.log(response);
-            var share = response;
+            //console.log(response);
 
+            var share = response;
             formatShare(share);
 
             //Store the share
@@ -182,16 +189,13 @@ function initializeSharesDetails(shareId, shareUserExternalId, textAreaId, divGo
          * @param button Button used to send the message (ui)
          */
         $scope.sendComment = function(message, button) {
-            //JSON data to send
-            var jsonData = {
-                share_id: $scope.shareId,
-                message: encodeURI(message)
-            };
-
             //Check message length
             if (message.length >= 3) {
                 //
-                $http.put(webroot + 'api/comment/add', JSON.stringify(jsonData))
+                $http.put(webroot + 'comment/add', {
+                    share_id: $scope.shareId,
+                    message: encodeURI(message)
+                })
                 .success(function(data, status, headers, config) {
                     //Add one comment
                     $scope.share.comment_count++;

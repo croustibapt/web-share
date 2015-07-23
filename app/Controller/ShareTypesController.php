@@ -5,7 +5,7 @@ class ShareTypesController extends ApiShareTypesController {
     public $name = 'ShareTypes';
         
 	public function add() {
-        if ($this->request->is('POST')) {
+        if ($this->request->is('post')) {
             $dataShareType = $this->request->data;
             
             if ($this->ShareType->save($dataShareType)) {
@@ -24,7 +24,7 @@ class ShareTypesController extends ApiShareTypesController {
 	}
     
     public function delete() {
-        if ($this->request->is('POST')) {
+        if ($this->request->is('post')) {
             $shareTypeId = $this->request->data['ShareType']['id'];
             
             if (($shareTypeId != NULL) && $this->ShareType->delete($shareTypeId, true)) {

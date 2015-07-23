@@ -43,10 +43,11 @@
 
     //General
     Router::connect('/user/add', array('controller' => 'Users', 'action' => 'add'));
-    Router::connect('/user/details/:externalId', array('controller' => 'Users', 'action' => 'get'), array(
+    Router::connect('/user/details/:externalId', array('controller' => 'Users', 'action' => 'details'), array(
         'pass' => array('externalId'),
         'externalId' => '[A-Za-z0-9]+'
     ));
+    Router::connect('/user/account', array('controller' => 'Users', 'action' => 'account'));
     Router::connect('/user/home', array('controller' => 'Users', 'action' => 'home'));
     Router::connect('/user/authenticate', array('controller' => 'Users', 'action' => 'authenticate'));
     Router::connect('/user/logout', array('controller' => 'Users', 'action' => 'logout'));
@@ -97,6 +98,10 @@
         'pass' => array('shareId'),
         'shareId' => '[0-9]+'
     ));
+    Router::connect('/share/view/:shareId', array('controller' => 'Shares', 'action' => 'view'), array(
+        'pass' => array('shareId'),
+        'shareId' => '[0-9]+'
+    ));
     Router::connect('/share/cancel/:shareId', array('controller' => 'Shares', 'action' => 'cancel'), array(
         'pass' => array('shareId'),
         'shareId' => '[0-9]+'
@@ -107,6 +112,10 @@
     //API
     Router::connect('/api/comment/add', array('controller' => 'ApiComments', 'action' => 'add'));
     Router::connect('/api/comment/get', array('controller' => 'ApiComments', 'action' => 'get'));
+
+    //General
+    Router::connect('/comment/add', array('controller' => 'Comments', 'action' => 'add'));
+    Router::connect('/comment/get', array('controller' => 'Comments', 'action' => 'get'));
 
 #pragma mark - REQUESTS
     

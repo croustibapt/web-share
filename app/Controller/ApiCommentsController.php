@@ -6,6 +6,11 @@ class ApiCommentsController extends AppController {
     public $name = 'ApiComments';
     
 	public $uses = array('Comment', 'Share', 'User');
+
+    public function beforeFilter() {
+        parent::beforeFilter();
+        $this->Auth->allow('get', 'add');
+    }
         
     protected function internAdd($userExternalId = NULL, $shareId = NULL, $message = NULL) {
         $response = NULL;
@@ -88,10 +93,10 @@ class ApiCommentsController extends AppController {
                     $this->sendErrorResponse($e->getStatusCode(), $e->getCode(), $e->getMessage(), $e->getValidationErrors());
                 }
             } else {
-                $this->sendErrorResponse(SHARE_STATUS_CODE_UNAUTHORIZED, SHARE_ERROR_CODE_BAD_CREDENTIALS, "Bad credentials");
+                $this->sendErrorResponse(SHARE_STATUS_CODE_UNAUTHORIZED, SHARE_ERROR_CODE_BAD_CREDENTIALS);
             }
         } else {
-            $this->sendErrorResponse(SHARE_STATUS_CODE_UNAUTHORIZED, SHARE_STATUS_CODE_METHOD_NOT_ALLOWED, "Method not allowed");
+            $this->sendErrorResponse(SHARE_STATUS_CODE_UNAUTHORIZED, SHARE_STATUS_CODE_METHOD_NOT_ALLOWED);
         }
     }
 

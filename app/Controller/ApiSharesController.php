@@ -4,6 +4,11 @@ App::uses('ShareException', 'Lib');
 
 class ApiSharesController extends AppController {
 	public $uses = array('Share', 'ShareType', 'ShareTypeCategory', 'User', 'Tag', 'Comment', 'Request');
+
+    public function beforeFilter() {
+        parent::beforeFilter();
+        $this->Auth->allow('search', 'details', 'add', 'cancel');
+    }
     
     protected function getShareTypeId($shareTypeLabel = NULL) {
         $shareTypeId = NULL;
@@ -120,8 +125,8 @@ class ApiSharesController extends AppController {
         return $response;
     }
 
-    public function apiSearch() {
-        if ($this->request->is('POST')) {
+    public function search() {
+        if ($this->request->is('post')) {
             //Decode data
             $data = $this->request->input('json_decode', true);
 
@@ -264,8 +269,8 @@ class ApiSharesController extends AppController {
         return $response;
     }
 
-	public function apiAdd() {
-        if ($this->request->is('PUT')) {
+	public function add() {
+        if ($this->request->is('put')) {
             //Check credentials
             if ($this->checkCredentials($this->request)) {
                 //Get user external identifier
@@ -297,10 +302,10 @@ class ApiSharesController extends AppController {
                     $this->sendErrorResponse($e->getStatusCode(), $e->getCode(), $e->getMessage(), $e->getValidationErrors());
                 }
             } else {
-                $this->sendErrorResponse(SHARE_STATUS_CODE_UNAUTHORIZED, SHARE_ERROR_CODE_BAD_CREDENTIALS, "Bad credentials");
+                $this->sendErrorResponse(SHARE_STATUS_CODE_UNAUTHORIZED, SHARE_ERROR_CODE_BAD_CREDENTIALS);
             }
         } else {
-            $this->sendErrorResponse(SHARE_STATUS_CODE_UNAUTHORIZED, SHARE_STATUS_CODE_METHOD_NOT_ALLOWED, "Method not allowed");
+            $this->sendErrorResponse(SHARE_STATUS_CODE_UNAUTHORIZED, SHARE_STATUS_CODE_METHOD_NOT_ALLOWED);
         }
 	}
     
@@ -337,8 +342,8 @@ class ApiSharesController extends AppController {
         return $response;
     }
     
-    public function apiDetails($shareId = NULL) {
-        if ($this->request->is('GET')) {
+    public function details($shareId = NULL) {
+        if ($this->request->is('get')) {
             try {
                 //Intern Details
                 $response = $this->internDetails($shareId);
@@ -391,8 +396,8 @@ class ApiSharesController extends AppController {
         }
     }
 
-    public function apiCancel($shareId = NULL) {
-        if ($this->request->is('POST')) {
+    public function cancel($shareId = NULL) {
+        if ($this->request->is('post')) {
             //Check credentials
             if ($this->checkCredentials($this->request)) {
                 try {
@@ -408,10 +413,10 @@ class ApiSharesController extends AppController {
                     $this->sendErrorResponse($e->getStatusCode(), $e->getCode(), $e->getMessage(), $e->getValidationErrors());
                 }
             } else {
-                $this->sendErrorResponse(SHARE_STATUS_CODE_UNAUTHORIZED, SHARE_ERROR_CODE_BAD_CREDENTIALS, "Bad credentials");
+                $this->sendErrorResponse(SHARE_STATUS_CODE_UNAUTHORIZED, SHARE_ERROR_CODE_BAD_CREDENTIALS);
             }
         } else {
-            $this->sendErrorResponse(SHARE_STATUS_CODE_UNAUTHORIZED, SHARE_STATUS_CODE_METHOD_NOT_ALLOWED, "Method not allowed");
+            $this->sendErrorResponse(SHARE_STATUS_CODE_UNAUTHORIZED, SHARE_STATUS_CODE_METHOD_NOT_ALLOWED);
         }
     }
 }

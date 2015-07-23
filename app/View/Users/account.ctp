@@ -88,5 +88,5 @@
 
 <script>
     //
-    initializeUsersHome();
+    initializeUsersAccount();
 </script>

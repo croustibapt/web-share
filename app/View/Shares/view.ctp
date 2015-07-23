@@ -170,7 +170,7 @@
 
                             <?php if ($shareStatus == SHARE_STATUS_OPENED) : ?>
 
-                                <?php if ($this->LocalUser->isAuthenticated($this)) : ?>
+                                <?php if (AuthComponent::user()) : ?>
 
                                     <?php if ($doesUserOwnShare) : ?>
 
@@ -335,6 +335,6 @@
 </div>
 
 <script>
-    //Initialize the SharesDetailsController
-    initializeSharesDetails(<?php echo $shareId; ?>, '<?php echo $shareUserExternalId; ?>', 'shares-details-comments-add-textarea', 'shares-details-google-map-div');
+    //Initialize the SharesViewController
+    initializeSharesView(<?php echo $shareId; ?>, '<?php echo $shareUserExternalId; ?>', 'shares-details-comments-add-textarea', 'shares-details-google-map-div');
 </script>

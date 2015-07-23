@@ -6,17 +6,20 @@ class CommentsController extends ApiCommentsController {
     
     public function beforeFilter() {
         parent::beforeFilter();
-        $this->Auth->allow('get');
+        $this->Auth->deny('add');
     }
     
     public function add() {
-        if ($this->request->is('ajax')) {
-            //Get data
-            $shareId = $this->request->data['shareId'];
-            $message = $this->request->data['message'];
-
+        if ($this->request->is('put', 'ajax')) {
             //Get user external identifier
             $userExternalId = $this->Auth->user('external_id');
+
+            //Get data
+            $data = $this->request->input('json_decode', true);
+            $shareId = $data['share_id'];
+            $message = $data['message'];
+
+            $this->sendResponse(SHARE_STATUS_CODE_OK, $userExternalId);
 
             try {
                 //Intern add
@@ -28,27 +31,27 @@ class CommentsController extends ApiCommentsController {
                 $this->sendErrorResponse($e->getStatusCode(), $e->getCode(), $e->getMessage(), $e->getValidationErrors());
             }
         } else {
-            $this->sendErrorResponse(SHARE_STATUS_CODE_UNAUTHORIZED, SHARE_STATUS_CODE_METHOD_NOT_ALLOWED, "Method not allowed");
+            $this->sendErrorResponse(SHARE_STATUS_CODE_UNAUTHORIZED, SHARE_STATUS_CODE_METHOD_NOT_ALLOWED);
         }
     }
     
     public function get() { 
-        if ($this->request->is('ajax')) {
+        if ($this->request->is('get', 'ajax')) {
             //Get data
-            $shareId = $this->request->data['shareId'];
-            $page = $this->request->data['page'];
+            $shareId = $this->params['url']['share_id'];
+            $page = $this->params['url']['page'];
 
             try {
                 //Intern add
                 $response = $this->internGet($shareId, $page);
-                
+
                 //Send JSON respsonse
                 $this->sendResponse(SHARE_STATUS_CODE_OK, $response);
             } catch (ShareException $e) {
                 $this->sendErrorResponse($e->getStatusCode(), $e->getCode(), $e->getMessage(), $e->getValidationErrors());
             }
         } else {
-            $this->sendErrorResponse(SHARE_STATUS_CODE_UNAUTHORIZED, SHARE_STATUS_CODE_METHOD_NOT_ALLOWED, "Method not allowed");
+            $this->sendErrorResponse(SHARE_STATUS_CODE_UNAUTHORIZED, SHARE_STATUS_CODE_METHOD_NOT_ALLOWED);
         }
     }
 }

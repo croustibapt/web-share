@@ -6,9 +6,14 @@ class ApiShareTypesController extends AppController {
     public $name = 'ApiShareTypes';
     
 	public $uses = array('ShareType', 'ShareTypeCategory');
+
+    public function beforeFilter() {
+        parent::beforeFilter();
+        $this->Auth->allow('get');
+    }
     
-    public function apiGet() {
-        if ($this->request->is('GET')) {
+    public function get() {
+        if ($this->request->is('get', 'mobile', 'json')) {
             $shareTypes = $this->ShareType->find('all');
             
             $response['results'] = array();

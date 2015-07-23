@@ -58,7 +58,7 @@
                 <?php echo $this->element('pagination'); ?>
             </div>
 
-            <?php if ($this->LocalUser->isAuthenticated($this)) : ?>
+            <?php if (AuthComponent::user()) : ?>
 
             <!-- No comments -->
             <h3 ng-if="(comments.length == 0)" class="shares-details-comments-message-h3">
@@ -75,7 +75,7 @@
             <?php endif; ?>
         </div>
 
-        <?php if ($this->LocalUser->isAuthenticated($this)) : ?>
+        <?php if (AuthComponent::user()) : ?>
 
             <div class="col-md-10 shares-details-comments-editor-div">
                 <textarea id="shares-details-comments-add-textarea" class="form-control" rows="3" ng-model="message"></textarea>
@@ -91,7 +91,7 @@
     </div>
 </div>
 
-<?php if ($this->LocalUser->isAuthenticated($this)) : ?>
+<?php if (AuthComponent::user()) : ?>
 
 <script>
     //On ready

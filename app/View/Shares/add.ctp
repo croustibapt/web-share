@@ -1,6 +1,6 @@
 <div id="shares-add-div">
     <div class="container">
-        <?php if ($this->LocalUser->isAuthenticated($this)) : ?>
+        <?php if (AuthComponent::user()) : ?>
 
         <?php
             echo $this->Form->create('Share', array(
@@ -196,7 +196,7 @@
     ?>
 
     <div class="container text-center shares-add-submit-div">
-        <?php if ($this->LocalUser->isAuthenticated($this)) : ?>
+        <?php if (AuthComponent::user()) : ?>
 
         <?php
             echo $this->Form->submit('Partager mon coupon', array(

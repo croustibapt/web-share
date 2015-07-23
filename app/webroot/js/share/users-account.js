@@ -1,14 +1,14 @@
-function initializeUsersHome() {
+function initializeUsersAccount() {
     /**
-     * DetailsController
+     * UsersAccountController
      */
-    app.controller('UsersHomeController', ['$scope', '$http', function($scope, $http) {
+    app.controller('UsersAccountController', ['$scope', '$http', function($scope, $http) {
         //User
         $scope.user = null;
 
         $scope.getUserHome = function() {
             //Get call
-            $http.get(webroot + 'api/user/home')
+            $http.get(webroot + 'user/home')
             .success(function (data, status, headers, config) {
                 //Parse JSON response
                 $scope.handleUserHomeResponse(data);
@@ -73,7 +73,7 @@ function initializeUsersHome() {
             var button = angular.element($event.currentTarget);
             button.button('loading');
 
-            $http.get(webroot + 'api/request/accept/' + requestId)
+            $http.get(webroot + 'request/accept/' + requestId)
             .success(function (data, status, headers, config) {
                 //Update request status
                 $scope.updateRequestStatus(shareId, requestId, 1);
@@ -96,7 +96,7 @@ function initializeUsersHome() {
             button.button('loading');
 
             if (confirm('Are you sure you want to decline this request?')) {
-                $http.get(webroot + 'api/request/decline/' + requestId)
+                $http.get(webroot + 'request/decline/' + requestId)
                 .success(function (data, status, headers, config) {
                     //Update request status
                     $scope.updateRequestStatus(shareId, requestId, 2);
@@ -122,7 +122,7 @@ function initializeUsersHome() {
             button.button('loading');
 
             if (confirm('Are you sure you want to cancel this request?')) {
-                $http.get(webroot + 'api/request/cancel/' + requestId)
+                $http.get(webroot + 'request/cancel/' + requestId)
                 .success(function (data, status, headers, config) {
                     //Update request status
                     $scope.updateRequestStatus(shareId, requestId, 3);
@@ -148,7 +148,7 @@ function initializeUsersHome() {
             button.button('loading');
 
             if (confirm('Are you sure you want to cancel your request?')) {
-                $http.get(webroot + 'api/request/cancel/' + requestId)
+                $http.get(webroot + 'request/cancel/' + requestId)
                 .success(function (data, status, headers, config) {
                     //Update request status
                     $scope.updateOwnRequestStatus(requestId, 3);

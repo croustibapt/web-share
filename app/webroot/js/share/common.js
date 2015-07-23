@@ -436,7 +436,7 @@ function centerMapOnPlace(scope, place) {
 
 function showShareDetails(shareId) {
     //Simply change window location
-    window.location.href = webroot + "share/details/" + shareId;
+    window.location.href = webroot + "share/view/" + shareId;
 }
 
 function formatShare(share) {
@@ -486,7 +486,7 @@ function formatShare(share) {
     share.formatted_price = numeral(price).format('0.0a');
 
     //Details link
-    var detailsLink = webroot + 'shares/details/' + share.share_id;
+    var detailsLink = webroot + 'shares/view/' + share.share_id;
     share.details_link = detailsLink;
 }
 

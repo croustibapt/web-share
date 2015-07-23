@@ -51,25 +51,27 @@
                     ?>
                 </li>
 
-                <?php if ($this->LocalUser->isAuthenticated($this)) : ?>
+                <?php if (AuthComponent::user()) : ?>
 
                     <li class="dropdown">
 
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
                            aria-expanded="false">
-                            <img class="nav-bar-user-img img-circle" src="https://graph.facebook.com/v2.3/<?php echo $this->LocalUser->getExternalId($this); ?>/picture" /> Hi <?php echo $this->LocalUser->getUsername($this); ?> <span class="caret"></span>
+                            <img class="nav-bar-user-img img-circle" src="https://graph.facebook.com/v2.3/<?php echo AuthComponent::user('external_id'); ?>/picture" /> Hi <?php echo AuthComponent::user('username'); ?> <span class="caret"></span>
                         </a>
                         <ul class="dropdown-menu" role="menu">
                             <li>
                                 <?php
-                                    echo $this->Html->link('My account', '/users/home');
+                                    echo $this->Html->link('My account', '/users/account');
                                 ?>
                             </li>
                             <li class="divider"></li>
                             <li>
+
                                 <?php
-                                    echo '<a href="' . $logoutUrl . '">Logout</a>';
+                                    echo $this->Html->link('Logout', '/users/logout');
                                 ?>
+
                             </li>
                         </ul>
                     </li>
@@ -79,7 +81,9 @@
                     <li class="li-navbar-right">
 
                         <?php
-                            echo '<a  class="btn btn-outline btn-navbar authenticate-button" href="' . $loginUrl . '">Authenticate</a>';
+                            echo $this->Html->link('Login', '/users/login', array(
+                                'class' => 'btn btn-outline btn-navbar authenticate-button'
+                            ));
                         ?>
 
                     </li>

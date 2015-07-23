@@ -4,7 +4,9 @@ App::uses('ApiSharesController', 'Controller');
 class SharesController extends ApiSharesController {
     public function beforeFilter() {
         parent::beforeFilter();
-        $this->Auth->allow('home', 'search', 'details');
+
+        $this->Auth->deny('add', 'cancel');
+        $this->Auth->allow('home');
     }
 
     //
@@ -55,10 +57,9 @@ class SharesController extends ApiSharesController {
 	public function add() {
         $shareTypeId = '';
 
-        if ($this->request->is('POST')) {
+        if ($this->request->is('post')) {
             //Get user identifier
-            $userExternalId = $this->getUserExternalId($this->request);
-            $userId = $this->getUserId($userExternalId);
+            $userId = $this->Auth->user('id');
 
             //Get POST data
             $data = $this->request->data;
@@ -73,7 +74,7 @@ class SharesController extends ApiSharesController {
                     $data['Share']['meet_place'], $data['Share']['limitations'], NULL, NULL, $data['Share']['message'], NULL, NULL);
 
                 $shareId = $response['share_id'];
-                $this->redirect('/share/details/'.$shareId);
+                $this->redirect('/share/view/'.$shareId);
             } catch (ShareException $e) {
                 $this->Share->validationErrors = $e->getValidationErrors();
             }
@@ -83,59 +84,61 @@ class SharesController extends ApiSharesController {
 	}
 
     //
-    public function details($shareId = NULL) {
-        if ($shareId != NULL) {
-            //Get related Share
-            $share = $this->Share->find('first', array(
-                'conditions' => array(
-                    'Share.id' => $shareId
-                )
-            ));
+    public function view($shareId = NULL) {
+        if ($this->request->is('get')) {
+            if ($shareId != NULL) {
+                //Get related Share
+                $share = $this->Share->find('first', array(
+                    'conditions' => array(
+                        'Share.id' => $shareId
+                    )
+                ));
 
-            //Check if exists
-            if ($share != NULL) {
-                $this->set('shareId', $share['Share']['id']);
-                $this->set('shareStatus', $share['Share']['status']);
-                $this->set('shareUserExternalId', $share['User']['external_id']);
+                //Check if exists
+                if ($share != NULL) {
+                    $this->set('shareId', $share['Share']['id']);
+                    $this->set('shareStatus', $share['Share']['status']);
+                    $this->set('shareUserExternalId', $share['User']['external_id']);
 
-                //Get user identifier
-                $userExternalId = $this->getUserExternalId($this->request);
+                    //Get user identifier
+                    $userExternalId = $this->getUserExternalId($this->request);
 
-                //User can request?
-                $canRequest = $this->canRequest($share, $userExternalId);
-                $this->set('canRequest', $canRequest);
+                    //User can request?
+                    $canRequest = $this->canRequest($share, $userExternalId);
+                    $this->set('canRequest', $canRequest);
 
-                //Is expired?
-                $isExpired = $this->isShareExpired($share);
-                $this->set('isExpired', $isExpired);
+                    //Is expired?
+                    $isExpired = $this->isShareExpired($share);
+                    $this->set('isExpired', $isExpired);
 
-                //Is places left?
-                $isPlacesLeft = $this->isPlacesLeft($share);
-                $this->set('isPlacesLeft', $isPlacesLeft);
+                    //Is places left?
+                    $isPlacesLeft = $this->isPlacesLeft($share);
+                    $this->set('isPlacesLeft', $isPlacesLeft);
 
-                //Own
-                $doesUserOwnShare = $this->doesUserOwnShare($share, $userExternalId);
-                $this->set('doesUserOwnShare', $doesUserOwnShare);
+                    //Own
+                    $doesUserOwnShare = $this->doesUserOwnShare($share, $userExternalId);
+                    $this->set('doesUserOwnShare', $doesUserOwnShare);
 
-                //Request status
-                $requestStatus = $this->getRequestStatus($share, $userExternalId);
-                $this->set('requestStatus', $requestStatus);
+                    //Request status
+                    $requestStatus = $this->getRequestStatus($share, $userExternalId);
+                    $this->set('requestStatus', $requestStatus);
+                } else {
+                    //Set warning
+                    $this->Session->setFlash('No share found', 'flash-warning');
+
+                    $this->redirect('/');
+                }
             } else {
                 //Set warning
-                $this->Session->setFlash('No share found', 'flash-warning');
+                $this->Session->setFlash('Bad share identifier', 'flash-warning');
 
                 $this->redirect('/');
             }
-        } else {
-            //Set warning
-            $this->Session->setFlash('Bad share identifier', 'flash-warning');
-
-            $this->redirect('/');
         }
     }
 
     public function cancel($shareId = NULL) {
-        if ($this->request->is('POST')) {
+        if ($this->request->is('post')) {
             $data = $this->request->data;
 
             //Get user identifier

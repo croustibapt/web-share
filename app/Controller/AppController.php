@@ -121,18 +121,16 @@ class AppController extends Controller {
         /*'DebugKit.Toolbar',*/
         'Auth' => array(
             'authenticate' => 'Share',
-            'loginRedirect' => array('controller' => 'shares', 'action' => 'home'),
+            'loginRedirect' => array('controller' => 'users', 'action' => 'account'),
             'logoutRedirect' => array('controller' => 'shares', 'action' => 'home')
         )
     );
     
 	public $uses = array('User', 'Share', 'Comment', 'Request');
     
-    public $helpers = array('ShareType', 'LocalUser');
+    public $helpers = array('ShareType');
 
-    public $facebook = NULL;
-
-    protected function saveAuthSession($userExternalId = NULL, $mail = NULL, $authToken = NULL, $username = NULL) {
+    /*protected function saveAuthSession($userExternalId = NULL, $mail = NULL, $authToken = NULL, $username = NULL) {
         if (($userExternalId != NULL) && ($mail != NULL) && ($authToken != NULL) && ($userExternalId != NULL)) {
             //Session
             $this->Session->write(SHARE_LOCAL_USER_SESSION_PREFIX.'.'.SHARE_HEADER_AUTH_EXTERNAL_ID, $userExternalId);
@@ -177,9 +175,9 @@ class AppController extends Controller {
         $isAuthenticated = (($userExternalId != NULL) && ($mail != NULL) && ($authToken != NULL) && ($username != NULL));
 
         return $isAuthenticated;
-    }
+    }*/
     
-    protected function invalidateLocalUserSession() {
+    /*protected function invalidateLocalUserSession() {
         //Session
         $this->Session->delete(SHARE_LOCAL_USER_SESSION_PREFIX.'.'.SHARE_HEADER_AUTH_EXTERNAL_ID);
         $this->Session->delete(SHARE_LOCAL_USER_SESSION_PREFIX.'.'.SHARE_HEADER_AUTH_MAIL);
@@ -191,62 +189,23 @@ class AppController extends Controller {
         $this->Cookie->delete(SHARE_HEADER_AUTH_MAIL);
         $this->Cookie->delete(SHARE_HEADER_AUTH_TOKEN);
         $this->Cookie->delete(SHARE_HEADER_AUTH_USERNAME);
-    }
+    }*/
 
     public function beforeFilter() {
         $this->Auth->allow('index', 'view');
 
-        //Cookie stuff
+        /*//Cookie stuff
         $this->Cookie->name = SHARE_LOCAL_USER_SESSION_PREFIX;
         $this->Cookie->time = 3600 * 24 * 60;  //60 days
-        /*$this->Cookie->path = '/shares/';*/
-        /*$this->Cookie->domain = 'localhost';*/
-        /*$this->Cookie->secure = true;  // ex. seulement envoyé si on utilise un HTTPS sécurisé*/
         $this->Cookie->key = 'qSI232qs*&sXOw!adre@34SAv!@*(XSL#$%)asGb$@11~_+!@#HKis~#^';
         $this->Cookie->httpOnly = true;
-        $this->Cookie->type('aes');
-
-        //Initialize Facebook
-        $this->facebook = new Facebook\Facebook([
-            'app_id' => SHARE_FACEBOOK_APP_ID,
-            'app_secret' => SHARE_FACEBOOK_APP_SECRET,
-            'default_graph_version' => 'v2.2',
-            'persistent_data_handler' => new CakePersistentDataHandler($this)
-        ]);
-        //FacebookSession::setDefaultApplication(SHARE_FACEBOOK_APP_ID, SHARE_FACEBOOK_APP_SECRET);
+        $this->Cookie->type('aes');*/
 
         //If user is not logged with its session but a cookie is present
         /*if (!$this->isLocalUserSessionAuthenticated() && $this->isLocalUserCookieAuthenticated()) {
             //Save session
             $this->saveAuthSession($this->Cookie->read(SHARE_HEADER_AUTH_EXTERNAL_ID), $this->Cookie->read(SHARE_HEADER_AUTH_MAIL), $this->Cookie->read(SHARE_HEADER_AUTH_TOKEN), $this->Cookie->read(SHARE_HEADER_AUTH_USERNAME));
         }*/
-
-        if ($this->isLocalUserSessionAuthenticated()) {
-            $helper = $this->facebook->getRedirectLoginHelper();
-
-            $callbackUrl = Router::url(array(
-                "controller" => "users",
-                "action" => "logout"
-            ), true);
-
-            $authToken = $this->Session->read(SHARE_LOCAL_USER_SESSION_PREFIX.'.'.SHARE_HEADER_AUTH_TOKEN);
-            $logoutUrl = $helper->getLogoutUrl($authToken, $callbackUrl);
-
-            $this->set('logoutUrl', $logoutUrl);
-        } else {
-            $helper = $this->facebook->getRedirectLoginHelper();
-
-            $permissions = ['email']; // Optional permissions
-
-            $callbackUrl = Router::url(array(
-                "controller" => "users",
-                "action" => "fbLogin"
-            ), true);
-
-            $loginUrl = $helper->getLoginUrl($callbackUrl, $permissions);
-
-            $this->set('loginUrl', $loginUrl);
-        }
     }
     
     private function extractUserAuthValue($request = NULL, $key = NULL) {
@@ -295,8 +254,14 @@ class AppController extends Controller {
 
                     //Check if we need to check credentials
                     if ($nbSeconds > SHARE_CHECK_CREDENTIALS_MAX_INTERVAL) {
+                        $facebook = new Facebook\Facebook([
+                            'app_id' => SHARE_FACEBOOK_APP_ID,
+                            'app_secret' => SHARE_FACEBOOK_APP_SECRET,
+                            'default_graph_version' => 'v2.2'
+                        ]);
+
                         //The OAuth 2.0 client handler helps us manage access tokens
-                        $oAuth2Client = $this->facebook->getOAuth2Client();
+                        $oAuth2Client = $facebook->getOAuth2Client();
                         $tokenMetadata = $oAuth2Client->debugToken($userToken);
 
                         //pr($tokenMetadata);

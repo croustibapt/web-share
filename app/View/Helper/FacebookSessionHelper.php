@@ -1,8 +1,8 @@
 <?php
 App::uses('AppHelper', 'View/Helper');
 
-class LocalUserHelper extends AppHelper {
-    public function isAuthenticated($context) {
+class FacebookSessionHelper extends AppHelper {
+    /*public function isAuthenticated($context) {
         $userExternalId = $context->Session->read(SHARE_LOCAL_USER_SESSION_PREFIX.'.'.SHARE_HEADER_AUTH_EXTERNAL_ID);
         $mail = $context->Session->read(SHARE_LOCAL_USER_SESSION_PREFIX.'.'.SHARE_HEADER_AUTH_MAIL);
         $authToken = $context->Session->read(SHARE_LOCAL_USER_SESSION_PREFIX.'.'.SHARE_HEADER_AUTH_TOKEN);
@@ -27,5 +27,5 @@ class LocalUserHelper extends AppHelper {
     public function getUsername($context) {
         $username = $context->Session->read(SHARE_LOCAL_USER_SESSION_PREFIX.'.'.SHARE_HEADER_AUTH_USERNAME);
         return $username;
-    }
+    }*/
 }
