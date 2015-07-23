@@ -173,97 +173,92 @@ class ApiSharesController extends AppController {
     
     protected function internAdd($userId = NULL, $latitude = NULL, $longitude = NULL, $city = NULL, $zipCode = NULL, $shareTypeId = NULL, $eventDate = NULL, $eventTime = NULL, $title = NULL, $price = NULL, $places = NULL, $waitingTime = NULL, $meetPlace = NULL, $limitations = NULL, $imageUrl = NULL, $link = NULL, $message = NULL, $accuracy = NULL, $radius = NULL) {
         $response = NULL;
-        
-        //Check credentials
-        if ($this->checkCredentials($this->request)) {
-            $cityGeocodingUrl = "https://maps.googleapis.com/maps/api/geocode/json?latlng=".$latitude.",".$longitude."&result_type=locality|postal_code&key=".SHARE_GOOGLE_MAPS_API_KEY;
 
-            //pr($cityGeocodingUrl);
+        $cityGeocodingUrl = "https://maps.googleapis.com/maps/api/geocode/json?latlng=".$latitude.",".$longitude."&result_type=locality|postal_code&key=".SHARE_GOOGLE_MAPS_API_KEY;
 
-            /*echo json_encode($cityGeocodingUrl);
-            exit();*/
+        //pr($cityGeocodingUrl);
 
-            $ch = curl_init();
-            curl_setopt($ch, CURLOPT_URL, $cityGeocodingUrl);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-            $geocodingCityResponse = json_decode(curl_exec($ch), true);
+        /*echo json_encode($cityGeocodingUrl);
+        exit();*/
 
-            /*echo json_encode($geocodingCityResponse);
-            exit();*/
-            
-            foreach ($geocodingCityResponse['results'] as $result) {
-                if (count($result['address_components']) > 0) {
-                    $firstAddressComponent = $result['address_components'][0];
-                    $adressTypes = $firstAddressComponent['types'];
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $cityGeocodingUrl);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        $geocodingCityResponse = json_decode(curl_exec($ch), true);
 
-                    if (in_array('postal_code', $adressTypes)) {
-                        $zipCode = $firstAddressComponent['long_name'];
-                    } else if (in_array('locality', $adressTypes)) {
-                        $city = $firstAddressComponent['long_name'];
-                    }
+        /*echo json_encode($geocodingCityResponse);
+        exit();*/
+
+        foreach ($geocodingCityResponse['results'] as $result) {
+            if (count($result['address_components']) > 0) {
+                $firstAddressComponent = $result['address_components'][0];
+                $adressTypes = $firstAddressComponent['types'];
+
+                if (in_array('postal_code', $adressTypes)) {
+                    $zipCode = $firstAddressComponent['long_name'];
+                } else if (in_array('locality', $adressTypes)) {
+                    $city = $firstAddressComponent['long_name'];
                 }
             }
+        }
 
-            //User
-            $dataShare['Share']['user_id'] = $userId;
+        //User
+        $dataShare['Share']['user_id'] = $userId;
 
-            //Transform data
-            if ($shareTypeId != -1) {
-                $dataShare['Share']['share_type_id'] = $shareTypeId;
-            }
-            $dataShare['Share']['event_date'] = $eventDate;
-            $dataShare['Share']['event_time'] = $eventTime;
-            $dataShare['Share']['title'] = $title;
-            $dataShare['Share']['price'] = $price;
-            $dataShare['Share']['places'] = $places;
-            $dataShare['Share']['status'] = SHARE_STATUS_OPENED;
-            $dataShare['Share']['waiting_time'] = $waitingTime;
-            $dataShare['Share']['meet_place'] = $meetPlace;
-            $dataShare['Share']['limitations'] = $limitations;
-            $dataShare['Share']['image_url'] = $imageUrl;
-            $dataShare['Share']['link'] = $link;
-            $dataShare['Share']['message'] = $message;
-            $dataShare['Share']['latitude'] = $latitude;
-            $dataShare['Share']['longitude'] = $longitude;
-            $dataShare['Share']['city'] = $city;
-            $dataShare['Share']['zip_code'] = $zipCode;
-            $dataShare['Share']['accuracy'] = $accuracy;
-            $dataShare['Share']['radius'] = $radius;
+        //Transform data
+        if ($shareTypeId != -1) {
+            $dataShare['Share']['share_type_id'] = $shareTypeId;
+        }
+        $dataShare['Share']['event_date'] = $eventDate;
+        $dataShare['Share']['event_time'] = $eventTime;
+        $dataShare['Share']['title'] = $title;
+        $dataShare['Share']['price'] = $price;
+        $dataShare['Share']['places'] = $places;
+        $dataShare['Share']['status'] = SHARE_STATUS_OPENED;
+        $dataShare['Share']['waiting_time'] = $waitingTime;
+        $dataShare['Share']['meet_place'] = $meetPlace;
+        $dataShare['Share']['limitations'] = $limitations;
+        $dataShare['Share']['image_url'] = $imageUrl;
+        $dataShare['Share']['link'] = $link;
+        $dataShare['Share']['message'] = $message;
+        $dataShare['Share']['latitude'] = $latitude;
+        $dataShare['Share']['longitude'] = $longitude;
+        $dataShare['Share']['city'] = $city;
+        $dataShare['Share']['zip_code'] = $zipCode;
+        $dataShare['Share']['accuracy'] = $accuracy;
+        $dataShare['Share']['radius'] = $radius;
 
-            /*echo json_encode($dataShare);
-            exit();*/
+        /*echo json_encode($dataShare);
+        exit();*/
 
-            //If Share was successfuly saved
-            if ($this->Share->saveAssociated($dataShare)) {
-                //Get it back
-                $shareId = $this->Share->id;
-                $share = $this->Share->find('first', array(
-                    'conditions' => array(
-                        'Share.id' => $shareId
-                    )
-                ));
+        //If Share was successfuly saved
+        if ($this->Share->saveAssociated($dataShare)) {
+            //Get it back
+            $shareId = $this->Share->id;
+            $share = $this->Share->find('first', array(
+                'conditions' => array(
+                    'Share.id' => $shareId
+                )
+            ));
 
-                //Prepare response
-                $response['share_id'] = $shareId;
+            //Prepare response
+            $response['share_id'] = $shareId;
 
-                //Created, modified
-                $this->formatISODate($response['created'], $share['Share']['created']);
-                $this->formatISODate($response['modified'], $share['Share']['modified']);
+            //Created, modified
+            $this->formatISODate($response['created'], $share['Share']['created']);
+            $this->formatISODate($response['modified'], $share['Share']['modified']);
 
-                $response['city'] = $this->checkEmptyString($share['Share']['city']);
-                $response['zip_code'] = $share['Share']['zip_code'];
-            } else {
-                $validationErrors = $this->Share->validationErrors;
-
-                //Check validation errors
-                if ($validationErrors !== NULL) {
-                    throw new ShareException(SHARE_STATUS_CODE_PRECONDITION_FAILED, SHARE_ERROR_CODE_VALIDATION_FAILED, "Share validation failed", $validationErrors);
-                } else {
-                    throw new ShareException(SHARE_STATUS_CODE_INTERNAL_SERVER_ERROR, SHARE_ERROR_CODE_SAVE_FAILED, "Share save failed");
-                }
-            }
+            $response['city'] = $this->checkEmptyString($share['Share']['city']);
+            $response['zip_code'] = $share['Share']['zip_code'];
         } else {
-            throw new ShareException(SHARE_STATUS_CODE_UNAUTHORIZED, SHARE_ERROR_CODE_BAD_CREDENTIALS, "Bad credentials");
+            $validationErrors = $this->Share->validationErrors;
+
+            //Check validation errors
+            if ($validationErrors !== NULL) {
+                throw new ShareException(SHARE_STATUS_CODE_PRECONDITION_FAILED, SHARE_ERROR_CODE_VALIDATION_FAILED, "Share validation failed", $validationErrors);
+            } else {
+                throw new ShareException(SHARE_STATUS_CODE_INTERNAL_SERVER_ERROR, SHARE_ERROR_CODE_SAVE_FAILED, "Share save failed");
+            }
         }
         
         return $response;
@@ -271,34 +266,41 @@ class ApiSharesController extends AppController {
 
 	public function apiAdd() {
         if ($this->request->is('PUT')) {
-            //Get user external identifier
-            $userExternalId = $this->getUserExternalId($this->request);
-            $userId = $this->getUserId($userExternalId);
-            
-            /*echo json_encode($userExternalId);
-            exit();*/
-            
-            //Get data
-            $data = $this->request->input('json_decode', true);
-            
-            //Check empty fields
-            $this->checkField($data, 'city');
-            $this->checkField($data, 'zip_code');
-            $this->checkField($data, 'limitations');
-            $this->checkField($data, 'image_url');
-            $this->checkField($data, 'link');
-            $this->checkField($data, 'meet_place');
-            $this->checkField($data, 'message');
-            
-            try {
-                //Intern add
-                $response = $this->internAdd($userId, $data['latitude'], $data['longitude'], NULL, NULL, $data['share_type_id'], $data['event_date'], $data['event_time'], $data['title'], $data['price'], $data['places'], $data['waiting_time'], $data['meet_place'], $data['limitations'], $data['image_url'], $data['link'], $data['message'], $data['accuracy'], $data['radius']);
+            //Check credentials
+            if ($this->checkCredentials($this->request)) {
+                //Get user external identifier
+                $userExternalId = $this->getUserExternalId($this->request);
+                $userId = $this->getUserId($userExternalId);
 
-                //Send JSON respsonse
-                $this->sendResponse(SHARE_STATUS_CODE_CREATED, $response);
-            } catch (ShareException $e) {
-                $this->sendErrorResponse($e->getStatusCode(), $e->getCode(), $e->getMessage(), $e->getValidationErrors());
+                /*echo json_encode($userExternalId);
+                exit();*/
+
+                //Get data
+                $data = $this->request->input('json_decode', true);
+
+                //Check empty fields
+                $this->checkField($data, 'city');
+                $this->checkField($data, 'zip_code');
+                $this->checkField($data, 'limitations');
+                $this->checkField($data, 'image_url');
+                $this->checkField($data, 'link');
+                $this->checkField($data, 'meet_place');
+                $this->checkField($data, 'message');
+
+                try {
+                    //Intern add
+                    $response = $this->internAdd($userId, $data['latitude'], $data['longitude'], NULL, NULL, $data['share_type_id'], $data['event_date'], $data['event_time'], $data['title'], $data['price'], $data['places'], $data['waiting_time'], $data['meet_place'], $data['limitations'], $data['image_url'], $data['link'], $data['message'], $data['accuracy'], $data['radius']);
+
+                    //Send JSON respsonse
+                    $this->sendResponse(SHARE_STATUS_CODE_CREATED, $response);
+                } catch (ShareException $e) {
+                    $this->sendErrorResponse($e->getStatusCode(), $e->getCode(), $e->getMessage(), $e->getValidationErrors());
+                }
+            } else {
+                $this->sendErrorResponse(SHARE_STATUS_CODE_UNAUTHORIZED, SHARE_ERROR_CODE_BAD_CREDENTIALS, "Bad credentials");
             }
+        } else {
+            $this->sendErrorResponse(SHARE_STATUS_CODE_UNAUTHORIZED, SHARE_STATUS_CODE_METHOD_NOT_ALLOWED, "Method not allowed");
         }
 	}
     
@@ -365,20 +367,15 @@ class ApiSharesController extends AppController {
                 if ($share != NULL) {
                     //Check if the Share is opened
                     if ($this->canCancel($share, $userExternalId)) {
-                        //Check credentials
-                        if ($this->checkCredentials($this->request)) {
-                            //Save changes
-                            $this->Share->id = $shareId;
+                        //Save changes
+                        $this->Share->id = $shareId;
 
-                            //If it succeeded
-                            if ($this->Share->saveField('status', SHARE_STATUS_CLOSED)) {
-                                //Send push notif: TODO
-                                //$this->sendPushNotif($request['Request']['user_id'], 'Votre demande a été acceptée.');
-                            } else {
-                                throw new ShareException(SHARE_STATUS_CODE_INTERNAL_SERVER_ERROR, SHARE_ERROR_CODE_SAVE_FAILED, "Share cancel failed");
-                            }
+                        //If it succeeded
+                        if ($this->Share->saveField('status', SHARE_STATUS_CLOSED)) {
+                            //Send push notif: TODO
+                            //$this->sendPushNotif($request['Request']['user_id'], 'Votre demande a été acceptée.');
                         } else {
-                            throw new ShareException(SHARE_STATUS_CODE_UNAUTHORIZED, SHARE_ERROR_CODE_BAD_CREDENTIALS, "Bad credentials");
+                            throw new ShareException(SHARE_STATUS_CODE_INTERNAL_SERVER_ERROR, SHARE_ERROR_CODE_SAVE_FAILED, "Share cancel failed");
                         }
                     } else {
                         throw new ShareException(SHARE_STATUS_CODE_METHOD_NOT_ALLOWED, SHARE_ERROR_CODE_RESOURCE_DISABLED, "You cannot cancel this Share");
@@ -396,18 +393,25 @@ class ApiSharesController extends AppController {
 
     public function apiCancel($shareId = NULL) {
         if ($this->request->is('POST')) {
-            try {
-                //Get data
-                $data = $this->request->input('json_decode', true);
+            //Check credentials
+            if ($this->checkCredentials($this->request)) {
+                try {
+                    //Get data
+                    $data = $this->request->input('json_decode', true);
 
-                //Intern Details
-                $this->internCancel($shareId, $data['reason'], $data['message']);
+                    //Intern Details
+                    $this->internCancel($shareId, $data['reason'], $data['message']);
 
-                //Send JSON respsonse
-                $this->sendResponse(SHARE_STATUS_CODE_OK);
-            } catch (ShareException $e) {
-                $this->sendErrorResponse($e->getStatusCode(), $e->getCode(), $e->getMessage(), $e->getValidationErrors());
+                    //Send JSON respsonse
+                    $this->sendResponse(SHARE_STATUS_CODE_OK);
+                } catch (ShareException $e) {
+                    $this->sendErrorResponse($e->getStatusCode(), $e->getCode(), $e->getMessage(), $e->getValidationErrors());
+                }
+            } else {
+                $this->sendErrorResponse(SHARE_STATUS_CODE_UNAUTHORIZED, SHARE_ERROR_CODE_BAD_CREDENTIALS, "Bad credentials");
             }
+        } else {
+            $this->sendErrorResponse(SHARE_STATUS_CODE_UNAUTHORIZED, SHARE_STATUS_CODE_METHOD_NOT_ALLOWED, "Method not allowed");
         }
     }
 }

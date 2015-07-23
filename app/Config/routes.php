@@ -33,13 +33,13 @@
 #pragma mark - USERS
 
     //API
-    Router::connect('/api/user/add', array('controller' => 'ApiUsers', 'action' => 'apiAdd'));
-    Router::connect('/api/user/details/:externalId', array('controller' => 'ApiUsers', 'action' => 'apiDetails'), array(
+    Router::connect('/api/user/add', array('controller' => 'ApiUsers', 'action' => 'add'));
+    Router::connect('/api/user/details/:externalId', array('controller' => 'ApiUsers', 'action' => 'details'), array(
         'pass' => array('externalId'),
         'externalId' => '[A-Za-z0-9]+'
     ));
-    Router::connect('/api/user/home', array('controller' => 'ApiUsers', 'action' => 'apiHome'));
-    Router::connect('/api/user/registerpush', array('controller' => 'ApiUsers', 'action' => 'apiRegisterPush'));
+    Router::connect('/api/user/home', array('controller' => 'ApiUsers', 'action' => 'home'));
+    Router::connect('/api/user/registerpush', array('controller' => 'ApiUsers', 'action' => 'registerPush'));
 
     //General
     Router::connect('/user/add', array('controller' => 'Users', 'action' => 'add'));
@@ -54,7 +54,7 @@
 #pragma mark - SHARE TYPE CATEGORIES
 
     //API
-    Router::connect('/api/share_type_categories/get', array('controller' => 'ApiShareTypeCategories', 'action' => 'apiGet'));
+    Router::connect('/api/share_type_categories/get', array('controller' => 'ApiShareTypeCategories', 'action' => 'get'));
     
     //General
     Router::connect('/share_type_categories/get', array('controller' => 'ShareTypeCategories', 'action' => 'get'));
@@ -62,7 +62,7 @@
 #pragma mark - SHARE TYPES
     
     //API
-    Router::connect('/api/share_types/get', array('controller' => 'ApiShareTypes', 'action' => 'apiGet'));
+    Router::connect('/api/share_types/get', array('controller' => 'ApiShareTypes', 'action' => 'get'));
 
     //General
     Router::connect('/share_types/get', array('controller' => 'ShareTypes', 'action' => 'get'));
@@ -70,20 +70,18 @@
 #pragma mark - SHARES
 
     //API
-    Router::connect('/api/share/search', array('controller' => 'ApiShares', 'action' => 'apiSearch'));
-    Router::connect('/api/share/add', array('controller' => 'ApiShares', 'action' => 'apiAdd'));
-    Router::connect('/api/share/details/:shareId', array('controller' => 'ApiShares', 'action' => 'apiDetails'), array(
+    Router::connect('/api/share/search', array('controller' => 'ApiShares', 'action' => 'search'));
+    Router::connect('/api/share/add', array('controller' => 'ApiShares', 'action' => 'add'));
+    Router::connect('/api/share/details/:shareId', array('controller' => 'ApiShares', 'action' => 'details'), array(
         'pass' => array('shareId'),
         'shareId' => '[0-9]+'
     ));
-    Router::connect('/api/share/cancel/:shareId', array('controller' => 'ApiShares', 'action' => 'apiCancel'), array(
+    Router::connect('/api/share/cancel/:shareId', array('controller' => 'ApiShares', 'action' => 'cancel'), array(
         'pass' => array('shareId'),
         'shareId' => '[0-9]+'
     ));
 
     //General
-
-    //Search
     Router::connect('/share/search/:shareTypeCategory', array('controller' => 'Shares', 'action' => 'search'), array(
         'pass' => array('shareTypeCategory'),
         'shareTypeCategory' => '[A-Za-z0-9]+'
@@ -107,22 +105,22 @@
 #pragma mark - COMMENTS
     
     //API
-    Router::connect('/api/comment/add', array('controller' => 'ApiComments', 'action' => 'apiAdd'));
-    Router::connect('/api/comment/get', array('controller' => 'ApiComments', 'action' => 'apiGet'));
+    Router::connect('/api/comment/add', array('controller' => 'ApiComments', 'action' => 'add'));
+    Router::connect('/api/comment/get', array('controller' => 'ApiComments', 'action' => 'get'));
 
 #pragma mark - REQUESTS
     
     //API
-    Router::connect('/api/request/add', array('controller' => 'ApiRequests', 'action' => 'apiAdd'));
-    Router::connect('/api/request/accept/:requestId', array('controller' => 'ApiRequests', 'action' => 'apiAccept'), array(
+    Router::connect('/api/request/add', array('controller' => 'ApiRequests', 'action' => 'add'));
+    Router::connect('/api/request/accept/:requestId', array('controller' => 'ApiRequests', 'action' => 'accept'), array(
         'pass' => array('requestId'),
         'requestId' => '[0-9]+'
     ));
-    Router::connect('/api/request/decline/:requestId', array('controller' => 'ApiRequests', 'action' => 'apiDecline'), array(
+    Router::connect('/api/request/decline/:requestId', array('controller' => 'ApiRequests', 'action' => 'decline'), array(
         'pass' => array('requestId'),
         'requestId' => '[0-9]+'
     ));
-    Router::connect('/api/request/cancel/:requestId', array('controller' => 'ApiRequests', 'action' => 'apiCancel'), array(
+    Router::connect('/api/request/cancel/:requestId', array('controller' => 'ApiRequests', 'action' => 'cancel'), array(
         'pass' => array('requestId'),
         'requestId' => '[0-9]+'
     ));

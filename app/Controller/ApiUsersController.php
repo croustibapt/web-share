@@ -119,73 +119,68 @@ class ApiUsersController extends AppController {
 
     protected function interHome() {
         $response = NULL;
+        
+        //Get user external identifier
+        $userExternalId = $this->getUserExternalId($this->request);
 
-        //Check credentials
-        if ($this->checkCredentials($this->request)) {
-            //Get user external identifier
-            $userExternalId = $this->getUserExternalId($this->request);
+        //Find its entity
+        $user = $this->User->find('first', array(
+            'fields' => array('User.username', 'User.external_id', 'User.created', 'User.share_count', 'User.request_count', 'User.comment_count'),
+            'conditions' => array(
+                'User.external_id' => $userExternalId
+            )
+        ));
 
-            //Find its entity
-            $user = $this->User->find('first', array(
-                'fields' => array('User.username', 'User.external_id', 'User.created', 'User.share_count', 'User.request_count', 'User.comment_count'),
+        //User
+        $response['username'] = $user['User']['username'];
+        $response['external_id'] = $user['User']['external_id'];
+
+        //Created
+        $this->formatISODate($response['created'], $user['User']['created']);
+
+        $response['comment_count'] = $user['User']['comment_count'];
+
+        //Shares
+        $shareCount = $user['User']['share_count'];
+        $response['share_count'] = $shareCount;
+
+        if ($shareCount > 0) {
+            $sql = "SELECT *, X(Share.location) as latitude, Y(Share.location) as longitude, (SELECT COUNT(Request.id) FROM requests Request WHERE Request.share_id = Share.id AND Request.status = 1) AS participation_count FROM shares Share, users User, share_types ShareType, share_type_categories ShareTypeCategory WHERE Share.user_id = User.id AND Share.share_type_id = ShareType.id AND ShareType.share_type_category_id = ShareTypeCategory.id AND User.external_id = ".$userExternalId." AND Share.status = ".SHARE_STATUS_OPENED." AND Share.event_date >= '".date('Y-m-d')."';";
+            $shares = $this->Share->query($sql);
+
+            //pr($shares);
+
+            $response['shares'] = array();
+
+            //Format Shares
+            $shareIndex = 0;
+            foreach ($shares as $share) {
+                $response['shares'][$shareIndex++] = $this->formatShare($share, false, true);
+            }
+        }
+
+        //Requests
+        $requestCount = $user['User']['request_count'];
+        $response['request_count'] = $requestCount;
+
+        if ($requestCount > 0) {
+            $requests = $this->Request->find('all', array(
                 'conditions' => array(
-                    'User.external_id' => $userExternalId
+                    'User.id' => $user['User']['id'],
+                    'Share.event_date >= ' => date('Y-m-d')
                 )
             ));
 
-            //User
-            $response['username'] = $user['User']['username'];
-            $response['external_id'] = $user['User']['external_id'];
+            foreach ($requests as & $request) {
+                $sql = "SELECT *, X(Share.location) as latitude, Y(Share.location) as longitude, (SELECT COUNT(Request.id) FROM requests Request WHERE Request.share_id = Share.id AND Request.status = 1) AS participation_count FROM shares AS Share, users AS User, share_types AS ShareType, share_type_categories ShareTypeCategory WHERE Share.user_id = User.id AND Share.share_type_id = ShareType.id AND ShareType.share_type_category_id = ShareTypeCategory.id AND Share.id = ".$request['Request']['share_id']." LIMIT 1;";
 
-            //Created
-            $this->formatISODate($response['created'], $user['User']['created']);
-
-            $response['comment_count'] = $user['User']['comment_count'];
-
-            //Shares
-            $shareCount = $user['User']['share_count'];
-            $response['share_count'] = $shareCount;
-
-            if ($shareCount > 0) {
-                $sql = "SELECT *, X(Share.location) as latitude, Y(Share.location) as longitude, (SELECT COUNT(Request.id) FROM requests Request WHERE Request.share_id = Share.id AND Request.status = 1) AS participation_count FROM shares Share, users User, share_types ShareType, share_type_categories ShareTypeCategory WHERE Share.user_id = User.id AND Share.share_type_id = ShareType.id AND ShareType.share_type_category_id = ShareTypeCategory.id AND User.external_id = ".$userExternalId." AND Share.status = ".SHARE_STATUS_OPENED." AND Share.event_date >= '".date('Y-m-d')."';";
                 $shares = $this->Share->query($sql);
+                $share = $shares[0];
 
-                //pr($shares);
-
-                $response['shares'] = array();
-
-                //Format Shares
-                $shareIndex = 0;
-                foreach ($shares as $share) {
-                    $response['shares'][$shareIndex++] = $this->formatShare($share, false, true);
-                }
+                $request['Share'] = $share;
             }
 
-            //Requests
-            $requestCount = $user['User']['request_count'];
-            $response['request_count'] = $requestCount;
-
-            if ($requestCount > 0) {
-                $requests = $this->Request->find('all', array(
-                    'conditions' => array(
-                        'User.id' => $user['User']['id'],
-                        'Share.event_date >= ' => date('Y-m-d')
-                    )
-                ));
-
-                foreach ($requests as & $request) {
-                    $sql = "SELECT *, X(Share.location) as latitude, Y(Share.location) as longitude, (SELECT COUNT(Request.id) FROM requests Request WHERE Request.share_id = Share.id AND Request.status = 1) AS participation_count FROM shares AS Share, users AS User, share_types AS ShareType, share_type_categories ShareTypeCategory WHERE Share.user_id = User.id AND Share.share_type_id = ShareType.id AND ShareType.share_type_category_id = ShareTypeCategory.id AND Share.id = ".$request['Request']['share_id']." LIMIT 1;";
-
-                    $shares = $this->Share->query($sql);
-                    $share = $shares[0];
-
-                    $request['Share'] = $share;
-                }
-
-                $this->formatRequests($response['requests'], $requests, true);
-            }
-        } else {
-            throw new ShareException(SHARE_STATUS_CODE_UNAUTHORIZED, SHARE_ERROR_CODE_BAD_CREDENTIALS, "Bad credentials");
+            $this->formatRequests($response['requests'], $requests, true);
         }
 
         return $response;
@@ -193,15 +188,22 @@ class ApiUsersController extends AppController {
     
     public function apiHome() {
         if ($this->request->is('GET')) {
-            try {
-                //Intern home
-                $response = $this->interHome();
+            //Check credentials
+            if ($this->checkCredentials($this->request)) {
+                try {
+                    //Intern home
+                    $response = $this->interHome();
 
-                //Send JSON respsonse
-                $this->sendResponse(SHARE_STATUS_CODE_OK, $response);
-            } catch (ShareException $e) {
-                $this->sendErrorResponse($e->getStatusCode(), $e->getCode(), $e->getMessage(), $e->getValidationErrors());
+                    //Send JSON respsonse
+                    $this->sendResponse(SHARE_STATUS_CODE_OK, $response);
+                } catch (ShareException $e) {
+                    $this->sendErrorResponse($e->getStatusCode(), $e->getCode(), $e->getMessage(), $e->getValidationErrors());
+                }
+            } else {
+                $this->sendErrorResponse(SHARE_STATUS_CODE_UNAUTHORIZED, SHARE_ERROR_CODE_BAD_CREDENTIALS, "Bad credentials");
             }
+        } else {
+            $this->sendErrorResponse(SHARE_STATUS_CODE_UNAUTHORIZED, SHARE_STATUS_CODE_METHOD_NOT_ALLOWED, "Method not allowed");
         }
     }
     
@@ -235,6 +237,8 @@ class ApiUsersController extends AppController {
             } else {
                 $this->sendErrorResponse(SHARE_STATUS_CODE_UNAUTHORIZED, SHARE_ERROR_CODE_BAD_CREDENTIALS, "Bad credentials");
             }
+        } else {
+            $this->sendErrorResponse(SHARE_STATUS_CODE_UNAUTHORIZED, SHARE_STATUS_CODE_METHOD_NOT_ALLOWED, "Method not allowed");
         }
     }
 }

@@ -102,38 +102,33 @@ class ApiRequestsController extends AppController {
 
             //If found
             if ($share != NULL) {
-                //Check credentials
-                if ($this->checkCredentials($this->request)) {
-                    //Can interact?
-                    if ($this->canRequest($share, $userId)) {
-                        //Format data
-                        $dataRequest['Request']['share_id'] = $shareId;
-                        $dataRequest['Request']['user_id'] = $userId;
-                        $dataRequest['Request']['status'] = SHARE_REQUEST_STATUS_PENDING;
+                //Can interact?
+                if ($this->canRequest($share, $userId)) {
+                    //Format data
+                    $dataRequest['Request']['share_id'] = $shareId;
+                    $dataRequest['Request']['user_id'] = $userId;
+                    $dataRequest['Request']['status'] = SHARE_REQUEST_STATUS_PENDING;
 
-                        //echo json_encode($dataSharesUsers);
-                        //exit();
+                    //echo json_encode($dataSharesUsers);
+                    //exit();
 
-                        //Try to save Request
-                        $request = $this->Request->save($dataRequest);
+                    //Try to save Request
+                    $request = $this->Request->save($dataRequest);
 
-                        //If it worked
-                        if ($request != NULL) {
-                            //Send push notif
-                            $this->sendPushNotif($share['Share']['user_id'], 'Vous avez une nouvelle demande.');
+                    //If it worked
+                    if ($request != NULL) {
+                        //Send push notif
+                        $this->sendPushNotif($share['Share']['user_id'], 'Vous avez une nouvelle demande.');
 
-                            //Format response
-                            $response['request_id'] = $request['Request']['id'];
-                            $this->formatISODate($response['created'], $request['Request']['created']);
-                            $this->formatISODate($response['modified'], $request['Request']['modified']);
-                        } else {
-                            throw new ShareException(SHARE_STATUS_CODE_INTERNAL_SERVER_ERROR, SHARE_ERROR_CODE_SAVE_FAILED, "Request save failed");
-                        }
+                        //Format response
+                        $response['request_id'] = $request['Request']['id'];
+                        $this->formatISODate($response['created'], $request['Request']['created']);
+                        $this->formatISODate($response['modified'], $request['Request']['modified']);
                     } else {
-                        throw new ShareException(SHARE_STATUS_CODE_METHOD_NOT_ALLOWED, SHARE_ERROR_CODE_RESOURCE_DISABLED, "You cannot request for this Share");
+                        throw new ShareException(SHARE_STATUS_CODE_INTERNAL_SERVER_ERROR, SHARE_ERROR_CODE_SAVE_FAILED, "Request save failed");
                     }
                 } else {
-                    throw new ShareException(SHARE_STATUS_CODE_UNAUTHORIZED, SHARE_ERROR_CODE_BAD_CREDENTIALS, "Bad credentials");
+                    throw new ShareException(SHARE_STATUS_CODE_METHOD_NOT_ALLOWED, SHARE_ERROR_CODE_RESOURCE_DISABLED, "You cannot request for this Share");
                 }
             } else {
                 throw new ShareException(SHARE_STATUS_CODE_NOT_FOUND, SHARE_ERROR_CODE_RESOURCE_NOT_FOUND, "Share not found");
@@ -145,28 +140,35 @@ class ApiRequestsController extends AppController {
         return $response;
     }
                 
-    public function apiAdd() {
-        if ($this->request->is('GET')) {
-            //Get Share identifier
-            $shareId = NULL;
-            if (isset($this->params['url']['shareId']) && is_numeric($this->params['url']['shareId'])) {
-                $shareId = $this->params['url']['shareId'];
-            }
-            
-            //Get user identifier
-            $userExternalId = $this->getUserExternalId($this->request);
-            $userId = $this->getUserId($userExternalId);
-            
-            try {
-                //Intern add
-                $response = $this->internAdd($userId, $shareId);
+    public function add() {
+        if ($this->request->is('get', 'mobile', 'json')) {
+            //Check credentials
+            if ($this->checkCredentials($this->request)) {
+                //Get Share identifier
+                $shareId = NULL;
+                if (isset($this->params['url']['shareId']) && is_numeric($this->params['url']['shareId'])) {
+                    $shareId = $this->params['url']['shareId'];
+                }
 
-                //Send JSON respsonse
-                $this->sendResponse(SHARE_STATUS_CODE_CREATED, $response);
-            } catch (ShareException $e) {
-                $this->sendErrorResponse($e->getStatusCode(), $e->getCode(), $e->getMessage(), $e->getValidationErrors());
+                //Get user identifier
+                $userExternalId = $this->getUserExternalId($this->request);
+                $userId = $this->getUserId($userExternalId);
+
+                try {
+                    //Intern add
+                    $response = $this->internAdd($userId, $shareId);
+
+                    //Send JSON respsonse
+                    $this->sendResponse(SHARE_STATUS_CODE_CREATED, $response);
+                } catch (ShareException $e) {
+                    $this->sendErrorResponse($e->getStatusCode(), $e->getCode(), $e->getMessage(), $e->getValidationErrors());
+                }
+            } else {
+                $this->sendErrorResponse(SHARE_STATUS_CODE_UNAUTHORIZED, SHARE_ERROR_CODE_BAD_CREDENTIALS, "Bad credentials");
             }
-        } 
+        } else {
+            $this->sendErrorResponse(SHARE_STATUS_CODE_UNAUTHORIZED, SHARE_STATUS_CODE_METHOD_NOT_ALLOWED, "Method not allowed");
+        }
     }
     
     private function changeStatus($request = NULL, $status = NULL) {
@@ -194,22 +196,17 @@ class ApiRequestsController extends AppController {
 
             //Check if the request exists
             if ($request != NULL) {
-                //If it exists, then check credentials
-                if ($this->checkCredentials($this->request)) {
-                    //
-                    if ($this->canAcceptRequest($request, $userExternalId)) {
-                        //Update status
-                        if ($this->changeStatus($request, SHARE_REQUEST_STATUS_ACCEPTED)) {
-                            //Send push notif
-                            $this->sendPushNotif($request['Request']['user_id'], 'Votre demande a été acceptée.');
-                        } else {
-                            throw new ShareException(SHARE_STATUS_CODE_INTERNAL_SERVER_ERROR, SHARE_ERROR_CODE_SAVE_FAILED, "Request accept failed");
-                        }
+                //
+                if ($this->canAcceptRequest($request, $userExternalId)) {
+                    //Update status
+                    if ($this->changeStatus($request, SHARE_REQUEST_STATUS_ACCEPTED)) {
+                        //Send push notif
+                        $this->sendPushNotif($request['Request']['user_id'], 'Votre demande a été acceptée.');
                     } else {
-                        throw new ShareException(SHARE_STATUS_CODE_METHOD_NOT_ALLOWED, SHARE_ERROR_CODE_RESOURCE_DISABLED, "You cannot accept this Request");
+                        throw new ShareException(SHARE_STATUS_CODE_INTERNAL_SERVER_ERROR, SHARE_ERROR_CODE_SAVE_FAILED, "Request accept failed");
                     }
                 } else {
-                    throw new ShareException(SHARE_STATUS_CODE_UNAUTHORIZED, SHARE_ERROR_CODE_BAD_CREDENTIALS, "Bad credentials");
+                    throw new ShareException(SHARE_STATUS_CODE_METHOD_NOT_ALLOWED, SHARE_ERROR_CODE_RESOURCE_DISABLED, "You cannot accept this Request");
                 }
             } else {
                 throw new ShareException(SHARE_STATUS_CODE_NOT_FOUND, SHARE_ERROR_CODE_RESOURCE_NOT_FOUND, "Request not found");
@@ -217,25 +214,32 @@ class ApiRequestsController extends AppController {
         }
     }
     
-    public function apiAccept($requestId = NULL) {
-        if ($this->request->is('GET')) {
+    public function accept($requestId = NULL) {
+        if ($this->request->is('get', 'mobile', 'json')) {
             /*sleep(3);
             //TEMP TEST
             $this->sendErrorResponse(SHARE_STATUS_CODE_NOT_FOUND, SHARE_ERROR_CODE_RESOURCE_NOT_FOUND,
             "Request not found", NULL);*/
+            
+            //Check credentials
+            if ($this->checkCredentials($this->request)) {
+                //Get user identifier
+                $userExternalId = $this->getUserExternalId($this->request);
 
-            //Get user identifier
-            $userExternalId = $this->getUserExternalId($this->request);
+                try {
+                    //Intern accept
+                    $this->internAccept($requestId, $userExternalId);
 
-            try {
-                //Intern accept
-                $this->internAccept($requestId, $userExternalId);
-
-                //Send JSON respsonse
-                $this->sendResponse(SHARE_STATUS_CODE_OK);
-            } catch (ShareException $e) {
-                $this->sendErrorResponse($e->getStatusCode(), $e->getCode(), $e->getMessage(), $e->getValidationErrors());
+                    //Send JSON respsonse
+                    $this->sendResponse(SHARE_STATUS_CODE_OK);
+                } catch (ShareException $e) {
+                    $this->sendErrorResponse($e->getStatusCode(), $e->getCode(), $e->getMessage(), $e->getValidationErrors());
+                }
+            } else {
+                $this->sendErrorResponse(SHARE_STATUS_CODE_UNAUTHORIZED, SHARE_ERROR_CODE_BAD_CREDENTIALS, "Bad credentials");
             }
+        } else {
+            $this->sendErrorResponse(SHARE_STATUS_CODE_UNAUTHORIZED, SHARE_STATUS_CODE_METHOD_NOT_ALLOWED, "Method not allowed");
         }
     }
     
@@ -249,22 +253,17 @@ class ApiRequestsController extends AppController {
 
             //Check if the request exists
             if ($request != NULL) {
-                //If it exists, then check credentials
-                if ($this->checkCredentials($this->request)) {
-                    //
-                    if ($this->canDeclineRequest($request, $userExternalId)) {
-                        //Update status
-                        if ($this->changeStatus($request, SHARE_REQUEST_STATUS_DECLINED)) {
-                            //Send push notif
-                            $this->sendPushNotif($request['Request']['user_id'], 'Votre demande a été refusée.');
-                        } else {
-                            throw new ShareException(SHARE_STATUS_CODE_INTERNAL_SERVER_ERROR, SHARE_ERROR_CODE_SAVE_FAILED, "Request decline failed");
-                        }
+                //
+                if ($this->canDeclineRequest($request, $userExternalId)) {
+                    //Update status
+                    if ($this->changeStatus($request, SHARE_REQUEST_STATUS_DECLINED)) {
+                        //Send push notif
+                        $this->sendPushNotif($request['Request']['user_id'], 'Votre demande a été refusée.');
                     } else {
-                        throw new ShareException(SHARE_STATUS_CODE_METHOD_NOT_ALLOWED, SHARE_ERROR_CODE_RESOURCE_DISABLED, "You cannot decline this Request");
+                        throw new ShareException(SHARE_STATUS_CODE_INTERNAL_SERVER_ERROR, SHARE_ERROR_CODE_SAVE_FAILED, "Request decline failed");
                     }
                 } else {
-                    throw new ShareException(SHARE_STATUS_CODE_UNAUTHORIZED, SHARE_ERROR_CODE_BAD_CREDENTIALS, "Bad credentials");
+                    throw new ShareException(SHARE_STATUS_CODE_METHOD_NOT_ALLOWED, SHARE_ERROR_CODE_RESOURCE_DISABLED, "You cannot decline this Request");
                 }
             } else {
                 throw new ShareException(SHARE_STATUS_CODE_NOT_FOUND, SHARE_ERROR_CODE_RESOURCE_NOT_FOUND, "Request not found");
@@ -272,20 +271,27 @@ class ApiRequestsController extends AppController {
         }
     }
     
-    public function apiDecline($requestId = NULL) {
-        if ($this->request->is('GET')) {
-            //Get user identifier
-            $userExternalId = $this->getUserExternalId($this->request);
+    public function decline($requestId = NULL) {
+        if ($this->request->is('get', 'mobile', 'json')) {
+            //If it exists, then check credentials
+            if ($this->checkCredentials($this->request)) {
+                //Get user identifier
+                $userExternalId = $this->getUserExternalId($this->request);
 
-            try {
-                //Intern decline
-                $this->internDecline($requestId, $userExternalId);
+                try {
+                    //Intern decline
+                    $this->internDecline($requestId, $userExternalId);
 
-                //Send JSON respsonse
-                $this->sendResponse(SHARE_STATUS_CODE_OK);
-            } catch (ShareException $e) {
-                $this->sendErrorResponse($e->getStatusCode(), $e->getCode(), $e->getMessage(), $e->getValidationErrors());
+                    //Send JSON respsonse
+                    $this->sendResponse(SHARE_STATUS_CODE_OK);
+                } catch (ShareException $e) {
+                    $this->sendErrorResponse($e->getStatusCode(), $e->getCode(), $e->getMessage(), $e->getValidationErrors());
+                }
+            } else {
+                $this->sendErrorResponse(SHARE_STATUS_CODE_UNAUTHORIZED, SHARE_ERROR_CODE_BAD_CREDENTIALS, "Bad credentials");
             }
+        } else {
+            $this->sendErrorResponse(SHARE_STATUS_CODE_UNAUTHORIZED, SHARE_STATUS_CODE_METHOD_NOT_ALLOWED, "Method not allowed");
         }
     }
     
@@ -299,22 +305,17 @@ class ApiRequestsController extends AppController {
 
             //Check if the request exists
             if ($request != NULL) {
-                //If it exists, then check credentials
-                if ($this->checkCredentials($this->request)) {
-                    //
-                    if ($this->canCancelRequest($request, $userExternalId)) {
-                        //Update status
-                        if ($this->changeStatus($request, SHARE_REQUEST_STATUS_CANCELLED)) {
-                            //Send push notif
-                            $this->sendPushNotif($request['Request']['user_id'], 'Votre participation a été annulée.');
-                        } else {
-                            throw new ShareException(SHARE_STATUS_CODE_INTERNAL_SERVER_ERROR, SHARE_ERROR_CODE_SAVE_FAILED, "Request cancel failed");
-                        }
+                //
+                if ($this->canCancelRequest($request, $userExternalId)) {
+                    //Update status
+                    if ($this->changeStatus($request, SHARE_REQUEST_STATUS_CANCELLED)) {
+                        //Send push notif
+                        $this->sendPushNotif($request['Request']['user_id'], 'Votre participation a été annulée.');
                     } else {
-                        throw new ShareException(SHARE_STATUS_CODE_METHOD_NOT_ALLOWED, SHARE_ERROR_CODE_RESOURCE_DISABLED, "You cannot cancel this Request");
+                        throw new ShareException(SHARE_STATUS_CODE_INTERNAL_SERVER_ERROR, SHARE_ERROR_CODE_SAVE_FAILED, "Request cancel failed");
                     }
                 } else {
-                    throw new ShareException(SHARE_STATUS_CODE_UNAUTHORIZED, SHARE_ERROR_CODE_BAD_CREDENTIALS, "Bad credentials");
+                    throw new ShareException(SHARE_STATUS_CODE_METHOD_NOT_ALLOWED, SHARE_ERROR_CODE_RESOURCE_DISABLED, "You cannot cancel this Request");
                 }
             } else {
                 throw new ShareException(SHARE_STATUS_CODE_NOT_FOUND, SHARE_ERROR_CODE_RESOURCE_NOT_FOUND, "Request not found");
@@ -322,20 +323,27 @@ class ApiRequestsController extends AppController {
         }
     }
     
-    public function apiCancel($requestId = NULL) {
-        if ($this->request->is('GET')) {
-            //Get user identifier
-            $userExternalId = $this->getUserExternalId($this->request);
+    public function cancel($requestId = NULL) {
+        if ($this->request->is('get', 'mobile', 'json')) {
+            //If it exists, then check credentials
+            if ($this->checkCredentials($this->request)) {
+                //Get user identifier
+                $userExternalId = $this->getUserExternalId($this->request);
 
-            try {
-                //Intern cancel
-                $this->internCancel($requestId, $userExternalId);
+                try {
+                    //Intern cancel
+                    $this->internCancel($requestId, $userExternalId);
 
-                //Send JSON respsonse
-                $this->sendResponse(SHARE_STATUS_CODE_OK);
-            } catch (ShareException $e) {
-                $this->sendErrorResponse($e->getStatusCode(), $e->getCode(), $e->getMessage(), $e->getValidationErrors());
+                    //Send JSON respsonse
+                    $this->sendResponse(SHARE_STATUS_CODE_OK);
+                } catch (ShareException $e) {
+                    $this->sendErrorResponse($e->getStatusCode(), $e->getCode(), $e->getMessage(), $e->getValidationErrors());
+                }
+            } else {
+                $this->sendErrorResponse(SHARE_STATUS_CODE_UNAUTHORIZED, SHARE_ERROR_CODE_BAD_CREDENTIALS, "Bad credentials");
             }
+        } else {
+            $this->sendErrorResponse(SHARE_STATUS_CODE_UNAUTHORIZED, SHARE_STATUS_CODE_METHOD_NOT_ALLOWED, "Method not allowed");
         }
     }
 }
