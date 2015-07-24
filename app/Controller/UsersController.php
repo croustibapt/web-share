@@ -145,7 +145,7 @@ class UsersController extends ApiUsersController {
                     "action" => "fbLogin"
                 ), true);
 
-                $loginUrl = $helper->getLoginUrl($callbackUrl, $permissions);
+                $loginUrl = $helper->getLoginUrl($callbackUrl.'/', $permissions);
 
                 $this->set('loginUrl', $loginUrl);
             }
@@ -224,6 +224,12 @@ class UsersController extends ApiUsersController {
 
     }
 
+    public function fbLogout() {
+        if ($this->request->is('get')) {
+            $this->redirect($this->Auth->logout());
+        }
+    }
+
     public function logout() {
         if ($this->request->is('get')) {
             $facebook = new Facebook\Facebook([
@@ -236,12 +242,12 @@ class UsersController extends ApiUsersController {
             $helper = $facebook->getRedirectLoginHelper();
 
             $callbackUrl = Router::url(array(
-                "controller" => "shares",
-                "action" => "home"
+                "controller" => "users",
+                "action" => "fbLogout"
             ), true);
 
             $authToken = $this->Auth->user('token');
-            $logoutUrl = $helper->getLogoutUrl($authToken, $callbackUrl);
+            $logoutUrl = $helper->getLogoutUrl($authToken, $callbackUrl.'/');
 
             //pr($logoutUrl);
             $this->redirect($logoutUrl);

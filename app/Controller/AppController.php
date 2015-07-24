@@ -122,7 +122,7 @@ class AppController extends Controller {
         'Auth' => array(
             'authenticate' => 'Share',
             'loginRedirect' => array('controller' => 'users', 'action' => 'account'),
-            'logoutRedirect' => array('controller' => 'shares', 'action' => 'home')
+            'logoutRedirect' => '/'
         )
     );
     
