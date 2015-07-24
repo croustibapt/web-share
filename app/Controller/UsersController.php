@@ -225,20 +225,28 @@ class UsersController extends ApiUsersController {
     }
 
     public function logout() {
-        if ($this->isLocalUserSessionAuthenticated()) {
-            if ($this->request->is('GET')) {
-                $this->invalidateLocalUserSession();
-            }
+        if ($this->request->is('get')) {
+            $facebook = new Facebook\Facebook([
+                    'app_id' => SHARE_FACEBOOK_APP_ID,
+                    'app_secret' => SHARE_FACEBOOK_APP_SECRET,
+                    'default_graph_version' => 'v2.2',
+                    'persistent_data_handler' => new CakePersistentDataHandler($this)
+                ]);
+            
+            $helper = $facebook->getRedirectLoginHelper();
 
-            //Redirect to home
-            $this->redirect('/');
+            $callbackUrl = Router::url(array(
+                "controller" => "shares",
+                "action" => "home"
+            ), true);
+
+            $authToken = $this->Auth->user('token');
+            $logoutUrl = $helper->getLogoutUrl($authToken, $callbackUrl);
+
+            //pr($logoutUrl);
+            $this->redirect($logoutUrl);
+            //$this->set('logoutUrl', $logoutUrl);
         }
-
-        //Set flash error
-        $this->Session->setFlash('You need to be authenticated', 'flash-danger');
-
-        //Redirect to home
-        $this->redirect('/');
     }
 
     /*public function index() {
