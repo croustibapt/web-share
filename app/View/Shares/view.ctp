@@ -1,9 +1,9 @@
 <script src="http://js.nicedit.com/nicEdit-latest.js"></script>
 
-<?php if ($doesUserOwnShare) : ?>
-
 <!-- Own share : delete modal -->
-<div id="shares-details-delete-modal-div" class="modal fade">
+<?php if (AuthComponent::user()) : ?>
+
+<div ng-if="(share.user.external_id == <?php echo AuthComponent::user('external_id'); ?>)" id="shares-details-delete-modal-div" class="modal fade">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -166,76 +166,65 @@
                             / pers.
                         </h3>
 
-                        <?php if (!$isExpired) : ?>
+                        <div ng-if="(share.event_date >= now)">
 
-                            <?php if ($shareStatus == SHARE_STATUS_OPENED) : ?>
+                            <div ng-if="(share.status == <?php echo SHARE_STATUS_OPENED; ?>)">
 
                                 <?php if (AuthComponent::user()) : ?>
 
-                                    <?php if ($doesUserOwnShare) : ?>
+                                    <div ng-if="(share.user.external_id == <?php echo AuthComponent::user('external_id'); ?>)">
 
                                         <button type="button" class="btn btn-danger shares-details-participate-button" data-toggle="modal" data-target="#shares-details-delete-modal-div">
                                             Supprimer
                                         </button>
 
-                                    <?php elseif ($canRequest) : ?>
+                                    </div>
 
-                                        <!-- Participate button -->
-                                        <?php
-                                            echo $this->Form->create('Request', array(
-                                                'action' => 'add',
-                                                'class' => 'form-inline',
-                                            ));
+                                    <div ng-if="(!(share.user.external_id == <?php echo AuthComponent::user('external_id'); ?>) && (requestStatus == -1) && (share.places_left > 0))">
 
-                                            echo $this->Form->hidden('shareId', array(
-                                                'value' => $shareId
-                                            ));
-
-                                            echo $this->Form->submit('Participer', array(
-                                                'class' => 'btn btn-success shares-details-participate-button'
-                                            ));
-
-                                            echo $this->Form->end();
-                                        ?>
-
-                                    <?php else : ?>
-
-                                        <button class="btn btn-<?php echo $this->Share->getShareDetailsRequestStatusClass($requestStatus); ?> disabled shares-details-participate-status">
-                                            <?php echo $this->Share->getShareDetailsRequestStatusLabel($requestStatus); ?>
+                                        <button ng-click="onParticipateButtonClicked($event);" class="btn btn-success shares-details-participate-button">
+                                            Participer
                                         </button>
 
-                                    <?php endif; ?>
+                                    </div>
+
+                                    <div ng-if="(!(share.user.external_id == <?php echo AuthComponent::user('external_id'); ?>) && (requestStatus != -1))">
+
+                                        <button class="btn btn-{{ getRequestStatusButtonClass() }} disabled shares-details-participate-status">
+                                            {{ getRequestStatusLabel() }}
+                                        </button>
+
+                                    </div>
 
                                 <?php else : ?>
 
-                                    <?php if ($isPlacesLeft) : ?>
-
                                     <!-- Need to be authenticated -->
-                                    <div data-toggle="tooltip" data-placement="bottom" title="Vous devez être authentifié pour pouvoir participer" class="shares-details-participate-div">
+                                    <div ng-if="(share.places_left > 0)" title="Vous devez être authentifié pour pouvoir participer" class="shares-details-participate-div">
                                         <button class="btn btn-success disabled shares-details-participate-button">
                                             Participer
                                         </button>
                                     </div>
 
-                                    <?php endif; ?>
-
                                 <?php endif; ?>
 
-                            <?php else : ?>
+                            </div>
+
+                            <div ng-if="(share.status != <?php echo SHARE_STATUS_OPENED; ?>)">
 
                                 <button type="button" class="btn btn-default shares-details-participate-button disabled">
                                     Annulé
                                 </button>
 
-                            <?php endif; ?>
+                            </div>
 
-                        <?php else : ?><!-- !isExpired -->
+                        </div>
+                        <div ng-if="(share.event_date < now)">
 
                             <button type="button" class="btn btn-default shares-details-participate-button disabled">
                                 Expiré
                             </button>
 
-                        <?php endif; ?>
+                        </div>
 
                         <!-- Places -->
                         <p ng-if="(share.places_left > 1)" class="text-info">
@@ -251,21 +240,23 @@
                     </div>
                 </div>
 
-                <!-- Created by -->
-                <p class="shares-details-created-p">
+                <?php if (AuthComponent::user()) : ?>
 
-                    <?php if (!$doesUserOwnShare) : ?>
+                    <!-- Created by -->
+                    <p ng-if="(share.user.external_id == <?php echo AuthComponent::user('external_id'); ?>)" class="shares-details-created-p">
+                        Vous avez créé ce partage {{ share.moment_created_time_ago }}
+                    </p>
+                    <p ng-if="(share.user.external_id != <?php echo AuthComponent::user('external_id'); ?>)" class="shares-details-created-p">
+                        Créé par <a href="#shares-details-user-profile-header-div" class="scroll-a">{{ share.user.username }}</a> {{ share.moment_created_time_ago }}
+                    </p>
 
-                    Créé par <a href="#shares-details-user-profile-header-div" class="scroll-a">{{ share.user.username }}</a>
+                <?php else : ?>
 
-                    <?php else : ?>
+                    <p class="shares-details-created-p">
+                        Créé par <a href="#shares-details-user-profile-header-div" class="scroll-a">{{ share.user.username }}</a> {{ share.moment_created_time_ago }}
+                    </p>
 
-                    Vous avez créé ce partage
-
-                    <?php endif; ?>
-
-                    {{ share.moment_created_time_ago }}
-                </p>
+                <?php endif; ?>
 
             </div>
         </div>
@@ -287,10 +278,16 @@
 
     </div>
 
-    <?php if (!$doesUserOwnShare) : ?>
-
     <!-- User profile -->
+    <?php if (AuthComponent::user()) : ?>
+
+    <div ng-if="!(share.user.external_id != <?php echo AuthComponent::user('external_id'); ?>)" class="shares-details-user-profile-div text-center-xs">
+
+    <?php else : ?>
+
     <div class="shares-details-user-profile-div text-center-xs">
+
+    <?php endif; ?>
 
         <div id="shares-details-user-profile-header-div" class="container">
             <h3>A propos de {{ share.user.username }}</h3>
@@ -330,11 +327,9 @@
 
     </div>
 
-    <?php endif; ?>
-
 </div>
 
 <script>
     //Initialize the SharesViewController
-    initializeSharesView(<?php echo $shareId; ?>, '<?php echo $shareUserExternalId; ?>', 'shares-details-comments-add-textarea', 'shares-details-google-map-div');
+    initializeSharesView(<?php echo $shareId; ?>, '<?php echo $shareUserExternalId; ?>', <?php echo $requestStatus; ?>, 'shares-details-comments-add-textarea', 'shares-details-google-map-div');
 </script>

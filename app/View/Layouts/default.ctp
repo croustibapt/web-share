@@ -27,7 +27,10 @@
 
             //Page specific
             echo $this->Html->css('share/common');
-            echo $this->Html->css('share/'.strtolower($this->name).'-'.$this->action);
+            $specificScriptUrl = WWW_ROOT.'css/share/'.strtolower($this->name).'-'.$this->action.'.css';
+            if (file_exists($specificScriptUrl)) {
+                echo $this->Html->css('share/'.strtolower($this->name).'-'.$this->action);
+            }
         ?>
 
         <?php
@@ -43,7 +46,10 @@
 
             //Page specific
             echo $this->Html->script('share/common');
-            echo $this->Html->script('share/'.strtolower($this->name).'-'.$this->action);
+            $specificScriptUrl = WWW_ROOT.'js/share/'.strtolower($this->name).'-'.$this->action.'.js';
+            if (file_exists($specificScriptUrl)) {
+                echo $this->Html->script('share/' . strtolower($this->name) . '-' . $this->action);
+            }
 
             //Moment
             echo $this->Html->script('moment/moment');
@@ -65,7 +71,16 @@
         $ngControllerName = ucfirst($this->name).ucfirst($this->action).'Controller';
     ?>
 
+    <?php if (file_exists($specificScriptUrl)) : ?>
+
     <body ng-controller="<?php echo $ngControllerName; ?>">
+
+    <?php else : ?>
+
+    <body>
+
+    <?php endif; ?>
+
         <script type="text/javascript">
             //Webroot global variable
             var webroot = "<?php echo $this->webroot; ?>";
@@ -73,7 +88,7 @@
 
         <!-- Facebook redirect fix -->
         <script type="text/javascript">
-            if (window.location.hash && window.location.hash == '#_=_') {
+            /*if (window.location.hash && window.location.hash == '#_=_') {
                 if (window.history && history.pushState) {
                     window.history.pushState("", document.title, window.location.pathname);
                 } else {
@@ -87,7 +102,7 @@
                     document.body.scrollTop = scroll.top;
                     document.body.scrollLeft = scroll.left;
                 }
-            }
+            }*/
         </script>
 
         <!-- Navigation bar -->

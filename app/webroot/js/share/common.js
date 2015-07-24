@@ -466,6 +466,12 @@ function formatShare(share) {
         share.moment_hour = momentHour;
     }
 
+    //Created
+    var createdDate = new Date(share.modified);
+    var isoCreatedDate = createdDate.toISOString();
+    var momentCreatedTimeAgo = moment(isoCreatedDate).fromNow();
+    share.moment_created_time_ago = momentCreatedTimeAgo;
+
     //Modified
     var modifiedDate = new Date(share.modified);
     var isoModifiedDate = modifiedDate.toISOString();

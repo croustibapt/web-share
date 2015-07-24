@@ -5,7 +5,7 @@
  * @param textAreaId Comment text area identifier
  * @param divGoogleMapId GoogleMap div identifier
  */
-function initializeSharesView(shareId, shareUserExternalId, textAreaId, divGoogleMapId) {
+function initializeSharesView(shareId, shareUserExternalId, requestStatus, textAreaId, divGoogleMapId) {
     /**
      * SharesViewController
      */
@@ -20,6 +20,7 @@ function initializeSharesView(shareId, shareUserExternalId, textAreaId, divGoogl
         //Share
         $scope.shareId = shareId;
         $scope.share = null;
+        $scope.requestStatus = requestStatus;
 
         //Google map
         $scope.divGoogleMapId = divGoogleMapId;
@@ -32,6 +33,8 @@ function initializeSharesView(shareId, shareUserExternalId, textAreaId, divGoogl
         //User
         $scope.shareUserExternalId = shareUserExternalId;
         $scope.user = null;
+
+        $scope.now = moment().format('YYYY-MM-DD');
 
         /**
          * Method used to get an array from a number (used in pagination)
@@ -246,6 +249,55 @@ function initializeSharesView(shareId, shareUserExternalId, textAreaId, divGoogl
                 icon: '../../img/markers/40/marker-' + $scope.share.share_type_category.label + '-' + $scope.share.share_type.label + '.png'
             });
         };
+
+        $scope.onParticipateButtonClicked = function($event) {
+            var button = angular.element($event.currentTarget);
+            button.button('loading');
+
+            //
+            $http.get(webroot + 'request/add?share_id=' + $scope.shareId)
+            .success(function(data, status, headers, config) {
+                console.log(data);
+                $scope.requestStatus = 0;
+                button.button('reset');
+            })
+            .error(function(data, status, headers, config) {
+                //Reset button state
+                button.button('reset');
+            });
+        };
+
+        $scope.getRequestStatusButtonClass = function() {
+            var buttonClass = 'default';
+
+            if ($scope.requestStatus == 0) {
+                buttonClass = 'warning';
+            } else if ($scope.requestStatus == 1) {
+                buttonClass = 'success';
+            } else if ($scope.requestStatus == 2) {
+                buttonClass = 'danger';
+            } else if ($scope.requestStatus == 3) {
+                buttonClass = 'default';
+            }
+
+            return buttonClass;
+        }
+
+        $scope.getRequestStatusLabel = function() {
+            var label = 'Invalide';
+
+            if ($scope.requestStatus == 0) {
+                label = 'En attente';
+            } else if ($scope.requestStatus == 1) {
+                label = 'Acceptée';
+            } else if ($scope.requestStatus == 2) {
+                label = 'Refusée';
+            } else if ($scope.requestStatus == 3) {
+                label = 'Annulée';
+            }
+
+            return label;
+        }
 
         /**
          * Method used to initialize the DetailsController

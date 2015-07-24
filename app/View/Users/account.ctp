@@ -59,7 +59,7 @@
                         </div>
                     </div>
 
-                    <div ng-if="(user.shares.length == 0)" class="text-muted">Vous n'avez aucun partage en cours</div>
+                    <div ng-if="((user.share_count == 0) || (user.shares.length == 0))" class="text-muted">Vous n'avez aucun partage en cours</div>
 
                 </div>
 
@@ -77,7 +77,7 @@
 
                     </div>
 
-                    <div ng-if="(user.requests.length == 0)" class="text-muted">Vous n'avez aucune requêtes en attente</div>
+                    <div ng-if="((user.request_count == 0) || (user.requests.length == 0))" class="text-muted">Vous n'avez aucune requêtes en attente</div>
 
                 </div>
 

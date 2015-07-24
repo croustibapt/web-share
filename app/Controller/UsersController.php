@@ -10,6 +10,32 @@ class UsersController extends ApiUsersController {
         $this->Auth->allow('fbLogin', 'login');
     }
 
+    private function internLogin($userExternalId, $mail, $userAuthToken, $username) {
+        //Save session
+        $this->request->addParams(array(
+            SHARE_HEADER_AUTH_EXTERNAL_ID => $userExternalId,
+            SHARE_HEADER_AUTH_MAIL => $mail,
+            SHARE_HEADER_AUTH_TOKEN => $userAuthToken,
+            SHARE_HEADER_AUTH_USERNAME => $username
+        ));
+
+        if ($this->Auth->login()) {
+            CakeLog::write('debug', 'login succeeded');
+
+            //Set flash success TEMP
+            $this->Session->setFlash('Bienvenue '.$username, 'flash-success');
+
+            $this->redirect($this->Auth->redirectUrl());
+        } else {
+            CakeLog::write('debug', 'login failed');
+
+            //Set flash error
+            $this->Session->setFlash('Login failed', 'flash-error');
+
+            $this->redirect('/');
+        }
+    }
+
     public function fbLogin() {
         CakeLog::write('debug', 'fblogin1');
 
@@ -80,24 +106,8 @@ class UsersController extends ApiUsersController {
                 if ($user != NULL) {
                     CakeLog::write('debug', $user['User']['id']);
 
-                    //Set flash success TEMP
-                    $this->Session->setFlash('Bienvenue '.$user['User']['username'], 'flash-success');
-
-                    //Save session
-                    //$this->saveAuth($userExternalId, $user['User']['mail'], $userAuthToken, $user['User']['username']);
-                    $this->request->addParams(array(
-                        SHARE_HEADER_AUTH_EXTERNAL_ID => $userExternalId,
-                        SHARE_HEADER_AUTH_MAIL => $user['User']['mail'],
-                        SHARE_HEADER_AUTH_TOKEN => $userAuthToken,
-                        SHARE_HEADER_AUTH_USERNAME => $user['User']['username']
-                    ));
-
-                    if ($this->Auth->login()) {
-                        CakeLog::write('debug', 'login succeeded');
-                        return $this->redirect($this->Auth->redirectUrl());
-                    } else {
-                        CakeLog::write('debug', 'login failed');
-                    }
+                    //Log user
+                    $this->internLogin($userExternalId, $user['User']['mail'], $userAuthToken, $user['User']['username']);
                 } else {
                     //If no user was found we try to get the information from Facebook about its profile
                     $response = $facebook->get('/me', $userAuthToken);
@@ -107,11 +117,16 @@ class UsersController extends ApiUsersController {
                     $firstName = $user->getFirstName();
                     $mail = $user->getField('email');
 
-                    //Set form input values
-                    $this->set('externalId', $userExternalId);
-                    $this->set('username', $firstName);
-                    $this->set('mail', $mail);
-                    $this->set('authToken', $userAuthToken);
+                    //Redirect to home
+                    $this->redirect(array(
+                        'controller' => 'users',
+                        'action' => 'add',
+                        '?' => array(
+                            'externalId' => $userExternalId,
+                            'username' => $firstName,
+                            'mail' => $mail,
+                            'authToken' => $userAuthToken
+                    )));
                 }
             } catch (Facebook\Exceptions\FacebookSDKException $e) {
                 CakeLog::write('debug', $e->getMessage());
@@ -161,16 +176,11 @@ class UsersController extends ApiUsersController {
                 $mail = $this->request->data['User']['mail'];
                 $authToken = $this->request->data['User']['auth_token'];
 
+                //
                 $this->internAdd($userExternalId, $username, $mail);
 
-                //Save auth session
-                //$this->saveAuth($userExternalId, $mail, $authToken, $username);
-
-                //Set flash success TEMP
-                $this->Session->setFlash('Bienvenue '.$username, 'flash-success');
-
-                //Redirect to home
-                $this->redirect('/');
+                //Log user
+                $this->internLogin($userExternalId, $mail, $authToken, $username);
             } catch (ShareException $e) {
                 //Set flash error
                 $this->Session->setFlash($e->getMessage(), 'flash-danger');
@@ -178,9 +188,6 @@ class UsersController extends ApiUsersController {
                 //Set validation errors
                 $this->User->validationErrors = $e->getValidationErrors();
             }
-        } else {
-            //Redirect to home
-            $this->redirect('/');
         }
 	}
 

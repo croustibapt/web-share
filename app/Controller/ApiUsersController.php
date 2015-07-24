@@ -175,7 +175,8 @@ class ApiUsersController extends AppController {
             $requests = $this->Request->find('all', array(
                 'conditions' => array(
                     'User.id' => $user['User']['id'],
-                    'Share.event_date >= ' => date('Y-m-d')
+                    'Share.event_date >= ' => date('Y-m-d'),
+                    'Share.status' => SHARE_STATUS_OPENED
                 )
             ));
 
