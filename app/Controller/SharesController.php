@@ -101,7 +101,7 @@ class SharesController extends ApiSharesController {
                     $this->set('shareUserExternalId', $share['User']['external_id']);
 
                     //Get user identifier
-                    $userExternalId = $this->getUserExternalId($this->request);
+                    $userExternalId = $this->Auth->user('external_id');
 
                     //User can request?
                     $canRequest = $this->canRequest($share, $userExternalId);
@@ -142,7 +142,7 @@ class SharesController extends ApiSharesController {
             $data = $this->request->data;
 
             //Get user identifier
-            $userExternalId = $this->getUserExternalId($this->request);
+            $userExternalId = $this->Auth->user('external_id');
 
             try {
                 //Intern add
