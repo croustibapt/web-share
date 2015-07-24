@@ -94,49 +94,56 @@ class ApiRequestsController extends AppController {
         return $canCancelRequest;
     }
     
-    protected function internAdd($userId = NULL, $shareId = NULL) {
+    protected function internAdd($userExternalId = NULL, $shareId = NULL) {
         $response = NULL;
         
-        if (($userId != NULL) && ($shareId != NULL)) {
-            //Get related Share
-            $share = $this->Share->find('first', array(
-                'conditions' => array(
-                    'Share.id' => $shareId
-                )
-            ));
+        if (($userExternalId != NULL) && ($shareId != NULL)) {
+            //Get user id
+            $userId = $this->getUserId($userExternalId);
+            
+            if ($userId != NULL) {
+                //Get related Share
+                $share = $this->Share->find('first', array(
+                    'conditions' => array(
+                        'Share.id' => $shareId
+                    )
+                ));
 
-            //If found
-            if ($share != NULL) {
-                //Can interact?
-                if ($this->canRequest($share, $userId)) {
-                    //Format data
-                    $dataRequest['Request']['share_id'] = $shareId;
-                    $dataRequest['Request']['user_id'] = $userId;
-                    $dataRequest['Request']['status'] = SHARE_REQUEST_STATUS_PENDING;
+                //If found
+                if ($share != NULL) {
+                    //Can interact?
+                    if ($this->canRequest($share, $userId)) {
+                        //Format data
+                        $dataRequest['Request']['share_id'] = $shareId;
+                        $dataRequest['Request']['user_id'] = $userId;
+                        $dataRequest['Request']['status'] = SHARE_REQUEST_STATUS_PENDING;
 
-                    //echo json_encode($dataSharesUsers);
-                    //exit();
+                        //echo json_encode($dataSharesUsers);
+                        //exit();
 
-                    //Try to save Request
-                    $request = $this->Request->save($dataRequest);
+                        //Try to save Request
+                        $request = $this->Request->save($dataRequest);
 
-                    //If it worked
-                    if ($request != NULL) {
-                        //Send push notif
-                        $this->sendPushNotif($share['Share']['user_id'], 'Vous avez une nouvelle demande.');
+                        //If it worked
+                        if ($request != NULL) {
+                            //Send push notif
+                            $this->sendPushNotif($share['Share']['user_id'], 'Vous avez une nouvelle demande.');
 
-                        //Format response
-                        $response['request_id'] = $request['Request']['id'];
-                        $this->formatISODate($response['created'], $request['Request']['created']);
-                        $this->formatISODate($response['modified'], $request['Request']['modified']);
+                            //Format response
+                            $response['request_id'] = $request['Request']['id'];
+                            $this->formatISODate($response['created'], $request['Request']['created']);
+                            $this->formatISODate($response['modified'], $request['Request']['modified']);
+                        } else {
+                            throw new ShareException(SHARE_STATUS_CODE_INTERNAL_SERVER_ERROR, SHARE_ERROR_CODE_SAVE_FAILED, "Request save failed");
+                        }
                     } else {
-                        throw new ShareException(SHARE_STATUS_CODE_INTERNAL_SERVER_ERROR, SHARE_ERROR_CODE_SAVE_FAILED, "Request save failed");
+                        throw new ShareException(SHARE_STATUS_CODE_METHOD_NOT_ALLOWED, SHARE_ERROR_CODE_RESOURCE_DISABLED, "You cannot request for this Share");
                     }
                 } else {
-                    throw new ShareException(SHARE_STATUS_CODE_METHOD_NOT_ALLOWED, SHARE_ERROR_CODE_RESOURCE_DISABLED, "You cannot request for this Share");
+                    throw new ShareException(SHARE_STATUS_CODE_NOT_FOUND, SHARE_ERROR_CODE_RESOURCE_NOT_FOUND, "Share not found");
                 }
             } else {
-                throw new ShareException(SHARE_STATUS_CODE_NOT_FOUND, SHARE_ERROR_CODE_RESOURCE_NOT_FOUND, "Share not found");
+                throw new ShareException(SHARE_STATUS_CODE_NOT_FOUND, SHARE_ERROR_CODE_RESOURCE_NOT_FOUND, "User not found");
             }
         } else {
             throw new ShareException(SHARE_STATUS_CODE_BAD_REQUEST, SHARE_ERROR_CODE_BAD_PARAMETERS, "Bad parameters");
@@ -157,11 +164,10 @@ class ApiRequestsController extends AppController {
 
                 //Get user identifier
                 $userExternalId = $this->getUserExternalId($this->request);
-                $userId = $this->getUserId($userExternalId);
 
                 try {
                     //Intern add
-                    $response = $this->internAdd($userId, $shareId);
+                    $response = $this->internAdd($userExternalId, $shareId);
 
                     //Send JSON respsonse
                     $this->sendResponse(SHARE_STATUS_CODE_CREATED, $response);

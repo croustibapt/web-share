@@ -12,14 +12,14 @@ class RequestsController extends ApiRequestsController {
     public function add() {
         if ($this->request->is('get', 'ajax')) {
             //Get user identifier
-            $userId = $this->Auth->user('id');
+            $userExternalId = $this->Auth->user('external_id');
 
             //Share id
             $shareId = $this->params['url']['share_id'];
 
             try {
                 //Intern accept
-                $response = $this->internAdd($userId, $shareId);
+                $response = $this->internAdd($userExternalId, $shareId);
                 
                 //Send JSON respsonse
                 $this->sendResponse(SHARE_STATUS_CODE_CREATED, $response);
