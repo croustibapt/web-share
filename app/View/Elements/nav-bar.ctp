@@ -20,33 +20,25 @@
 
                 <hr />
 
-                <div class="btn-group" style="margin-bottom: 15px;">
-                    <button type="button" class="btn btn-primary btn-lg disabled" style="width: 56px;">
-
-                        <?php
-                            echo $this->Html->image('ic-facebook.png', array(
-                                'style' => 'height: 22px;'
-                            ));
-                        ?>
-
-                    </button>
-                    <a href="<?php echo $loginUrl; ?>" class="btn btn-primary btn-lg" style="width: 210px;">Connexion Facebook</a>
-                </div>
+                <a href="<?php echo $loginUrl; ?>" class="btn btn-primary btn-lg text-left" style="width: 250px; margin-bottom: 20px;">
+                    <?php
+                        echo $this->Html->image('ic-facebook.png', array(
+                            'style' => 'height: 22px;',
+                            'class' => 'pull-left'
+                        ));
+                    ?> Connexion Facebook
+                </a>
 
                 <br />
 
-                <div class="btn-group">
-                    <button type="button" class="btn btn-info btn-lg disabled" style="width: 56px;">
-
-                        <?php
-                            echo $this->Html->image('ic-facebook.png', array(
-                                'style' => 'height: 22px;'
-                            ));
-                        ?>
-
-                    </button>
-                    <a href="<?php echo $loginUrl; ?>" class="btn btn-info btn-lg disabled" style="width: 210px;">Connexion Twitter</a>
-                </div>
+                <a href="<?php echo $loginUrl; ?>" class="btn btn-info btn-lg disabled text-left" style="width: 250px;">
+                    <?php
+                        echo $this->Html->image('ic-facebook.png', array(
+                            'style' => 'height: 22px;',
+                            'class' => 'pull-left'
+                        ));
+                    ?> Connexion Twitter
+                </a>
 
             </div>
         </div>
