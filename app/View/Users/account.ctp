@@ -33,11 +33,11 @@
                 <ul class="nav nav-pills text-center" role="tablist">
                     <!-- My shares -->
                     <li role="presentation" class="active">
-                        <a href="#div-user-home-shares" aria-controls="div-user-home-shares" role="tab" data-toggle="tab">Mes partages <span ng-if="(user.share_count > 0)" class="badge">{{ user.shares.length }}</span></a>
+                        <a href="#div-user-home-shares" aria-controls="div-user-home-shares" role="tab" data-toggle="tab">Mes partages <span ng-if="(user.shares.length > 0)" class="badge">{{ user.shares.length }}</span></a>
                     </li>
                     <!-- My requests -->
                     <li role="presentation">
-                        <a href="#div-user-home-requests" aria-controls="div-user-home-requests" role="tab" data-toggle="tab">Mes demandes <span ng-if="(user.request_count > 0)" class="badge">{{ user.requests.length }}</span></a>
+                        <a href="#div-user-home-requests" aria-controls="div-user-home-requests" role="tab" data-toggle="tab">Mes demandes <span ng-if="(user.requests.length > 0)" class="badge">{{ user.requests.length }}</span></a>
                     </li>
                 </ul>
             </div>

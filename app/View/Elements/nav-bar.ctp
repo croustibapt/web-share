@@ -81,7 +81,7 @@
                     <li class="li-navbar-right">
 
                         <?php
-                            echo $this->Html->link('Login', '/users/login', array(
+                            echo $this->Html->link('Se connecter', '/users/login', array(
                                 'class' => 'btn btn-outline btn-navbar authenticate-button'
                             ));
                         ?>
