@@ -207,6 +207,40 @@ class AppController extends Controller {
             $this->saveAuthSession($this->Cookie->read(SHARE_HEADER_AUTH_EXTERNAL_ID), $this->Cookie->read(SHARE_HEADER_AUTH_MAIL), $this->Cookie->read(SHARE_HEADER_AUTH_TOKEN), $this->Cookie->read(SHARE_HEADER_AUTH_USERNAME));
         }*/
     }
+
+    public function beforeRender() {
+        $facebook = new Facebook\Facebook([
+            'app_id' => SHARE_FACEBOOK_APP_ID,
+            'app_secret' => SHARE_FACEBOOK_APP_SECRET,
+            'default_graph_version' => 'v2.2',
+            'persistent_data_handler' => new CakePersistentDataHandler($this)
+        ]);
+
+        $helper = $facebook->getRedirectLoginHelper();
+
+        if (!$this->Auth->loggedIn()) {
+            $permissions = ['email']; // Optional permissions
+
+            $callbackUrl = Router::url(array(
+                "controller" => "users",
+                "action" => "fbLogin"
+            ), true);
+
+            $loginUrl = $helper->getLoginUrl($callbackUrl.'/', $permissions);
+
+            $this->set('loginUrl', $loginUrl);
+        } else {
+            $callbackUrl = Router::url(array(
+                "controller" => "users",
+                "action" => "fbLogout"
+            ), true);
+
+            $authToken = $this->Auth->user('token');
+            $logoutUrl = $helper->getLogoutUrl($authToken, $callbackUrl.'/');
+
+            $this->set('logoutUrl', $logoutUrl);
+        }
+    }
     
     private function extractUserAuthValue($request = NULL, $key = NULL) {
         $userAuthValue = NULL;

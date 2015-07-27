@@ -1,3 +1,60 @@
+<?php
+    //pr($loginUrl);
+?>
+
+<?php if (!AuthComponent::user()) : ?>
+
+<!-- Login modal -->
+<div class="modal fade" id="login-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header text-center" style="background-color: #f4f4f4; border-radius: 6px 6px 0 0;">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Se connecter</h4>
+            </div>
+            <div class="modal-body text-center">
+
+                <?php
+                    echo $this->Html->image('user-login.png');
+                ?>
+
+                <hr />
+
+                <div class="btn-group" style="margin-bottom: 15px;">
+                    <button type="button" class="btn btn-primary btn-lg disabled" style="width: 56px;">
+
+                        <?php
+                            echo $this->Html->image('ic-facebook.png', array(
+                                'style' => 'height: 22px;'
+                            ));
+                        ?>
+
+                    </button>
+                    <a href="<?php echo $loginUrl; ?>" class="btn btn-primary btn-lg" style="width: 210px;">Connexion Facebook</a>
+                </div>
+
+                <br />
+
+                <div class="btn-group">
+                    <button type="button" class="btn btn-info btn-lg disabled" style="width: 56px;">
+
+                        <?php
+                            echo $this->Html->image('ic-facebook.png', array(
+                                'style' => 'height: 22px;'
+                            ));
+                        ?>
+
+                    </button>
+                    <a href="<?php echo $loginUrl; ?>" class="btn btn-info btn-lg disabled" style="width: 210px;">Connexion Twitter</a>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<?php endif; ?>
+
 <?php if (($this->action == 'home') && ($this->name == 'Shares')) : ?>
 
 <nav class="navbar navbar-default navbar-home navbar-home-xs">
@@ -69,7 +126,7 @@
                             <li>
 
                                 <?php
-                                    echo $this->Html->link('Logout', '/users/logout');
+                                    echo $this->Html->link('Logout', $logoutUrl);
                                 ?>
 
                             </li>
@@ -80,10 +137,14 @@
 
                     <li class="li-navbar-right">
 
+                        <button type="button" class="btn btn-outline btn-navbar" data-toggle="modal" data-target="#login-modal">
+                            Se connecter
+                        </button>
+
                         <?php
-                            echo $this->Html->link('Se connecter', '/users/login', array(
-                                'class' => 'btn btn-outline btn-navbar authenticate-button'
-                            ));
+                            /*echo $this->Html->link('Se connecter', '/users/login', array(
+                                'class' => 'btn btn-outline btn-navbar'
+                            ));*/
                         ?>
 
                     </li>

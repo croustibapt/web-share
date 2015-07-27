@@ -22,10 +22,13 @@ class UsersController extends ApiUsersController {
         if ($this->Auth->login()) {
             CakeLog::write('debug', 'login succeeded');
 
+            CakeLog::write('debug', $this->Auth->user('token'));
+
             //Set flash success TEMP
             $this->Session->setFlash('Bienvenue '.$username, 'flash-success');
 
-            $this->redirect($this->Auth->redirectUrl());
+            $this->redirect('/');
+            //$this->redirect($this->Auth->redirectUrl());
         } else {
             CakeLog::write('debug', 'login failed');
 
@@ -141,7 +144,13 @@ class UsersController extends ApiUsersController {
     }
 
     public function login() {
-        if ($this->request->is('get')) {
+        //Set flash error
+        $this->Session->setFlash('Vous devez être authentifié', 'flash-warning');
+
+        //Redirect to home
+        $this->redirect('/');
+
+        /*if ($this->request->is('get')) {
             //
             if (!$this->Auth->loggedIn()) {
                 $facebook = new Facebook\Facebook([
@@ -164,7 +173,7 @@ class UsersController extends ApiUsersController {
 
                 $this->set('loginUrl', $loginUrl);
             }
-        }
+        }*/
     }
 
 	public function add() {
@@ -232,33 +241,9 @@ class UsersController extends ApiUsersController {
     }
 
     public function fbLogout() {
+        CakeLog::write('debug', 'logout');
         if ($this->request->is('get')) {
             $this->redirect($this->Auth->logout());
-        }
-    }
-
-    public function logout() {
-        if ($this->request->is('get')) {
-            $facebook = new Facebook\Facebook([
-                    'app_id' => SHARE_FACEBOOK_APP_ID,
-                    'app_secret' => SHARE_FACEBOOK_APP_SECRET,
-                    'default_graph_version' => 'v2.2',
-                    'persistent_data_handler' => new CakePersistentDataHandler($this)
-                ]);
-            
-            $helper = $facebook->getRedirectLoginHelper();
-
-            $callbackUrl = Router::url(array(
-                "controller" => "users",
-                "action" => "fbLogout"
-            ), true);
-
-            $authToken = $this->Auth->user('token');
-            $logoutUrl = $helper->getLogoutUrl($authToken, $callbackUrl.'/');
-
-            //pr($logoutUrl);
-            $this->redirect($logoutUrl);
-            //$this->set('logoutUrl', $logoutUrl);
         }
     }
 
