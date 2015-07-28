@@ -1,8 +1,10 @@
 <script>
     console.log('<?php echo $message; ?>');
-    toastr.options = {
-        "newestOnTop": true,
-        "positionClass": "toast-top-center"
-    };
-    toastr.warning('<?php echo $message; ?>', 'Attention');
+    
+    //
+    Messenger().post({
+        message: '<?php echo addslashes($message); ?>',
+        type: 'info',
+        hideAfter: 2
+    });
 </script>

@@ -23,7 +23,8 @@
 
             //Utils
             echo $this->Html->css('utils/clamp');
-            echo $this->Html->css('utils/toastr.min');
+            echo $this->Html->css('utils/messenger/messenger');
+            echo $this->Html->css('utils/messenger/messenger-theme-air');
 
             //Page specific
             echo $this->Html->css('share/common');
@@ -58,7 +59,8 @@
 
             //Utils
             echo $this->Html->script('utils/numeral.min');
-            echo $this->Html->script('utils/toastr.min');
+            echo $this->Html->script('utils/messenger/messenger.min');
+            echo $this->Html->script('utils/messenger/messenger-theme-flat');
 
             echo $this->fetch('meta');
             echo $this->fetch('css');
@@ -84,6 +86,11 @@
         <script type="text/javascript">
             //Webroot global variable
             var webroot = "<?php echo $this->webroot; ?>";
+            
+            Messenger.options = {
+                extraClasses: 'messenger-fixed messenger-on-top',
+                theme: 'air'
+            }
         </script>
 
         <!-- Facebook redirect fix -->
