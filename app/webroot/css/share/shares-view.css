@@ -156,6 +156,10 @@
     margin-bottom: 20px;
 }
 
+.shares-details-comment-message-p {
+    white-space: pre-line;
+}
+
 .shares-details-comments-editor-div {
     margin-bottom: 20px;
 }

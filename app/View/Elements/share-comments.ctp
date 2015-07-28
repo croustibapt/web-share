@@ -20,7 +20,7 @@
                         <div class="media-body">
                             <blockquote class="blockquote-reverse">
 
-                                <p class="media-heading text-left">{{ comment.message }}</p>
+                                <p class="media-heading text-left shares-details-comment-message-p">{{ comment.message }}</p>
 
                                 <footer class="text-left">
                                     <span>{{ comment.moment_created_time_ago }}</span>
@@ -43,7 +43,7 @@
                         <div class="media-body">
                             <blockquote class="blockquote-normal">
 
-                                <p class="media-heading text-left">{{ comment.message }}</p>
+                                <p class="media-heading text-left shares-details-comment-message-p">{{ comment.message }}</p>
 
                                 <footer class="text-left">
                                     <span>{{ comment.moment_created_time_ago }}</span>
