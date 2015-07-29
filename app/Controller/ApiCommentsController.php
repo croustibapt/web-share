@@ -127,7 +127,7 @@ class ApiCommentsController extends AppController {
                 'conditions' => array(
                     'Comment.share_id' => $shareId
                 ),
-                'order' => 'Comment.id DESC'
+                'order' => 'Comment.id ASC'
             ));
             $response['results'] = array();
 
