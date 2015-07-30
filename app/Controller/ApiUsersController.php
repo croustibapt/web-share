@@ -133,7 +133,7 @@ class ApiUsersController extends AppController {
 
         //Find its entity
         $user = $this->User->find('first', array(
-            'fields' => array('User.username', 'User.external_id', 'User.created', 'User.share_count', 'User.request_count', 'User.comment_count'),
+            'fields' => array('User.username', 'User.external_id', 'User.description', 'User.created', 'User.share_count', 'User.request_count', 'User.comment_count'),
             'conditions' => array(
                 'User.external_id' => $userExternalId
             )
@@ -142,6 +142,7 @@ class ApiUsersController extends AppController {
         //User
         $response['username'] = $user['User']['username'];
         $response['external_id'] = $user['User']['external_id'];
+        $response['description'] = $user['User']['description'];
 
         //Created
         $this->formatISODate($response['created'], $user['User']['created']);
