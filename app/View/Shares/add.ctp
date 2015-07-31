@@ -49,14 +49,14 @@
 
                             echo $this->element('add-input', array(
                                 'modelName' => 'Share',
-                                'name' => 'event_date_display',
+                                'name' => 'start_date_display',
                                 'placeholder' => 'Date',
                                 'class' => 'datepicker',
                                 'icon' => 'glyphicon-calendar',
                                 'required' => true
                             ));
 
-                            echo $this->Form->hidden('event_date', array(
+                            echo $this->Form->hidden('start_date', array(
                                 'id' => 'shares-add-event-date'
                             ));
 
@@ -112,9 +112,9 @@
                         <?php
                             echo $this->element('add-select', array(
                                 'modelName' => 'Share',
-                                'name' => 'event_time',
-                                'ngModel' => 'eventTime',
-                                'ngOptions' => 'eventTime as eventTimeDisplay for (eventTime, eventTimeDisplay) in eventTimes',
+                                'name' => 'start_time',
+                                'ngModel' => 'startTime',
+                                'ngOptions' => 'startTime as startTimeDisplay for (startTime, startTimeDisplay) in startTimes',
                                 'icon' => 'glyphicon-time'
                             ));
                         ?>

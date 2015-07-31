@@ -55,7 +55,7 @@ class ApiSharesController extends AppController {
             $sqlStartDate = $startDate->format('Y-m-d');
             //$sqlStartTime = $startDate->format('H:i:s');
 
-            $sql .= ' AND Share.event_date >= \''.$sqlStartDate.'\'';
+            $sql .= ' AND Share.start_date >= \''.$sqlStartDate.'\'';
         }
 
         //End date
@@ -63,7 +63,7 @@ class ApiSharesController extends AppController {
             $sqlEndDate = $endDate->format('Y-m-d');
             //$sqlEndTime = $endDate->format('H:i:s');
 
-            $sql .= ' AND Share.event_date <= \''.$sqlEndDate.'\'';
+            $sql .= ' AND Share.start_date <= \''.$sqlEndDate.'\'';
         }
 
         //Region
@@ -95,7 +95,7 @@ class ApiSharesController extends AppController {
         $offset = ($page - 1) * SHARE_SEARCH_LIMIT;
         $sqlOffset = " OFFSET ".$offset;
 
-        $query = $sqlPrefix.$sql." GROUP BY Share.id ORDER BY Share.event_date ASC, Share.event_time ASC".$sqlLimit.$sqlOffset.";";
+        $query = $sqlPrefix.$sql." GROUP BY Share.id ORDER BY Share.start_date ASC, Share.start_time ASC".$sqlLimit.$sqlOffset.";";
 
         //pr($query);
 
@@ -176,7 +176,7 @@ class ApiSharesController extends AppController {
         }
     }
     
-    protected function internAdd($userId = NULL, $latitude = NULL, $longitude = NULL, $city = NULL, $zipCode = NULL, $shareTypeId = NULL, $eventDate = NULL, $eventTime = NULL, $title = NULL, $price = NULL, $places = NULL, $waitingTime = NULL, $meetPlace = NULL, $limitations = NULL, $imageUrl = NULL, $link = NULL, $message = NULL, $accuracy = NULL, $radius = NULL) {
+    protected function internAdd($userId = NULL, $latitude = NULL, $longitude = NULL, $city = NULL, $zipCode = NULL, $shareTypeId = NULL, $startDate = NULL, $startTime = NULL, $title = NULL, $price = NULL, $places = NULL, $waitingTime = NULL, $meetPlace = NULL, $limitations = NULL, $imageUrl = NULL, $link = NULL, $message = NULL, $accuracy = NULL, $radius = NULL) {
         $response = NULL;
 
         $cityGeocodingUrl = "https://maps.googleapis.com/maps/api/geocode/json?latlng=".$latitude.",".$longitude."&result_type=locality|postal_code&key=".SHARE_GOOGLE_MAPS_API_KEY;
@@ -214,8 +214,8 @@ class ApiSharesController extends AppController {
         if ($shareTypeId != -1) {
             $dataShare['Share']['share_type_id'] = $shareTypeId;
         }
-        $dataShare['Share']['event_date'] = $eventDate;
-        $dataShare['Share']['event_time'] = $eventTime;
+        $dataShare['Share']['start_date'] = $startDate;
+        $dataShare['Share']['start_time'] = $startTime;
         $dataShare['Share']['title'] = $title;
         $dataShare['Share']['price'] = $price;
         $dataShare['Share']['places'] = $places;
@@ -294,7 +294,7 @@ class ApiSharesController extends AppController {
 
                 try {
                     //Intern add
-                    $response = $this->internAdd($userId, $data['latitude'], $data['longitude'], NULL, NULL, $data['share_type_id'], $data['event_date'], $data['event_time'], $data['title'], $data['price'], $data['places'], $data['waiting_time'], $data['meet_place'], $data['limitations'], $data['image_url'], $data['link'], $data['message'], $data['accuracy'], $data['radius']);
+                    $response = $this->internAdd($userId, $data['latitude'], $data['longitude'], NULL, NULL, $data['share_type_id'], $data['start_date'], $data['start_time'], $data['title'], $data['price'], $data['places'], $data['waiting_time'], $data['meet_place'], $data['limitations'], $data['image_url'], $data['link'], $data['message'], $data['accuracy'], $data['radius']);
 
                     //Send JSON respsonse
                     $this->sendResponse(SHARE_STATUS_CODE_CREATED, $response);

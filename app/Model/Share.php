@@ -7,10 +7,10 @@ class Share extends AppModel {
     public function checkFutureDate($check) {
         $value = array_values($check);
 
-        $eventDate = DateTime::createFromFormat('Y-m-d', $value[0]);
+        $startDate = DateTime::createFromFormat('Y-m-d', $value[0]);
         $now = new DateTime();
 
-        return strtotime($eventDate->format('Y-m-d')) >= strtotime($now->format('Y-m-d'));
+        return strtotime($startDate->format('Y-m-d')) >= strtotime($now->format('Y-m-d'));
     }
     
     public $validate = array(
@@ -38,7 +38,7 @@ class Share extends AppModel {
                 'message'  => 'FieldNotValid'
             )
         ),
-        'event_date' => array(
+        'start_date' => array(
             'required' => array(
                 'rule' => 'notEmpty',
                 'required' => 'create',

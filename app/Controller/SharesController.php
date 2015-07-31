@@ -69,7 +69,7 @@ class SharesController extends ApiSharesController {
             try {
                 //Intern add
                 $response = $this->internAdd($userId, $data['Share']['latitude'], $data['Share']['longitude'], NULL, NULL,
-                    $shareTypeId, $data['Share']['event_date'], $data['Share']['event_time'], $data['Share']['title'],
+                    $shareTypeId, $data['Share']['start_date'], $data['Share']['start_time'], $data['Share']['title'],
                     $data['Share']['price'], $data['Share']['places'], $data['Share']['waiting_time'],
                     $data['Share']['meet_place'], $data['Share']['limitations'], NULL, NULL, $data['Share']['message'], NULL, NULL);
 

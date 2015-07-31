@@ -20,17 +20,17 @@ function initializeSharesAdd(googleMapDivId, autocompleteDivId, autocompleteInpu
         $scope.shareType = shareTypeId;
 
         //Event time
-        $scope.eventTime = "";
-        $scope.eventTimes = {};
+        $scope.startTime = "";
+        $scope.startTimes = {};
 
-        $scope.eventTimes[""] = "Heure";
+        $scope.startTimes[""] = "Heure";
         for (var i = 0; i < 24; i++) {
             var hour = pad(i, 2);
 
-            $scope.eventTimes['' + hour + ':00:00'] = '' + hour + ':00';
-            $scope.eventTimes['' + hour + ':15:00'] = '' + hour + ':15';
-            $scope.eventTimes['' + hour + ':30:00'] = '' + hour + ':30';
-            $scope.eventTimes['' + hour + ':45:00'] = '' + hour + ':45';
+            $scope.startTimes['' + hour + ':00:00'] = '' + hour + ':00';
+            $scope.startTimes['' + hour + ':15:00'] = '' + hour + ':15';
+            $scope.startTimes['' + hour + ':30:00'] = '' + hour + ':30';
+            $scope.startTimes['' + hour + ':45:00'] = '' + hour + ':45';
         }
 
         //Waiting time

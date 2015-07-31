@@ -453,16 +453,16 @@ function formatShare(share) {
     share.share_color = shareColor;
 
     //Event date
-    var eventDate = new Date(share.event_date);
-    var isoEventDate = eventDate.toISOString();
-    var momentDay = moment(isoEventDate).format('dddd D MMMM', 'fr');
+    var startDate = new Date(share.start_date);
+    var isoStartDate = startDate.toISOString();
+    var momentDay = moment(isoStartDate).format('dddd D MMMM', 'fr');
     share.moment_day = momentDay;
 
     //Event time
-    if (share.event_time != null) {
-        var eventTime = new Date(share.event_date + ' ' + share.event_time);
-        var isoEventTime = eventTime.toISOString();
-        var momentHour = moment(isoEventTime).format('LT', 'fr');
+    if (share.start_time != null) {
+        var startTime = new Date(share.start_date + ' ' + share.start_time);
+        var isostartTime = startTime.toISOString();
+        var momentHour = moment(isostartTime).format('LT', 'fr');
         share.moment_hour = momentHour;
     }
 

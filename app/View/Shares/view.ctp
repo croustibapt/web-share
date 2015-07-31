@@ -94,7 +94,7 @@
                     </h2>
 
                     <!-- Hour -->
-                    <h3 ng-if="(share.event_time != null)" class="shares-details-time-h2">
+                    <h3 ng-if="(share.start_time != null)" class="shares-details-time-h2">
                         {{ share.moment_hour }}
                     </h3>
 
@@ -166,7 +166,7 @@
                             / pers.
                         </h3>
 
-                        <div ng-if="(share.event_date >= now)">
+                        <div ng-if="(share.start_date >= now)">
 
                             <div ng-if="(share.status == <?php echo SHARE_STATUS_OPENED; ?>)">
 
@@ -218,7 +218,7 @@
                             </div>
 
                         </div>
-                        <div ng-if="(share.event_date < now)">
+                        <div ng-if="(share.start_date < now)">
 
                             <button type="button" class="btn btn-default shares-details-participate-button disabled">
                                 Expiré

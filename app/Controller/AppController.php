@@ -479,8 +479,8 @@ class AppController extends Controller {
             $response['title'] = $this->checkEmptyString($share['Share']['title']);
 
             //Event date and time
-            $response['event_date'] = $share['Share']['event_date'];
-            $response['event_time'] = $share['Share']['event_time'];
+            $response['start_date'] = $share['Share']['start_date'];
+            $response['start_time'] = $share['Share']['start_time'];
 
             $response['share_type']['share_type_id'] = $share['ShareType']['id'];
             $response['share_type']['label'] = $this->checkEmptyString($share['ShareType']['label']);
@@ -702,7 +702,7 @@ class AppController extends Controller {
     protected function isShareExpired($share = NULL) {
         $isExpired = false;
 
-        if (($share != NULL) && ($share['Share']['event_date'] < date('Y-m-d'))) {
+        if (($share != NULL) && ($share['Share']['start_date'] < date('Y-m-d'))) {
             $isExpired = true;
         }
 

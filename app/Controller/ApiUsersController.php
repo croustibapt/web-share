@@ -155,7 +155,7 @@ class ApiUsersController extends AppController {
         $response['share_count'] = $shareCount;
 
         if ($shareCount > 0) {
-            $sql = "SELECT *, X(Share.location) as latitude, Y(Share.location) as longitude, (SELECT COUNT(Request.id) FROM requests Request WHERE Request.share_id = Share.id AND Request.status = 1) AS participation_count FROM shares Share, users User, share_types ShareType, share_type_categories ShareTypeCategory WHERE Share.user_id = User.id AND Share.share_type_id = ShareType.id AND ShareType.share_type_category_id = ShareTypeCategory.id AND User.external_id = ".$userExternalId." AND Share.status = ".SHARE_STATUS_OPENED." AND Share.event_date >= '".date('Y-m-d')."';";
+            $sql = "SELECT *, X(Share.location) as latitude, Y(Share.location) as longitude, (SELECT COUNT(Request.id) FROM requests Request WHERE Request.share_id = Share.id AND Request.status = 1) AS participation_count FROM shares Share, users User, share_types ShareType, share_type_categories ShareTypeCategory WHERE Share.user_id = User.id AND Share.share_type_id = ShareType.id AND ShareType.share_type_category_id = ShareTypeCategory.id AND User.external_id = ".$userExternalId." AND Share.status = ".SHARE_STATUS_OPENED." AND Share.start_date >= '".date('Y-m-d')."';";
             $shares = $this->Share->query($sql);
 
             //pr($shares);
@@ -177,7 +177,7 @@ class ApiUsersController extends AppController {
             $requests = $this->Request->find('all', array(
                 'conditions' => array(
                     'User.id' => $user['User']['id'],
-                    'Share.event_date >= ' => date('Y-m-d'),
+                    'Share.start_date >= ' => date('Y-m-d'),
                     'Share.status' => SHARE_STATUS_OPENED
                 )
             ));

@@ -99,10 +99,10 @@ function initializeSharesView(shareId, shareUserExternalId, requestStatus, textA
                 var comment = comments[i];
 
                 var htmlDate = comment.created;
-                var eventDate = new Date(htmlDate);
-                var isoEventDate = eventDate.toISOString();
+                var startDate = new Date(htmlDate);
+                var isoStartDate = startDate.toISOString();
 
-                var momentModifiedTimeAgo = moment(isoEventDate).fromNow();
+                var momentModifiedTimeAgo = moment(isoStartDate).fromNow();
                 comment.moment_created_time_ago = momentModifiedTimeAgo;
 
                 //Add to array

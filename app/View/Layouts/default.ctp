@@ -148,9 +148,9 @@
                 //Day
                 $(".moment-time-ago").each(function() {
                     var htmlDate = $(this).html();
-                    var eventDate = new Date(htmlDate);
-                    var isoEventDate = eventDate.toISOString();
-                    var formattedDate = moment(isoEventDate).fromNow();
+                    var startDate = new Date(htmlDate);
+                    var isoStartDate = startDate.toISOString();
+                    var formattedDate = moment(isoStartDate).fromNow();
 
                     $(this).html(formattedDate);
                 });
@@ -158,9 +158,9 @@
                 //Day
                 $(".moment-day").each(function() {
                     var htmlDate = $(this).text();
-                    var eventDate = new Date(htmlDate);
-                    var isoEventDate = eventDate.toISOString();
-                    var formattedDate = moment(isoEventDate).format('D MMMM', 'fr');
+                    var startDate = new Date(htmlDate);
+                    var isoStartDate = startDate.toISOString();
+                    var formattedDate = moment(isoStartDate).format('D MMMM', 'fr');
 
                     $(this).html(formattedDate);
                 });
@@ -168,9 +168,9 @@
                 //Hour
                 $(".moment-hour").each(function() {
                     var htmlDate = $(this).html();
-                    var eventDate = new Date(htmlDate);
-                    var isoEventDate = eventDate.toISOString();
-                    var formattedDate = moment(isoEventDate).format('LT', 'fr');
+                    var startDate = new Date(htmlDate);
+                    var isoStartDate = startDate.toISOString();
+                    var formattedDate = moment(isoStartDate).format('LT', 'fr');
 
                     $(this).html(formattedDate);
                 });
