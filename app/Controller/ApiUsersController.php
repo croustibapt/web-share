@@ -83,7 +83,7 @@ class ApiUsersController extends AppController {
         if ($externalId != NULL) {
             //Find first user
             $user = $this->User->find('first', array(
-                'fields' => array('User.username', 'User.external_id', 'User.description', 'User.created', 'User.share_count', 'User.request_count', 'User.comment_count'),
+                'fields' => array('User.username', 'User.external_id', 'User.description', 'User.created', 'User.modified', 'User.share_count', 'User.request_count', 'User.comment_count'),
                 'conditions' => array(
                     'User.external_id' => $externalId
                 )
@@ -98,6 +98,7 @@ class ApiUsersController extends AppController {
 
                 //Created
                 $this->formatISODate($response['created'], $user['User']['created']);
+                $this->formatISODate($response['modified'], $user['User']['modified']);
 
                 $response['share_count'] = $user['User']['share_count'];
                 $response['request_count'] = $user['User']['request_count'];
