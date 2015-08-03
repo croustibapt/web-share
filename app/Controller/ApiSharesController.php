@@ -366,6 +366,8 @@ class ApiSharesController extends AppController {
     }
 
     protected function internCancel($shareId = NULL, $reason = NULL, $message = NULL, $userExternalId = NULL) {
+        $response = NULL;
+
         //Check share id parameter
         if ($shareId != NULL) {
             //Check reason parameter
@@ -386,6 +388,10 @@ class ApiSharesController extends AppController {
 
                         //If it succeeded
                         if ($this->Share->saveField('status', SHARE_STATUS_CLOSED)) {
+                            $response['share_id'] = $shareId;
+                            $response['status'] = SHARE_STATUS_CLOSED;
+                            $response['modified'] = '';
+
                             //Send push notif: TODO
                             //$this->sendPushNotif($request['Request']['user_id'], 'Votre demande a été acceptée.');
                         } else {
@@ -403,6 +409,8 @@ class ApiSharesController extends AppController {
         } else {
             throw new ShareException(SHARE_STATUS_CODE_BAD_REQUEST, SHARE_ERROR_CODE_BAD_PARAMETERS, "Bad Share identifier");
         }
+
+        return $response;
     }
 
     public function cancel($shareId = NULL) {
@@ -414,10 +422,10 @@ class ApiSharesController extends AppController {
                     $data = $this->request->input('json_decode', true);
 
                     //Intern Details
-                    $this->internCancel($shareId, $data['reason'], $data['message']);
+                    $response = $this->internCancel($shareId, $data['reason'], $data['message']);
 
                     //Send JSON respsonse
-                    $this->sendResponse(SHARE_STATUS_CODE_OK);
+                    $this->sendResponse(SHARE_STATUS_CODE_OK, $response);
                 } catch (ShareException $e) {
                     $this->sendErrorResponse($e->getStatusCode(), $e->getCode(), $e->getMessage(), $e->getValidationErrors());
                 }
