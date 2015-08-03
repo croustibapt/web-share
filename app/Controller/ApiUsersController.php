@@ -7,7 +7,7 @@ class ApiUsersController extends AppController {
 
     public function beforeFilter() {
         parent::beforeFilter();
-        $this->Auth->allow('add', 'details', 'home');
+        $this->Auth->allow('add', 'details', 'home', 'registerPush');
     }
 
     protected function internAdd($userExternalId = NULL, $username = NULL, $mail = NULL) {
