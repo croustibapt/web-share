@@ -65,6 +65,9 @@ function initializeSharesSearch(autocompleteInputId, googleMapDivId, shareTypeCa
             //Page
             jsonData['page'] = page;
 
+            //Limit
+            jsonData['limit'] = $scope.results_by_page;
+
             //Start date
             if (startDate) {
                 jsonData['start'] = startDate;
