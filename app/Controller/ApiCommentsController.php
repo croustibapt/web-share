@@ -100,7 +100,7 @@ class ApiCommentsController extends AppController {
         }
     }
 
-    protected function internGet($shareId = NULL, $page = 1) {
+    protected function internGet($shareId = NULL, $page = 1, $limit = SHARE_COMMENTS_LIMIT) {
         $response = NULL;
 
         $share = NULL;
@@ -118,11 +118,11 @@ class ApiCommentsController extends AppController {
             $response['page'] = $page;
 
             //Get start parameter
-            $offset = ($page - 1) * SHARE_COMMENTS_LIMIT;
+            $offset = ($page - 1) * $limit;
 
             //Comments
             $comments = $this->Comment->find('all', array(
-                'limit' => SHARE_COMMENTS_LIMIT,
+                'limit' => $limit,
                 'offset' => $offset,
                 'conditions' => array(
                     'Comment.share_id' => $shareId
@@ -143,8 +143,11 @@ class ApiCommentsController extends AppController {
             $response['total_results'] = $totalComments;
 
             //Total pages
-            $totalPages = ceil($totalComments / SHARE_COMMENTS_LIMIT);
+            $totalPages = ceil($totalComments / $limit);
             $response['total_pages'] = $totalPages;
+
+            //Return limit
+            $response['limit'] = $limit;
         } else {
             throw new ShareException(SHARE_STATUS_CODE_BAD_REQUEST, SHARE_ERROR_CODE_BAD_PARAMETERS, "Bad Share identifier");
         }
@@ -165,10 +168,16 @@ class ApiCommentsController extends AppController {
             if (isset($this->params['url']['page']) && is_numeric($this->params['url']['page'])) {
                 $page = $this->params['url']['page'];
             }
+
+            //Get limit parameter
+            $limit = SHARE_COMMENTS_LIMIT;
+            if (isset($this->params['url']['limit']) && is_numeric($this->params['url']['limit'])) {
+                $limit = $this->params['url']['limit'];
+            }
             
             try {
                 //Intern get
-                $response = $this->internGet($shareId, $page);
+                $response = $this->internGet($shareId, $page, $limit);
 
                 //Send JSON respsonse
                 $this->sendResponse(SHARE_STATUS_CODE_OK, $response);

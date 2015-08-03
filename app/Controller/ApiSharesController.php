@@ -26,7 +26,7 @@ class ApiSharesController extends AppController {
         return $shareTypeId;
     }
 
-    protected function internSearch($types = NULL, $startDate = NULL, $endDate = NULL, $region = NULL, $page = 1) {
+    protected function internSearch($types = NULL, $startDate = NULL, $endDate = NULL, $region = NULL, $page = 1, $limit = SHARE_SEARCH_LIMIT) {
         //Main query
         $sqlPrefix = "SELECT *, X(Share.location) as latitude, Y(Share.location) as longitude, ShareTypeCategory.label, (SELECT COUNT(Request.id) FROM requests Request WHERE Request.share_id = Share.id AND Request.status = 1) AS participation_count";
         $sql = " FROM shares Share, users User, share_types ShareType, share_type_categories ShareTypeCategory WHERE Share.user_id = User.id AND Share.status = ".SHARE_STATUS_OPENED." AND Share.share_type_id = ShareType.id AND ShareType.share_type_category_id = ShareTypeCategory.id";
@@ -89,10 +89,10 @@ class ApiSharesController extends AppController {
         }
 
         //Limit
-        $sqlLimit = " LIMIT ".SHARE_SEARCH_LIMIT;
+        $sqlLimit = " LIMIT ".$limit;
         
         //Offset
-        $offset = ($page - 1) * SHARE_SEARCH_LIMIT;
+        $offset = ($page - 1) * $limit;
         $sqlOffset = " OFFSET ".$offset;
 
         $query = $sqlPrefix.$sql." GROUP BY Share.id ORDER BY Share.start_date ASC, Share.start_time ASC".$sqlLimit.$sqlOffset.";";
@@ -120,7 +120,10 @@ class ApiSharesController extends AppController {
         }
 
         $response['total_results'] = $totalResults;
-        $response['total_pages'] = ceil($totalResults / SHARE_SEARCH_LIMIT);
+        $response['total_pages'] = ceil($totalResults / $limit);
+
+        //Return limit
+        $response['limit'] = $limit;
 
         return $response;
     }
@@ -169,7 +172,13 @@ class ApiSharesController extends AppController {
                 $page = $data['page'];
             }
 
-            $response = $this->internSearch($types, $startDate, $endDate, $region, $page);
+            //Limit
+            $limit = SHARE_SEARCH_LIMIT;
+            if (isset($data['limit']) && is_numeric($data['limit'])) {
+                $limit = $data['limit'];
+            }
+
+            $response = $this->internSearch($types, $startDate, $endDate, $region, $page, $limit);
 
             //Send JSON response
             $this->sendResponse(SHARE_STATUS_CODE_OK, $response);
