@@ -62,9 +62,11 @@ define('SHARE_ERROR_CODE_BAD_CREDENTIALS', 5);
 define('SHARE_ERROR_CODE_RESOURCE_NOT_FOUND', 6);
 define('SHARE_ERROR_CODE_RESOURCE_DISABLED', 7);
 
-define("SHARE_SEARCH_LIMIT", 10);
+define("SHARE_SHARES_SEARCH_LIMIT", 10);
 
-define("SHARE_COMMENTS_LIMIT", 5);
+define("SHARE_COMMENTS_GET_LIMIT", 5);
+
+define("SHARE_USERS_SHARES_LIMIT", 30);
 
 //String min size
 define("SHARE_SHARE_TITLE_MIN_LENGTH", 15);
@@ -461,7 +463,7 @@ class AppController extends Controller {
         return $stringToCheck;
     }
     
-    protected function formatShare($share = NULL, $returnComments = false, $returnRequests = false) {
+    protected function formatShare($share = NULL, $returnRequests = false) {
         $response = NULL;
 
         /*echo json_encode($share);
@@ -516,15 +518,6 @@ class AppController extends Controller {
             //Comments            
             $commentsCount = $share['Share']['comment_count'];
             $response['comment_count'] = $commentsCount;
-                        
-            if ($returnComments && ($commentsCount > 0)) {
-                $comments = $this->Comment->find('all', array(
-                    'limit' => SHARE_COMMENTS_LIMIT,
-                    'conditions' => array('Comment.share_id' => $share['Share']['id']),
-                    'order' => 'Comment.created DESC'
-                ));
-                $this->formatComments($response['comments'], $comments);
-            }
             
             //Requests            
             $requestCount = $share['Share']['request_count'];

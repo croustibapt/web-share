@@ -38,7 +38,8 @@
         'pass' => array('externalId'),
         'externalId' => '[A-Za-z0-9]+'
     ));
-    Router::connect('/api/user/home', array('controller' => 'ApiUsers', 'action' => 'home'));
+    Router::connect('/api/user/shares', array('controller' => 'ApiUsers', 'action' => 'shares'));
+    Router::connect('/api/user/requests', array('controller' => 'ApiUsers', 'action' => 'requests'));
     Router::connect('/api/user/registerpush', array('controller' => 'ApiUsers', 'action' => 'registerPush'));
 
     //General

@@ -100,7 +100,7 @@ class ApiCommentsController extends AppController {
         }
     }
 
-    protected function internGet($shareId = NULL, $page = 1, $limit = SHARE_COMMENTS_LIMIT) {
+    protected function internGet($shareId = NULL, $page = 1, $limit = SHARE_COMMENTS_GET_LIMIT) {
         $response = NULL;
 
         $share = NULL;
@@ -170,7 +170,7 @@ class ApiCommentsController extends AppController {
             }
 
             //Get limit parameter
-            $limit = SHARE_COMMENTS_LIMIT;
+            $limit = SHARE_COMMENTS_GET_LIMIT;
             if (isset($this->params['url']['limit']) && is_numeric($this->params['url']['limit'])) {
                 $limit = $this->params['url']['limit'];
             }

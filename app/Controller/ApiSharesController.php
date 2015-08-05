@@ -26,7 +26,7 @@ class ApiSharesController extends AppController {
         return $shareTypeId;
     }
 
-    protected function internSearch($types = NULL, $startDate = NULL, $endDate = NULL, $region = NULL, $page = 1, $limit = SHARE_SEARCH_LIMIT) {
+    protected function internSearch($types = NULL, $startDate = NULL, $endDate = NULL, $region = NULL, $page = 1, $limit = SHARE_SHARES_SEARCH_LIMIT) {
         //Main query
         $sqlPrefix = "SELECT *, X(Share.location) as latitude, Y(Share.location) as longitude, ShareTypeCategory.label, (SELECT COUNT(Request.id) FROM requests Request WHERE Request.share_id = Share.id AND Request.status = 1) AS participation_count";
         $sql = " FROM shares Share, users User, share_types ShareType, share_type_categories ShareTypeCategory WHERE Share.user_id = User.id AND Share.status = ".SHARE_STATUS_OPENED." AND Share.share_type_id = ShareType.id AND ShareType.share_type_category_id = ShareTypeCategory.id";
@@ -173,7 +173,7 @@ class ApiSharesController extends AppController {
             }
 
             //Limit
-            $limit = SHARE_SEARCH_LIMIT;
+            $limit = SHARE_SHARES_SEARCH_LIMIT;
             if (isset($data['limit']) && is_numeric($data['limit'])) {
                 $limit = $data['limit'];
             }
@@ -340,7 +340,7 @@ class ApiSharesController extends AppController {
             //If it's well formatted
             if ($share != NULL) {
                 //Format response
-                $response = $this->formatShare($share, false, true);
+                $response = $this->formatShare($share, true);
             } else {
                 throw new ShareException(SHARE_STATUS_CODE_NOT_FOUND, SHARE_ERROR_CODE_RESOURCE_NOT_FOUND, "Share not found");
             }
