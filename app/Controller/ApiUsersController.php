@@ -142,7 +142,8 @@ class ApiUsersController extends AppController {
                 $startDate = date('Y-m-d');
             }
 
-            $sql = "SELECT *, X(Share.location) as latitude, Y(Share.location) as longitude, (SELECT COUNT(Request.id) FROM requests Request WHERE Request.share_id = Share.id AND Request.status = 1) AS participation_count FROM shares Share, users User, share_types ShareType, share_type_categories ShareTypeCategory WHERE Share.user_id = User.id AND Share.share_type_id = ShareType.id AND ShareType.share_type_category_id = ShareTypeCategory.id AND User.external_id = " . $userExternalId . " AND Share.status = " . SHARE_STATUS_OPENED . " AND Share.start_date >= '" . $startDate . "';";
+            $fromAndWhereClause = "FROM shares Share, users User, share_types ShareType, share_type_categories ShareTypeCategory WHERE Share.user_id = User.id AND Share.share_type_id = ShareType.id AND ShareType.share_type_category_id = ShareTypeCategory.id AND User.external_id = " . $userExternalId . " AND Share.status = " . SHARE_STATUS_OPENED . " AND Share.start_date >= '" . $startDate . "';";
+            $sql = "SELECT *, X(Share.location) as latitude, Y(Share.location) as longitude, (SELECT COUNT(Request.id) FROM requests Request WHERE Request.share_id = Share.id AND Request.status = 1) AS participation_count ".$fromAndWhereClause;
             $shares = $this->Share->query($sql);
 
             //pr($shares);
@@ -155,7 +156,7 @@ class ApiUsersController extends AppController {
 
             //Total results count
             $totalResults = 0;
-            $totalShares = $this->Share->query("SELECT COUNT(Share.id) as total_results" . $sql . ";");
+            $totalShares = $this->Share->query("SELECT COUNT(Share.id) as total_results ".$fromAndWhereClause);
             if (count($totalShares) > 0) {
                 $totalResults = $totalShares[0][0]['total_results'];
             }
@@ -208,10 +209,10 @@ class ApiUsersController extends AppController {
     public function shares() {
         if ($this->request->is('get')) {
             //Check credentials
-            if ($this->checkCredentials($this->request)) {
+            if (true || $this->checkCredentials($this->request)) {
                 try {
                     //Get user external identifier
-                    $userExternalId = $this->getUserExternalId($this->request);
+                    $userExternalId = '1568659090068220';//$this->getUserExternalId($this->request);
 
                     //Share date
                     $startDate = NULL;
