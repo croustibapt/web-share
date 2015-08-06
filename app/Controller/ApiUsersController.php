@@ -142,8 +142,11 @@ class ApiUsersController extends AppController {
                 $startDate = date('Y-m-d');
             }
 
-            $fromAndWhereClause = "FROM shares Share, users User, share_types ShareType, share_type_categories ShareTypeCategory WHERE Share.user_id = User.id AND Share.share_type_id = ShareType.id AND ShareType.share_type_category_id = ShareTypeCategory.id AND User.external_id = " . $userExternalId . " AND Share.status = " . SHARE_STATUS_OPENED . " AND Share.start_date >= '" . $startDate . "';";
-            $sql = "SELECT *, X(Share.location) as latitude, Y(Share.location) as longitude, (SELECT COUNT(Request.id) FROM requests Request WHERE Request.share_id = Share.id AND Request.status = 1) AS participation_count ".$fromAndWhereClause;
+            //Offset
+            $offset = ($page - 1) * $limit;
+
+            $fromAndWhereClause = "FROM shares Share, users User, share_types ShareType, share_type_categories ShareTypeCategory WHERE Share.user_id = User.id AND Share.share_type_id = ShareType.id AND ShareType.share_type_category_id = ShareTypeCategory.id AND User.external_id = " . $userExternalId . " AND Share.status = " . SHARE_STATUS_OPENED . " AND Share.start_date >= '" . $startDate . "'";
+            $sql = "SELECT *, X(Share.location) as latitude, Y(Share.location) as longitude, (SELECT COUNT(Request.id) FROM requests Request WHERE Request.share_id = Share.id AND Request.status = 1) AS participation_count " . $fromAndWhereClause . " LIMIT " . $limit . " OFFSET " . $offset . ";";
             $shares = $this->Share->query($sql);
 
             //pr($shares);
@@ -156,7 +159,7 @@ class ApiUsersController extends AppController {
 
             //Total results count
             $totalResults = 0;
-            $totalShares = $this->Share->query("SELECT COUNT(Share.id) as total_results ".$fromAndWhereClause);
+            $totalShares = $this->Share->query("SELECT COUNT(Share.id) as total_results ".$fromAndWhereClause.";");
             if (count($totalShares) > 0) {
                 $totalResults = $totalShares[0][0]['total_results'];
             }
@@ -171,48 +174,13 @@ class ApiUsersController extends AppController {
         return $response;
     }
 
-    protected function internRequests($userExternalId = NULL, $startDate = NULL, $page = 1, $limit = SHARE_USERS_SHARES_LIMIT) {
-        $response = NULL;
-
-        if ($userExternalId != NULL) {
-            $response['page'] = $page;
-            $response['results'] = array();
-
-            //Start date
-            if ($startDate == NULL) {
-                $startDate = date('Y-m-d');
-            }
-            $requests = $this->Request->find('all', array(
-                'conditions' => array(
-                    'User.external_id' => $userExternalId,
-                    'Share.start_date >= ' => $startDate,
-                    'Share.status' => SHARE_STATUS_OPENED
-                ),
-                'limit' => $limit
-            ));
-
-            foreach ($requests as & $request) {
-                $sql = "SELECT *, X(Share.location) as latitude, Y(Share.location) as longitude, (SELECT COUNT(Request.id) FROM requests Request WHERE Request.share_id = Share.id AND Request.status = 1) AS participation_count FROM shares AS Share, users AS User, share_types AS ShareType, share_type_categories ShareTypeCategory WHERE Share.user_id = User.id AND Share.share_type_id = ShareType.id AND ShareType.share_type_category_id = ShareTypeCategory.id AND Share.id = ".$request['Request']['share_id']." LIMIT 1;";
-
-                $shares = $this->Share->query($sql);
-                $share = $shares[0];
-
-                $request['Share'] = $share;
-            }
-
-            $this->formatRequests($response['results'], $requests, true);
-        }
-
-        return $response;
-    }
-
     public function shares() {
         if ($this->request->is('get')) {
             //Check credentials
-            if (true || $this->checkCredentials($this->request)) {
+            if ($this->checkCredentials($this->request)) {
                 try {
                     //Get user external identifier
-                    $userExternalId = '1568659090068220';//$this->getUserExternalId($this->request);
+                    $userExternalId = $this->getUserExternalId($this->request);
 
                     //Share date
                     $startDate = NULL;
@@ -246,6 +214,59 @@ class ApiUsersController extends AppController {
         } else {
             $this->sendErrorResponse(SHARE_STATUS_CODE_UNAUTHORIZED, SHARE_STATUS_CODE_METHOD_NOT_ALLOWED);
         }
+    }
+
+    protected function internRequests($userExternalId = NULL, $startDate = NULL, $page = 1, $limit = SHARE_USERS_SHARES_LIMIT) {
+        $response = NULL;
+
+        if ($userExternalId != NULL) {
+            $response['page'] = $page;
+            $response['results'] = array();
+
+            //Start date
+            if ($startDate == NULL) {
+                $startDate = date('Y-m-d');
+            }
+
+            //Offset
+            $offset = ($page - 1) * $limit;
+
+            $requests = $this->Request->find('all', array(
+                'conditions' => array(
+                    'User.external_id' => $userExternalId,
+                    'Share.start_date >= ' => $startDate,
+                    'Share.status' => SHARE_STATUS_OPENED
+                ),
+                'limit' => $limit,
+                'offset' => $offset
+            ));
+            $totalResults = $this->Request->find('count', array(
+                'conditions' => array(
+                    'User.external_id' => $userExternalId,
+                    'Share.start_date >= ' => $startDate,
+                    'Share.status' => SHARE_STATUS_OPENED
+                )
+            ));
+
+            foreach ($requests as & $request) {
+                $sql = "SELECT *, X(Share.location) as latitude, Y(Share.location) as longitude, (SELECT COUNT(Request.id) FROM requests Request WHERE Request.share_id = Share.id AND Request.status = 1) AS participation_count FROM shares AS Share, users AS User, share_types AS ShareType, share_type_categories ShareTypeCategory WHERE Share.user_id = User.id AND Share.share_type_id = ShareType.id AND ShareType.share_type_category_id = ShareTypeCategory.id AND Share.id = ".$request['Request']['share_id']." LIMIT 1;";
+
+                $shares = $this->Share->query($sql);
+                $share = $shares[0];
+
+                $request['Share'] = $share;
+            }
+
+            $this->formatRequests($response['results'], $requests, true);
+
+            $response['total_results'] = $totalResults;
+            $response['total_pages'] = ceil($totalResults / $limit);
+
+            //Return limit
+            $response['limit'] = $limit;
+        }
+
+        return $response;
     }
 
     public function requests() {

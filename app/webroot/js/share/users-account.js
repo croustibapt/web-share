@@ -1,4 +1,4 @@
-function initializeUsersAccount() {
+function initializeUsersAccount(userExternalId) {
     /**
      * UsersAccountController
      */
@@ -6,31 +6,81 @@ function initializeUsersAccount() {
         //User
         $scope.user = null;
 
-        $scope.getUserHome = function() {
-            //Get call
-            $http.get(webroot + 'user/home')
+        $scope.shares = null;
+        $scope.user_shares_page = null;
+        $scope.user_shares_total_pages = 0;
+        $scope.user_shares_total_results = 0;
+        $scope.user_shares_results_count = 0;
+        $scope.user_shares_results_by_page = 10;
+
+        $scope.requests = null;
+
+        $scope.getNumberArray = function(number) {
+            return new Array(number);
+        };
+
+        $scope.getUserAccount = function(userExternalId) {
+            //Get user/details call
+            $http.get(webroot + 'user/details/' + userExternalId)
             .success(function (data, status, headers, config) {
                 //Parse JSON response
-                $scope.handleUserHomeResponse(data);
+                $scope.handleUserDetailsResponse(data);
+            })
+            .error(function (data, status, headers, config) {
+                console.log(data);
+            });
+
+            //Get user/shares call
+            $http.get(webroot + 'user/shares?page=1&limit=1')
+            .success(function (data, status, headers, config) {
+                //Parse JSON response
+                $scope.handleUserSharesResponse(data);
+            })
+            .error(function (data, status, headers, config) {
+                console.log(data);
+            });
+
+            //Get user/requests call
+            $http.get(webroot + 'user/requests')
+            .success(function (data, status, headers, config) {
+                //Parse JSON response
+                $scope.handleUserRequestsResponse(data);
             })
             .error(function (data, status, headers, config) {
                 console.log(data);
             });
         };
 
-        $scope.handleUserHomeResponse = function(response) {
+        $scope.handleUserDetailsResponse = function(response) {
             console.log(response);
             $scope.user = response;
 
             formatUser($scope.user);
+        }
 
-            for (var shareIndex in $scope.user.shares) {
-                var share = $scope.user.shares[shareIndex];
+        $scope.handleUserSharesResponse = function(response) {
+            console.log(response);
+
+            //Handle pagination
+            $scope.user_shares_total_pages = parseInt(response.total_pages);
+            $scope.user_shares_total_results = parseInt(response.total_results);
+            $scope.user_shares_results_count = response.results.length;
+            $scope.user_shares_page = parseInt(response.page);
+
+            $scope.shares = response.results;
+
+            for (var shareIndex in $scope.shares) {
+                var share = $scope.shares[shareIndex];
                 formatShare(share);
             }
+        };
 
-            for (var requestIndex in $scope.user.requests) {
-                var request = $scope.user.requests[requestIndex];
+        $scope.handleUserRequestsResponse = function(response) {
+            console.log(response);
+            $scope.requests = response.results;
+
+            for (var requestIndex in $scope.requests) {
+                var request = $scope.requests[requestIndex];
                 formatShare(request.share);
             }
         };
@@ -172,12 +222,12 @@ function initializeUsersAccount() {
         /**
          * Method used to initialize the HomeController
          */
-        $scope.initialize = function() {
-            //Get user home
-            $scope.getUserHome();
+        $scope.initialize = function(userExternalId) {
+            //Get user account
+            $scope.getUserAccount(userExternalId);
         };
 
         //Initialize the controller
-        $scope.initialize();
+        $scope.initialize(userExternalId);
     }]);
 }

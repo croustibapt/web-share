@@ -6,7 +6,7 @@ class UsersController extends ApiUsersController {
 
     public function beforeFilter() {
         parent::beforeFilter();
-        $this->Auth->deny('home', 'registerPush');
+        $this->Auth->deny('shares', 'requests', 'registerPush');
         $this->Auth->allow('fbLogin', 'login');
     }
 
@@ -216,17 +216,55 @@ class UsersController extends ApiUsersController {
         }
     }
 
-    public function home() {
+    public function shares() {
         if ($this->request->is('get', 'ajax')) {
             try {
                 //Get user identifier
                 $userExternalId = $this->Auth->user('external_id');
                 //pr($userExternalId);
 
-                //Intern home
-                $response = $this->interHome($userExternalId);
+                //Share date
+                $startDate = NULL;
+                if (isset($this->params['url']['startDate'])/* && is_numeric($this->params['url']['startDate'])*/) {
+                    $startDate = $this->params['url']['startDate'];
+                }
 
-                //Send JSON respsonse
+                //Page
+                $page = 1;
+                if (isset($this->params['url']['page']) && is_numeric($this->params['url']['page'])) {
+                    $page = $this->params['url']['page'];
+                }
+
+                //Limit
+                $limit = SHARE_USERS_SHARES_LIMIT;
+                if (isset($this->params['url']['limit']) && is_numeric($this->params['url']['limit'])) {
+                    $limit = $this->params['url']['limit'];
+                }
+
+                //Intern shares
+                $response = $this->internShares($userExternalId, $startDate, $page, $limit);
+
+                //Send JSON response
+                $this->sendResponse(SHARE_STATUS_CODE_OK, $response);
+            } catch (ShareException $e) {
+                $this->sendErrorResponse($e->getStatusCode(), $e->getCode(), $e->getMessage(), $e->getValidationErrors());
+            }
+        } else {
+            $this->sendErrorResponse(SHARE_STATUS_CODE_UNAUTHORIZED, SHARE_STATUS_CODE_METHOD_NOT_ALLOWED);
+        }
+    }
+
+    public function requests() {
+        if ($this->request->is('get', 'ajax')) {
+            try {
+                //Get user identifier
+                $userExternalId = $this->Auth->user('external_id');
+                //pr($userExternalId);
+
+                //Intern requests
+                $response = $this->internRequests($userExternalId);
+
+                //Send JSON response
                 $this->sendResponse(SHARE_STATUS_CODE_OK, $response);
             } catch (ShareException $e) {
                 $this->sendErrorResponse($e->getStatusCode(), $e->getCode(), $e->getMessage(), $e->getValidationErrors());

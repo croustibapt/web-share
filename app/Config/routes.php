@@ -49,7 +49,8 @@
         'externalId' => '[A-Za-z0-9]+'
     ));
     Router::connect('/user/account', array('controller' => 'Users', 'action' => 'account'));
-    Router::connect('/user/home', array('controller' => 'Users', 'action' => 'home'));
+    Router::connect('/user/shares', array('controller' => 'Users', 'action' => 'shares'));
+    Router::connect('/user/requests', array('controller' => 'Users', 'action' => 'requests'));
     Router::connect('/user/authenticate', array('controller' => 'Users', 'action' => 'authenticate'));
     Router::connect('/user/logout', array('controller' => 'Users', 'action' => 'logout'));
 
