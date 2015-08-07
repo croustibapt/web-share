@@ -130,22 +130,31 @@ class ApiUsersController extends AppController {
         }
     }
 
-    protected function internShares($userExternalId = NULL, $startDate = NULL, $page = 1, $limit = SHARE_USERS_SHARES_LIMIT) {
+    protected function internShares($userExternalId = NULL, $startDate = NULL, $endDate = NULL, $page = 1, $limit = SHARE_USERS_SHARES_LIMIT) {
         $response = NULL;
 
         if ($userExternalId != NULL) {
             $response['page'] = $page;
             $response['results'] = array();
 
-            //Start date check
-            if ($startDate == NULL) {
-                $startDate = date('Y-m-d');
-            }
-
             //Offset
             $offset = ($page - 1) * $limit;
 
-            $fromAndWhereClause = "FROM shares Share, users User, share_types ShareType, share_type_categories ShareTypeCategory WHERE Share.user_id = User.id AND Share.share_type_id = ShareType.id AND ShareType.share_type_category_id = ShareTypeCategory.id AND User.external_id = " . $userExternalId . " AND Share.status = " . SHARE_STATUS_OPENED . " AND Share.start_date >= '" . $startDate . "'";
+            $fromAndWhereClause = "FROM shares Share, users User, share_types ShareType, share_type_categories ShareTypeCategory WHERE Share.user_id = User.id AND Share.share_type_id = ShareType.id AND ShareType.share_type_category_id = ShareTypeCategory.id AND User.external_id = " . $userExternalId . " AND Share.status = " . SHARE_STATUS_OPENED;
+
+            //Start date
+            if ($startDate != NULL) {
+                $sqlStartDate = $startDate->format('Y-m-d');
+
+                $fromAndWhereClause .= " AND Share.start_date >= '" . $sqlStartDate . "'";
+            }
+
+            //End date
+            if ($endDate != NULL) {
+                $sqlEndDate = $endDate->format('Y-m-d');
+
+                $fromAndWhereClause .= " AND Share.start_date <= '" . $sqlEndDate . "'";
+            }
             $sql = "SELECT *, X(Share.location) as latitude, Y(Share.location) as longitude, (SELECT COUNT(Request.id) FROM requests Request WHERE Request.share_id = Share.id AND Request.status = 1) AS participation_count " . $fromAndWhereClause . " LIMIT " . $limit . " OFFSET " . $offset . ";";
             $shares = $this->Share->query($sql);
 
@@ -182,10 +191,22 @@ class ApiUsersController extends AppController {
                     //Get user external identifier
                     $userExternalId = $this->getUserExternalId($this->request);
 
-                    //Share date
+                    //Start date
                     $startDate = NULL;
-                    if (isset($this->params['url']['startDate'])/* && is_numeric($this->params['url']['startDate'])*/) {
-                        $startDate = $this->params['url']['startDate'];
+                    if (isset($this->params['url']['start']) && is_numeric($this->params['url']['start'])) {
+                        $startTimestamp = $this->params['url']['start'];
+
+                        $startDate = new DateTime();
+                        $startDate->setTimestamp($startTimestamp);
+                    }
+
+                    //End date
+                    $endDate = NULL;
+                    if (isset($this->params['url']['end']) && is_numeric($this->params['url']['end'])) {
+                        $endTimestamp = $this->params['url']['end'];
+
+                        $endDate = new DateTime();
+                        $endDate->setTimestamp($endTimestamp);
                     }
 
                     //Page
@@ -201,7 +222,7 @@ class ApiUsersController extends AppController {
                     }
 
                     //Intern shares
-                    $response = $this->internShares($userExternalId, $startDate, $page, $limit);
+                    $response = $this->internShares($userExternalId, $startDate, $endDate, $page, $limit);
 
                     //Send JSON respsonse
                     $this->sendResponse(SHARE_STATUS_CODE_OK, $response);
@@ -216,36 +237,38 @@ class ApiUsersController extends AppController {
         }
     }
 
-    protected function internRequests($userExternalId = NULL, $startDate = NULL, $page = 1, $limit = SHARE_USERS_SHARES_LIMIT) {
+    protected function internRequests($userExternalId = NULL, $startDate = NULL, $endDate = NULL, $page = 1, $limit = SHARE_USERS_SHARES_LIMIT) {
         $response = NULL;
 
         if ($userExternalId != NULL) {
             $response['page'] = $page;
             $response['results'] = array();
 
-            //Start date
-            if ($startDate == NULL) {
-                $startDate = date('Y-m-d');
-            }
-
             //Offset
             $offset = ($page - 1) * $limit;
 
+            $conditions = array(
+                'User.external_id' => $userExternalId,
+                'Share.status' => SHARE_STATUS_OPENED
+            );
+
+            //Start date
+            if ($startDate != NULL) {
+                $conditions['Share.start_date >= '] = $startDate->format('Y-m-d');
+            }
+
+            //End date
+            if ($endDate != NULL) {
+                $conditions['Share.start_date <= '] = $endDate->format('Y-m-d');
+            }
+
             $requests = $this->Request->find('all', array(
-                'conditions' => array(
-                    'User.external_id' => $userExternalId,
-                    'Share.start_date >= ' => $startDate,
-                    'Share.status' => SHARE_STATUS_OPENED
-                ),
+                'conditions' => $conditions,
                 'limit' => $limit,
                 'offset' => $offset
             ));
             $totalResults = $this->Request->find('count', array(
-                'conditions' => array(
-                    'User.external_id' => $userExternalId,
-                    'Share.start_date >= ' => $startDate,
-                    'Share.status' => SHARE_STATUS_OPENED
-                )
+                'conditions' => $conditions
             ));
 
             foreach ($requests as & $request) {
@@ -272,15 +295,27 @@ class ApiUsersController extends AppController {
     public function requests() {
         if ($this->request->is('get')) {
             //Check credentials
-            if ($this->checkCredentials($this->request)) {
+            if (true || $this->checkCredentials($this->request)) {
                 try {
                     //Get user external identifier
-                    $userExternalId = $this->getUserExternalId($this->request);
+                    $userExternalId = '1568659090068220';//$this->getUserExternalId($this->request);
 
-                    //Share date
+                    //Start date
                     $startDate = NULL;
-                    if (isset($this->params['url']['startDate'])/* && is_numeric($this->params['url']['startDate'])*/) {
-                        $startDate = $this->params['url']['startDate'];
+                    if (isset($this->params['url']['start']) && is_numeric($this->params['url']['start'])) {
+                        $startTimestamp = $this->params['url']['start'];
+
+                        $startDate = new DateTime();
+                        $startDate->setTimestamp($startTimestamp);
+                    }
+
+                    //End date
+                    $endDate = NULL;
+                    if (isset($this->params['url']['end']) && is_numeric($this->params['url']['end'])) {
+                        $endTimestamp = $this->params['url']['end'];
+
+                        $endDate = new DateTime();
+                        $endDate->setTimestamp($endTimestamp);
                     }
 
                     //Page
@@ -289,6 +324,7 @@ class ApiUsersController extends AppController {
                         $page = $this->params['url']['page'];
                     }
 
+
                     //Limit
                     $limit = SHARE_USERS_SHARES_LIMIT;
                     if (isset($this->params['url']['limit']) && is_numeric($this->params['url']['limit'])) {
@@ -296,7 +332,7 @@ class ApiUsersController extends AppController {
                     }
 
                     //Intern requests
-                    $response = $this->internRequests($userExternalId, $startDate, $page, $limit);
+                    $response = $this->internRequests($userExternalId, $startDate, $endDate, $page, $limit);
 
                     //Send JSON respsonse
                     $this->sendResponse(SHARE_STATUS_CODE_OK, $response);
