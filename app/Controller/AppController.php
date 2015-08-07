@@ -705,7 +705,7 @@ class AppController extends Controller {
     protected function canCancel($share = NULL, $userExternalId = NULL) {
         $canCancel = false;
         
-        if (true || ($share != NULL) && ($userExternalId != NULL) /*&& $this->doesUserOwnShare($share, $userExternalId) && $this->isShareOpened($share) && !$this->isShareExpired($share)*/) {
+        if (true || ($share != NULL) && ($userExternalId != NULL) /*&& $this->doesUserOwnShare($share, $userExternalId)*/ && $this->isShareOpened($share) && !$this->isShareExpired($share)) {
             $canCancel = true;
         }
         
