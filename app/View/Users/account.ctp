@@ -79,6 +79,11 @@
                                 echo $this->element('request-card');
                             ?>
                         </div>
+                        
+                        <!-- Pagination -->
+                        <?php echo $this->element('pagination', array(
+                            'prefix' => 'user_requests_'
+                        )); ?>
 
                     </div>
 

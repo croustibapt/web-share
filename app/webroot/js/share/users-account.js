@@ -14,9 +14,49 @@ function initializeUsersAccount(userExternalId) {
         $scope.user_shares_results_by_page = 10;
 
         $scope.requests = null;
+        
+        $scope.user_shares_showPage = function(page) {
+            //Update page
+            $scope.user_shares_page = null;
+
+            //Simply call the user/shares method
+            $scope.getUserShares(page);
+        };
+        
+        $scope.user_requests_showPage = function(page) {
+            //Update page
+            $scope.user_requests_page = null;
+
+            //Simply call the user/requests method
+            $scope.getUserRequests(page);
+        };
 
         $scope.getNumberArray = function(number) {
             return new Array(number);
+        };
+        
+        $scope.getUserShares = function(page) {
+            //Get user/shares call
+            $http.get(webroot + 'user/shares?page=' + page + '&limit=1')
+            .success(function (data, status, headers, config) {
+                //Parse JSON response
+                $scope.handleUserSharesResponse(data);
+            })
+            .error(function (data, status, headers, config) {
+                console.log(data);
+            });
+        };
+        
+        $scope.getUserRequests = function(page) {
+            //Get user/requests call
+            $http.get(webroot + 'user/requests?page=' + page + '&limit=1')
+            .success(function (data, status, headers, config) {
+                //Parse JSON response
+                $scope.handleUserRequestsResponse(data);
+            })
+            .error(function (data, status, headers, config) {
+                console.log(data);
+            });
         };
 
         $scope.getUserAccount = function(userExternalId) {
@@ -30,25 +70,11 @@ function initializeUsersAccount(userExternalId) {
                 console.log(data);
             });
 
-            //Get user/shares call
-            $http.get(webroot + 'user/shares?page=1&limit=1')
-            .success(function (data, status, headers, config) {
-                //Parse JSON response
-                $scope.handleUserSharesResponse(data);
-            })
-            .error(function (data, status, headers, config) {
-                console.log(data);
-            });
+            //
+            $scope.getUserShares(1);
 
-            //Get user/requests call
-            $http.get(webroot + 'user/requests')
-            .success(function (data, status, headers, config) {
-                //Parse JSON response
-                $scope.handleUserRequestsResponse(data);
-            })
-            .error(function (data, status, headers, config) {
-                console.log(data);
-            });
+            //
+            $scope.getUserRequests(1);
         };
 
         $scope.handleUserDetailsResponse = function(response) {
@@ -56,7 +82,7 @@ function initializeUsersAccount(userExternalId) {
             $scope.user = response;
 
             formatUser($scope.user);
-        }
+        };
 
         $scope.handleUserSharesResponse = function(response) {
             console.log(response);
