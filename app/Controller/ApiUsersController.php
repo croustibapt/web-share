@@ -295,10 +295,10 @@ class ApiUsersController extends AppController {
     public function requests() {
         if ($this->request->is('get')) {
             //Check credentials
-            if (true || $this->checkCredentials($this->request)) {
+            if ($this->checkCredentials($this->request)) {
                 try {
                     //Get user external identifier
-                    $userExternalId = '1568659090068220';//$this->getUserExternalId($this->request);
+                    $userExternalId = $this->getUserExternalId($this->request);
 
                     //Start date
                     $startDate = NULL;
