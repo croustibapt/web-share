@@ -12,15 +12,22 @@ function initializeUsersAccount(userExternalId) {
         $scope.user_shares_total_results = 0;
         $scope.user_shares_results_count = 0;
         $scope.user_shares_results_by_page = 10;
+        $scope.user_shares_status = 'pending';
 
         $scope.requests = null;
+        $scope.user_requests_page = null;
+        $scope.user_requests_total_pages = 0;
+        $scope.user_requests_total_results = 0;
+        $scope.user_requests_results_count = 0;
+        $scope.user_requests_results_by_page = 10;
+        $scope.user_requests_status = 'pending';
         
         $scope.user_shares_showPage = function(page) {
             //Update page
             $scope.user_shares_page = null;
 
             //Simply call the user/shares method
-            $scope.getUserShares(page);
+            $scope.getUserShares(page, $scope.user_shares_status);
         };
         
         $scope.user_requests_showPage = function(page) {
@@ -28,31 +35,51 @@ function initializeUsersAccount(userExternalId) {
             $scope.user_requests_page = null;
 
             //Simply call the user/requests method
-            $scope.getUserRequests(page);
+            $scope.getUserRequests(page, $scope.user_requests_status);
         };
 
         $scope.getNumberArray = function(number) {
             return new Array(number);
         };
         
-        $scope.getUserShares = function(page) {
+        $scope.getUserShares = function(page, status) {
+            var url = webroot + 'user/shares?page=' + page;
+            if (status == 'finished') {
+                url += '&end=' + moment().unix();
+            } else {
+                url += '&start=' + moment().unix();
+            }
+            console.log(url);
+
             //Get user/shares call
-            $http.get(webroot + 'user/shares?page=' + page + '&limit=1')
+            $http.get(url)
             .success(function (data, status, headers, config) {
                 //Parse JSON response
                 $scope.handleUserSharesResponse(data);
+
+                console.log($scope.shares.length);
             })
             .error(function (data, status, headers, config) {
                 console.log(data);
             });
         };
         
-        $scope.getUserRequests = function(page) {
+        $scope.getUserRequests = function(page, status) {
+            var url = webroot + 'user/requests?page=' + page;
+            if (status == 'finished') {
+                url += '&end=' + moment().unix()
+            } else {
+                url += '&start=' + moment().unix();
+            }
+            console.log(url);
+
             //Get user/requests call
-            $http.get(webroot + 'user/requests?page=' + page + '&limit=1')
+            $http.get(url)
             .success(function (data, status, headers, config) {
                 //Parse JSON response
                 $scope.handleUserRequestsResponse(data);
+
+                console.log($scope.requests.length);
             })
             .error(function (data, status, headers, config) {
                 console.log(data);
@@ -103,12 +130,33 @@ function initializeUsersAccount(userExternalId) {
 
         $scope.handleUserRequestsResponse = function(response) {
             console.log(response);
+
+            //Handle pagination
+            $scope.user_requests_total_pages = parseInt(response.total_pages);
+            $scope.user_requests_total_results = parseInt(response.total_results);
+            $scope.user_requests_results_count = response.results.length;
+            $scope.user_requests_page = parseInt(response.page);
+
             $scope.requests = response.results;
 
             for (var requestIndex in $scope.requests) {
                 var request = $scope.requests[requestIndex];
                 formatShare(request.share);
             }
+        };
+
+        $scope.onUserSharesStatusChanged = function(status, $event) {
+            $scope.user_shares_status = status;
+
+            //Update results
+            $scope.getUserShares($scope.user_shares_page, $scope.user_shares_status);
+        };
+
+        $scope.onUserRequestsStatusChanged = function(status, $event) {
+            $scope.user_requests_status = status;
+
+            //Update results
+            $scope.getUserRequests($scope.user_requests_page, $scope.user_requests_status);
         };
 
         $scope.updateRequestStatus = function(shareId, requestId, status) {
@@ -226,6 +274,8 @@ function initializeUsersAccount(userExternalId) {
             if (confirm('Are you sure you want to cancel your request?')) {
                 $http.get(webroot + 'request/cancel/' + requestId)
                 .success(function (data, status, headers, config) {
+                    console.log(data);
+
                     //Update request status
                     $scope.updateOwnRequestStatus(requestId, 3);
 
@@ -233,6 +283,8 @@ function initializeUsersAccount(userExternalId) {
                     button.button('reset');
                 })
                 .error(function (data, status, headers, config) {
+                    console.log(data);
+
                     //Reset button state
                     button.button('reset');
 

@@ -48,6 +48,13 @@
                 <!-- My shares -->
                 <div id="div-user-home-shares" class="tab-pane active" role="tabpanel">
 
+                    <nav>
+                        <ul class="pagination pagination-sm">
+                            <li ng-class="(user_shares_status == 'pending' ? 'active' : '')" ng-click="onUserSharesStatusChanged('pending', $event);"><a href="#">En cours</a></li>
+                            <li ng-class="(user_shares_status == 'finished' ? 'active' : '')" ng-click="onUserSharesStatusChanged('finished', $event);"><a href="#">Terminés</a></li>
+                        </ul>
+                    </nav>
+
                     <div ng-if="(shares.length > 0)">
                         <div ng-repeat="share in shares track by share.share_id" class="card-div">
                             <?php
@@ -64,12 +71,19 @@
                         )); ?>
                     </div>
 
-                    <div ng-if="((user.share_count == 0) || (user.shares.length == 0))" class="text-muted">Vous n'avez aucun partage en cours</div>
+                    <div ng-if="((user.share_count == 0) || (shares.length == 0))" class="text-muted">Vous n'avez aucun partage en cours</div>
 
                 </div>
 
                 <!-- My requests -->
                 <div role="tabpanel" class="tab-pane" id="div-user-home-requests">
+
+                    <nav>
+                        <ul class="pagination pagination-sm">
+                            <li ng-class="(user_requests_status == 'pending' ? 'active' : '')" ng-click="onUserRequestsStatusChanged('pending', $event);"><a href="#">En cours</a></li>
+                            <li ng-class="(user_requests_status == 'finished' ? 'active' : '')" ng-click="onUserRequestsStatusChanged('finished', $event);"><a href="#">Terminés</a></li>
+                        </ul>
+                    </nav>
 
                     <div ng-if="(requests.length > 0)">
 
@@ -87,7 +101,7 @@
 
                     </div>
 
-                    <div ng-if="((user.request_count == 0) || (user.requests.length == 0))" class="text-muted">Vous n'avez aucune requêtes en attente</div>
+                    <div ng-if="((user.request_count == 0) || (requests.length == 0))" class="text-muted">Vous n'avez aucune requêtes en attente</div>
 
                 </div>
 

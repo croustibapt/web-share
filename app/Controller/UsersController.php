@@ -223,10 +223,22 @@ class UsersController extends ApiUsersController {
                 $userExternalId = $this->Auth->user('external_id');
                 //pr($userExternalId);
 
-                //Share date
+                //Start date
                 $startDate = NULL;
-                if (isset($this->params['url']['startDate'])/* && is_numeric($this->params['url']['startDate'])*/) {
-                    $startDate = $this->params['url']['startDate'];
+                if (isset($this->params['url']['start']) && is_numeric($this->params['url']['start'])) {
+                    $startTimestamp = $this->params['url']['start'];
+
+                    $startDate = new DateTime();
+                    $startDate->setTimestamp($startTimestamp);
+                }
+
+                //End date
+                $endDate = NULL;
+                if (isset($this->params['url']['end']) && is_numeric($this->params['url']['end'])) {
+                    $endTimestamp = $this->params['url']['end'];
+
+                    $endDate = new DateTime();
+                    $endDate->setTimestamp($endTimestamp);
                 }
 
                 //Page
@@ -242,7 +254,7 @@ class UsersController extends ApiUsersController {
                 }
 
                 //Intern shares
-                $response = $this->internShares($userExternalId, $startDate, $page, $limit);
+                $response = $this->internShares($userExternalId, $startDate, $endDate, $page, $limit);
 
                 //Send JSON response
                 $this->sendResponse(SHARE_STATUS_CODE_OK, $response);
@@ -261,8 +273,38 @@ class UsersController extends ApiUsersController {
                 $userExternalId = $this->Auth->user('external_id');
                 //pr($userExternalId);
 
+                //Start date
+                $startDate = NULL;
+                if (isset($this->params['url']['start']) && is_numeric($this->params['url']['start'])) {
+                    $startTimestamp = $this->params['url']['start'];
+
+                    $startDate = new DateTime();
+                    $startDate->setTimestamp($startTimestamp);
+                }
+
+                //End date
+                $endDate = NULL;
+                if (isset($this->params['url']['end']) && is_numeric($this->params['url']['end'])) {
+                    $endTimestamp = $this->params['url']['end'];
+
+                    $endDate = new DateTime();
+                    $endDate->setTimestamp($endTimestamp);
+                }
+
+                //Page
+                $page = 1;
+                if (isset($this->params['url']['page']) && is_numeric($this->params['url']['page'])) {
+                    $page = $this->params['url']['page'];
+                }
+
+                //Limit
+                $limit = SHARE_USERS_REQUESTS_LIMIT;
+                if (isset($this->params['url']['limit']) && is_numeric($this->params['url']['limit'])) {
+                    $limit = $this->params['url']['limit'];
+                }
+
                 //Intern requests
-                $response = $this->internRequests($userExternalId);
+                $response = $this->internRequests($userExternalId, $startDate, $endDate, $page, $limit);
 
                 //Send JSON response
                 $this->sendResponse(SHARE_STATUS_CODE_OK, $response);

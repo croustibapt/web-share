@@ -387,10 +387,11 @@ class ApiSharesController extends AppController {
                         $this->Share->id = $shareId;
 
                         //If it succeeded
-                        if ($this->Share->saveField('status', SHARE_STATUS_CLOSED)) {
+                        $updatedShare = $this->Share->saveField('status', SHARE_STATUS_CLOSED);
+                        if ($updatedShare) {
                             $response['share_id'] = $shareId;
-                            $response['status'] = SHARE_STATUS_CLOSED;
-                            $response['modified'] = '';
+                            $response['status'] = $updatedShare['Share']['status'];
+                            $response['modified'] = $updatedShare['Share']['modified'];
 
                             //Send push notif: TODO
                             //$this->sendPushNotif($request['Request']['user_id'], 'Votre demande a été acceptée.');
