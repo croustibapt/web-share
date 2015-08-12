@@ -7,14 +7,12 @@
 
     <div class="media">
         <div class="media-left">
-            <a href="#">
-                <img ng-src="../img/markers/128/marker-{{ share.share_type_category.label }}-{{ share.share_type.label }}.png" style="max-width: 80px;" />
-            </a>
+            <img ng-src="../img/markers/128/marker-{{ share.share_type_category.label }}-{{ share.share_type.label }}.png" style="max-width: 80px;" />
         </div>
         <div class="media-body">
             <blockquote class="share-card-description-blockquote">
                 <!-- Share type -->
-                <p class="text-capitalize share-card-type-p" style="color: {{ share.share_color }};">
+                <p class="text-capitalize share-card-type-p" ng-style="(share.start_date >= now) ? {'color': share.share_color} : {'color': '#bdc3c7'}">
                     {{ share.share_type_category_label }} / <span class="share-card-type-span">{{ share.share_type_label }}</span>
                 </p>
 
@@ -60,26 +58,26 @@
             {{ request.user.username }} <span class="glyphicon glyphicon-minus-sign" aria-hidden="true"></span>
         </p>
 
-        <td ng-if="(request.status == <?php echo SHARE_REQUEST_STATUS_PENDING; ?>)" class="text-right share-request-card-td">
+        <td ng-if="(share.start_date >= now) && (request.status == <?php echo SHARE_REQUEST_STATUS_PENDING; ?>)" class="text-right share-request-card-td">
 
             <button ng-click="acceptRequest(share.share_id, request.request_id, $event);" class="btn btn-success btn-xs share-card-request-btn">Accepter</button>
             <button ng-click="declineRequest(share.share_id, request.request_id, $event);" class="btn btn-danger btn-xs share-card-request-btn">Refuser</button>
 
         </td>
 
-        <td ng-if="(request.status == <?php echo SHARE_REQUEST_STATUS_ACCEPTED; ?>)" class="text-right share-request-card-td">
+        <td ng-if="(share.start_date >= now) && (request.status == <?php echo SHARE_REQUEST_STATUS_ACCEPTED; ?>)" class="text-right share-request-card-td">
 
             <button ng-click="cancelRequest(share.share_id, request.request_id, $event);" class="btn btn-default btn-xs share-card-request-btn">Annuler</button>
 
         </td>
 
-        <td ng-if="(request.status == <?php echo SHARE_REQUEST_STATUS_DECLINED; ?>)" class="text-right share-request-card-td">
+        <td ng-if="(share.start_date >= now) && (request.status == <?php echo SHARE_REQUEST_STATUS_DECLINED; ?>)" class="text-right share-request-card-td">
 
             <button class="btn btn-default btn-xs disabled share-card-request-btn">Declinée</button>
 
         </td>
 
-        <td ng-if="(request.status == <?php echo SHARE_REQUEST_STATUS_CANCELLED; ?>)" class="text-right share-request-card-td">
+        <td ng-if="(share.start_date >= now) && (request.status == <?php echo SHARE_REQUEST_STATUS_CANCELLED; ?>)" class="text-right share-request-card-td">
 
             <button class="btn btn-default btn-xs disabled share-card-request-btn">Annulé</button>
 

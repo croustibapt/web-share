@@ -10,9 +10,7 @@
 
         <div class="media">
             <div class="media-left">
-                <a href="#">
-                    <img ng-src="../img/markers/128/marker-{{ share.share_type_category.label }}-{{ share.share_type.label }}.png" class="share-card-icon-img" />
-                </a>
+                <img ng-src="../img/markers/128/marker-{{ share.share_type_category.label }}-{{ share.share_type.label }}.png" class="share-card-icon-img" />
             </div>
             <div class="media-body">
                 <blockquote class="share-card-description-blockquote">

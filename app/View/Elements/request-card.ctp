@@ -7,15 +7,51 @@
 
     <div class="media">
         <div class="media-left">
-            <a href="#">
-                <img ng-src="../img/markers/128/marker-{{ request.share.share_type_category.label }}-{{ request.share.share_type.label }}.png" class="share-card-icon-img" />
-            </a>
+            <img ng-src="../img/markers/128/marker-{{ request.share.share_type_category.label }}-{{ request.share.share_type.label }}.png" class="share-card-icon-img" />
         </div>
 
         <div class="media-body">
-            <blockquote class="share-card-description-blockquote">
+            <blockquote ng-if="(request.share.start_date < now)" class="share-card-description-blockquote">
                 <!-- Share type -->
-                <p class="text-capitalize share-card-type-p" style="color: {{ request.share.share_color }};">
+                <p class="text-capitalize share-card-type-p" ng-style="{'color': '#bdc3c7'}">
+                    {{ request.share.share_type_category_label }} / <span class="share-card-type-span">{{ request.share.share_type_label }}</span>
+                </p>
+                
+                <!-- Title -->
+                <p class="media-heading lead share-card-title-p">
+                    <a href="javascript:void(0);" ng-href="{{ request.share.details_link }}">{{ request.share.title }}</a>
+                </p>
+                
+                <!-- Status -->
+                <footer ng-if="(request.status == <?php echo SHARE_REQUEST_STATUS_PENDING; ?>)" class="request-card-footer">
+
+                    Demande non traitée <span class="glyphicon glyphicon-question-sign" aria-hidden="true"></span>
+
+                </footer>
+
+                <footer ng-if="(request.status == <?php echo SHARE_REQUEST_STATUS_ACCEPTED; ?>)" class="request-card-footer">
+
+                    Demande acceptée <span class="glyphicon glyphicon-ok-sign" aria-hidden="true"></span>
+
+                </footer>
+
+                <footer ng-if="(request.status == <?php echo SHARE_REQUEST_STATUS_DECLINED; ?>)" class="request-card-footer">
+
+                    Demande rejetée <span class="glyphicon glyphicon-minus-sign" aria-hidden="true"></span>
+
+                </footer>
+
+                <footer ng-if="(request.status == <?php echo SHARE_REQUEST_STATUS_CANCELLED; ?>)" class="request-card-footer">
+
+                    Demande annulée <span class="glyphicon glyphicon-remove-sign" aria-hidden="true"></span>
+
+                </footer>
+                
+            </blockquote>
+            
+            <blockquote ng-if="(request.share.start_date >= now)" class="share-card-description-blockquote">
+                <!-- Share type -->
+                <p class="text-capitalize share-card-type-p" ng-style="(request.share.start_date >= now) ? {'color': request.share.share_color} : {'color': '#bdc3c7'}">
                     {{ request.share.share_type_category_label }} / <span class="share-card-type-span">{{ request.share.share_type_label }}</span>
                 </p>
 

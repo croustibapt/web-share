@@ -1,5 +1,5 @@
 <!-- Header -->
-<div class="card-header-div" ng-style="{'background-color': share.share_color}">
+<div class="card-header-div" ng-style="(share.start_date >= now) ? {'background-color': share.share_color} : {'background-color': '#bdc3c7'}">
     <div class="row">
         <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 text-center-xs">
 

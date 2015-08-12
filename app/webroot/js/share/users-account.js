@@ -22,6 +22,8 @@ function initializeUsersAccount(userExternalId) {
         $scope.user_requests_results_by_page = 10;
         $scope.user_requests_status = 'pending';
         
+        $scope.now = moment().format('YYYY-MM-DD');
+        
         $scope.user_shares_showPage = function(page) {
             //Update page
             $scope.user_shares_page = null;
