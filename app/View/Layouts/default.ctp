@@ -141,7 +141,13 @@
             //Function used to handle AJAX error and display a toast
             function handleAjaxError(ajaxError) {
                 var responseJSON = ajaxError.responseJSON;
-                toastr.error(responseJSON.error_message, responseJSON.error_code);
+                
+                //
+                Messenger().post({
+                    message: responseJSON.error_message,
+                    type: 'error',
+                    hideAfter: 2
+                });
             }
 
             function handleMomentTags() {

@@ -529,7 +529,10 @@ class AppController extends Controller {
                     'conditions' => array(
                         'Request.share_id' => $share['Share']['id']
                     ),
-                    'order' => 'Request.created ASC'
+                    'order' => array(
+                        'Request.status ASC',
+                        'Request.created DESC'
+                    )
                 ));
                 $this->formatRequests($response['requests'], $requests);
             }
@@ -706,7 +709,7 @@ class AppController extends Controller {
     protected function canCancel($share = NULL, $userExternalId = NULL) {
         $canCancel = false;
         
-        if (true || ($share != NULL) && ($userExternalId != NULL) && $this->doesUserOwnShare($share, $userExternalId) && $this->isShareOpened($share) && !$this->isShareExpired($share)) {
+        if (($share != NULL) && ($userExternalId != NULL) && $this->isShareOpened($share) && !$this->isShareExpired($share) && $this->doesUserOwnShare($share, $userExternalId)) {
             $canCancel = true;
         }
         

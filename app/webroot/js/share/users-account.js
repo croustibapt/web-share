@@ -212,7 +212,7 @@ function initializeUsersAccount(userExternalId) {
                 button.button('reset');
 
                 //Empty message
-                toastr.error(data, 'Erreur');
+                handleAjaxError(data);
             });
         };
 
@@ -235,7 +235,7 @@ function initializeUsersAccount(userExternalId) {
                     button.button('reset');
 
                     //Empty message
-                    toastr.error(data, 'Erreur');
+                    handleAjaxError(data);
                 });
             } else {
                 //Reset button state
@@ -261,7 +261,7 @@ function initializeUsersAccount(userExternalId) {
                     button.button('reset');
 
                     //Empty message
-                    toastr.error(data, 'Erreur');
+                    handleAjaxError(data);
                 });
             } else {
                 //Reset button state
@@ -291,7 +291,7 @@ function initializeUsersAccount(userExternalId) {
                     button.button('reset');
 
                     //Empty message
-                    toastr.error(data, 'Erreur');
+                    handleAjaxError(data);
                 });
             } else {
                 //Reset button state

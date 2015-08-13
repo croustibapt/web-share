@@ -220,7 +220,11 @@ function initializeSharesView(shareId, shareUserExternalId, requestStatus, textA
                 button.button('reset');
 
                 //Empty message
-                toastr.warning('Veuillez saisir un message d\'au moins <?php echo SHARE_COMMENT_MESSAGE_MIN_LENGTH; ?> caractères.', 'Attention');
+                Messenger().post({
+                    message: 'Veuillez saisir un message d\'au moins <?php echo SHARE_COMMENT_MESSAGE_MIN_LENGTH; ?> caractères.',
+                    type: 'warning',
+                    hideAfter: 2
+                });
             }
         };
 
