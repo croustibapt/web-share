@@ -5,6 +5,9 @@ function initializeUsersAccount(userExternalId) {
     app.controller('UsersAccountController', ['$scope', '$http', function($scope, $http) {
         //User
         $scope.user = null;
+        
+        $scope.user_data = 'shares';
+        $scope.user_data_status = 'pending';
 
         $scope.shares = null;
         $scope.user_shares_page = null;
@@ -12,7 +15,6 @@ function initializeUsersAccount(userExternalId) {
         $scope.user_shares_total_results = 0;
         $scope.user_shares_results_count = 0;
         $scope.user_shares_results_by_page = 10;
-        $scope.user_shares_status = 'pending';
 
         $scope.requests = null;
         $scope.user_requests_page = null;
@@ -20,7 +22,6 @@ function initializeUsersAccount(userExternalId) {
         $scope.user_requests_total_results = 0;
         $scope.user_requests_results_count = 0;
         $scope.user_requests_results_by_page = 10;
-        $scope.user_requests_status = 'pending';
         
         $scope.now = moment().format('YYYY-MM-DD');
         
@@ -46,7 +47,8 @@ function initializeUsersAccount(userExternalId) {
         
         $scope.getUserShares = function(page, status) {
             var url = webroot + 'user/shares?page=' + page;
-            if (status == 'finished') {
+            if (status == 'finished') {                
+                url += '&start=' + moment().subtract(1, 'month').unix(); //Last month
                 url += '&end=' + moment().unix();
             } else {
                 url += '&start=' + moment().unix();
@@ -68,8 +70,9 @@ function initializeUsersAccount(userExternalId) {
         
         $scope.getUserRequests = function(page, status) {
             var url = webroot + 'user/requests?page=' + page;
-            if (status == 'finished') {
-                url += '&end=' + moment().unix()
+            if (status == 'finished') {                
+                url += '&start=' + moment().subtract(1, 'month').unix(); //Last month
+                url += '&end=' + moment().unix();
             } else {
                 url += '&start=' + moment().unix();
             }
@@ -146,19 +149,28 @@ function initializeUsersAccount(userExternalId) {
                 formatShare(request.share);
             }
         };
-
-        $scope.onUserSharesStatusChanged = function(status, $event) {
-            $scope.user_shares_status = status;
-
+        
+        $scope.updateData = function() {
             //Update results
-            $scope.getUserShares($scope.user_shares_page, $scope.user_shares_status);
+            if ($scope.user_data == 'shares') {
+                $scope.getUserShares($scope.user_shares_page, $scope.user_data_status);
+            } else {
+                $scope.getUserRequests($scope.user_shares_page, $scope.user_data_status);
+            }
+        }
+
+        $scope.onUserDataStatusChanged = function(status, $event) {
+            if ($scope.user_data_status != status) {
+                $scope.user_data_status = status;
+                $scope.updateData();
+            }            
         };
-
-        $scope.onUserRequestsStatusChanged = function(status, $event) {
-            $scope.user_requests_status = status;
-
-            //Update results
-            $scope.getUserRequests($scope.user_requests_page, $scope.user_requests_status);
+        
+        $scope.onUserDataChanged = function(data, $event) {
+            if ($scope.user_data != data) {
+                $scope.user_data = data;
+                $scope.updateData();
+            }
         };
 
         $scope.updateRequestStatus = function(shareId, requestId, status) {
