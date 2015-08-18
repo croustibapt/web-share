@@ -10,15 +10,15 @@
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title">Modal title</h4>
             </div>
-
-            <div class="modal-body">
-
-                <?php
+            
+            <?php
                 echo $this->Form->create('Share', array(
                     'action' => 'cancel/'.$shareId
                 ));
-                ?>
+            ?>
 
+            <div class="modal-body">
+                
                 <!-- Reason -->
                 <div class="form-group">
 
@@ -63,11 +63,13 @@
                         'class' => 'btn btn-danger',
                         'div' => false
                     ));
-
-                    echo $this->Form->end();
                 ?>
 
             </div>
+            
+            <?php
+                echo $this->Form->end();
+            ?>
         </div>
     </div>
 </div>

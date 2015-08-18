@@ -392,9 +392,15 @@ class ApiSharesController extends AppController {
                             $response['share_id'] = $shareId;
                             $response['status'] = $updatedShare['Share']['status'];
                             $response['modified'] = $updatedShare['Share']['modified'];
-
-                            //Send push notif: TODO
-                            //$this->sendPushNotif($request['Request']['user_id'], 'Votre demande a été acceptée.');
+                            
+                            //Send push notif to each participant
+                            foreach ($share['Request'] as $request) {
+                                if ($request['status'] == SHARE_REQUEST_STATUS_ACCEPTED) {
+                                    $this->sendPushNotif($request['user_id'], 'Le partage auquel vous participiez vient d\'être annulé.');
+                                } else if ($request['status'] == SHARE_REQUEST_STATUS_PENDING) {
+                                    $this->sendPushNotif($request['user_id'], 'Le partage auquel vous vouliez participer vient d\'être annulé.');
+                                }
+                            }
                         } else {
                             throw new ShareException(SHARE_STATUS_CODE_INTERNAL_SERVER_ERROR, SHARE_ERROR_CODE_SAVE_FAILED, "Share cancel failed");
                         }

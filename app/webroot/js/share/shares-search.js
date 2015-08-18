@@ -19,6 +19,8 @@ function initializeSharesSearch(autocompleteInputId, googleMapDivId, shareTypeCa
         $scope.results_by_page = 10;
 
         $scope.period = period;
+        
+        $scope.now = moment().format('YYYY-MM-DD');
 
         $scope.address = '';
         $scope.placeId = placeId;
