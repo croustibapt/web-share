@@ -455,7 +455,7 @@ function formatShare(share) {
     //Event date
     var startDate = new Date(share.start_date);
     var isoStartDate = startDate.toISOString();
-    var momentDay = moment(isoStartDate).format('dddd D MMMM', 'fr');
+    var momentDay = moment(isoStartDate).format('dddd D MMM', 'fr');
     share.moment_day = momentDay;
 
     //Event time
