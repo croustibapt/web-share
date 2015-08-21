@@ -43,7 +43,7 @@
 
 <table class="table-share-request-card-requests table">
 
-    <tr ng-if="(request.share.start_date >= now)" ng-repeat="request in share.requests track by request.request_id" ng-class="{ 'warning': (request.status == <?php echo SHARE_REQUEST_STATUS_PENDING; ?>), 'success': (request.status == <?php echo SHARE_REQUEST_STATUS_ACCEPTED; ?>), 'danger': (request.status == <?php echo SHARE_REQUEST_STATUS_DECLINED; ?>) }" class="tr-share-card-request">
+    <tr ng-if="(share.start_date >= now)" ng-repeat="request in share.requests track by request.request_id" ng-class="{ 'warning': (request.status == <?php echo SHARE_REQUEST_STATUS_PENDING; ?>), 'success': (request.status == <?php echo SHARE_REQUEST_STATUS_ACCEPTED; ?>), 'danger': (request.status == <?php echo SHARE_REQUEST_STATUS_DECLINED; ?>) }" class="tr-share-card-request">
 
         <td class="share-request-card-td">
 
