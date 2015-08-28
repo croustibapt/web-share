@@ -541,10 +541,10 @@ class AppController extends Controller {
         return $response;
     }
     
-    protected function sendPushNotif($userId = NULL, $message = NULL) {
+    protected function sendPushNotif($userId = NULL, $message = NULL, $key = NULL, $options = NULL) {
         $success = false;
         
-        if (($userId != NULL) && ($message != NULL)) {
+        if (($userId != NULL) && ($message != NULL) && ($key != NULL)) {
             //Find related user
             $user = $this->User->find('first', array(
                 'conditions' => array('User.id' => $userId)
@@ -563,7 +563,21 @@ class AppController extends Controller {
                     "X-Parse-REST-API-Key: " . $restKey
                 );
 
-                $objectData = '{"where":{"deviceToken":{"$in":["'.$user['User']['push_token'].'"]}},"data":{"alert":"'.$message.'"}}';
+                $pushNotification = array(
+                    "where" => array(
+                        "deviceToken" => array(
+                            "\$in" => array(
+                                $user['User']['push_token']
+                            )
+                        )
+                    ),
+                    "data" => array(
+                        "alert" => $message,
+                        "key" => $key,
+                        "options" => $options
+                    )
+                );
+                $objectData = json_encode($pushNotification);
 
                 $rest = curl_init();
                 curl_setopt($rest,CURLOPT_URL,$url);

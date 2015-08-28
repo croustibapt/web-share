@@ -123,5 +123,5 @@
 
 <script>
     //
-    initializeUsersAccount(<?php echo AuthComponent::User('external_id'); ?>);
+    initializeUsersAccount('<?php echo AuthComponent::User('external_id'); ?>');
 </script>

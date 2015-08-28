@@ -2,6 +2,11 @@
 App::uses('AppController', 'Controller');
 App::uses('ShareException', 'Lib');
 
+define('SHARE_PUSH_NOTIFICATION_NEW_REQUEST', 'SHARE_PUSH_NOTIFICATION_NEW_REQUEST');
+define('SHARE_PUSH_NOTIFICATION_REQUEST_ACCEPTED', 'SHARE_PUSH_NOTIFICATION_REQUEST_ACCEPTED');
+define('SHARE_PUSH_NOTIFICATION_REQUEST_DECLINED', 'SHARE_PUSH_NOTIFICATION_REQUEST_DECLINED');
+define('SHARE_PUSH_NOTIFICATION_PARTICIPATION_CANCELLED', 'SHARE_PUSH_NOTIFICATION_PARTICIPATION_CANCELLED');
+
 class ApiRequestsController extends AppController {
     public $name = 'ApiRequests';
     
@@ -127,7 +132,7 @@ class ApiRequestsController extends AppController {
                         //If it worked
                         if ($request != NULL) {
                             //Send push notif
-                            $this->sendPushNotif($share['Share']['user_id'], 'Vous avez une nouvelle demande.');
+                            $this->sendPushNotif($share['Share']['user_id'], 'Vous avez une nouvelle demande.', SHARE_PUSH_NOTIFICATION_NEW_REQUEST, array("share_id" => $shareId));
 
                             //Format response
                             $response['request_id'] = $request['Request']['id'];
@@ -212,7 +217,7 @@ class ApiRequestsController extends AppController {
                     //Update status
                     if ($this->changeStatus($request, SHARE_REQUEST_STATUS_ACCEPTED)) {
                         //Send push notif
-                        $this->sendPushNotif($request['Request']['user_id'], 'Votre demande a été acceptée.');
+                        $this->sendPushNotif($request['Request']['user_id'], 'Votre demande a été acceptée.', SHARE_PUSH_NOTIFICATION_REQUEST_ACCEPTED, array("request_id" => $requestId));
                     } else {
                         throw new ShareException(SHARE_STATUS_CODE_INTERNAL_SERVER_ERROR, SHARE_ERROR_CODE_SAVE_FAILED, "Request accept failed");
                     }
@@ -269,7 +274,7 @@ class ApiRequestsController extends AppController {
                     //Update status
                     if ($this->changeStatus($request, SHARE_REQUEST_STATUS_DECLINED)) {
                         //Send push notif
-                        $this->sendPushNotif($request['Request']['user_id'], 'Votre demande a été refusée.');
+                        $this->sendPushNotif($request['Request']['user_id'], 'Votre demande a été refusée.', SHARE_PUSH_NOTIFICATION_REQUEST_DECLINED, array("request_id" => $requestId));
                     } else {
                         throw new ShareException(SHARE_STATUS_CODE_INTERNAL_SERVER_ERROR, SHARE_ERROR_CODE_SAVE_FAILED, "Request decline failed");
                     }
@@ -321,7 +326,7 @@ class ApiRequestsController extends AppController {
                     //Update status
                     if ($this->changeStatus($request, SHARE_REQUEST_STATUS_CANCELLED)) {
                         //Send push notif
-                        $this->sendPushNotif($request['Request']['user_id'], 'Votre participation a été annulée.');
+                        $this->sendPushNotif($request['Request']['user_id'], 'Votre participation a été annulée.', SHARE_PUSH_NOTIFICATION_PARTICIPATION_CANCELLED, array("request_id" => $requestId));
                     } else {
                         throw new ShareException(SHARE_STATUS_CODE_INTERNAL_SERVER_ERROR, SHARE_ERROR_CODE_SAVE_FAILED, "Request cancel failed");
                     }

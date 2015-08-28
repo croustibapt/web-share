@@ -1,10 +1,11 @@
-function initializeUsersAccount(userExternalId) {
+function initializeUsersAccount(userExternalId) {    
     /**
      * UsersAccountController
      */
     app.controller('UsersAccountController', ['$scope', '$http', function($scope, $http) {
         //User
         $scope.user = null;
+        $scope.user_external_id = userExternalId;
         
         $scope.user_data = 'shares';
         $scope.user_data_status = 'pending';
@@ -91,9 +92,12 @@ function initializeUsersAccount(userExternalId) {
             });
         };
 
-        $scope.getUserAccount = function(userExternalId) {
+        $scope.getUserAccount = function() {            
+            var url = webroot + 'user/details/' + $scope.user_external_id;
+            console.log(url);
+            
             //Get user/details call
-            $http.get(webroot + 'user/details/' + userExternalId)
+            $http.get(url)
             .success(function (data, status, headers, config) {
                 //Parse JSON response
                 $scope.handleUserDetailsResponse(data);
@@ -174,8 +178,8 @@ function initializeUsersAccount(userExternalId) {
         };
 
         $scope.updateRequestStatus = function(shareId, requestId, status) {
-            for (var shareIndex in $scope.user.shares) {
-                var share = $scope.user.shares[shareIndex];
+            for (var shareIndex in $scope.shares) {
+                var share = $scope.shares[shareIndex];
 
                 if (share.share_id == shareId) {
                     for (var requestIndex in share.requests) {
@@ -195,8 +199,8 @@ function initializeUsersAccount(userExternalId) {
         };
 
         $scope.updateOwnRequestStatus = function(requestId, status) {
-            for (var requestIndex in $scope.user.requests) {
-                var request = $scope.user.requests[requestIndex];
+            for (var requestIndex in $scope.requests) {
+                var request = $scope.requests[requestIndex];
 
                 if (request.request_id == requestId) {
                     console.log(request);
@@ -314,7 +318,7 @@ function initializeUsersAccount(userExternalId) {
         /**
          * Method used to initialize the HomeController
          */
-        $scope.initialize = function(userExternalId) {
+        $scope.initialize = function(userExternalId) {            
             //Get user account
             $scope.getUserAccount(userExternalId);
         };

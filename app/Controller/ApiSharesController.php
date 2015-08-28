@@ -2,6 +2,8 @@
 App::uses('AppController', 'Controller');
 App::uses('ShareException', 'Lib');
 
+define('SHARE_PUSH_NOTIFICATION_SHARE_CANCELLED', 'SHARE_PUSH_NOTIFICATION_SHARE_CANCELLED');
+
 class ApiSharesController extends AppController {
 	public $uses = array('Share', 'ShareType', 'ShareTypeCategory', 'User', 'Tag', 'Comment', 'Request');
 
@@ -396,9 +398,9 @@ class ApiSharesController extends AppController {
                             //Send push notif to each participant
                             foreach ($share['Request'] as $request) {
                                 if ($request['status'] == SHARE_REQUEST_STATUS_ACCEPTED) {
-                                    $this->sendPushNotif($request['user_id'], 'Le partage auquel vous participiez vient d\'être annulé.');
+                                    $this->sendPushNotif($request['user_id'], 'Le partage auquel vous participiez vient d\'être annulé.', SHARE_PUSH_NOTIFICATION_SHARE_CANCELLED, array("share_id" => $shareId));
                                 } else if ($request['status'] == SHARE_REQUEST_STATUS_PENDING) {
-                                    $this->sendPushNotif($request['user_id'], 'Le partage auquel vous vouliez participer vient d\'être annulé.');
+                                    $this->sendPushNotif($request['user_id'], 'Le partage auquel vous vouliez participer vient d\'être annulé.', SHARE_PUSH_NOTIFICATION_SHARE_CANCELLED, array("share_id" => $shareId));
                                 }
                             }
                         } else {
