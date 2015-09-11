@@ -413,9 +413,7 @@ class AppController extends Controller {
     protected function formatRequests(& $response, $requests, $returnShare = false) {
         $response = array();
                 
-        $requestIndex = 0;
-        $userParticipate = false;
-        
+        $requestIndex = 0;        
         foreach ($requests as $request) {
             $status = $request['Request']['status'];
 
