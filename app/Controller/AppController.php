@@ -420,6 +420,12 @@ class AppController extends Controller {
             $response[$requestIndex]['request_id'] = $request['Request']['id'];
             $response[$requestIndex]['share_id'] = $request['Request']['share_id'];
             $response[$requestIndex]['status'] = $status;
+            
+            //Evaluations
+            $response[$requestIndex]['participant_evalutation']['rate'] = $request['ParticipantEvaluation']['rate'];
+            $response[$requestIndex]['participant_evalutation']['message'] = $request['ParticipantEvaluation']['message'];
+            $response[$requestIndex]['creator_evalutation']['rate'] = $request['CreatorEvaluation']['rate'];
+            $response[$requestIndex]['creator_evalutation']['message'] = $request['CreatorEvaluation']['message'];
 
             //Share
             if ($returnShare) {

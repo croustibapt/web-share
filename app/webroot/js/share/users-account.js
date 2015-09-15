@@ -59,6 +59,8 @@ function initializeUsersAccount(userExternalId) {
             //Get user/shares call
             $http.get(url)
             .success(function (data, status, headers, config) {
+                console.log(data);
+        
                 //Parse JSON response
                 $scope.handleUserSharesResponse(data);
 
@@ -82,6 +84,8 @@ function initializeUsersAccount(userExternalId) {
             //Get user/requests call
             $http.get(url)
             .success(function (data, status, headers, config) {
+                console.log(data);
+                
                 //Parse JSON response
                 $scope.handleUserRequestsResponse(data);
 

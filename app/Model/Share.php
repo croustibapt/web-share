@@ -137,15 +137,6 @@ class Share extends AppModel {
         'Request' => array(
 			'className' => 'Request')
     );
-    
-    public $hasOne = array(
-        'Evalutation' => array(
-			'className' => 'Evalutation',
-			'foreignKey' => 'participant_evaluation_id'),
-        'Evalutation' => array(
-			'className' => 'Evalutation',
-			'foreignKey' => 'creator_evaluation_id')
-    );
 
     public function beforeSave($options = array()) {
         if (isset($this->data['Share']['latitude']) && isset($this->data['Share']['longitude'])) {
