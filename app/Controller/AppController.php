@@ -422,10 +422,15 @@ class AppController extends Controller {
             $response[$requestIndex]['status'] = $status;
             
             //Evaluations
-            $response[$requestIndex]['participant_evalutation']['rate'] = $request['ParticipantEvaluation']['rate'];
-            $response[$requestIndex]['participant_evalutation']['message'] = $request['ParticipantEvaluation']['message'];
-            $response[$requestIndex]['creator_evalutation']['rate'] = $request['CreatorEvaluation']['rate'];
-            $response[$requestIndex]['creator_evalutation']['message'] = $request['CreatorEvaluation']['message'];
+            if (isset($request['ParticipantEvaluation']) && ($request['ParticipantEvaluation'] != null)) {
+                $response[$requestIndex]['participant_evalutation']['rating'] = $request['ParticipantEvaluation']['rating'];
+                $response[$requestIndex]['participant_evalutation']['message'] = $request['ParticipantEvaluation']['message'];
+            }
+            
+            if (isset($request['CreatorEvaluation']) && ($request['CreatorEvaluation'] != null)) {
+                $response[$requestIndex]['creator_evalutation']['rating'] = $request['CreatorEvaluation']['rating'];
+                $response[$requestIndex]['creator_evalutation']['message'] = $request['CreatorEvaluation']['message'];
+            }
 
             //Share
             if ($returnShare) {

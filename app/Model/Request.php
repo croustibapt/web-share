@@ -18,13 +18,13 @@ class Request extends AppModel {
     public $hasOne = array(
         'ParticipantEvaluation' => array(
 			'className' => 'Evaluation',
-            'foreignKey'    => false,
+            'foreignKey' => false,
             'conditions' => array(
                 'Request.participant_evaluation_id = ParticipantEvaluation.id'
         )),
         'CreatorEvaluation' => array(
 			'className' => 'Evaluation',
-            'foreignKey'    => false,
+            'foreignKey' => false,
             'conditions' => array(
                 'Request.creator_evaluation_id = CreatorEvaluation.id'
         ))
