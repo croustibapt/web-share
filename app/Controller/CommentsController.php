@@ -19,8 +19,6 @@ class CommentsController extends ApiCommentsController {
             $shareId = $data['share_id'];
             $message = $data['message'];
 
-            $this->sendResponse(SHARE_STATUS_CODE_OK, $userExternalId);
-
             try {
                 //Intern add
                 $response = $this->internAdd($userExternalId, $shareId, $message);

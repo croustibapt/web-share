@@ -410,7 +410,7 @@ class AppController extends Controller {
         }
     }
     
-    protected function formatRequests(& $response, $requests, $returnShare = false) {
+    protected function formatRequests(& $response, $requests, $shareConcluded, $returnShare = false) {
         $response = array();
                 
         $requestIndex = 0;        
@@ -422,14 +422,16 @@ class AppController extends Controller {
             $response[$requestIndex]['status'] = $status;
             
             //Evaluations
-            if (isset($request['ParticipantEvaluation']) && ($request['ParticipantEvaluation'] != null)) {
-                $response[$requestIndex]['participant_evalutation']['rating'] = $request['ParticipantEvaluation']['rating'];
-                $response[$requestIndex]['participant_evalutation']['message'] = $request['ParticipantEvaluation']['message'];
-            }
-            
-            if (isset($request['CreatorEvaluation']) && ($request['CreatorEvaluation'] != null)) {
-                $response[$requestIndex]['creator_evalutation']['rating'] = $request['CreatorEvaluation']['rating'];
-                $response[$requestIndex]['creator_evalutation']['message'] = $request['CreatorEvaluation']['message'];
+            if (($request['Request']['status'] == SHARE_REQUEST_STATUS_ACCEPTED) && $shareConcluded) {
+                if (isset($request['ParticipantEvaluation']) && ($request['ParticipantEvaluation'] != null)) {
+                    $response[$requestIndex]['participant_evalutation']['rating'] = $request['ParticipantEvaluation']['rating'];
+                    $response[$requestIndex]['participant_evalutation']['message'] = $request['ParticipantEvaluation']['message'];
+                }
+                
+                if (isset($request['CreatorEvaluation']) && ($request['CreatorEvaluation'] != null)) {
+                    $response[$requestIndex]['creator_evalutation']['rating'] = $request['CreatorEvaluation']['rating'];
+                    $response[$requestIndex]['creator_evalutation']['message'] = $request['CreatorEvaluation']['message'];
+                }
             }
 
             //Share
@@ -543,7 +545,9 @@ class AppController extends Controller {
                         'Request.created DESC'
                     )
                 ));
-                $this->formatRequests($response['requests'], $requests);
+                
+                $shareConcluded = $share['Share']['participation_count'] == $share['Share']['places'];
+                $this->formatRequests($response['requests'], $requests, $shareConcluded);
             }
         }
         

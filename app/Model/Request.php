@@ -29,4 +29,28 @@ class Request extends AppModel {
                 'Request.creator_evaluation_id = CreatorEvaluation.id'
         ))
     );
+
+    public function afterFind($results, $primary = false) {
+        if (isset($results['ParticipantEvaluation']) && $results['ParticipantEvaluation']['id'] === null) {
+            unset($results['ParticipantEvaluation']);
+        }
+
+        if (isset($results['CreatorEvaluation']) && $results['CreatorEvaluation']['id'] === null) {
+            unset($results['CreatorEvaluation']);
+        }
+
+        if (isset($results[0])) {
+            foreach ($results as $key => $value) {
+                if (isset($value['ParticipantEvaluation']) && $value['ParticipantEvaluation']['id'] === null) {
+                    unset($results[$key]['ParticipantEvaluation']);
+                }
+
+                if (isset($value['CreatorEvaluation']) && $value['CreatorEvaluation']['id'] === null) {
+                    unset($results[$key]['CreatorEvaluation']);
+                }
+            }
+        }
+
+        return $results;
+    }
 }

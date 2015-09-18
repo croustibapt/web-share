@@ -283,7 +283,8 @@ class ApiUsersController extends AppController {
                 $request['Share'] = $share;
             }
 
-            $this->formatRequests($response['results'], $requests, true);
+            $shareConcluded = $share['participation_count'] == $share['places'];
+            $this->formatRequests($response['results'], $requests, $shareConcluded, true);
 
             $response['total_results'] = $totalResults;
             $response['total_pages'] = ceil($totalResults / $limit);

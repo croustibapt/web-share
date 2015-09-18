@@ -151,6 +151,14 @@
         'requestId' => '[0-9]+'
     ));
 
+#pragma mark - EVALUATIONS
+
+    //API
+    Router::connect('/api/evaluation/add', array('controller' => 'ApiEvaluations', 'action' => 'add'));
+
+    //General
+    Router::connect('/evaluation/add', array('controller' => 'Evaluations', 'action' => 'add'));
+
 /**
  * Load all plugin routes. See the CakePlugin documentation on
  * how to customize the loading of plugin routes.
