@@ -15,26 +15,28 @@ class ApiEvaluationsController extends AppController {
     }
     
     private function canEvaluate($request = NULL, $userExternalId = NULL, $share = NULL, $userId = NULL) {
-        $canCancelRequest = false;
+        $canEvaluate = false;
         
-        // //Check parameters
-        // if (($request != NULL) && ($userExternalId != NULL) && $this->canChangeStatus($request, SHARE_REQUEST_STATUS_CANCELLED)) {
-        //     //Get Share identifier
-        //     $shareId = $request['Request']['share_id'];
-
-        //     //Get related Share
-        //     $share = $this->Share->find('first', array(
-        //         'conditions' => array(
-        //             'Share.id' => $shareId
-        //         )
-        //     ));
+        //Check parameters
+        if (($request != NULL) && ($userExternalId != NULL) && ($userId != nil)) {
+            $creator = false;
+            $participant = false;
+            $hasAlreadyEvaluateShare = true;
             
-        //     if ($this->isShareOpened($share) && !$this->isShareExpired($share) && ($this->doesUserOwnShare($share, $userExternalId) || ($request['User']['external_id'] == $userExternalId))) {
-        //         $canCancelRequest = true;
-        //     }
-        // }
+            if ($userId == $share['Share']['user_id']) {
+                $creator = true;
+                $hasAlreadyEvaluateShare = ($request['Request']['creator_evaluation_id'] == $userId);
+            } else if ($userId == $request['Request']['user_id']) {
+                $participant = true;
+                $hasAlreadyEvaluateShare = ($request['Request']['participant_evaluation_id'] == $userId);
+            }
+            
+            if (($creator || $participant) && !$hasAlreadyEvaluateShare && ($share['participation_count'] == $share['places']) && $this->isShareOpened($share)) {
+                $canEvaluate = true;
+            }
+        }
         
-        return $canCancelRequest;
+        return $canEvaluate;
     }
     
     protected function internAdd($userExternalId = NULL, $requestId = NULL, $userId = NULL, $rating = NULL, $message = NULL) {
