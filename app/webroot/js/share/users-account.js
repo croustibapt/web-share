@@ -319,6 +319,37 @@ function initializeUsersAccount(userExternalId) {
             }
         };
 
+        $scope.evaluate = function(requestId, $event) {
+            var button = angular.element($event.currentTarget);
+            button.button('loading');
+
+            var message = prompt("Saisissez votre message :", "Super partage !")
+            if (message != null) {
+                $http.get(webroot + 'request/cancel/' + requestId)
+                .success(function (data, status, headers, config) {
+                    console.log(data);
+
+                    //Update request status
+                    $scope.updateOwnRequestStatus(requestId, 3);
+
+                    //Reset button state
+                    button.button('reset');
+                })
+                .error(function (data, status, headers, config) {
+                    console.log(data);
+
+                    //Reset button state
+                    button.button('reset');
+
+                    //Empty message
+                    handleAjaxError(data);
+                });
+            } else {
+                //Reset button state
+                button.button('reset');
+            }
+        };
+
         /**
          * Method used to initialize the HomeController
          */

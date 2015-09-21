@@ -113,8 +113,7 @@ class ApiUsersController extends AppController {
         return $response;
     }
     
-    public function details($externalId = NULL)
-    {
+    public function details($externalId = NULL) {
         if ($this->request->is('get')) {
             try {
                 //Intern details
@@ -279,12 +278,11 @@ class ApiUsersController extends AppController {
 
                 $shares = $this->Share->query($sql);
                 $share = $shares[0];
-
+                
                 $request['Share'] = $share;
             }
 
-            $shareConcluded = $share['participation_count'] == $share['places'];
-            $this->formatRequests($response['results'], $requests, $shareConcluded, true);
+            $this->formatRequests($response['results'], $requests, true);
 
             $response['total_results'] = $totalResults;
             $response['total_pages'] = ceil($totalResults / $limit);

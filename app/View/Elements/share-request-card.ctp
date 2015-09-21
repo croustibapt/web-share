@@ -9,15 +9,13 @@
         <div class="media-left">
             
             <!-- Share type icon -->
-            <img ng-if="(share.start_date >= now)" ng-src="../img/markers/128/marker-{{ share.share_type_category.label }}-{{ share.share_type.label }}.png" style="max-width: 80px;" />
-            
-            <img ng-if="(share.start_date < now)" ng-src="../img/markers/128/marker-other-other.png" style="max-width: 80px;" />
+            <img ng-src="../img/markers/128/marker-{{ share.share_type_category.label }}-{{ share.share_type.label }}.png" style="max-width: 80px;" />
             
         </div>
         <div class="media-body">
             <blockquote class="share-card-description-blockquote">
                 <!-- Share type -->
-                <p class="text-capitalize share-card-type-p" ng-style="(share.start_date >= now) ? { 'color': share.share_color } : { 'color': '#bdc3c7' }">
+                <p class="text-capitalize share-card-type-p" ng-style="{ 'color': share.share_color }">
                     {{ share.share_type_category_label }} / <span class="share-card-type-span">{{ share.share_type_label }}</span>
                 </p>
 
@@ -28,8 +26,8 @@
 
                 <p class="share-request-card-summary-p text-muted">
 
-                    <span ng-if="(share.places_left > 1)"><strong>{{ share.places_left }}</strong> places</span>
-                    <span ng-if="(share.places_left == 1)"><strong>1</strong> place</span>
+                    <span ng-if="(share.places_left > 1)">Encore <strong>{{ share.places_left }}</strong> places</span>
+                    <span ng-if="(share.places_left == 1)">Encore <strong>1</strong> place</span>
                     <span ng-if="(share.places_left == 0)">Complet</span>
 
                     <span ng-if="(share.places_left > 0)">à <strong>{{ share.formatted_price }}</strong> <span ng-if="(share.price >= 2.0)">euros</span><span ng-if="(share.price < 2.0)">euro</span></span>
@@ -43,7 +41,7 @@
 
 <table class="table-share-request-card-requests table">
 
-    <tr ng-if="(share.start_date >= now)" ng-repeat="request in share.requests track by request.request_id" ng-class="{ 'warning': (request.status == <?php echo SHARE_REQUEST_STATUS_PENDING; ?>), 'success': (request.status == <?php echo SHARE_REQUEST_STATUS_ACCEPTED; ?>), 'danger': (request.status == <?php echo SHARE_REQUEST_STATUS_DECLINED; ?>) }" class="tr-share-card-request">
+    <tr ng-if="(share.start_date >= now)" ng-repeat="request in share.requests track by request.request_id" class="tr-share-card-request">
 
         <td class="share-request-card-td">
 
@@ -101,19 +99,19 @@
 
         <td class="share-request-card-td">
 
-            <p ng-if="(request.status == <?php echo SHARE_REQUEST_STATUS_PENDING; ?>)" class="text-muted share-card-request-p share-card-request-user-p">
+            <p ng-if="(request.status == <?php echo SHARE_REQUEST_STATUS_PENDING; ?>)" class="text-warning share-card-request-p share-card-request-user-p">
                 {{ request.user.username }} <span class="glyphicon glyphicon-question-sign" aria-hidden="true"></span>
             </p>
 
-            <p ng-if="(request.status == <?php echo SHARE_REQUEST_STATUS_ACCEPTED; ?>)" class="text-muted share-card-request-p share-card-request-user-p">
+            <p ng-if="(request.status == <?php echo SHARE_REQUEST_STATUS_ACCEPTED; ?>)" class="text-success share-card-request-p share-card-request-user-p">
                 {{ request.user.username }} <span class="glyphicon glyphicon-ok-sign" aria-hidden="true"></span>
             </p>
 
-            <p ng-if="(request.status == <?php echo SHARE_REQUEST_STATUS_DECLINED; ?>)" class="text-muted share-card-request-p share-card-request-user-p">
+            <p ng-if="(request.status == <?php echo SHARE_REQUEST_STATUS_DECLINED; ?>)" class="text-danger share-card-request-p share-card-request-user-p">
                 {{ request.user.username }} <span class="glyphicon glyphicon-minus-sign" aria-hidden="true"></span>
             </p>
 
-            <p ng-if="(request.status == <?php echo SHARE_REQUEST_STATUS_CANCELLED; ?>)" class="text-muted share-card-request-p share-card-request-user-p">
+            <p ng-if="(request.status == <?php echo SHARE_REQUEST_STATUS_CANCELLED; ?>)" class="share-card-request-p share-card-request-user-p">
                 {{ request.user.username }} <span class="glyphicon glyphicon-minus-sign" aria-hidden="true"></span>
             </p>
         
@@ -129,7 +127,21 @@
             
             <div ng-if="(request.status == <?php echo SHARE_REQUEST_STATUS_ACCEPTED; ?>)">
                 
-                <span class="text-muted">Demande acceptée</span>
+                <div ng-if="(request.participant_evaluation != null)" style="color: #f4a62a;">
+                    <!-- Filled -->
+                    <span ng-repeat="i in [] | range:request.participant_evaluation.rating" class="glyphicon glyphicon-star" aria-hidden="true"></span>
+
+                    <!-- Empty -->
+                    <span ng-repeat="i in [] | range:(5 - request.participant_evaluation.rating)" class="glyphicon glyphicon-star-empty" aria-hidden="true"></span>
+                </div>
+
+                <div ng-if="((request.participant_evaluation == null) && (share.participation_count != share.places))">
+                    <button class="disabled btn btn-success btn-xs share-card-request-btn" title="Pas encore complet">Evaluer</button>
+                </div>
+
+                <div ng-if="((request.participant_evaluation == null) && (share.participation_count == share.places))">
+                    <button ng-click="evaluate(request.request_id, $event);" class="btn btn-success btn-xs share-card-request-btn">Evaluer</button>
+                </div>
                 
             </div>
             

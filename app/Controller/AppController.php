@@ -410,7 +410,7 @@ class AppController extends Controller {
         }
     }
     
-    protected function formatRequests(& $response, $requests, $shareConcluded, $returnShare = false) {
+    protected function formatRequests(& $response, $requests, $returnShare = false) {
         $response = array();
                 
         $requestIndex = 0;        
@@ -421,22 +421,27 @@ class AppController extends Controller {
             $response[$requestIndex]['share_id'] = $request['Request']['share_id'];
             $response[$requestIndex]['status'] = $status;
             
+            $share['Share'] = $request['Share'];
+            $shareConcluded = ($share['Share']['participation_count'] == $share['Share']['places']);
+
             //Evaluations
-            if (($request['Request']['status'] == SHARE_REQUEST_STATUS_ACCEPTED) && $shareConcluded) {
+            if (($request['Request']['status'] == SHARE_REQUEST_STATUS_ACCEPTED) && $shareConcluded && $this->isShareExpired($share)) {
                 if (isset($request['ParticipantEvaluation']) && ($request['ParticipantEvaluation'] != null)) {
-                    $response[$requestIndex]['participant_evalutation']['rating'] = $request['ParticipantEvaluation']['rating'];
-                    $response[$requestIndex]['participant_evalutation']['message'] = $request['ParticipantEvaluation']['message'];
+                    $response[$requestIndex]['participant_evaluation']['evaluation_id'] = $request['ParticipantEvaluation']['id'];
+                    $response[$requestIndex]['participant_evaluation']['rating'] = $request['ParticipantEvaluation']['rating'];
+                    $response[$requestIndex]['participant_evaluation']['message'] = $request['ParticipantEvaluation']['message'];
                 }
                 
                 if (isset($request['CreatorEvaluation']) && ($request['CreatorEvaluation'] != null)) {
-                    $response[$requestIndex]['creator_evalutation']['rating'] = $request['CreatorEvaluation']['rating'];
-                    $response[$requestIndex]['creator_evalutation']['message'] = $request['CreatorEvaluation']['message'];
+                    $response[$requestIndex]['creator_evaluation']['evaluation_id'] = $request['CreatorEvaluation']['id'];
+                    $response[$requestIndex]['creator_evaluation']['rating'] = $request['CreatorEvaluation']['rating'];
+                    $response[$requestIndex]['creator_evaluation']['message'] = $request['CreatorEvaluation']['message'];
                 }
             }
 
             //Share
             if ($returnShare) {
-                $response[$requestIndex]['share'] = $this->formatShare($request['Share']);
+                $response[$requestIndex]['share'] = $this->formatShare($share);
             }
 
             //User
@@ -502,9 +507,12 @@ class AppController extends Controller {
             $response['share_type_category']['share_type_category_id'] = $share['ShareTypeCategory']['id'];
             $response['share_type_category']['label'] = $this->checkEmptyString($share['ShareTypeCategory']['label']);
             $response['price'] = $share['Share']['price'];
-            $response['places'] = $share['Share']['places'];
+
+            $places = $share['Share']['places'];
+            $response['places'] = $places;
             
-            $response['participation_count'] = $share['0']['participation_count'];
+            $participationCount = $share['0']['participation_count'];
+            $response['participation_count'] = $participationCount;
             
             $response['waiting_time'] = $share['Share']['waiting_time'];
             $response['meet_place'] = $this->checkEmptyString($share['Share']['meet_place']);
@@ -545,9 +553,13 @@ class AppController extends Controller {
                         'Request.created DESC'
                     )
                 ));
+
+                //Set Share reference to the Request structure
+                foreach ($requests as & $request) {                    
+                    $request['Share']['participation_count'] = $participationCount;
+                }
                 
-                $shareConcluded = $share['Share']['participation_count'] == $share['Share']['places'];
-                $this->formatRequests($response['requests'], $requests, $shareConcluded);
+                $this->formatRequests($response['requests'], $requests);
             }
         }
         
