@@ -145,6 +145,8 @@ function initializeSharesView(shareId, shareUserExternalId, requestStatus, textA
             //Get call
             $http.get(webroot + 'share/details/' + shareId)
             .success(function (data, status, headers, config) {
+                console.log(data);
+                
                 //Parse JSON response
                 $scope.handleDetailsResponse(data);
             })
