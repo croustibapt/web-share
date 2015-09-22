@@ -25,6 +25,8 @@ function initializeUsersAccount(userExternalId) {
         $scope.user_requests_results_by_page = 10;
         
         $scope.now = moment().format('YYYY-MM-DD');
+
+        $scope.rate = 3;
         
         $scope.user_shares_showPage = function(page) {
             //Update page
@@ -319,44 +321,46 @@ function initializeUsersAccount(userExternalId) {
             }
         };
 
-        $scope.evaluate = function(requestId, userExternalId, rating, $event) {
-            var button = angular.element($event.currentTarget);
-            button.button('loading');
+        $scope.evaluate = function(request, $event) {
+            /*var button = angular.element($event.currentTarget);
+            button.button('loading');*/
+
+            console.log(request);
 
             var message = prompt("Saisissez votre message :", "Super partage !");
             if (message != null) {
                 console.log(message);
-                console.log(userExternalId);
                 
                 $http.put(webroot + 'evaluation/add', {
-                    request_id: requestId,
-                    user_external_id: userExternalId,
-                    rating: rating,
+                    request_id: request.request_id,
+                    user_external_id: request.user.external_id,
+                    rating: request.rating,
                     message: encodeURI(message)
                 })
                 .success(function(data, status, headers, config) {
                     console.log(data);
-            
-                    //Add one comment
-                    $scope.share.comment_count++;
 
-                    //Reset content
-                    var editor = nicEditors.findEditor($scope.textAreaId);
-                    editor.setContent('');
+                    //Update request
+                    request.participant_evaluation = {};
+                    request.participant_evaluation.evaluation_id = data['evaluation_id'];
+                    request.participant_evaluation.message = message;
+                    request.participant_evaluation.rating = request.rating;
 
-                    $scope.showPage(1, function(success) {
-                        button.button('reset');
-                    });
+                    //Reset button state
+                    //button.button('reset');
                 })
                 .error(function(data, status, headers, config) {
                     console.log(data);
+
+                    request.rating = 0;
             
                     //Reset button state
-                    button.button('reset');
+                    //button.button('reset');
                 });
             } else {
+                request.rating = 0;
                 //Reset button state
-                button.button('reset');
+                //button.button('reset');
             }
         };
 

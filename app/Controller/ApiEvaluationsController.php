@@ -14,25 +14,43 @@ class ApiEvaluationsController extends AppController {
         $this->Auth->allow('add');
     }
     
-    private function canEvaluate($request = NULL, $share = NULL, $userIdFrom = NULL, $userIdTo = NULL) {
+    private function canEvaluateParticipant($request = NULL, $share = NULL, $userIdFrom = NULL, $userIdTo = NULL) {
         $canEvaluate = false;
         
         //Check parameters
         if (($request != NULL) && ($share != NULL) && ($userIdFrom != NULL) && ($userIdTo != NULL)) {
-            $creator = false;
             $participant = false;
             $hasAlreadyEvaluateShare = true;
             
-            if (($userIdFrom == $request['Request']['user_id']) && ($userIdTo == $share['Share']['user_id'])) {
-                $creator = true;
-                $hasAlreadyEvaluateShare = ($request['Request']['creator_evaluation_id'] == $userIdTo);
-            } else if (($userIdFrom == $share['Share']['user_id']) && ($userIdTo == $request['Request']['user_id'])) {
+            if (($userIdFrom == $share['Share']['user_id']) && ($userIdTo == $request['Request']['user_id'])) {
                 $participant = true;
                 $hasAlreadyEvaluateShare = ($request['Request']['participant_evaluation_id'] == $userIdTo);
             }
                         
             $shareFull = ($share['0']['participation_count'] == $share['Share']['places']);
-            if (($creator || $participant) && !$hasAlreadyEvaluateShare && $shareFull && $this->isShareOpened($share)) {
+            if ($participant && !$hasAlreadyEvaluateShare && $shareFull && $this->isShareOpened($share)) {
+                $canEvaluate = true;
+            }
+        }
+        
+        return $canEvaluate;
+    }
+
+    private function canEvaluateCreator($request = NULL, $share = NULL, $userIdFrom = NULL, $userIdTo = NULL) {
+        $canEvaluate = false;
+        
+        //Check parameters
+        if (($request != NULL) && ($share != NULL) && ($userIdFrom != NULL) && ($userIdTo != NULL)) {
+            $creator = false;
+            $hasAlreadyEvaluateShare = true;
+            
+            if (($userIdFrom == $request['Request']['user_id']) && ($userIdTo == $share['Share']['user_id'])) {
+                $creator = true;
+                $hasAlreadyEvaluateShare = ($request['Request']['creator_evaluation_id'] == $userIdTo);
+            }
+                        
+            $shareFull = ($share['0']['participation_count'] == $share['Share']['places']);
+            if ($creator && !$hasAlreadyEvaluateShare && $shareFull && $this->isShareOpened($share)) {
                 $canEvaluate = true;
             }
         }
@@ -64,8 +82,10 @@ class ApiEvaluationsController extends AppController {
 
                 //If found
                 if ($request != NULL) {
-                    //Can interact?
-                    if ($this->canEvaluate($request, $share, $userIdFrom, $userIdTo)) {
+                    //Can evaluate?
+                    $canEvaluateParticipant = $this->canEvaluateParticipant($request, $share, $userIdFrom, $userIdTo);
+                    $canEvaluateCreator = $this->canEvaluateCreator($request, $share, $userIdFrom, $userIdTo);
+                    if ($canEvaluateParticipant || $canEvaluateCreator) {
                         //Format data
                         $dataEvaluation['Evaluation']['rating'] = $rating;
                         $dataEvaluation['Evaluation']['message'] = $message;
@@ -78,8 +98,12 @@ class ApiEvaluationsController extends AppController {
 
                         //If it worked
                         if ($evaluation != NULL) {
-                            $dataRequest['rating'] = $rating;
-                            $dataRequest['message'] = $message;
+                            if ($canEvaluateParticipant) {
+                                $dataRequest['participant_evaluation_id'] = $evaluation['Evaluation']['id'];
+                            }
+                            if ($canEvaluateCreator) {
+                                $dataRequest['creator_evaluation_id'] = $evaluation['Evaluation']['id'];
+                            }
 
                             $this->Request->id = $requestId;
                             if ($this->Request->save($dataRequest)) {

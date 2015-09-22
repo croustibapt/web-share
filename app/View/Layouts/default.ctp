@@ -44,6 +44,7 @@
 
             //Angular
             echo $this->Html->script('angular/angular.min');
+            echo $this->Html->script('bootstrap/ui-bootstrap-tpls-0.13.4.min');
 
             //Page specific
             echo $this->Html->script('share/common');
