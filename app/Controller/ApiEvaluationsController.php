@@ -14,24 +14,25 @@ class ApiEvaluationsController extends AppController {
         $this->Auth->allow('add');
     }
     
-    private function canEvaluate($request = NULL, $userExternalId = NULL, $share = NULL, $userId = NULL) {
+    private function canEvaluate($request = NULL, $share = NULL, $userIdFrom = NULL, $userIdTo = NULL) {
         $canEvaluate = false;
         
         //Check parameters
-        if (($request != NULL) && ($userExternalId != NULL) && ($userId != nil)) {
+        if (($request != NULL) && ($share != NULL) && ($userIdFrom != NULL) && ($userIdTo != NULL)) {
             $creator = false;
             $participant = false;
             $hasAlreadyEvaluateShare = true;
             
-            if ($userId == $share['Share']['user_id']) {
+            if (($userIdFrom == $request['Request']['user_id']) && ($userIdTo == $share['Share']['user_id'])) {
                 $creator = true;
-                $hasAlreadyEvaluateShare = ($request['Request']['creator_evaluation_id'] == $userId);
-            } else if ($userId == $request['Request']['user_id']) {
+                $hasAlreadyEvaluateShare = ($request['Request']['creator_evaluation_id'] == $userIdTo);
+            } else if (($userIdFrom == $share['Share']['user_id']) && ($userIdTo == $request['Request']['user_id'])) {
                 $participant = true;
-                $hasAlreadyEvaluateShare = ($request['Request']['participant_evaluation_id'] == $userId);
+                $hasAlreadyEvaluateShare = ($request['Request']['participant_evaluation_id'] == $userIdTo);
             }
-            
-            if (($creator || $participant) && !$hasAlreadyEvaluateShare && ($share['participation_count'] == $share['places']) && $this->isShareOpened($share)) {
+                        
+            $shareFull = ($share['0']['participation_count'] == $share['Share']['places']);
+            if (($creator || $participant) && !$hasAlreadyEvaluateShare && $shareFull && $this->isShareOpened($share)) {
                 $canEvaluate = true;
             }
         }
@@ -39,25 +40,32 @@ class ApiEvaluationsController extends AppController {
         return $canEvaluate;
     }
     
-    protected function internAdd($userExternalId = NULL, $requestId = NULL, $userId = NULL, $rating = NULL, $message = NULL) {
+    protected function internAdd($userExternalIdFrom = NULL, $requestId = NULL, $userExternalIdTo = NULL, $rating = NULL, $message = NULL) {
         $response = NULL;
         
-        if (($userExternalId != NULL) && ($requestId != NULL) && ($userId != NULL) && ($rating != NULL)) {
+        if (($userExternalIdFrom != NULL) && ($requestId != NULL) && ($userExternalIdTo != NULL) && ($rating != NULL)) {
             //Get user id
-            $userId = $this->getUserId($userExternalId);
+            $userIdFrom = $this->getUserId($userExternalIdFrom);
+            $userIdTo = $this->getUserId($userExternalIdTo);
             
-            if ($userId != NULL) {
+            if (($userIdFrom != NULL) && ($userIdTo != NULL)) {
                 //Get related Request
                 $request = $this->Request->find('first', array(
                     'conditions' => array(
                         'Request.id' => $requestId
                     )
                 ));
+                
+                //And related Share
+                $sql = "SELECT *, X(Share.location) as latitude, Y(Share.location) as longitude, (SELECT COUNT(Request.id) FROM requests Request WHERE Request.share_id = Share.id AND Request.status = 1) AS participation_count FROM shares AS Share, users AS User, share_types AS ShareType, share_type_categories ShareTypeCategory WHERE Share.user_id = User.id AND Share.share_type_id = ShareType.id AND ShareType.share_type_category_id = ShareTypeCategory.id AND Share.id = ".$request['Request']['share_id']." LIMIT 1;";
+
+                $shares = $this->Share->query($sql);
+                $share = $shares[0];
 
                 //If found
                 if ($request != NULL) {
                     //Can interact?
-                    if ($this->canEvaluate($share, $userId)) {
+                    if ($this->canEvaluate($request, $share, $userIdFrom, $userIdTo)) {
                         //Format data
                         $dataEvaluation['Evaluation']['rating'] = $rating;
                         $dataEvaluation['Evaluation']['message'] = $message;
@@ -74,15 +82,15 @@ class ApiEvaluationsController extends AppController {
                             $dataRequest['message'] = $message;
 
                             $this->Request->id = $requestId;
-                            if ($this->Request->save(dataRequest)) {
+                            if ($this->Request->save($dataRequest)) {
                                 //Send push notif
-                                $this->sendPushNotif($userId, 'Vous avez une nouvelle évaluation.', SHARE_PUSH_NOTIFICATION_EVALUATION_ADDED, array("request_id" => $requestId));
+                                $this->sendPushNotif($userIdTo, 'Vous avez une nouvelle évaluation.', SHARE_PUSH_NOTIFICATION_EVALUATION_ADDED, array("request_id" => $requestId));
 
                                 //Format response
                                 $response['evaluation_id'] = $evaluation['Evaluation']['id'];
                                 $this->formatISODate($response['created'], $evaluation['Evaluation']['created']);
                             } else {
-
+                                throw new ShareException(SHARE_STATUS_CODE_INTERNAL_SERVER_ERROR, SHARE_ERROR_CODE_SAVE_FAILED, "Request update failed");
                             }                            
                         } else {
                             throw new ShareException(SHARE_STATUS_CODE_INTERNAL_SERVER_ERROR, SHARE_ERROR_CODE_SAVE_FAILED, "Evaluation save failed");
@@ -111,11 +119,11 @@ class ApiEvaluationsController extends AppController {
                 $data = $this->request->input('json_decode', true);
 
                 //Get user identifier
-                $userExternalId = $this->getUserExternalId($this->request);
+                $userExternalIdFrom = $this->getUserExternalId($this->request);
 
                 try {
                     //Intern add
-                    $response = $this->internAdd($userExternalId, $data['request_id'], $data['user_id'], $data['rating'], $data['message']);
+                    $response = $this->internAdd($userExternalIdFrom, $data['request_id'], $data['user_external_id'], $data['rating'], $data['message']);
 
                     //Send JSON respsonse
                     $this->sendResponse(SHARE_STATUS_CODE_CREATED, $response);

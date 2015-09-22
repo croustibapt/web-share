@@ -12,18 +12,19 @@ class EvaluationsController extends ApiEvaluationsController {
     public function add() {
         if ($this->request->is('put', 'ajax')) {
             //Get user external identifier
-            $userExternalId = $this->Auth->user('external_id');
+            $userExternalIdFrom = $this->Auth->user('external_id');
 
             //Get data
             $data = $this->request->input('json_decode', true);
+
             $requestId = $data['request_id'];
-            $userId = $data['user_id'];
+            $userExternalIdTo = $data['user_external_id'];
             $rating = $data['rating'];
             $message = $data['message'];
 
             try {
                 //Intern add
-                $response = $this->internAdd($userExternalId, $requestId, $userId, $rating, $message);
+                $response = $this->internAdd($userExternalIdFrom, $requestId, $userExternalIdTo, $rating, $message);
                 
                 //Send JSON respsonse
                 $this->sendResponse(SHARE_STATUS_CODE_CREATED, $response);

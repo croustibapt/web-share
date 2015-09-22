@@ -319,30 +319,40 @@ function initializeUsersAccount(userExternalId) {
             }
         };
 
-        $scope.evaluate = function(requestId, $event) {
+        $scope.evaluate = function(requestId, userExternalId, rating, $event) {
             var button = angular.element($event.currentTarget);
             button.button('loading');
 
-            var message = prompt("Saisissez votre message :", "Super partage !")
+            var message = prompt("Saisissez votre message :", "Super partage !");
             if (message != null) {
-                $http.get(webroot + 'request/cancel/' + requestId)
-                .success(function (data, status, headers, config) {
-                    console.log(data);
-
-                    //Update request status
-                    $scope.updateOwnRequestStatus(requestId, 3);
-
-                    //Reset button state
-                    button.button('reset');
+                console.log(message);
+                console.log(userExternalId);
+                
+                $http.put(webroot + 'evaluation/add', {
+                    request_id: requestId,
+                    user_external_id: userExternalId,
+                    rating: rating,
+                    message: encodeURI(message)
                 })
-                .error(function (data, status, headers, config) {
+                .success(function(data, status, headers, config) {
                     console.log(data);
+            
+                    //Add one comment
+                    $scope.share.comment_count++;
 
+                    //Reset content
+                    var editor = nicEditors.findEditor($scope.textAreaId);
+                    editor.setContent('');
+
+                    $scope.showPage(1, function(success) {
+                        button.button('reset');
+                    });
+                })
+                .error(function(data, status, headers, config) {
+                    console.log(data);
+            
                     //Reset button state
                     button.button('reset');
-
-                    //Empty message
-                    handleAjaxError(data);
                 });
             } else {
                 //Reset button state

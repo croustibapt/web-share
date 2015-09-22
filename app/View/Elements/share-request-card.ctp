@@ -140,7 +140,7 @@
                 </div>
 
                 <div ng-if="((request.participant_evaluation == null) && (share.participation_count == share.places))">
-                    <button ng-click="evaluate(request.request_id, $event);" class="btn btn-success btn-xs share-card-request-btn">Evaluer</button>
+                    <button ng-click="evaluate(request.request_id, request.user.external_id, 5, $event);" class="btn btn-success btn-xs share-card-request-btn">Evaluer</button>
                 </div>
                 
             </div>
